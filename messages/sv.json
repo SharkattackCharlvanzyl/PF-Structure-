@@ -222,22 +222,49 @@
   "auctions": {
     "title": "Property Auctions",
     "subtitle": "Bid on properties in real-time across 185 countries",
-    "types": "Auction Types",
-    "typeList": {
-      "live": {
-        "title": "Live Auction",
-        "description": "Bid in real-time with a live auctioneer. Exciting, fast-paced property sales."
-      },
-      "online": {
-        "title": "Online Auction",
-        "description": "Bid from anywhere in the world via our secure online auction platform."
-      },
-      "sealed": {
-        "title": "Sealed Bid",
-        "description": "Submit your best offer in a confidential sealed-bid process."
-      }
-    },
+    "searchPlaceholder": "Search auctions by location or property...",
+    "liveNow": "{count} auctions live now!",
+    "viewLive": "View Live Auctions",
+    "resultsCount": "{count} auctions found",
+    "reservePrice": "Reserve Price",
+    "currentBid": "Current Bid",
+    "finalBid": "Final Bid",
+    "bids": "bids",
+    "beds": "Beds",
+    "baths": "Baths",
+    "placeBid": "Place Bid",
+    "registerToBid": "Register to Bid",
+    "auctionEnded": "Auction Ended",
+    "details": "Details",
+    "startsAt": "Starts:",
+    "endsAt": "Ends:",
+    "endedOn": "Ended:",
+    "noResults": "No auctions match your search",
+    "noResultsHint": "Try adjusting your filters or check back soon",
     "howToBid": "How to Bid",
+    "tabs": {
+      "all": "All Auctions",
+      "live": "Live Now",
+      "upcoming": "Upcoming",
+      "ended": "Ended"
+    },
+    "auctionTypes": {
+      "all": "All Types",
+      "live": "Live Auction",
+      "online": "Online Bidding",
+      "sealed": "Sealed Bid"
+    },
+    "statusLabels": {
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "ended": "Ended"
+    },
+    "sort": {
+      "soonest": "Starting Soonest",
+      "priceLow": "Reserve: Low to High",
+      "priceHigh": "Reserve: High to Low",
+      "mostBids": "Most Bids"
+    },
     "bidSteps": {
       "register": {
         "title": "Register",
@@ -255,8 +282,7 @@
         "title": "Win & Close",
         "description": "If successful, sign the agreement and complete your purchase."
       }
-    },
-    "viewUpcoming": "View Upcoming Auctions"
+    }
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",

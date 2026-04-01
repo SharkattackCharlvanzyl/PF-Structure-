@@ -220,43 +220,69 @@
     }
   },
   "auctions": {
-    "title": "Enchères immobilières",
-    "subtitle": "Enchérissez sur des biens en temps réel dans 185 pays",
-    "types": "Types d’enchères",
-    "typeList": {
-      "live": {
-        "title": "Enchère en direct",
-        "description": "Enchérissez en temps réel avec un commissaire-priseur."
-      },
-      "online": {
-        "title": "Enchère en ligne",
-        "description": "Enchérissez de n’importe où via notre plateforme sécurisée."
-      },
-      "sealed": {
-        "title": "Offre scellée",
-        "description": "Soumettez votre meilleure offre dans un processus confidentiel."
-      }
+    "title": "Ventes aux encheres immobilieres",
+    "subtitle": "Encherissez sur des proprietes exclusives a des prix competitifs",
+    "searchPlaceholder": "Rechercher des encheres par lieu ou propriete...",
+    "liveNow": "{count} encheres en direct maintenant !",
+    "viewLive": "Voir les encheres en direct",
+    "resultsCount": "{count} encheres trouvees",
+    "reservePrice": "Prix de reserve",
+    "currentBid": "Enchere actuelle",
+    "finalBid": "Enchere finale",
+    "bids": "encheres",
+    "beds": "Ch.",
+    "baths": "SdB",
+    "placeBid": "Encherir",
+    "registerToBid": "S'inscrire pour encherir",
+    "auctionEnded": "Encheres terminees",
+    "details": "Details",
+    "startsAt": "Debut :",
+    "endsAt": "Fin :",
+    "endedOn": "Terminee :",
+    "noResults": "Aucune enchere ne correspond",
+    "noResultsHint": "Essayez de modifier vos filtres ou revenez bientot",
+    "howToBid": "Comment encherir",
+    "tabs": {
+      "all": "Toutes les encheres",
+      "live": "En direct",
+      "upcoming": "A venir",
+      "ended": "Terminees"
     },
-    "howToBid": "Comment enchérir",
+    "auctionTypes": {
+      "all": "Tous les types",
+      "live": "Encheres en direct",
+      "online": "Encheres en ligne",
+      "sealed": "Offre scellee"
+    },
+    "statusLabels": {
+      "live": "En direct",
+      "upcoming": "A venir",
+      "ended": "Terminee"
+    },
+    "sort": {
+      "soonest": "Debut le plus proche",
+      "priceLow": "Reserve croissant",
+      "priceHigh": "Reserve decroissant",
+      "mostBids": "Plus d'encheres"
+    },
     "bidSteps": {
       "register": {
-        "title": "S’inscrire",
-        "description": "Créez un compte et vérifiez votre identité pour enchérir."
+        "title": "S'inscrire",
+        "description": "Creez un compte et verifiez votre identite pour participer."
       },
       "inspect": {
         "title": "Inspecter",
-        "description": "Visitez les biens et examinez toute la documentation."
+        "description": "Visitez la propriete et examinez toute la documentation."
       },
       "bid": {
-        "title": "Placer votre enchère",
-        "description": "Enchérissez en direct, en ligne ou par offre scellée."
+        "title": "Encherir",
+        "description": "Placez votre enchere en ligne ou assistez a la vente en personne."
       },
       "win": {
-        "title": "Gagner & Conclure",
-        "description": "En cas de succès, signez le contrat et finalisez votre achat."
+        "title": "Gagner et conclure",
+        "description": "Si vous gagnez, signez le contrat et finalisez le transfert."
       }
-    },
-    "viewUpcoming": "Voir les prochaines enchères"
+    }
   },
   "pricing": {
     "title": "Tarifs simples et transparents",
