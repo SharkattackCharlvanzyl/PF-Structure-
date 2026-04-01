@@ -111,35 +111,76 @@
     }
   },
   "rent": {
-    "title": "Rent Your Ideal Property",
-    "subtitle": "Find rental properties across 185 countries",
-    "categoryList": {
-      "residential": {
-        "title": "Residential Rental",
-        "description": "Houses, apartments and townhouses available for long-term rental."
-      },
-      "commercial": {
-        "title": "Commercial Rental",
-        "description": "Office space, retail and commercial units for lease."
-      },
-      "industrial": {
-        "title": "Industrial Rental",
-        "description": "Warehouses and industrial space available to rent."
-      },
-      "farm": {
-        "title": "Farm Rental",
-        "description": "Agricultural land and farms available for lease."
-      },
-      "shortStay": {
-        "title": "Short Stay & Holiday",
-        "description": "Holiday homes, Airbnb-style stays and short-term furnished rentals."
-      }
+    "title": "Find Your Perfect Rental",
+    "subtitle": "Browse rental properties across South Africa and beyond",
+    "searchPlaceholder": "Search by location, property name, or keyword...",
+    "filters": "Filters",
+    "bedroomsLabel": "Bedrooms",
+    "leaseLabel": "Lease Type",
+    "sortLabel": "Sort By",
+    "any": "Any",
+    "clearFilters": "Clear All",
+    "furnishedOnly": "Furnished Only",
+    "petFriendlyOnly": "Pet Friendly Only",
+    "furnished": "Furnished",
+    "petFriendly": "Pet Friendly",
+    "perMonth": "pm",
+    "availableFrom": "Available",
+    "resultsCount": "{count} rentals found",
+    "beds": "Beds",
+    "baths": "Baths",
+    "garage": "Garage",
+    "enquire": "Enquire Now",
+    "viewDetails": "View Details",
+    "noResults": "No rentals match your search",
+    "noResultsHint": "Try adjusting your filters or search terms",
+    "types": {
+      "all": "All Types",
+      "apartment": "Apartment",
+      "house": "House",
+      "townhouse": "Townhouse",
+      "commercial": "Commercial"
     },
-    "browseListings": "Browse Listings",
-    "tenantTips": {
-      "title": "Tips for Tenants",
-      "description": "Know your rights, understand lease agreements, and find the perfect rental.",
-      "cta": "Read Tenant Guide"
+    "rentRanges": {
+      "any": "Any Rent",
+      "under10k": "Under R10,000",
+      "10kTo20k": "R10K - R20K",
+      "20kTo30k": "R20K - R30K",
+      "over30k": "Over R30,000"
+    },
+    "leaseTypes": {
+      "all": "All Leases",
+      "longTerm": "Long Term",
+      "shortTerm": "Short Term",
+      "monthToMonth": "Month-to-Month"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "rentLow": "Rent: Low to High",
+      "rentHigh": "Rent: High to Low",
+      "bedsHigh": "Bedrooms: Most First",
+      "sizeHigh": "Size: Largest First"
+    },
+    "status": {
+      "available": "Available",
+      "taken": "Let",
+      "newListing": "New"
+    },
+    "featureLabels": {
+      "pool": "Pool",
+      "garden": "Garden",
+      "security": "Security",
+      "petFriendly": "Pet Friendly",
+      "aircon": "Aircon",
+      "fireplace": "Fireplace",
+      "balcony": "Balcony",
+      "gym": "Gym",
+      "braaiArea": "Braai",
+      "staffQuarters": "Staff Quarters",
+      "solarPanels": "Solar",
+      "borehole": "Borehole",
+      "fibre": "Fibre",
+      "flatlet": "Flatlet"
     }
   },
   "business": {

@@ -111,35 +111,76 @@
     }
   },
   "rent": {
-    "title": "Louez votre bien idéal",
-    "subtitle": "Trouvez des biens à louer dans 185 pays",
-    "categoryList": {
-      "residential": {
-        "title": "Location résidentielle",
-        "description": "Maisons, appartements et maisons de ville disponibles en location longue durée."
-      },
-      "commercial": {
-        "title": "Location commerciale",
-        "description": "Bureaux, commerces et locaux commerciaux à louer."
-      },
-      "industrial": {
-        "title": "Location industrielle",
-        "description": "Entrepôts et espaces industriels disponibles à la location."
-      },
-      "farm": {
-        "title": "Location agricole",
-        "description": "Terres agricoles et fermes disponibles en bail."
-      },
-      "shortStay": {
-        "title": "Court séjour & Vacances",
-        "description": "Maisons de vacances, séjours de type Airbnb et locations meublées courte durée."
-      }
+    "title": "Trouvez la location ideale",
+    "subtitle": "Parcourez les proprietes a louer en Afrique du Sud et au-dela",
+    "searchPlaceholder": "Rechercher par lieu, nom ou mot-cle...",
+    "filters": "Filtres",
+    "bedroomsLabel": "Chambres",
+    "leaseLabel": "Type de bail",
+    "sortLabel": "Trier par",
+    "any": "Tous",
+    "clearFilters": "Effacer tout",
+    "furnishedOnly": "Meuble uniquement",
+    "petFriendlyOnly": "Animaux acceptes",
+    "furnished": "Meuble",
+    "petFriendly": "Animaux OK",
+    "perMonth": "pm",
+    "availableFrom": "Disponible",
+    "resultsCount": "{count} locations trouvees",
+    "beds": "Ch.",
+    "baths": "SdB",
+    "garage": "Garage",
+    "enquire": "Contacter",
+    "viewDetails": "Voir les details",
+    "noResults": "Aucune location ne correspond",
+    "noResultsHint": "Essayez de modifier vos filtres ou termes de recherche",
+    "types": {
+      "all": "Tous les types",
+      "apartment": "Appartement",
+      "house": "Maison",
+      "townhouse": "Maison de ville",
+      "commercial": "Commercial"
     },
-    "browseListings": "Voir les annonces",
-    "tenantTips": {
-      "title": "Conseils aux locataires",
-      "description": "Connaissez vos droits, comprenez les baux et trouvez la location parfaite.",
-      "cta": "Lire le guide du locataire"
+    "rentRanges": {
+      "any": "Tout loyer",
+      "under10k": "Moins de R10 000",
+      "10kTo20k": "R10K - R20K",
+      "20kTo30k": "R20K - R30K",
+      "over30k": "Plus de R30 000"
+    },
+    "leaseTypes": {
+      "all": "Tous les baux",
+      "longTerm": "Long terme",
+      "shortTerm": "Court terme",
+      "monthToMonth": "Mois par mois"
+    },
+    "sort": {
+      "newest": "Plus recents",
+      "rentLow": "Loyer croissant",
+      "rentHigh": "Loyer decroissant",
+      "bedsHigh": "Chambres: Plus",
+      "sizeHigh": "Surface: Plus grand"
+    },
+    "status": {
+      "available": "Disponible",
+      "taken": "Loue",
+      "newListing": "Nouveau"
+    },
+    "featureLabels": {
+      "pool": "Piscine",
+      "garden": "Jardin",
+      "security": "Securite",
+      "petFriendly": "Animaux",
+      "aircon": "Clim",
+      "fireplace": "Cheminee",
+      "balcony": "Balcon",
+      "gym": "Salle de sport",
+      "braaiArea": "Barbecue",
+      "staffQuarters": "Logement service",
+      "solarPanels": "Solaire",
+      "borehole": "Forage",
+      "fibre": "Fibre",
+      "flatlet": "Studio"
     }
   },
   "business": {
