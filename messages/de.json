@@ -186,37 +186,57 @@
   "business": {
     "title": "Business for Sale",
     "subtitle": "Find businesses for sale across all industries",
-    "categoryList": {
-      "retail": {
-        "title": "Retail",
-        "description": "Shops, boutiques, convenience stores and retail franchises."
-      },
-      "hospitality": {
-        "title": "Hospitality & Food",
-        "description": "Restaurants, cafes, hotels, guest houses and catering businesses."
-      },
-      "manufacturing": {
-        "title": "Manufacturing",
-        "description": "Production facilities, packaging plants and manufacturing operations."
-      },
-      "services": {
-        "title": "Professional Services",
-        "description": "Consulting, accounting, legal and other service-based businesses."
-      },
-      "franchise": {
-        "title": "Franchise Opportunities",
-        "description": "Proven franchise models with established brand recognition."
-      },
-      "online": {
-        "title": "Online & Digital",
-        "description": "E-commerce stores, SaaS platforms and digital businesses."
-      }
+    "searchPlaceholder": "Search by business name, location, or industry...",
+    "filters": "Filters",
+    "sortLabel": "Sort By",
+    "franchiseOnly": "Franchises Only",
+    "clearFilters": "Clear All",
+    "resultsCount": "{count} businesses found",
+    "revenue": "Monthly Revenue",
+    "profit": "Monthly Profit",
+    "employees": "Employees",
+    "years": "yrs",
+    "established": "Established",
+    "enquire": "Enquire",
+    "viewDetails": "View Details",
+    "requestFinancials": "Request Financials",
+    "franchiseBadge": "Franchise",
+    "noResults": "No businesses match your search",
+    "noResultsHint": "Try adjusting your filters or search terms",
+    "categories": {
+      "all": "All Categories",
+      "hospitality": "Hospitality & Food",
+      "franchise": "Franchises",
+      "services": "Professional Services",
+      "online": "Online & E-Commerce",
+      "manufacturing": "Manufacturing",
+      "retail": "Retail"
     },
-    "viewListings": "View Listings",
+    "priceRanges": {
+      "any": "Any Price",
+      "under1m": "Under R1M",
+      "1mTo3m": "R1M - R3M",
+      "3mTo5m": "R3M - R5M",
+      "over5m": "Over R5M"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "profitHigh": "Profit: Highest First",
+      "established": "Most Established"
+    },
+    "status": {
+      "available": "Available",
+      "underNegotiation": "Under Negotiation",
+      "newListing": "New",
+      "priceReduced": "Price Reduced"
+    },
     "sellCta": {
       "title": "Want to Sell Your Business?",
       "description": "List your business on PropertyFinder and reach qualified buyers across 185 countries.",
-      "button": "List Your Business"
+      "button": "List Your Business",
+      "viewPricing": "View Pricing"
     }
   },
   "auctions": {

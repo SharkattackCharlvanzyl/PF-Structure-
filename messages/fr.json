@@ -184,39 +184,59 @@
     }
   },
   "business": {
-    "title": "Entreprises à vendre",
-    "subtitle": "Trouvez des entreprises à vendre dans tous les secteurs",
-    "categoryList": {
-      "retail": {
-        "title": "Commerce de détail",
-        "description": "Boutiques, magasins de proximité et franchises de commerce de détail."
-      },
-      "hospitality": {
-        "title": "Hôtellerie & Restauration",
-        "description": "Restaurants, cafés, hôtels, maisons d’hôtes et traiteurs."
-      },
-      "manufacturing": {
-        "title": "Fabrication",
-        "description": "Installations de production, usines d’emballage et opérations de fabrication."
-      },
-      "services": {
-        "title": "Services professionnels",
-        "description": "Conseil, comptabilité, juridique et autres entreprises de services."
-      },
-      "franchise": {
-        "title": "Franchises",
-        "description": "Modèles de franchise éprouvés avec une reconnaissance de marque établie."
-      },
-      "online": {
-        "title": "En ligne & Numérique",
-        "description": "Boutiques en ligne, plateformes SaaS et entreprises numériques."
-      }
+    "title": "Entreprises a vendre",
+    "subtitle": "Trouvez des entreprises rentables et des opportunites de franchise",
+    "searchPlaceholder": "Rechercher par nom, lieu ou secteur...",
+    "filters": "Filtres",
+    "sortLabel": "Trier par",
+    "franchiseOnly": "Franchises uniquement",
+    "clearFilters": "Effacer tout",
+    "resultsCount": "{count} entreprises trouvees",
+    "revenue": "Chiffre d'affaires mensuel",
+    "profit": "Benefice mensuel",
+    "employees": "Employes",
+    "years": "ans",
+    "established": "Etablie",
+    "enquire": "Contacter",
+    "viewDetails": "Voir les details",
+    "requestFinancials": "Demander les bilans",
+    "franchiseBadge": "Franchise",
+    "noResults": "Aucune entreprise ne correspond",
+    "noResultsHint": "Essayez de modifier vos filtres ou termes de recherche",
+    "categories": {
+      "all": "Toutes les categories",
+      "hospitality": "Hotellerie et restauration",
+      "franchise": "Franchises",
+      "services": "Services professionnels",
+      "online": "En ligne et e-commerce",
+      "manufacturing": "Industrie",
+      "retail": "Commerce de detail"
     },
-    "viewListings": "Voir les annonces",
+    "priceRanges": {
+      "any": "Tout prix",
+      "under1m": "Moins de R1M",
+      "1mTo3m": "R1M - R3M",
+      "3mTo5m": "R3M - R5M",
+      "over5m": "Plus de R5M"
+    },
+    "sort": {
+      "newest": "Plus recents",
+      "priceLow": "Prix croissant",
+      "priceHigh": "Prix decroissant",
+      "profitHigh": "Benefice le plus eleve",
+      "established": "Plus ancienne"
+    },
+    "status": {
+      "available": "Disponible",
+      "underNegotiation": "En negociation",
+      "newListing": "Nouveau",
+      "priceReduced": "Prix reduit"
+    },
     "sellCta": {
-      "title": "Vous voulez vendre votre entreprise ?",
-      "description": "Publiez votre entreprise sur PropertyFinder et touchez des acheteurs qualifiés dans 185 pays.",
-      "button": "Publier votre entreprise"
+      "title": "Pret a vendre votre entreprise ?",
+      "description": "Publiez votre entreprise sur PropertyFinder et connectez-vous avec des acheteurs serieux. Nous gerons le marketing pendant que vous gerez votre entreprise.",
+      "button": "Publier votre entreprise",
+      "viewPricing": "Voir les tarifs"
     }
   },
   "auctions": {
