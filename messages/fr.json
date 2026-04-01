@@ -313,52 +313,101 @@
     "facebook": "Facebook"
   },
   "dashboard": {
-    "title": "Mon tableau de bord",
-    "welcome": "Bon retour",
+    "title": "Mon Tableau de Bord",
+    "welcome": "Bienvenue ! Voici un apercu de vos proprietes et activites.",
     "addListing": "Ajouter une annonce",
+    "recentProperties": "Proprietes recentes",
+    "recentEnquiries": "Demandes recentes",
+    "viewAll": "Tout voir",
+    "newLabel": "nouveau",
+    "performance": "Vues cette semaine",
+    "searchProperties": "Rechercher des proprietes...",
+    "filterAll": "Tous les statuts",
+    "noProperties": "Aucune propriete trouvee correspondant a vos criteres.",
+    "selectEnquiry": "Selectionnez une demande pour voir les details",
+    "back": "Retour",
+    "regarding": "Concernant",
+    "message": "Message",
+    "markReplied": "Marquer comme repondu",
+    "sendEmail": "Envoyer un e-mail",
+    "call": "Appeler",
+    "agreementsTitle": "Vos contrats",
+    "newAgreement": "Nouveau contrat",
+    "editProperty": "Modifier la propriete",
+    "addProperty": "Ajouter une propriete",
+    "saveChanges": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "viewDetails": "Voir les details",
+    "delete": "Supprimer",
+    "viewsLabel": "vues",
+    "enquiriesLabel": "demandes",
+    "listedOn": "Publie le",
+    "profileSettings": "Parametres du profil",
+    "notifications": "Preferences de notification",
+    "tabs": {
+      "overview": "Apercu",
+      "properties": "Proprietes",
+      "enquiries": "Demandes",
+      "agreements": "Contrats",
+      "settings": "Parametres"
+    },
     "stats": {
       "listings": {
-        "value": "3",
         "label": "Annonces actives"
       },
       "views": {
-        "value": "1 247",
         "label": "Vues totales"
       },
       "enquiries": {
-        "value": "18",
         "label": "Demandes"
       },
       "saved": {
-        "value": "42",
-        "label": "Biens sauvegardés"
+        "label": "Proprietes sauvegardees"
       }
     },
-    "recentActivity": {
-      "title": "Activité récente",
-      "items": [
-        {
-          "text": "Nouvelle demande pour 24 Avenue des Chênes",
-          "time": "Il y a 2 heures"
-        },
-        {
-          "text": "Bien vu 15 fois aujourd’hui",
-          "time": "Il y a 5 heures"
-        },
-        {
-          "text": "Annonce sauvegardée par 3 utilisateurs",
-          "time": "Il y a 1 jour"
-        }
-      ]
+    "status": {
+      "active": "Actif",
+      "pending": "En attente",
+      "sold": "Vendu",
+      "rented": "Loue",
+      "draft": "Brouillon"
     },
-    "quickActions": {
-      "title": "Actions rapides",
-      "items": [
-        "Ajouter une annonce",
-        "Voir mes contrats",
-        "Paramètres du compte",
-        "Télécharger les rapports"
-      ]
+    "enquiryStatus": {
+      "new": "Nouveau",
+      "read": "Lu",
+      "replied": "Repondu"
+    },
+    "agreementType": {
+      "agency": "Agence",
+      "private": "Prive",
+      "enterprise": "Entreprise",
+      "seller": "Vendeur",
+      "auction": "Encheres"
+    },
+    "agreementStatus": {
+      "signed": "Signe",
+      "pending": "En attente",
+      "expired": "Expire"
+    },
+    "propertyFields": {
+      "title": "Titre de la propriete",
+      "address": "Adresse",
+      "price": "Prix",
+      "type": "Type de propriete",
+      "status": "Statut"
+    },
+    "settingsFields": {
+      "displayName": "Nom affiche",
+      "emailAddress": "Adresse e-mail",
+      "phoneNumber": "Numero de telephone",
+      "company": "Societe / Agence"
+    },
+    "notificationSettings": {
+      "emailNotify": "Notifications par e-mail pour les nouvelles demandes",
+      "smsNotify": "Notifications SMS pour les messages urgents",
+      "enquiryAlerts": "Alertes instantanees pour les demandes",
+      "weeklyReport": "Rapport de performance hebdomadaire"
     }
   },
   "valuate": {

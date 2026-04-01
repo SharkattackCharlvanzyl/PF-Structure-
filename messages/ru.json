@@ -316,49 +316,98 @@
     "title": "My Dashboard",
     "welcome": "Welcome back",
     "addListing": "Add Listing",
+    "recentProperties": "Recent Properties",
+    "recentEnquiries": "Recent Enquiries",
+    "viewAll": "View All",
+    "newLabel": "new",
+    "performance": "Views This Week",
+    "searchProperties": "Search properties...",
+    "filterAll": "All Statuses",
+    "noProperties": "No properties found matching your criteria.",
+    "selectEnquiry": "Select an enquiry to view details",
+    "back": "Back",
+    "regarding": "Regarding",
+    "message": "Message",
+    "markReplied": "Mark as Replied",
+    "sendEmail": "Send Email",
+    "call": "Call",
+    "agreementsTitle": "Your Agreements",
+    "newAgreement": "New Agreement",
+    "editProperty": "Edit Property",
+    "addProperty": "Add New Property",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "viewDetails": "View Details",
+    "delete": "Delete",
+    "viewsLabel": "views",
+    "enquiriesLabel": "enquiries",
+    "listedOn": "Listed",
+    "profileSettings": "Profile Settings",
+    "notifications": "Notification Preferences",
+    "tabs": {
+      "overview": "Overview",
+      "properties": "Properties",
+      "enquiries": "Enquiries",
+      "agreements": "Agreements",
+      "settings": "Settings"
+    },
     "stats": {
       "listings": {
-        "value": "3",
         "label": "Active Listings"
       },
       "views": {
-        "value": "1,247",
         "label": "Total Views"
       },
       "enquiries": {
-        "value": "18",
         "label": "Enquiries"
       },
       "saved": {
-        "value": "42",
         "label": "Saved Properties"
       }
     },
-    "recentActivity": {
-      "title": "Recent Activity",
-      "items": [
-        {
-          "text": "New enquiry on 24 Oak Avenue",
-          "time": "2 hours ago"
-        },
-        {
-          "text": "Property viewed 15 times today",
-          "time": "5 hours ago"
-        },
-        {
-          "text": "Listing saved by 3 users",
-          "time": "1 day ago"
-        }
-      ]
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "sold": "Sold",
+      "rented": "Rented",
+      "draft": "Draft"
     },
-    "quickActions": {
-      "title": "Quick Actions",
-      "items": [
-        "Add new listing",
-        "View my agreements",
-        "Update account settings",
-        "Download reports"
-      ]
+    "enquiryStatus": {
+      "new": "New",
+      "read": "Read",
+      "replied": "Replied"
+    },
+    "agreementType": {
+      "agency": "Agency",
+      "private": "Private",
+      "enterprise": "Enterprise",
+      "seller": "Seller",
+      "auction": "Auction"
+    },
+    "agreementStatus": {
+      "signed": "Signed",
+      "pending": "Pending",
+      "expired": "Expired"
+    },
+    "propertyFields": {
+      "title": "Property Title",
+      "address": "Address",
+      "price": "Price",
+      "type": "Property Type",
+      "status": "Status"
+    },
+    "settingsFields": {
+      "displayName": "Display Name",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "company": "Company / Agency"
+    },
+    "notificationSettings": {
+      "emailNotify": "Email notifications for new enquiries",
+      "smsNotify": "SMS notifications for urgent messages",
+      "enquiryAlerts": "Instant alerts for property enquiries",
+      "weeklyReport": "Weekly performance report"
     }
   },
   "valuate": {
