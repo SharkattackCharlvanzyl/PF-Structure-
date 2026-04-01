@@ -506,28 +506,55 @@
     "applyNow": "Apply for Finance"
   },
   "agreement": {
-    "title": "Listing Agreement",
-    "agencyTitle": "Agency Listing Agreement",
-    "referenceLabel": "Agreement Reference",
-    "fullName": "Full Name",
-    "email": "Email Address",
-    "phone": "Phone Number",
-    "idNumber": "ID / Passport Number",
-    "propertyAddress": "Property Address",
-    "askingPrice": "Asking Price",
-    "commissionRate": "Commission Rate",
-    "agreementDate": "Agreement Date",
-    "signatureLabel": "Your Signature",
-    "clearSignature": "Clear",
-    "submitAgreement": "Submit Agreement",
-    "success": "Agreement Submitted Successfully!",
-    "successMessage": "Your agreement reference is:",
-    "proceedToPayment": "Proceed to Payment",
-    "legalClause1": "The Lister hereby authorises PropertyFinder to market the above property.",
-    "legalClause2": "This agreement is binding upon signature by both parties.",
-    "legalClause3": "Commission is payable upon successful transfer of the property.",
-    "pfSignatureLabel": "PropertyFinder Representative",
-    "listerSignatureLabel": "Lister Signature"
+    "title": "Listing Agreements",
+    "subtitle": "Select the type of agreement that best suits your listing needs",
+    "back": "Back",
+    "fillDetails": "Please fill in your details below to proceed with the agreement.",
+    "legalPreview": "Legal Terms Preview",
+    "legalText": "By proceeding, you agree to authorise PropertyFinder to market your property on the PropertyFinder platform and affiliated channels. This agreement is binding for 12 months from the date of signing. Commission is payable upon successful transfer at the agreed rate.",
+    "proceedToSign": "Proceed to Signature",
+    "signTitle": "Review & Sign",
+    "summary": "Agreement Summary",
+    "drawSignature": "Draw Your Signature Below",
+    "clearSignature": "Clear Signature",
+    "signAndGenerate": "Sign & Generate Agreement",
+    "successTitle": "Agreement Signed Successfully",
+    "successMessage": "Your agreement has been generated. Reference:",
+    "download": "Download PDF",
+    "print": "Print",
+    "viewPdf": "View PDF",
+    "proceedPayment": "Proceed to Payment",
+    "types": {
+      "agency": {
+        "name": "Agency Listing Agreement",
+        "description": "Standard agreement for estate agents listing a property on behalf of a seller."
+      },
+      "private": {
+        "name": "Private Seller Agreement",
+        "description": "For individual property owners who want to list and sell their property directly."
+      },
+      "enterprise": {
+        "name": "Enterprise Listing Agreement",
+        "description": "Tailored for property companies and developers with multiple listings."
+      },
+      "seller": {
+        "name": "Seller Agent Agreement",
+        "description": "Agreement between a seller and their appointed selling agent."
+      },
+      "auction": {
+        "name": "Auction Seller Agreement",
+        "description": "For properties being listed for sale via auction on the platform."
+      }
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "idNumber": "ID / Passport Number",
+      "propertyAddress": "Property Address",
+      "askingPrice": "Asking Price",
+      "commissionRate": "Commission Rate"
+    }
   },
   "share": {
     "title": "Share",

@@ -506,28 +506,55 @@
     "applyNow": "Demander un financement"
   },
   "agreement": {
-    "title": "Contrat de publication",
-    "agencyTitle": "Contrat de publication agence",
-    "referenceLabel": "Référence du contrat",
-    "fullName": "Nom complet",
-    "email": "Adresse e-mail",
-    "phone": "Numéro de téléphone",
-    "idNumber": "N° d’identité / Passeport",
-    "propertyAddress": "Adresse du bien",
-    "askingPrice": "Prix demandé",
-    "commissionRate": "Taux de commission",
-    "agreementDate": "Date du contrat",
-    "signatureLabel": "Votre signature",
-    "clearSignature": "Effacer",
-    "submitAgreement": "Soumettre le contrat",
-    "success": "Contrat soumis avec succès !",
-    "successMessage": "Votre référence de contrat est :",
-    "proceedToPayment": "Procéder au paiement",
-    "legalClause1": "Le publieur autorise PropertyFinder à commercialiser le bien ci-dessus.",
-    "legalClause2": "Ce contrat est contraignant dès la signature des deux parties.",
-    "legalClause3": "La commission est payable lors du transfert réussi du bien.",
-    "pfSignatureLabel": "Représentant PropertyFinder",
-    "listerSignatureLabel": "Signature du publieur"
+    "title": "Contrats de Mandat",
+    "subtitle": "Choisissez le type de contrat qui correspond le mieux a vos besoins",
+    "back": "Retour",
+    "fillDetails": "Veuillez remplir vos coordonnees ci-dessous pour poursuivre le contrat.",
+    "legalPreview": "Apercu des conditions juridiques",
+    "legalText": "En continuant, vous autorisez PropertyFinder a commercialiser votre propriete sur la plateforme PropertyFinder et les canaux affilies. Ce contrat est contraignant pour 12 mois a compter de la date de signature. La commission est payable lors du transfert reussi au taux convenu.",
+    "proceedToSign": "Passer a la signature",
+    "signTitle": "Verifier et signer",
+    "summary": "Resume du contrat",
+    "drawSignature": "Dessinez votre signature ci-dessous",
+    "clearSignature": "Effacer la signature",
+    "signAndGenerate": "Signer et generer le contrat",
+    "successTitle": "Contrat signe avec succes",
+    "successMessage": "Votre contrat a ete genere. Reference :",
+    "download": "Telecharger PDF",
+    "print": "Imprimer",
+    "viewPdf": "Voir le PDF",
+    "proceedPayment": "Passer au paiement",
+    "types": {
+      "agency": {
+        "name": "Mandat de vente agence",
+        "description": "Contrat standard pour les agents immobiliers vendant au nom d'un proprietaire."
+      },
+      "private": {
+        "name": "Contrat vendeur prive",
+        "description": "Pour les proprietaires individuels souhaitant vendre directement."
+      },
+      "enterprise": {
+        "name": "Mandat entreprise",
+        "description": "Adapte aux societes immobilieres et promoteurs avec plusieurs biens."
+      },
+      "seller": {
+        "name": "Contrat agent vendeur",
+        "description": "Contrat entre un vendeur et son agent de vente designe."
+      },
+      "auction": {
+        "name": "Contrat vente aux encheres",
+        "description": "Pour les biens mis en vente aux encheres sur la plateforme."
+      }
+    },
+    "fields": {
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "phone": "Numero de telephone",
+      "idNumber": "Numero d'identite / Passeport",
+      "propertyAddress": "Adresse du bien",
+      "askingPrice": "Prix demande",
+      "commissionRate": "Taux de commission"
+    }
   },
   "share": {
     "title": "Partager",
