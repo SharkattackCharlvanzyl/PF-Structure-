@@ -1053,19 +1053,23 @@
     "phone": "Phone Number",
     "idNumber": "ID / Passport Number",
     "submitRegistration": "Submit Registration",
-    "status.live": "LIVE",
-    "status.upcoming": "Upcoming",
-    "status.ended": "Ended",
-    "featureLabels.pool": "Swimming Pool",
-    "featureLabels.garden": "Garden",
-    "featureLabels.security": "24hr Security",
-    "featureLabels.fibre": "Fibre Internet",
-    "featureLabels.aircon": "Air Conditioning",
-    "featureLabels.balcony": "Balcony",
-    "featureLabels.gym": "Gym",
-    "featureLabels.borehole": "Borehole",
-    "featureLabels.staffQuarters": "Staff Quarters",
-    "featureLabels.braaiArea": "Braai Area"
+    "status": {
+      "live": "LIVE",
+      "upcoming": "Upcoming",
+      "ended": "Ended"
+    },
+    "featureLabels": {
+      "pool": "Swimming Pool",
+      "garden": "Garden",
+      "security": "24hr Security",
+      "fibre": "Fibre Internet",
+      "aircon": "Air Conditioning",
+      "balcony": "Balcony",
+      "gym": "Gym",
+      "borehole": "Borehole",
+      "staffQuarters": "Staff Quarters",
+      "braaiArea": "Braai Area"
+    }
   },
   "businessDetail": {
     "notFound": "Business not found",
@@ -1110,9 +1114,11 @@
     "financialsSent": "Request submitted! You will receive the financials via email.",
     "ndaAgreement": "I agree to sign a Non-Disclosure Agreement before viewing financial details",
     "requestAccess": "Request Financial Access",
-    "status.available": "Available",
-    "status.underNegotiation": "Under Negotiation",
-    "status.newListing": "New Listing",
-    "status.priceReduced": "Price Reduced"
+    "status": {
+      "available": "Available",
+      "underNegotiation": "Under Negotiation",
+      "newListing": "New Listing",
+      "priceReduced": "Price Reduced"
+    }
   }
 }

@@ -1053,19 +1053,23 @@
     "phone": "Num\\u00E9ro de t\\u00E9l\\u00E9phone",
     "idNumber": "Num\\u00E9ro d'identit\\u00E9 / Passeport",
     "submitRegistration": "Soumettre l'inscription",
-    "status.live": "EN DIRECT",
-    "status.upcoming": "\\u00C0 venir",
-    "status.ended": "Termin\\u00E9",
-    "featureLabels.pool": "Piscine",
-    "featureLabels.garden": "Jardin",
-    "featureLabels.security": "S\\u00E9curit\\u00E9 24h",
-    "featureLabels.fibre": "Fibre optique",
-    "featureLabels.aircon": "Climatisation",
-    "featureLabels.balcony": "Balcon",
-    "featureLabels.gym": "Salle de sport",
-    "featureLabels.borehole": "Forage",
-    "featureLabels.staffQuarters": "Logement du personnel",
-    "featureLabels.braaiArea": "Espace barbecue"
+    "status": {
+      "live": "EN DIRECT",
+      "upcoming": "\\u00C0 venir",
+      "ended": "Termin\\u00E9"
+    },
+    "featureLabels": {
+      "pool": "Piscine",
+      "garden": "Jardin",
+      "security": "S\\u00E9curit\\u00E9 24h",
+      "fibre": "Fibre optique",
+      "aircon": "Climatisation",
+      "balcony": "Balcon",
+      "gym": "Salle de sport",
+      "borehole": "Forage",
+      "staffQuarters": "Logement du personnel",
+      "braaiArea": "Espace barbecue"
+    }
   },
   "businessDetail": {
     "notFound": "Entreprise introuvable",
@@ -1110,9 +1114,11 @@
     "financialsSent": "Demande soumise ! Vous recevrez les finances par e-mail.",
     "ndaAgreement": "J'accepte de signer un accord de confidentialit\\u00E9 avant de consulter les d\\u00E9tails financiers",
     "requestAccess": "Demander l'acc\\u00E8s financier",
-    "status.available": "Disponible",
-    "status.underNegotiation": "En n\\u00E9gociation",
-    "status.newListing": "Nouvelle annonce",
-    "status.priceReduced": "Prix r\\u00E9duit"
+    "status": {
+      "available": "Disponible",
+      "underNegotiation": "En n\\u00E9gociation",
+      "newListing": "Nouvelle annonce",
+      "priceReduced": "Prix r\\u00E9duit"
+    }
   }
 }
