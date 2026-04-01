@@ -494,29 +494,97 @@
   "listProperty": {
     "title": "List Your Property",
     "subtitle": "Reach buyers in 185 countries with PropertyFinder",
-    "benefits": {
+    "prev": "Previous",
+    "next": "Next",
+    "submitListing": "Submit Listing",
+    "submitting": "Submitting...",
+    "steps": {
+      "type": {
+        "listingType": "Listing Type",
+        "sale": "For Sale",
+        "rent": "For Rent",
+        "propertyType": "Property Type"
+      },
+      "location": {
+        "heading": "Property Location",
+        "mapPlaceholder": "Map integration coming soon"
+      },
+      "details": {
+        "heading": "Property Details",
+        "pricing": "Pricing",
+        "features": "Features & Amenities"
+      },
       "photos": {
-        "title": "Professional Photos",
-        "description": "Upload HD images and virtual tours to showcase your property."
+        "heading": "Property Photos",
+        "hint": "Upload up to 20 high-quality images. The first image will be used as the cover photo.",
+        "dropHere": "Drag & drop photos here",
+        "orClick": "or click to browse files",
+        "maxFiles": "JPG, PNG or WebP - Max 20 photos, 10MB each",
+        "setPrimary": "Set as Cover",
+        "remove": "Remove",
+        "primary": "Cover"
       },
-      "analytics": {
-        "title": "Listing Analytics",
-        "description": "Track views, enquiries and performance with real-time dashboards."
-      },
-      "reach": {
-        "title": "Global Reach",
-        "description": "Your listing is visible to buyers in 185 countries, in 15 languages."
-      },
-      "ai": {
-        "title": "AI-Powered Matching",
-        "description": "Our AI connects your property with the most relevant buyers."
+      "review": {
+        "heading": "Review Your Listing",
+        "propertyInfo": "Property Information",
+        "location": "Location",
+        "details": "Details & Price",
+        "photos": "Photos",
+        "edit": "Edit"
       }
     },
-    "cta": {
-      "title": "Ready to List?",
-      "description": "Choose your plan and start reaching buyers today.",
-      "listNow": "List Now",
-      "learnMore": "Learn More"
+    "fields": {
+      "title": "Listing Title",
+      "titlePlaceholder": "e.g. Modern 3-Bed Apartment in Sandton",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your property in detail...",
+      "address": "Street Address",
+      "addressPlaceholder": "e.g. 24 Oak Avenue, Sandton",
+      "city": "City",
+      "province": "Province / State",
+      "selectProvince": "Select province",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "garages": "Garages",
+      "floorSize": "Floor Size (m²)",
+      "erfSize": "Erf Size (m²)",
+      "yearBuilt": "Year Built",
+      "price": "Price (ZAR)",
+      "negotiable": "Price Negotiable"
+    },
+    "propertyTypes": {
+      "house": "House",
+      "apartment": "Apartment",
+      "townhouse": "Townhouse",
+      "villa": "Villa",
+      "farm": "Farm",
+      "commercial": "Commercial",
+      "land": "Land",
+      "industrial": "Industrial"
+    },
+    "features": {
+      "pool": "Swimming Pool",
+      "garden": "Garden",
+      "security": "24h Security",
+      "petFriendly": "Pet Friendly",
+      "aircon": "Air Conditioning",
+      "fireplace": "Fireplace",
+      "balcony": "Balcony",
+      "gym": "Gym",
+      "braaiArea": "Braai Area",
+      "staffQuarters": "Staff Quarters",
+      "solarPanels": "Solar Panels",
+      "borehole": "Borehole",
+      "fibre": "Fibre Internet",
+      "flatlet": "Flatlet"
+    },
+    "success": {
+      "title": "Listing Submitted!",
+      "message": "Your property has been submitted for review. Reference:",
+      "goToDashboard": "Go to Dashboard",
+      "listAnother": "List Another Property"
     }
   },
   "countries": {

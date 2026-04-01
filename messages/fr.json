@@ -492,31 +492,99 @@
     }
   },
   "listProperty": {
-    "title": "Publiez votre bien",
-    "subtitle": "Touchez les acheteurs dans 185 pays avec PropertyFinder",
-    "benefits": {
+    "title": "Publier votre propriete",
+    "subtitle": "Atteignez des acheteurs dans 185 pays avec PropertyFinder",
+    "prev": "Precedent",
+    "next": "Suivant",
+    "submitListing": "Soumettre l'annonce",
+    "submitting": "Soumission...",
+    "steps": {
+      "type": {
+        "listingType": "Type d'annonce",
+        "sale": "A vendre",
+        "rent": "A louer",
+        "propertyType": "Type de propriete"
+      },
+      "location": {
+        "heading": "Emplacement de la propriete",
+        "mapPlaceholder": "Integration de carte a venir"
+      },
+      "details": {
+        "heading": "Details de la propriete",
+        "pricing": "Tarification",
+        "features": "Caracteristiques et equipements"
+      },
       "photos": {
-        "title": "Photos professionnelles",
-        "description": "Téléchargez des images HD et des visites virtuelles pour mettre en valeur votre bien."
+        "heading": "Photos de la propriete",
+        "hint": "Telechargez jusqu'a 20 images de haute qualite. La premiere image sera utilisee comme couverture.",
+        "dropHere": "Glissez-deposez les photos ici",
+        "orClick": "ou cliquez pour parcourir les fichiers",
+        "maxFiles": "JPG, PNG ou WebP - Max 20 photos, 10 Mo chacune",
+        "setPrimary": "Couverture",
+        "remove": "Supprimer",
+        "primary": "Couverture"
       },
-      "analytics": {
-        "title": "Analytique des annonces",
-        "description": "Suivez les vues, demandes et performances avec des tableaux de bord en temps réel."
-      },
-      "reach": {
-        "title": "Portée mondiale",
-        "description": "Votre annonce est visible par les acheteurs de 185 pays, en 15 langues."
-      },
-      "ai": {
-        "title": "Matching par IA",
-        "description": "Notre IA connecte votre bien avec les acheteurs les plus pertinents."
+      "review": {
+        "heading": "Verifier votre annonce",
+        "propertyInfo": "Informations sur la propriete",
+        "location": "Emplacement",
+        "details": "Details et prix",
+        "photos": "Photos",
+        "edit": "Modifier"
       }
     },
-    "cta": {
-      "title": "Prêt à publier ?",
-      "description": "Choisissez votre forfait et commencez à toucher des acheteurs.",
-      "listNow": "Publier maintenant",
-      "learnMore": "En savoir plus"
+    "fields": {
+      "title": "Titre de l'annonce",
+      "titlePlaceholder": "ex. Appartement moderne 3 chambres a Sandton",
+      "description": "Description",
+      "descriptionPlaceholder": "Decrivez votre propriete en detail...",
+      "address": "Adresse",
+      "addressPlaceholder": "ex. 24 Oak Avenue, Sandton",
+      "city": "Ville",
+      "province": "Province / Etat",
+      "selectProvince": "Choisir une province",
+      "postalCode": "Code postal",
+      "country": "Pays",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "garages": "Garages",
+      "floorSize": "Surface (m²)",
+      "erfSize": "Terrain (m²)",
+      "yearBuilt": "Annee de construction",
+      "price": "Prix (ZAR)",
+      "negotiable": "Prix negociable"
+    },
+    "propertyTypes": {
+      "house": "Maison",
+      "apartment": "Appartement",
+      "townhouse": "Maison de ville",
+      "villa": "Villa",
+      "farm": "Ferme",
+      "commercial": "Commercial",
+      "land": "Terrain",
+      "industrial": "Industriel"
+    },
+    "features": {
+      "pool": "Piscine",
+      "garden": "Jardin",
+      "security": "Securite 24h",
+      "petFriendly": "Animaux acceptes",
+      "aircon": "Climatisation",
+      "fireplace": "Cheminee",
+      "balcony": "Balcon",
+      "gym": "Salle de sport",
+      "braaiArea": "Espace barbecue",
+      "staffQuarters": "Logement de service",
+      "solarPanels": "Panneaux solaires",
+      "borehole": "Forage",
+      "fibre": "Fibre optique",
+      "flatlet": "Studio annexe"
+    },
+    "success": {
+      "title": "Annonce soumise !",
+      "message": "Votre propriete a ete soumise pour examen. Reference :",
+      "goToDashboard": "Aller au tableau de bord",
+      "listAnother": "Publier une autre propriete"
     }
   },
   "countries": {
