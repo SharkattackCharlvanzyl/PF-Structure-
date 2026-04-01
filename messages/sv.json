@@ -307,93 +307,193 @@
   "pricing": {
     "title": "Simple, Transparent Pricing",
     "subtitle": "List your property on PropertyFinder and reach buyers in 185 countries",
-    "mostPopular": "Most Popular",
-    "tiers": {
-      "basic": {
-        "name": "Basic",
-        "price": "$29",
-        "period": "/month",
-        "description": "Perfect for private sellers with a single property listing.",
-        "features": [
-          "1 property listing",
-          "Up to 10 photos",
-          "30-day listing duration",
-          "Basic analytics"
-        ],
-        "cta": "Get Started"
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "save20": "Save 20%",
+    "mo": "mo",
+    "yr": "yr",
+    "popular": "Most Popular",
+    "choosePlan": "Choose Plan",
+    "compareTitle": "Compare All Plans",
+    "feature": "Feature",
+    "faqTitle": "Frequently Asked Questions",
+    "featureNames": {
+      "listings": "Active Listings",
+      "photos": "Photos per Listing",
+      "analytics": "Analytics Dashboard",
+      "support": "Priority Support",
+      "featured": "Featured Placement",
+      "virtualTours": "Virtual Tours",
+      "socialMedia": "Social Media Promotion",
+      "dedicatedAgent": "Dedicated Account Manager",
+      "customBranding": "Custom Branding",
+      "apiAccess": "API Access"
+    },
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "tagline": "For individual sellers",
+        "monthlyPrice": "R 199",
+        "annualPrice": "R 1,910",
+        "features": {
+          "listings": "1 listing",
+          "photos": "10 photos",
+          "analytics": "Basic stats",
+          "support": "-",
+          "featured": "-",
+          "virtualTours": "-",
+          "socialMedia": "-",
+          "dedicatedAgent": "-",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
       },
-      "standard": {
-        "name": "Standard",
-        "price": "$79",
-        "period": "/month",
-        "description": "Ideal for agents and sellers who want maximum exposure.",
-        "features": [
-          "5 property listings",
-          "Up to 30 photos each",
-          "Featured listing badge",
-          "Virtual tour support",
-          "Advanced analytics",
-          "Priority support"
-        ],
-        "cta": "Get Started"
+      "professional": {
+        "name": "Professional",
+        "tagline": "For active agents",
+        "monthlyPrice": "R 499",
+        "annualPrice": "R 4,790",
+        "features": {
+          "listings": "10 listings",
+          "photos": "30 photos",
+          "analytics": "Full dashboard",
+          "support": "Email support",
+          "featured": "2 featured/mo",
+          "virtualTours": "Included",
+          "socialMedia": "-",
+          "dedicatedAgent": "-",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "tagline": "For agencies",
+        "monthlyPrice": "R 1,499",
+        "annualPrice": "R 14,390",
+        "features": {
+          "listings": "50 listings",
+          "photos": "Unlimited",
+          "analytics": "Advanced + exports",
+          "support": "Phone & email",
+          "featured": "10 featured/mo",
+          "virtualTours": "Included",
+          "socialMedia": "Included",
+          "dedicatedAgent": "Included",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
       },
       "premium": {
         "name": "Premium",
-        "price": "$199",
-        "period": "/month",
-        "description": "For agencies and developers with large portfolios.",
-        "features": [
-          "Unlimited listings",
-          "Unlimited photos",
-          "Featured + promoted listings",
-          "Virtual tours & video",
-          "Dedicated account manager",
-          "Social media promotion",
-          "API access",
-          "Custom branding"
-        ],
-        "cta": "Contact Sales"
+        "tagline": "For developers",
+        "monthlyPrice": "R 4,999",
+        "annualPrice": "R 47,990",
+        "features": {
+          "listings": "Unlimited",
+          "photos": "Unlimited",
+          "analytics": "Custom reports",
+          "support": "24/7 dedicated",
+          "featured": "Unlimited",
+          "virtualTours": "Included",
+          "socialMedia": "Included",
+          "dedicatedAgent": "Included",
+          "customBranding": "Included",
+          "apiAccess": "Included"
+        }
       }
     },
-    "proval": {
-      "badge": "AI-Powered",
-      "title": "ProVal — AI Property Valuation",
-      "description": "Get an accurate, data-driven property valuation report powered by our proprietary AI engine.",
-      "stats": [
-        {
-          "value": "98.2%",
-          "label": "Accuracy rate"
-        },
-        {
-          "value": "< 5 min",
-          "label": "Report delivery"
-        },
-        {
-          "value": "50K+",
-          "label": "Valuations completed"
-        }
-      ],
-      "cta": "Get Your Valuation"
-    }
+    "faq": [
+      {
+        "q": "Can I change my plan later?",
+        "a": "Yes, you can upgrade or downgrade at any time. Changes take effect on your next billing cycle."
+      },
+      {
+        "q": "What payment methods do you accept?",
+        "a": "We accept all major credit cards, EFT, and debit orders for South African customers."
+      },
+      {
+        "q": "Is there a free trial?",
+        "a": "The Starter plan includes a 14-day free trial. No credit card required to start."
+      },
+      {
+        "q": "Can I cancel anytime?",
+        "a": "Yes, there are no long-term contracts. Cancel anytime from your dashboard settings."
+      }
+    ]
   },
   "howItWorks": {
     "title": "How It Works",
     "subtitle": "PropertyFinder makes buying, renting and selling property simple.",
+    "forYou": "PropertyFinder for You",
+    "ctaTitle": "Ready to Get Started?",
+    "ctaDescription": "Whether you're buying, selling, or renting, PropertyFinder makes it easy.",
+    "listProperty": "List a Property",
+    "browseProperties": "Browse Properties",
     "steps": {
+      "register": {
+        "title": "Create Account",
+        "description": "Sign up in seconds and complete your profile to get started."
+      },
       "list": {
         "title": "List or Search",
         "description": "List your property or search thousands of listings across 185 countries."
       },
+      "market": {
+        "title": "We Market It",
+        "description": "Your listing reaches buyers across 185 countries in 15 languages."
+      },
       "connect": {
         "title": "Connect",
         "description": "Contact agents, schedule viewings, and communicate directly through our platform."
+      },
+      "negotiate": {
+        "title": "Negotiate & Agree",
+        "description": "Use our platform to negotiate terms and sign agreements digitally."
       },
       "close": {
         "title": "Close the Deal",
         "description": "Sign digital agreements, make secure payments and complete your transaction."
       }
     },
-    "cta": "Get Started Now"
+    "roles": {
+      "sellers": {
+        "title": "For Sellers",
+        "description": "Reach a global audience and sell your property faster.",
+        "benefits": [
+          "List in minutes with our step-by-step wizard",
+          "Reach buyers in 185 countries",
+          "Track views and enquiries in real-time"
+        ]
+      },
+      "buyers": {
+        "title": "For Buyers",
+        "description": "Find your perfect property with powerful search tools.",
+        "benefits": [
+          "Search with advanced filters and maps",
+          "Save favourites and get alerts",
+          "Connect directly with sellers or agents"
+        ]
+      },
+      "agents": {
+        "title": "For Agents",
+        "description": "Grow your business with professional tools.",
+        "benefits": [
+          "Manage all listings from one dashboard",
+          "CRM tools for client management",
+          "Performance analytics and reporting"
+        ]
+      },
+      "developers": {
+        "title": "For Developers",
+        "description": "Showcase new developments to a targeted audience.",
+        "benefits": [
+          "Dedicated development project pages",
+          "Lead generation and buyer matching",
+          "Custom branding and marketing support"
+        ]
+      }
+    }
   },
   "login": {
     "title": "Welcome Back",
@@ -552,43 +652,94 @@
   "paymentSuccess": {
     "title": "Payment Successful!",
     "subtitle": "Your payment has been processed successfully.",
-    "receipt": {
-      "title": "Payment Receipt",
-      "orderId": "Order ID",
-      "orderIdValue": "PF-20260401-001",
-      "plan": "Plan",
-      "planValue": "Standard Listing",
-      "date": "Date",
-      "dateValue": "1 April 2026",
-      "total": "Total Paid",
-      "totalValue": "$79.00"
-    },
+    "orderSummary": "Order Summary",
+    "plan": "Plan",
+    "professionalPlan": "Professional",
+    "billing": "Billing",
+    "monthlyBilling": "Monthly",
+    "amount": "Amount",
+    "status": "Status",
+    "paid": "Paid",
+    "nextSteps": "What Happens Next",
+    "step0": "Your account has been upgraded. All new features are now available.",
+    "step1": "You can now create listings from your dashboard.",
+    "step2": "A confirmation email with your receipt has been sent.",
     "goToDashboard": "Go to Dashboard",
-    "downloadReceipt": "Download Receipt"
+    "listProperty": "List a Property",
+    "receiptNote": "A tax invoice has been sent to your email address."
   },
   "advertise": {
     "title": "Advertise With Us",
     "subtitle": "Reach property buyers and sellers across 185 countries",
-    "benefits": [
-      {
-        "title": "Massive Reach",
-        "description": "Access millions of property seekers across 185 countries worldwide."
+    "adTypes": "Advertising Solutions",
+    "howItWorks": "How Advertising Works",
+    "ctaTitle": "Ready to Grow Your Business?",
+    "ctaDescription": "Get in touch with our advertising team to create a custom campaign.",
+    "getStarted": "Get Started",
+    "contactSales": "Contact Sales",
+    "stats": {
+      "impressions": {
+        "value": "2.5M+",
+        "label": "Monthly Impressions"
       },
-      {
-        "title": "Targeted Audience",
-        "description": "Your ads are shown to qualified buyers and sellers actively searching."
+      "clicks": {
+        "value": "180K+",
+        "label": "Monthly Clicks"
       },
-      {
-        "title": "Global Exposure",
-        "description": "Multi-language support ensures your brand is seen worldwide."
+      "leads": {
+        "value": "12K+",
+        "label": "Leads Generated"
+      },
+      "roi": {
+        "value": "340%",
+        "label": "Average ROI"
       }
-    ],
-    "cta": {
-      "title": "Ready to Grow Your Business?",
-      "description": "Partner with PropertyFinder and reach a global audience of property buyers, sellers and investors.",
-      "getStarted": "Get Started",
-      "contactSales": "Contact Sales"
-    }
+    },
+    "adOptions": {
+      "banner": {
+        "name": "Banner Ads",
+        "description": "Premium display ads across all property pages and search results.",
+        "price": "From R 2,500/mo"
+      },
+      "featured": {
+        "name": "Featured Listings",
+        "description": "Boost your listings to the top of search results with priority placement.",
+        "price": "From R 500/listing"
+      },
+      "spotlight": {
+        "name": "Agent Spotlight",
+        "description": "Dedicated profile promotion highlighting your expertise and listings.",
+        "price": "From R 1,500/mo"
+      },
+      "newsletter": {
+        "name": "Newsletter Placement",
+        "description": "Reach 50K+ subscribers with your property or service in our weekly email.",
+        "price": "From R 3,000/send"
+      },
+      "social": {
+        "name": "Social Media Package",
+        "description": "Cross-platform promotion on our Facebook, Instagram, and LinkedIn channels.",
+        "price": "From R 2,000/campaign"
+      }
+    },
+    "steps": [
+      {
+        "title": "Choose Your Ad",
+        "description": "Select the advertising format that fits your goals."
+      },
+      {
+        "title": "Set Your Budget",
+        "description": "Choose your spend and targeting options."
+      },
+      {
+        "title": "We Create & Launch",
+        "description": "Our team designs and deploys your campaign."
+      },
+      {
+        "title": "Track Results",
+        "description": "Monitor performance with real-time analytics."
+      }
+    ]
   },
   "listProperty": {
     "title": "List Your Property",
@@ -689,21 +840,9 @@
   "countries": {
     "title": "Properties in 185 Countries",
     "subtitle": "Browse property listings worldwide",
-    "list": {
-      "southAfrica": "South Africa",
-      "namibia": "Namibia",
-      "botswana": "Botswana",
-      "zimbabwe": "Zimbabwe",
-      "mozambique": "Mozambique",
-      "zambia": "Zambia",
-      "mauritius": "Mauritius",
-      "kenya": "Kenya",
-      "tanzania": "Tanzania",
-      "nigeria": "Nigeria",
-      "ghana": "Ghana",
-      "portugal": "Portugal"
-    },
-    "comingSoon": "More countries being added every month — 185 and growing."
+    "searchPlaceholder": "Search countries...",
+    "allRegions": "All Regions",
+    "count": "{count} countries"
   },
   "calculators": {
     "title": "Property Calculators",

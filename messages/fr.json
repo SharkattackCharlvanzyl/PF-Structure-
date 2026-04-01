@@ -305,95 +305,195 @@
     }
   },
   "pricing": {
-    "title": "Tarifs simples et transparents",
-    "subtitle": "Publiez votre bien sur PropertyFinder et touchez des acheteurs dans 185 pays",
-    "mostPopular": "Le plus populaire",
-    "tiers": {
-      "basic": {
-        "name": "Basique",
-        "price": "29 €",
-        "period": "/mois",
-        "description": "Parfait pour les vendeurs privés avec un seul bien.",
-        "features": [
-          "1 annonce immobilière",
-          "Jusqu’à 10 photos",
-          "Durée de 30 jours",
-          "Analytique de base"
-        ],
-        "cta": "Commencer"
+    "title": "Tarifs",
+    "subtitle": "Choisissez le forfait adapte a vos besoins",
+    "monthly": "Mensuel",
+    "annual": "Annuel",
+    "save20": "-20%",
+    "mo": "mois",
+    "yr": "an",
+    "popular": "Le plus populaire",
+    "choosePlan": "Choisir ce forfait",
+    "compareTitle": "Comparer les forfaits",
+    "feature": "Fonctionnalite",
+    "faqTitle": "Questions frequentes",
+    "featureNames": {
+      "listings": "Annonces actives",
+      "photos": "Photos par annonce",
+      "analytics": "Tableau de bord",
+      "support": "Support prioritaire",
+      "featured": "Mise en avant",
+      "virtualTours": "Visites virtuelles",
+      "socialMedia": "Promotion reseaux sociaux",
+      "dedicatedAgent": "Gestionnaire dedie",
+      "customBranding": "Marque personnalisee",
+      "apiAccess": "Acces API"
+    },
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "tagline": "Pour les particuliers",
+        "monthlyPrice": "R 199",
+        "annualPrice": "R 1 910",
+        "features": {
+          "listings": "1 annonce",
+          "photos": "10 photos",
+          "analytics": "Stats basiques",
+          "support": "-",
+          "featured": "-",
+          "virtualTours": "-",
+          "socialMedia": "-",
+          "dedicatedAgent": "-",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
       },
-      "standard": {
-        "name": "Standard",
-        "price": "79 €",
-        "period": "/mois",
-        "description": "Idéal pour les agents qui veulent une exposition maximale.",
-        "features": [
-          "5 annonces immobilières",
-          "Jusqu’à 30 photos chacune",
-          "Badge annonce vedette",
-          "Visite virtuelle",
-          "Analytique avancée",
-          "Support prioritaire"
-        ],
-        "cta": "Commencer"
+      "professional": {
+        "name": "Professionnel",
+        "tagline": "Pour les agents actifs",
+        "monthlyPrice": "R 499",
+        "annualPrice": "R 4 790",
+        "features": {
+          "listings": "10 annonces",
+          "photos": "30 photos",
+          "analytics": "Tableau complet",
+          "support": "Support email",
+          "featured": "2 mises en avant/mois",
+          "virtualTours": "Inclus",
+          "socialMedia": "-",
+          "dedicatedAgent": "-",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
+      },
+      "enterprise": {
+        "name": "Entreprise",
+        "tagline": "Pour les agences",
+        "monthlyPrice": "R 1 499",
+        "annualPrice": "R 14 390",
+        "features": {
+          "listings": "50 annonces",
+          "photos": "Illimite",
+          "analytics": "Avance + exports",
+          "support": "Telephone et email",
+          "featured": "10 mises en avant/mois",
+          "virtualTours": "Inclus",
+          "socialMedia": "Inclus",
+          "dedicatedAgent": "Inclus",
+          "customBranding": "-",
+          "apiAccess": "-"
+        }
       },
       "premium": {
         "name": "Premium",
-        "price": "199 €",
-        "period": "/mois",
-        "description": "Pour les agences et promoteurs avec de grands portefeuilles.",
-        "features": [
-          "Annonces illimitées",
-          "Photos illimitées",
-          "Annonces vedettes + promues",
-          "Visites virtuelles & vidéo",
-          "Gestionnaire de compte dédié",
-          "Promotion sur les réseaux sociaux",
-          "Accès API",
-          "Image de marque personnalisée"
-        ],
-        "cta": "Contacter les ventes"
+        "tagline": "Pour les promoteurs",
+        "monthlyPrice": "R 4 999",
+        "annualPrice": "R 47 990",
+        "features": {
+          "listings": "Illimite",
+          "photos": "Illimite",
+          "analytics": "Rapports personnalises",
+          "support": "24/7 dedie",
+          "featured": "Illimite",
+          "virtualTours": "Inclus",
+          "socialMedia": "Inclus",
+          "dedicatedAgent": "Inclus",
+          "customBranding": "Inclus",
+          "apiAccess": "Inclus"
+        }
       }
     },
-    "proval": {
-      "badge": "IA",
-      "title": "ProVal — Évaluation IA",
-      "description": "Obtenez un rapport d’évaluation immobilière précis, alimenté par notre moteur d’IA.",
-      "stats": [
-        {
-          "value": "98,2%",
-          "label": "Taux de précision"
-        },
-        {
-          "value": "< 5 min",
-          "label": "Livraison du rapport"
-        },
-        {
-          "value": "50K+",
-          "label": "Évaluations réalisées"
-        }
-      ],
-      "cta": "Obtenir votre évaluation"
-    }
+    "faq": [
+      {
+        "q": "Puis-je changer de forfait ?",
+        "a": "Oui, vous pouvez passer a un forfait superieur ou inferieur a tout moment."
+      },
+      {
+        "q": "Quels moyens de paiement acceptez-vous ?",
+        "a": "Nous acceptons les cartes de credit, les virements et les prelevements."
+      },
+      {
+        "q": "Y a-t-il un essai gratuit ?",
+        "a": "Le forfait Starter inclut un essai gratuit de 14 jours."
+      },
+      {
+        "q": "Puis-je annuler a tout moment ?",
+        "a": "Oui, aucun engagement. Annulez depuis votre tableau de bord."
+      }
+    ]
   },
   "howItWorks": {
-    "title": "Comment ça marche",
-    "subtitle": "PropertyFinder simplifie l’achat, la location et la vente de biens immobiliers.",
+    "title": "Comment fonctionne PropertyFinder",
+    "subtitle": "De la publication a la conclusion, nous simplifions les transactions immobilieres",
+    "forYou": "PropertyFinder pour vous",
+    "ctaTitle": "Pret a commencer ?",
+    "ctaDescription": "Que vous achetiez, vendiez ou louiez, PropertyFinder vous facilite la tache.",
+    "listProperty": "Publier une propriete",
+    "browseProperties": "Parcourir les proprietes",
     "steps": {
+      "register": {
+        "title": "Creer un compte",
+        "description": "Inscrivez-vous en quelques secondes et completez votre profil."
+      },
       "list": {
-        "title": "Publier ou Rechercher",
-        "description": "Publiez votre bien ou parcourez des milliers d’annonces dans 185 pays."
+        "title": "Publier votre bien",
+        "description": "Ajoutez des photos, details et fixez votre prix facilement."
+      },
+      "market": {
+        "title": "Nous le promouvons",
+        "description": "Votre annonce atteint des acheteurs dans 185 pays en 15 langues."
       },
       "connect": {
-        "title": "Se connecter",
-        "description": "Contactez les agents, planifiez des visites et communiquez via notre plateforme."
+        "title": "Connectez-vous",
+        "description": "Recevez des demandes et contactez les parties interessees."
+      },
+      "negotiate": {
+        "title": "Negociez et signez",
+        "description": "Negociez les conditions et signez les contrats numeriquement."
       },
       "close": {
-        "title": "Conclure",
-        "description": "Signez les contrats numériques, effectuez des paiements sécurisés et finalisez."
+        "title": "Concluez l'affaire",
+        "description": "Finalisez avec notre support de paiement et transfert securise."
       }
     },
-    "cta": "Commencer maintenant"
+    "roles": {
+      "sellers": {
+        "title": "Pour les vendeurs",
+        "description": "Atteignez un public mondial et vendez plus vite.",
+        "benefits": [
+          "Publiez en quelques minutes",
+          "Atteignez des acheteurs dans 185 pays",
+          "Suivez les vues et demandes en temps reel"
+        ]
+      },
+      "buyers": {
+        "title": "Pour les acheteurs",
+        "description": "Trouvez la propriete ideale avec nos outils.",
+        "benefits": [
+          "Recherche avec filtres avances",
+          "Sauvegardez vos favoris et recevez des alertes",
+          "Contactez directement vendeurs ou agents"
+        ]
+      },
+      "agents": {
+        "title": "Pour les agents",
+        "description": "Developpez votre activite avec des outils professionnels.",
+        "benefits": [
+          "Gerez toutes vos annonces depuis un tableau de bord",
+          "Outils CRM pour la gestion clients",
+          "Analyses de performance et rapports"
+        ]
+      },
+      "developers": {
+        "title": "Pour les promoteurs",
+        "description": "Presentez vos projets a un public cible.",
+        "benefits": [
+          "Pages dediees aux projets",
+          "Generation de prospects et matching",
+          "Support marketing et marque personnalisee"
+        ]
+      }
+    }
   },
   "login": {
     "title": "Bon retour",
@@ -550,45 +650,96 @@
     "getValuation": "Obtenir mon évaluation"
   },
   "paymentSuccess": {
-    "title": "Paiement réussi !",
-    "subtitle": "Votre paiement a été traité avec succès.",
-    "receipt": {
-      "title": "Reçu de paiement",
-      "orderId": "N° de commande",
-      "orderIdValue": "PF-20260401-001",
-      "plan": "Forfait",
-      "planValue": "Annonce Standard",
-      "date": "Date",
-      "dateValue": "1 avril 2026",
-      "total": "Total payé",
-      "totalValue": "79,00 €"
-    },
+    "title": "Paiement reussi !",
+    "subtitle": "Votre paiement a ete traite. Reference :",
+    "orderSummary": "Resume de la commande",
+    "plan": "Forfait",
+    "professionalPlan": "Professionnel",
+    "billing": "Facturation",
+    "monthlyBilling": "Mensuelle",
+    "amount": "Montant",
+    "status": "Statut",
+    "paid": "Paye",
+    "nextSteps": "Prochaines etapes",
+    "step0": "Votre compte a ete mis a niveau. Toutes les nouvelles fonctionnalites sont disponibles.",
+    "step1": "Vous pouvez maintenant creer des annonces depuis votre tableau de bord.",
+    "step2": "Un e-mail de confirmation avec votre recu a ete envoye.",
     "goToDashboard": "Aller au tableau de bord",
-    "downloadReceipt": "Télécharger le reçu"
+    "listProperty": "Publier une propriete",
+    "receiptNote": "Une facture a ete envoyee a votre adresse e-mail."
   },
   "advertise": {
-    "title": "Faites de la publicité avec nous",
-    "subtitle": "Touchez les acheteurs et vendeurs de biens dans 185 pays",
-    "benefits": [
-      {
-        "title": "Portée massive",
-        "description": "Accédez à des millions de chercheurs de biens dans 185 pays."
+    "title": "Annoncez sur PropertyFinder",
+    "subtitle": "Atteignez des millions d'acheteurs et vendeurs avec nos solutions publicitaires",
+    "adTypes": "Solutions publicitaires",
+    "howItWorks": "Comment ca fonctionne",
+    "ctaTitle": "Pret a developper votre activite ?",
+    "ctaDescription": "Contactez notre equipe publicitaire pour creer une campagne sur mesure.",
+    "getStarted": "Commencer",
+    "contactSales": "Contacter les ventes",
+    "stats": {
+      "impressions": {
+        "value": "2,5M+",
+        "label": "Impressions mensuelles"
       },
-      {
-        "title": "Audience ciblée",
-        "description": "Vos annonces sont montrées aux acheteurs et vendeurs qualifiés."
+      "clicks": {
+        "value": "180K+",
+        "label": "Clics mensuels"
       },
-      {
-        "title": "Exposition mondiale",
-        "description": "Le support multilingue assure que votre marque est vue dans le monde entier."
+      "leads": {
+        "value": "12K+",
+        "label": "Prospects generes"
+      },
+      "roi": {
+        "value": "340%",
+        "label": "ROI moyen"
       }
-    ],
-    "cta": {
-      "title": "Prêt à développer votre entreprise ?",
-      "description": "Associez-vous à PropertyFinder et touchez un public mondial d’acheteurs et investisseurs.",
-      "getStarted": "Commencer",
-      "contactSales": "Contacter les ventes"
-    }
+    },
+    "adOptions": {
+      "banner": {
+        "name": "Bannieres",
+        "description": "Annonces display premium sur toutes les pages de proprietes.",
+        "price": "A partir de R 2 500/mois"
+      },
+      "featured": {
+        "name": "Annonces en vedette",
+        "description": "Placez vos annonces en haut des resultats de recherche.",
+        "price": "A partir de R 500/annonce"
+      },
+      "spotlight": {
+        "name": "Agent en vedette",
+        "description": "Promotion dediee mettant en avant votre expertise.",
+        "price": "A partir de R 1 500/mois"
+      },
+      "newsletter": {
+        "name": "Placement newsletter",
+        "description": "Atteignez 50K+ abonnes dans notre email hebdomadaire.",
+        "price": "A partir de R 3 000/envoi"
+      },
+      "social": {
+        "name": "Pack reseaux sociaux",
+        "description": "Promotion sur nos comptes Facebook, Instagram et LinkedIn.",
+        "price": "A partir de R 2 000/campagne"
+      }
+    },
+    "steps": [
+      {
+        "title": "Choisissez votre format",
+        "description": "Selectionnez le format publicitaire adapte."
+      },
+      {
+        "title": "Definissez votre budget",
+        "description": "Choisissez vos options de depense et ciblage."
+      },
+      {
+        "title": "Nous creons et lancons",
+        "description": "Notre equipe conçoit et deploie votre campagne."
+      },
+      {
+        "title": "Suivez les resultats",
+        "description": "Suivez les performances en temps reel."
+      }
+    ]
   },
   "listProperty": {
     "title": "Publier votre propriete",
@@ -687,23 +838,11 @@
     }
   },
   "countries": {
-    "title": "Biens dans 185 pays",
-    "subtitle": "Parcourez les annonces immobilières dans le monde entier",
-    "list": {
-      "southAfrica": "Afrique du Sud",
-      "namibia": "Namibie",
-      "botswana": "Botswana",
-      "zimbabwe": "Zimbabwe",
-      "mozambique": "Mozambique",
-      "zambia": "Zambie",
-      "mauritius": "Maurice",
-      "kenya": "Kenya",
-      "tanzania": "Tanzanie",
-      "nigeria": "Nigéria",
-      "ghana": "Ghana",
-      "portugal": "Portugal"
-    },
-    "comingSoon": "De nouveaux pays sont ajoutés chaque mois — 185 et en croissance."
+    "title": "Explorez les proprietes dans le monde",
+    "subtitle": "PropertyFinder opere dans 51 pays sur 6 continents",
+    "searchPlaceholder": "Rechercher des pays...",
+    "allRegions": "Toutes les regions",
+    "count": "{count} pays"
   },
   "calculators": {
     "title": "Calculateurs immobiliers",
