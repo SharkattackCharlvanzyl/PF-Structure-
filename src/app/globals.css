@@ -2,26 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --navy: #141c2b;
+  --navy-light: #1a2535;
+  --gold: #c4a47c;
+  --gold-light: #d4b98c;
+  --cream: #e8dfc8;
+  --cream-dark: #1a1408;
+  --muted: #8a7d5a;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--navy);
+  color: var(--cream);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Gold button base */
+.btn-gold {
+  @apply bg-gold text-cream-dark font-bold py-3 px-8 rounded-xl
+         transition-all duration-300 hover:bg-gold-dark
+         hover:-translate-y-0.5 hover:shadow-lg;
 }
+
+.btn-gold-outline {
+  @apply border-2 border-gold text-gold bg-transparent font-bold
+         py-3 px-8 rounded-xl transition-all duration-300
+         hover:bg-gold hover:text-cream-dark;
+}
+
+/* Hero gradient */
+.hero-gradient {
+  background: linear-gradient(135deg, #141c2b 0%, #1a2535 30%, #141c2b 100%);
+}
+
+/* Card styling */
+.pf-card {
+  @apply bg-navy-light border-2 border-gold/10 rounded-2xl p-6
+         transition-all duration-300 hover:border-gold/30
+         hover:-translate-y-1 hover:shadow-xl;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* RTL support */
+[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
