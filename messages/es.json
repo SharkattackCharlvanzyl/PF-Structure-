@@ -31,7 +31,7 @@
   },
   "countrySelector": {
     "heading": "Where are you looking for property?",
-    "subheading": "Select your country and we'll personalise your currency, language and listings.",
+    "subheading": "Select your country and we’ll personalise your currency, language and listings.",
     "searchPlaceholder": "Search for a country — e.g. South Africa, Germany, UAE...",
     "confirmButton": "Confirm My Country & Language",
     "changeCountry": "Change Country",
@@ -50,162 +50,464 @@
   "buy": {
     "title": "Find Your Dream Property",
     "subtitle": "Browse thousands of properties across 185 countries",
-    "chooseCategory": "Choose a Property Category",
-    "howBuyingWorks": "How Buying Works on PropertyFinder",
-    "residential": "Residential",
-    "commercial": "Commercial",
-    "industrial": "Industrial",
-    "farm": "Farm & Agricultural",
-    "developments": "New Developments",
-    "step1Title": "Browse & Search",
-    "step1Desc": "Search properties by location, type, price range and more",
-    "step2Title": "Connect with Agent",
-    "step2Desc": "Contact the listing agent directly through our platform",
-    "step3Title": "Make It Yours",
-    "step3Desc": "Negotiate, sign agreements and complete your purchase"
+    "categories": "Choose a Property Category",
+    "categoryList": {
+      "residential": {
+        "title": "Residential",
+        "description": "Houses, apartments, townhouses and more for every lifestyle and budget."
+      },
+      "commercial": {
+        "title": "Commercial",
+        "description": "Office space, retail units and mixed-use buildings for your business needs."
+      },
+      "industrial": {
+        "title": "Industrial",
+        "description": "Warehouses, factories and industrial parks for manufacturing and logistics."
+      },
+      "farm": {
+        "title": "Farm & Agricultural",
+        "description": "Farms, smallholdings and agricultural land for cultivation and livestock."
+      },
+      "newDevelopments": {
+        "title": "New Developments",
+        "description": "Brand-new off-plan and newly built properties from leading developers."
+      }
+    },
+    "browseListings": "Browse Listings",
+    "howItWorks": "How Buying Works on PropertyFinder",
+    "steps": {
+      "search": {
+        "title": "Search",
+        "description": "Browse properties by location, type, price range and more."
+      },
+      "enquire": {
+        "title": "Enquire",
+        "description": "Contact the listing agent directly through our platform."
+      },
+      "finance": {
+        "title": "Finance",
+        "description": "Use our calculators and connect with bond originators."
+      },
+      "offer": {
+        "title": "Make an Offer",
+        "description": "Negotiate and submit your offer to purchase."
+      },
+      "close": {
+        "title": "Close the Deal",
+        "description": "Sign agreements and complete your property purchase."
+      }
+    }
   },
   "rent": {
     "title": "Rent Your Ideal Property",
     "subtitle": "Find rental properties across 185 countries",
-    "chooseCategory": "Choose a Rental Category",
-    "residential": "Residential Rental",
-    "commercial": "Commercial Rental",
-    "industrial": "Industrial Rental",
-    "farm": "Farm Rental",
-    "shortStay": "Short Stay & Holiday"
+    "categoryList": {
+      "residential": {
+        "title": "Residential Rental",
+        "description": "Houses, apartments and townhouses available for long-term rental."
+      },
+      "commercial": {
+        "title": "Commercial Rental",
+        "description": "Office space, retail and commercial units for lease."
+      },
+      "industrial": {
+        "title": "Industrial Rental",
+        "description": "Warehouses and industrial space available to rent."
+      },
+      "farm": {
+        "title": "Farm Rental",
+        "description": "Agricultural land and farms available for lease."
+      },
+      "shortStay": {
+        "title": "Short Stay & Holiday",
+        "description": "Holiday homes, Airbnb-style stays and short-term furnished rentals."
+      }
+    },
+    "browseListings": "Browse Listings",
+    "tenantTips": {
+      "title": "Tips for Tenants",
+      "description": "Know your rights, understand lease agreements, and find the perfect rental.",
+      "cta": "Read Tenant Guide"
+    }
   },
   "business": {
     "title": "Business for Sale",
     "subtitle": "Find businesses for sale across all industries",
-    "categories": "Business Categories",
-    "restaurants": "Restaurants & Food",
-    "retail": "Retail",
-    "tech": "Technology",
-    "healthcare": "Healthcare",
-    "hospitality": "Hospitality & Tourism",
-    "manufacturing": "Manufacturing",
-    "automotive": "Automotive",
-    "agriculture": "Agriculture",
-    "franchise": "Franchise Opportunities"
+    "categoryList": {
+      "retail": {
+        "title": "Retail",
+        "description": "Shops, boutiques, convenience stores and retail franchises."
+      },
+      "hospitality": {
+        "title": "Hospitality & Food",
+        "description": "Restaurants, cafes, hotels, guest houses and catering businesses."
+      },
+      "manufacturing": {
+        "title": "Manufacturing",
+        "description": "Production facilities, packaging plants and manufacturing operations."
+      },
+      "services": {
+        "title": "Professional Services",
+        "description": "Consulting, accounting, legal and other service-based businesses."
+      },
+      "franchise": {
+        "title": "Franchise Opportunities",
+        "description": "Proven franchise models with established brand recognition."
+      },
+      "online": {
+        "title": "Online & Digital",
+        "description": "E-commerce stores, SaaS platforms and digital businesses."
+      }
+    },
+    "viewListings": "View Listings",
+    "sellCta": {
+      "title": "Want to Sell Your Business?",
+      "description": "List your business on PropertyFinder and reach qualified buyers across 185 countries.",
+      "button": "List Your Business"
+    }
   },
   "auctions": {
     "title": "Property Auctions",
     "subtitle": "Bid on properties in real-time across 185 countries",
-    "live": "Live Auction",
-    "upcoming": "Upcoming Auctions",
-    "residential": "Residential Auctions",
-    "commercial": "Commercial Auctions",
-    "industrial": "Industrial Auctions",
-    "farm": "Farm Auctions",
+    "types": "Auction Types",
+    "typeList": {
+      "live": {
+        "title": "Live Auction",
+        "description": "Bid in real-time with a live auctioneer. Exciting, fast-paced property sales."
+      },
+      "online": {
+        "title": "Online Auction",
+        "description": "Bid from anywhere in the world via our secure online auction platform."
+      },
+      "sealed": {
+        "title": "Sealed Bid",
+        "description": "Submit your best offer in a confidential sealed-bid process."
+      }
+    },
     "howToBid": "How to Bid",
-    "registerToBid": "Register to Bid",
-    "biddingTerms": "Bidding Terms",
-    "faq": "Auction FAQ"
+    "bidSteps": {
+      "register": {
+        "title": "Register",
+        "description": "Create an account and verify your identity to bid."
+      },
+      "inspect": {
+        "title": "Inspect",
+        "description": "View properties and review all auction documentation."
+      },
+      "bid": {
+        "title": "Place Your Bid",
+        "description": "Bid live, online or via sealed bid during the auction."
+      },
+      "win": {
+        "title": "Win & Close",
+        "description": "If successful, sign the agreement and complete your purchase."
+      }
+    },
+    "viewUpcoming": "View Upcoming Auctions"
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",
     "subtitle": "List your property on PropertyFinder and reach buyers in 185 countries",
-    "calculateCost": "Calculate Your Listing Cost",
-    "listingPlans": "Listing Plans",
-    "proval": "ProVal — AI Property Valuation",
-    "provalDesc": "Get an accurate AI-powered property valuation report",
-    "basic": "Basic",
-    "standard": "Standard",
-    "premium": "Premium",
-    "perMonth": "/month",
-    "getStarted": "Get Started",
     "mostPopular": "Most Popular",
-    "includes": "Includes",
-    "listingPhotos": "Property listing photos",
-    "virtualTour": "Virtual tour",
-    "featuredListing": "Featured listing",
-    "socialPromotion": "Social media promotion",
-    "dedicatedAgent": "Dedicated agent",
-    "provalReport": "ProVal AI Report",
-    "provalPrice": "R124.00",
-    "provalIncludes": "What's included in your ProVal report",
-    "marketAnalysis": "Market analysis",
-    "comparables": "Comparable property data",
-    "priceEstimate": "AI price estimate",
-    "neighborhoodData": "Neighbourhood data",
-    "investmentScore": "Investment score"
+    "tiers": {
+      "basic": {
+        "name": "Basic",
+        "price": "$29",
+        "period": "/month",
+        "description": "Perfect for private sellers with a single property listing.",
+        "features": [
+          "1 property listing",
+          "Up to 10 photos",
+          "30-day listing duration",
+          "Basic analytics"
+        ],
+        "cta": "Get Started"
+      },
+      "standard": {
+        "name": "Standard",
+        "price": "$79",
+        "period": "/month",
+        "description": "Ideal for agents and sellers who want maximum exposure.",
+        "features": [
+          "5 property listings",
+          "Up to 30 photos each",
+          "Featured listing badge",
+          "Virtual tour support",
+          "Advanced analytics",
+          "Priority support"
+        ],
+        "cta": "Get Started"
+      },
+      "premium": {
+        "name": "Premium",
+        "price": "$199",
+        "period": "/month",
+        "description": "For agencies and developers with large portfolios.",
+        "features": [
+          "Unlimited listings",
+          "Unlimited photos",
+          "Featured + promoted listings",
+          "Virtual tours & video",
+          "Dedicated account manager",
+          "Social media promotion",
+          "API access",
+          "Custom branding"
+        ],
+        "cta": "Contact Sales"
+      }
+    },
+    "proval": {
+      "badge": "AI-Powered",
+      "title": "ProVal — AI Property Valuation",
+      "description": "Get an accurate, data-driven property valuation report powered by our proprietary AI engine.",
+      "stats": [
+        {
+          "value": "98.2%",
+          "label": "Accuracy rate"
+        },
+        {
+          "value": "< 5 min",
+          "label": "Report delivery"
+        },
+        {
+          "value": "50K+",
+          "label": "Valuations completed"
+        }
+      ],
+      "cta": "Get Your Valuation"
+    }
   },
   "howItWorks": {
     "title": "How It Works",
-    "subtitle": "PropertyFinder makes buying, renting and selling property simple",
-    "step1Title": "Choose Your Country",
-    "step1Desc": "Select from 185 countries worldwide",
-    "step2Title": "Find Property",
-    "step2Desc": "Search listings, use AI search",
-    "step3Title": "Make It Yours",
-    "step3Desc": "Contact agent, sign agreement"
+    "subtitle": "PropertyFinder makes buying, renting and selling property simple.",
+    "steps": {
+      "list": {
+        "title": "List or Search",
+        "description": "List your property or search thousands of listings across 185 countries."
+      },
+      "connect": {
+        "title": "Connect",
+        "description": "Contact agents, schedule viewings, and communicate directly through our platform."
+      },
+      "close": {
+        "title": "Close the Deal",
+        "description": "Sign digital agreements, make secure payments and complete your transaction."
+      }
+    },
+    "cta": "Get Started Now"
   },
   "login": {
     "title": "Welcome Back",
     "subtitle": "Log in to your PropertyFinder account",
     "email": "Email Address",
+    "emailPlaceholder": "you@example.com",
     "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
-    "loginButton": "Log In",
-    "noAccount": "Don't have an account?",
-    "signupLink": "Sign up",
-    "orContinueWith": "Or continue with",
+    "signIn": "Sign In",
+    "noAccount": "Don’t have an account?",
+    "signUp": "Sign up",
+    "or": "or continue with",
     "google": "Google",
     "facebook": "Facebook"
-  },
-  "signup": {
-    "title": "Create Your Account",
-    "subtitle": "Join PropertyFinder and access properties in 185 countries",
-    "fullName": "Full Name",
-    "email": "Email Address",
-    "phone": "Phone Number",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "agreeTerms": "I agree to the Terms of Use and Privacy Policy",
-    "signupButton": "Sign Up",
-    "hasAccount": "Already have an account?",
-    "loginLink": "Log in"
   },
   "dashboard": {
     "title": "My Dashboard",
     "welcome": "Welcome back",
-    "savedProperties": "Saved Properties",
-    "myListings": "My Listings",
-    "myAgreements": "My Agreements",
-    "paymentHistory": "Payment History",
-    "accountSettings": "Account Settings"
+    "addListing": "Add Listing",
+    "stats": {
+      "listings": {
+        "value": "3",
+        "label": "Active Listings"
+      },
+      "views": {
+        "value": "1,247",
+        "label": "Total Views"
+      },
+      "enquiries": {
+        "value": "18",
+        "label": "Enquiries"
+      },
+      "saved": {
+        "value": "42",
+        "label": "Saved Properties"
+      }
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "items": [
+        {
+          "text": "New enquiry on 24 Oak Avenue",
+          "time": "2 hours ago"
+        },
+        {
+          "text": "Property viewed 15 times today",
+          "time": "5 hours ago"
+        },
+        {
+          "text": "Listing saved by 3 users",
+          "time": "1 day ago"
+        }
+      ]
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "items": [
+        "Add new listing",
+        "View my agreements",
+        "Update account settings",
+        "Download reports"
+      ]
+    }
   },
   "valuate": {
     "title": "Valuate My Property",
     "subtitle": "Get an AI-powered property valuation in minutes",
-    "step1": "Property Details",
-    "step2": "Property Information",
-    "step3": "Agreement",
-    "step4": "Payment",
-    "address": "Property Address",
-    "addressPlaceholder": "Start typing your address...",
-    "propertyType": "Property Type",
-    "bedrooms": "Bedrooms",
-    "bathrooms": "Bathrooms",
-    "squareMeters": "Size (m²)",
-    "yearBuilt": "Year Built",
-    "condition": "Property Condition",
-    "excellent": "Excellent",
-    "good": "Good",
-    "fair": "Fair",
-    "needsWork": "Needs Work",
-    "nextStep": "Next Step",
-    "prevStep": "Previous Step",
-    "submitValuation": "Submit Valuation Request",
-    "proceedToPayment": "Proceed to Payment"
+    "step1": {
+      "title": "Property Type & Location",
+      "propertyType": "Property Type",
+      "types": {
+        "house": "House",
+        "apartment": "Apartment",
+        "townhouse": "Townhouse",
+        "land": "Vacant Land",
+        "commercial": "Commercial"
+      },
+      "address": "Property Address",
+      "addressPlaceholder": "Start typing your address..."
+    },
+    "step2": {
+      "title": "Property Details",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "size": "Size (m²)",
+      "sizePlaceholder": "e.g. 250",
+      "condition": "Property Condition",
+      "selectCondition": "Select condition...",
+      "conditions": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "needsWork": "Needs Work"
+      }
+    },
+    "step3": {
+      "title": "Review & Submit",
+      "description": "Review your details and submit to receive your AI-powered valuation report.",
+      "summary": "Your property details will appear here"
+    },
+    "back": "Back",
+    "next": "Next Step",
+    "getValuation": "Get My Valuation"
+  },
+  "paymentSuccess": {
+    "title": "Payment Successful!",
+    "subtitle": "Your payment has been processed successfully.",
+    "receipt": {
+      "title": "Payment Receipt",
+      "orderId": "Order ID",
+      "orderIdValue": "PF-20260401-001",
+      "plan": "Plan",
+      "planValue": "Standard Listing",
+      "date": "Date",
+      "dateValue": "1 April 2026",
+      "total": "Total Paid",
+      "totalValue": "$79.00"
+    },
+    "goToDashboard": "Go to Dashboard",
+    "downloadReceipt": "Download Receipt"
+  },
+  "advertise": {
+    "title": "Advertise With Us",
+    "subtitle": "Reach property buyers and sellers across 185 countries",
+    "benefits": [
+      {
+        "title": "Massive Reach",
+        "description": "Access millions of property seekers across 185 countries worldwide."
+      },
+      {
+        "title": "Targeted Audience",
+        "description": "Your ads are shown to qualified buyers and sellers actively searching."
+      },
+      {
+        "title": "Global Exposure",
+        "description": "Multi-language support ensures your brand is seen worldwide."
+      }
+    ],
+    "cta": {
+      "title": "Ready to Grow Your Business?",
+      "description": "Partner with PropertyFinder and reach a global audience of property buyers, sellers and investors.",
+      "getStarted": "Get Started",
+      "contactSales": "Contact Sales"
+    }
+  },
+  "listProperty": {
+    "title": "List Your Property",
+    "subtitle": "Reach buyers in 185 countries with PropertyFinder",
+    "benefits": {
+      "photos": {
+        "title": "Professional Photos",
+        "description": "Upload HD images and virtual tours to showcase your property."
+      },
+      "analytics": {
+        "title": "Listing Analytics",
+        "description": "Track views, enquiries and performance with real-time dashboards."
+      },
+      "reach": {
+        "title": "Global Reach",
+        "description": "Your listing is visible to buyers in 185 countries, in 15 languages."
+      },
+      "ai": {
+        "title": "AI-Powered Matching",
+        "description": "Our AI connects your property with the most relevant buyers."
+      }
+    },
+    "cta": {
+      "title": "Ready to List?",
+      "description": "Choose your plan and start reaching buyers today.",
+      "listNow": "List Now",
+      "learnMore": "Learn More"
+    }
+  },
+  "countries": {
+    "title": "Properties in 185 Countries",
+    "subtitle": "Browse property listings worldwide",
+    "list": {
+      "southAfrica": "South Africa",
+      "namibia": "Namibia",
+      "botswana": "Botswana",
+      "zimbabwe": "Zimbabwe",
+      "mozambique": "Mozambique",
+      "zambia": "Zambia",
+      "mauritius": "Mauritius",
+      "kenya": "Kenya",
+      "tanzania": "Tanzania",
+      "nigeria": "Nigeria",
+      "ghana": "Ghana",
+      "portugal": "Portugal"
+    },
+    "comingSoon": "More countries being added every month — 185 and growing."
+  },
+  "calculators": {
+    "title": "Property Calculators",
+    "subtitle": "Calculate bond repayments, transfer costs and more",
+    "bondCalculator": "Bond Repayment Calculator",
+    "purchasePrice": "Purchase Price",
+    "deposit": "Deposit",
+    "interestRate": "Interest Rate",
+    "loanTerm": "Loan Term",
+    "years": "years",
+    "monthlyPayment": "Monthly Payment",
+    "perMonth": "per month",
+    "loanAmount": "Loan Amount",
+    "totalInterest": "Total Interest",
+    "totalCost": "Total Cost",
+    "applyNow": "Apply for Finance"
   },
   "agreement": {
     "title": "Listing Agreement",
     "agencyTitle": "Agency Listing Agreement",
-    "enterpriseTitle": "Enterprise Listing Agreement",
-    "privateTitle": "Private Seller Listing Agreement",
-    "sellerTitle": "Seller Agent Agreement",
-    "auctionTitle": "Auction Seller Agreement",
     "referenceLabel": "Agreement Reference",
     "fullName": "Full Name",
     "email": "Email Address",
@@ -221,91 +523,31 @@
     "success": "Agreement Submitted Successfully!",
     "successMessage": "Your agreement reference is:",
     "proceedToPayment": "Proceed to Payment",
-    "viewPdf": "View Agreement PDF",
-    "downloadInvoice": "Download Invoice",
-    "emailAgain": "Email Again",
-    "printAgreement": "Print",
     "legalClause1": "The Lister hereby authorises PropertyFinder to market the above property.",
     "legalClause2": "This agreement is binding upon signature by both parties.",
     "legalClause3": "Commission is payable upon successful transfer of the property.",
     "pfSignatureLabel": "PropertyFinder Representative",
     "listerSignatureLabel": "Lister Signature"
   },
-  "payment": {
-    "title": "Payment",
-    "processing": "Processing your payment...",
-    "successTitle": "Payment Successful!",
-    "successMessage": "Your payment has been processed successfully.",
-    "receiptTitle": "Payment Receipt",
-    "amount": "Amount",
-    "reference": "Reference",
-    "date": "Date",
-    "status": "Status",
-    "paid": "Paid",
-    "viewAgreement": "View Agreement PDF",
-    "downloadInvoice": "Download Invoice",
-    "emailReceipt": "Email Receipt",
-    "print": "Print",
-    "share": "Share",
-    "backToHome": "Back to Homepage"
-  },
-  "calculators": {
-    "title": "Property Calculators",
-    "subtitle": "Calculate bond repayments, transfer costs and more",
-    "bondCalculator": "Bond Repayment Calculator",
-    "transferCost": "Transfer Cost Calculator",
-    "affordability": "Affordability Calculator",
-    "propertyPrice": "Property Price",
-    "deposit": "Deposit",
-    "interestRate": "Interest Rate",
-    "loanTerm": "Loan Term (years)",
-    "calculate": "Calculate",
-    "monthlyPayment": "Monthly Payment",
-    "totalCost": "Total Cost",
-    "totalInterest": "Total Interest"
-  },
-  "advertise": {
-    "title": "Advertise With Us",
-    "subtitle": "Reach property buyers and sellers across 185 countries",
-    "getStarted": "Get Started",
-    "contactUs": "Contact Us"
-  },
   "share": {
     "title": "Share",
-    "global": "Global",
-    "china": "China",
     "whatsapp": "WhatsApp",
     "facebook": "Facebook",
     "linkedin": "LinkedIn",
     "twitter": "X (Twitter)",
-    "instagram": "Instagram",
     "telegram": "Telegram",
-    "pinterest": "Pinterest",
     "email": "Email",
     "copyLink": "Copy Link",
-    "wechat": "WeChat",
-    "weibo": "Weibo",
-    "xiaohongshu": "Xiaohongshu",
-    "douyin": "Douyin",
-    "bilibili": "Bilibili",
-    "qq": "QQ",
     "copied": "Link copied to clipboard!"
   },
   "forms": {
     "name": "Full Name",
     "email": "Email Address",
     "phone": "Phone Number",
-    "address": "Address",
-    "city": "City",
-    "company": "Company",
-    "message": "Message",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
     "submit": "Submit",
     "cancel": "Cancel",
     "required": "This field is required",
-    "invalidEmail": "Please enter a valid email address",
-    "passwordMismatch": "Passwords do not match"
+    "invalidEmail": "Please enter a valid email address"
   },
   "common": {
     "loading": "Loading...",
@@ -316,9 +558,6 @@
     "contactUs": "Contact Us",
     "viewAll": "View All",
     "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-    "noResults": "No results found",
     "backToHome": "Back to Homepage",
     "termsOfUse": "Terms of Use",
     "privacyPolicy": "Privacy Policy",
@@ -341,18 +580,9 @@
     "howItWorks": "How It Works",
     "tagline": "Find Your Dream Property Anywhere in the World"
   },
-  "listProperty": {
-    "title": "List Your Property",
-    "subtitle": "Reach buyers in 185 countries with PropertyFinder",
-    "getStarted": "Get Started",
-    "chooseAgreement": "Choose your listing agreement type"
-  },
-  "countries": {
-    "title": "Properties in 185 Countries",
-    "subtitle": "Browse property listings worldwide"
-  },
-  "features": {
-    "title": "Platform Features",
-    "subtitle": "Everything you need to buy, sell, rent and value property worldwide"
+  "floatingActions": {
+    "whatsapp": "Chat on WhatsApp",
+    "scrollTop": "Back to top",
+    "share": "Share this page"
   }
 }

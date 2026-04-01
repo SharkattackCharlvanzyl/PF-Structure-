@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { locales, rtlLocales, type Locale } from "@/i18n/config";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FloatingShare from "@/components/ui/FloatingShare";
+import FloatingActions from "@/components/ui/FloatingActions";
 
 export default async function LocaleLayout({
   children,
@@ -23,6 +25,8 @@ export default async function LocaleLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FloatingShare />
+          <FloatingActions />
         </NextIntlClientProvider>
       </body>
     </html>
