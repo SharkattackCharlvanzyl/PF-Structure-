@@ -48,54 +48,66 @@
     "setSuccess": "{country} · {currency} configuré avec succès !"
   },
   "buy": {
-    "title": "Trouvez votre propriété de rêve",
-    "subtitle": "Parcourez des milliers de biens dans 185 pays",
-    "categories": "Choisissez une catégorie",
-    "categoryList": {
-      "residential": {
-        "title": "Résidentiel",
-        "description": "Maisons, appartements, maisons mitoyennes et plus pour tous les modes de vie."
-      },
-      "commercial": {
-        "title": "Commercial",
-        "description": "Bureaux, locaux commerciaux et bâtiments mixtes pour vos besoins professionnels."
-      },
-      "industrial": {
-        "title": "Industriel",
-        "description": "Entrepôts, usines et parcs industriels pour la fabrication et la logistique."
-      },
-      "farm": {
-        "title": "Agricole",
-        "description": "Fermes, petites exploitations et terres agricoles pour la culture et l’élevage."
-      },
-      "newDevelopments": {
-        "title": "Programmes neufs",
-        "description": "Biens neufs sur plan et récemment construits par des promoteurs de premier plan."
-      }
+    "title": "Trouvez la propriete de vos reves",
+    "subtitle": "Parcourez des milliers de proprietes dans 185 pays",
+    "searchPlaceholder": "Rechercher par lieu, nom ou mot-cle...",
+    "filters": "Filtres",
+    "bedroomsLabel": "Chambres",
+    "sortLabel": "Trier par",
+    "any": "Tous",
+    "clearFilters": "Effacer les filtres",
+    "resultsCount": "{count} proprietes trouvees",
+    "beds": "Ch.",
+    "baths": "SdB",
+    "garage": "Garage",
+    "enquire": "Contacter",
+    "viewDetails": "Voir les details",
+    "noResults": "Aucune propriete ne correspond",
+    "noResultsHint": "Essayez de modifier vos filtres ou termes de recherche",
+    "types": {
+      "all": "Tous les types",
+      "house": "Maison",
+      "apartment": "Appartement",
+      "townhouse": "Maison de ville",
+      "villa": "Villa",
+      "farm": "Ferme",
+      "commercial": "Commercial"
     },
-    "browseListings": "Voir les annonces",
-    "howItWorks": "Comment acheter sur PropertyFinder",
-    "steps": {
-      "search": {
-        "title": "Rechercher",
-        "description": "Parcourez les biens par lieu, type, gamme de prix et plus."
-      },
-      "enquire": {
-        "title": "Contacter",
-        "description": "Contactez directement l’agent via notre plateforme."
-      },
-      "finance": {
-        "title": "Financer",
-        "description": "Utilisez nos calculateurs et connectez-vous avec des courtiers."
-      },
-      "offer": {
-        "title": "Faire une offre",
-        "description": "Négociez et soumettez votre offre d’achat."
-      },
-      "close": {
-        "title": "Conclure",
-        "description": "Signez les contrats et finalisez votre achat immobilier."
-      }
+    "priceRanges": {
+      "any": "Tout prix",
+      "under1m": "Moins de R1M",
+      "1mTo3m": "R1M - R3M",
+      "3mTo5m": "R3M - R5M",
+      "5mTo10m": "R5M - R10M",
+      "over10m": "Plus de R10M"
+    },
+    "sort": {
+      "newest": "Plus recents",
+      "priceLow": "Prix croissant",
+      "priceHigh": "Prix decroissant",
+      "bedsHigh": "Chambres: Plus",
+      "sizeHigh": "Surface: Plus grand"
+    },
+    "status": {
+      "available": "Disponible",
+      "underOffer": "Sous offre",
+      "newListing": "Nouveau"
+    },
+    "featureLabels": {
+      "pool": "Piscine",
+      "garden": "Jardin",
+      "security": "Securite",
+      "petFriendly": "Animaux",
+      "aircon": "Clim",
+      "fireplace": "Cheminee",
+      "balcony": "Balcon",
+      "gym": "Salle de sport",
+      "braaiArea": "Barbecue",
+      "staffQuarters": "Logement service",
+      "solarPanels": "Solaire",
+      "borehole": "Forage",
+      "fibre": "Fibre",
+      "flatlet": "Studio"
     }
   },
   "rent": {

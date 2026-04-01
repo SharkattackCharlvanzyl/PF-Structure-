@@ -50,52 +50,64 @@
   "buy": {
     "title": "Find Your Dream Property",
     "subtitle": "Browse thousands of properties across 185 countries",
-    "categories": "Choose a Property Category",
-    "categoryList": {
-      "residential": {
-        "title": "Residential",
-        "description": "Houses, apartments, townhouses and more for every lifestyle and budget."
-      },
-      "commercial": {
-        "title": "Commercial",
-        "description": "Office space, retail units and mixed-use buildings for your business needs."
-      },
-      "industrial": {
-        "title": "Industrial",
-        "description": "Warehouses, factories and industrial parks for manufacturing and logistics."
-      },
-      "farm": {
-        "title": "Farm & Agricultural",
-        "description": "Farms, smallholdings and agricultural land for cultivation and livestock."
-      },
-      "newDevelopments": {
-        "title": "New Developments",
-        "description": "Brand-new off-plan and newly built properties from leading developers."
-      }
+    "searchPlaceholder": "Search by location, property name, or keyword...",
+    "filters": "Filters",
+    "bedroomsLabel": "Bedrooms",
+    "sortLabel": "Sort By",
+    "any": "Any",
+    "clearFilters": "Clear All Filters",
+    "resultsCount": "{count} properties found",
+    "beds": "Beds",
+    "baths": "Baths",
+    "garage": "Garage",
+    "enquire": "Enquire Now",
+    "viewDetails": "View Details",
+    "noResults": "No properties match your search",
+    "noResultsHint": "Try adjusting your filters or search terms",
+    "types": {
+      "all": "All Types",
+      "house": "House",
+      "apartment": "Apartment",
+      "townhouse": "Townhouse",
+      "villa": "Villa",
+      "farm": "Farm",
+      "commercial": "Commercial"
     },
-    "browseListings": "Browse Listings",
-    "howItWorks": "How Buying Works on PropertyFinder",
-    "steps": {
-      "search": {
-        "title": "Search",
-        "description": "Browse properties by location, type, price range and more."
-      },
-      "enquire": {
-        "title": "Enquire",
-        "description": "Contact the listing agent directly through our platform."
-      },
-      "finance": {
-        "title": "Finance",
-        "description": "Use our calculators and connect with bond originators."
-      },
-      "offer": {
-        "title": "Make an Offer",
-        "description": "Negotiate and submit your offer to purchase."
-      },
-      "close": {
-        "title": "Close the Deal",
-        "description": "Sign agreements and complete your property purchase."
-      }
+    "priceRanges": {
+      "any": "Any Price",
+      "under1m": "Under R1M",
+      "1mTo3m": "R1M - R3M",
+      "3mTo5m": "R3M - R5M",
+      "5mTo10m": "R5M - R10M",
+      "over10m": "Over R10M"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "bedsHigh": "Bedrooms: Most First",
+      "sizeHigh": "Size: Largest First"
+    },
+    "status": {
+      "available": "Available",
+      "underOffer": "Under Offer",
+      "newListing": "New"
+    },
+    "featureLabels": {
+      "pool": "Pool",
+      "garden": "Garden",
+      "security": "Security",
+      "petFriendly": "Pet Friendly",
+      "aircon": "Aircon",
+      "fireplace": "Fireplace",
+      "balcony": "Balcony",
+      "gym": "Gym",
+      "braaiArea": "Braai",
+      "staffQuarters": "Staff Quarters",
+      "solarPanels": "Solar",
+      "borehole": "Borehole",
+      "fibre": "Fibre",
+      "flatlet": "Flatlet"
     }
   },
   "rent": {
