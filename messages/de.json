@@ -582,7 +582,8 @@
       "private": "Private",
       "enterprise": "Enterprise",
       "seller": "Seller",
-      "auction": "Auction"
+      "auction": "Auction",
+      "buyer": "Buyer"
     },
     "agreementStatus": {
       "signed": "Signed",
@@ -899,8 +900,13 @@
       "auction": {
         "name": "Auction Seller Agreement",
         "description": "For properties being listed for sale via auction on the platform."
+      },
+      "buyer": {
+        "name": "Buyer's Agreement",
+        "description": "For buyers seeking properties with pre-approval and preference documentation."
       }
     },
+    "typeSpecificTitle": "Additional Details",
     "fields": {
       "fullName": "Full Name",
       "email": "Email Address",
@@ -908,8 +914,63 @@
       "idNumber": "ID / Passport Number",
       "propertyAddress": "Property Address",
       "askingPrice": "Asking Price",
-      "commissionRate": "Commission Rate"
+      "commissionRate": "Commission Rate",
+      "exclusivePeriod": "Exclusive Listing Period",
+      "marketingBudget": "Marketing Budget",
+      "reasonForSelling": "Reason for Selling",
+      "propertyCondition": "Property Condition",
+      "companyName": "Company Name",
+      "registrationNumber": "Registration Number",
+      "portfolioSize": "Portfolio Size",
+      "agentLicenseNumber": "Agent License Number",
+      "agencyName": "Agency Name",
+      "regionCoverage": "Region Coverage",
+      "reservePrice": "Reserve Price",
+      "auctionDatePreference": "Preferred Auction Date",
+      "auctioneerPreference": "Preferred Auctioneer",
+      "preApprovalStatus": "Pre-Approval Status",
+      "budgetRange": "Budget Range",
+      "preferredAreas": "Preferred Areas",
+      "moveInTimeline": "Move-in Timeline"
     }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "Complete your subscription to PropertyFinder",
+    "selectedPlan": "Selected Plan",
+    "billingCycle": "Billing Cycle",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "perMonth": "mo",
+    "perYear": "yr",
+    "save20": "Save 20%",
+    "paymentMethod": "Payment Method",
+    "methods": {
+      "creditCard": "Credit Card",
+      "payfast": "PayFast",
+      "eft": "EFT"
+    },
+    "cardNumber": "Card Number",
+    "expiry": "Expiry Date",
+    "cvv": "CVV",
+    "nameOnCard": "Name on Card",
+    "nameOnCardPlaceholder": "As it appears on your card",
+    "payfastRedirect": "You will be redirected to PayFast to complete your payment securely.",
+    "eftDetails": "EFT Banking Details",
+    "eftBank": "Bank",
+    "eftAccount": "Account Number",
+    "eftBranch": "Branch Code",
+    "eftRef": "Reference",
+    "orderSummary": "Order Summary",
+    "plan": "Plan",
+    "billingLabel": "Billing",
+    "subtotal": "Subtotal",
+    "vat": "VAT (15%)",
+    "total": "Total",
+    "completePayment": "Complete Payment",
+    "processing": "Processing...",
+    "secureNote": "Your payment information is secure and encrypted",
+    "encrypted": "256-bit SSL Encrypted"
   },
   "share": {
     "title": "Share",

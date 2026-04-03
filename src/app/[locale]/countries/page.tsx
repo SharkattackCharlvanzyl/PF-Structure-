@@ -16,7 +16,7 @@ export default function CountriesPage() {
     });
   }, [search, selectedRegion]);
 
-  const uniqueRegions = ["all", ...regions];
+  const uniqueRegions = ["all", ...regions.filter((r) => r !== "All")];
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-24 pb-16">

@@ -582,7 +582,8 @@
       "private": "Prive",
       "enterprise": "Entreprise",
       "seller": "Vendeur",
-      "auction": "Encheres"
+      "auction": "Encheres",
+      "buyer": "Acheteur"
     },
     "agreementStatus": {
       "signed": "Signe",
@@ -899,8 +900,13 @@
       "auction": {
         "name": "Contrat vente aux encheres",
         "description": "Pour les biens mis en vente aux encheres sur la plateforme."
+      },
+      "buyer": {
+        "name": "Contrat acheteur",
+        "description": "Pour les acheteurs recherchant des biens avec documentation de pre-approbation et preferences."
       }
     },
+    "typeSpecificTitle": "Details supplementaires",
     "fields": {
       "fullName": "Nom complet",
       "email": "Adresse e-mail",
@@ -908,8 +914,63 @@
       "idNumber": "Numero d'identite / Passeport",
       "propertyAddress": "Adresse du bien",
       "askingPrice": "Prix demande",
-      "commissionRate": "Taux de commission"
+      "commissionRate": "Taux de commission",
+      "exclusivePeriod": "Periode d'exclusivite",
+      "marketingBudget": "Budget marketing",
+      "reasonForSelling": "Raison de la vente",
+      "propertyCondition": "Etat du bien",
+      "companyName": "Nom de l'entreprise",
+      "registrationNumber": "Numero d'enregistrement",
+      "portfolioSize": "Taille du portefeuille",
+      "agentLicenseNumber": "Numero de licence d'agent",
+      "agencyName": "Nom de l'agence",
+      "regionCoverage": "Couverture regionale",
+      "reservePrice": "Prix de reserve",
+      "auctionDatePreference": "Date d'enchere preferee",
+      "auctioneerPreference": "Commissaire-priseur prefere",
+      "preApprovalStatus": "Statut de pre-approbation",
+      "budgetRange": "Fourchette budgetaire",
+      "preferredAreas": "Zones preferees",
+      "moveInTimeline": "Delai d'emmenagement"
     }
+  },
+  "checkout": {
+    "title": "Paiement",
+    "subtitle": "Finalisez votre abonnement a PropertyFinder",
+    "selectedPlan": "Plan selectionne",
+    "billingCycle": "Cycle de facturation",
+    "monthly": "Mensuel",
+    "annual": "Annuel",
+    "perMonth": "mois",
+    "perYear": "an",
+    "save20": "Economisez 20%",
+    "paymentMethod": "Mode de paiement",
+    "methods": {
+      "creditCard": "Carte de credit",
+      "payfast": "PayFast",
+      "eft": "Virement bancaire"
+    },
+    "cardNumber": "Numero de carte",
+    "expiry": "Date d'expiration",
+    "cvv": "CVV",
+    "nameOnCard": "Nom sur la carte",
+    "nameOnCardPlaceholder": "Tel qu'il apparait sur votre carte",
+    "payfastRedirect": "Vous serez redirige vers PayFast pour completer votre paiement en toute securite.",
+    "eftDetails": "Coordonnees bancaires pour virement",
+    "eftBank": "Banque",
+    "eftAccount": "Numero de compte",
+    "eftBranch": "Code agence",
+    "eftRef": "Reference",
+    "orderSummary": "Resume de commande",
+    "plan": "Plan",
+    "billingLabel": "Facturation",
+    "subtotal": "Sous-total",
+    "vat": "TVA (15%)",
+    "total": "Total",
+    "completePayment": "Finaliser le paiement",
+    "processing": "Traitement en cours...",
+    "secureNote": "Vos informations de paiement sont securisees et cryptees",
+    "encrypted": "Chiffrement SSL 256 bits"
   },
   "share": {
     "title": "Partager",

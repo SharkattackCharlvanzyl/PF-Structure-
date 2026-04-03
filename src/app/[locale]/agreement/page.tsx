@@ -4,13 +4,59 @@ import { useTranslations } from "next-intl";
 import SignatureCanvas from "react-signature-canvas";
 import { generateAgreementPDF, AgreementData } from "@/lib/generate-agreement-pdf";
 
-const AGREEMENT_TYPES = ["agency", "private", "enterprise", "seller", "auction"];
+const AGREEMENT_TYPES = ["agency", "private", "enterprise", "seller", "auction", "buyer"];
+
+interface TypeSpecificFields {
+  [key: string]: { key: string; type: string }[];
+}
+
+const TYPE_SPECIFIC_FIELDS: TypeSpecificFields = {
+  agency: [
+    { key: "commissionRate", type: "text" },
+    { key: "exclusivePeriod", type: "text" },
+    { key: "marketingBudget", type: "text" },
+  ],
+  private: [
+    { key: "reasonForSelling", type: "text" },
+    { key: "propertyCondition", type: "text" },
+  ],
+  enterprise: [
+    { key: "companyName", type: "text" },
+    { key: "registrationNumber", type: "text" },
+    { key: "portfolioSize", type: "text" },
+  ],
+  seller: [
+    { key: "agentLicenseNumber", type: "text" },
+    { key: "agencyName", type: "text" },
+    { key: "regionCoverage", type: "text" },
+  ],
+  auction: [
+    { key: "reservePrice", type: "text" },
+    { key: "auctionDatePreference", type: "text" },
+    { key: "auctioneerPreference", type: "text" },
+  ],
+  buyer: [
+    { key: "preApprovalStatus", type: "text" },
+    { key: "budgetRange", type: "text" },
+    { key: "preferredAreas", type: "text" },
+    { key: "moveInTimeline", type: "text" },
+  ],
+};
+
+const TYPE_ICONS: Record<string, string> = {
+  agency: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+  private: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1",
+  enterprise: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+  seller: "M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0",
+  auction: "M15.536 8.464a5 5 0 010 7.072M12 9.88l.01-.01M18.364 5.636a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728",
+  buyer: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+};
 
 export default function AgreementPage() {
   const t = useTranslations("agreement");
   const [step, setStep] = useState(0);
   const [agreementType, setAgreementType] = useState("");
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Record<string, string>>({
     fullName: "",
     email: "",
     phone: "",
@@ -82,21 +128,26 @@ export default function AgreementPage() {
     win?.addEventListener("load", () => win.print());
   };
 
-  // Step 0: Select agreement type
+  // Step 0: Select agreement type (2x3 grid)
   if (step === 0) {
     return (
       <section className="min-h-screen py-20 px-4">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-display font-bold text-gold mb-4 text-center">{t("title")}</h1>
           <p className="text-cream/70 text-center mb-12">{t("subtitle")}</p>
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {AGREEMENT_TYPES.map((type) => (
               <button
                 key={type}
                 onClick={() => { setAgreementType(type); setStep(1); }}
                 className="p-6 bg-navy-light border-2 border-gold/20 rounded-2xl hover:border-gold/60 transition-all text-left group"
               >
-                <h3 className="text-xl font-display text-gold group-hover:text-gold-light mb-2">
+                <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
+                  <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d={TYPE_ICONS[type]} />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-display text-gold group-hover:text-gold-light mb-2">
                   {t(`types.${type}.name`)}
                 </h3>
                 <p className="text-cream/60 text-sm">{t(`types.${type}.description`)}</p>
@@ -108,17 +159,17 @@ export default function AgreementPage() {
     );
   }
 
-  // Step 1: Fill form
+  // Step 1: Fill form (shared + type-specific fields)
   if (step === 1) {
-    const fields = [
+    const sharedFields = [
       { key: "fullName", type: "text" },
       { key: "email", type: "email" },
       { key: "phone", type: "tel" },
       { key: "idNumber", type: "text" },
       { key: "propertyAddress", type: "text" },
       { key: "askingPrice", type: "text" },
-      { key: "commissionRate", type: "text" },
     ];
+    const specificFields = TYPE_SPECIFIC_FIELDS[agreementType] || [];
 
     return (
       <section className="min-h-screen py-20 px-4">
@@ -129,13 +180,15 @@ export default function AgreementPage() {
           </button>
           <h2 className="text-3xl font-display font-bold text-gold mb-2">{t(`types.${agreementType}.name`)}</h2>
           <p className="text-cream/60 mb-8">{t("fillDetails")}</p>
+
+          {/* Shared Fields */}
           <div className="space-y-5">
-            {fields.map((f) => (
+            {sharedFields.map((f) => (
               <div key={f.key}>
                 <label className="block text-cream/80 text-sm mb-1.5">{t(`fields.${f.key}`)}</label>
                 <input
                   type={f.type}
-                  value={form[f.key as keyof typeof form]}
+                  value={form[f.key] || ""}
                   onChange={(e) => handleFormChange(f.key, e.target.value)}
                   className="w-full px-4 py-3 bg-navy-light border-2 border-gold/20 rounded-xl text-cream focus:border-gold focus:outline-none transition-colors"
                   placeholder={t(`fields.${f.key}`)}
@@ -143,6 +196,28 @@ export default function AgreementPage() {
               </div>
             ))}
           </div>
+
+          {/* Type-specific Fields */}
+          {specificFields.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-gold font-display text-lg font-semibold mb-4">{t("typeSpecificTitle")}</h3>
+              <div className="space-y-5">
+                {specificFields.map((f) => (
+                  <div key={f.key}>
+                    <label className="block text-cream/80 text-sm mb-1.5">{t(`fields.${f.key}`)}</label>
+                    <input
+                      type={f.type}
+                      value={form[f.key] || ""}
+                      onChange={(e) => handleFormChange(f.key, e.target.value)}
+                      className="w-full px-4 py-3 bg-navy-light border-2 border-gold/20 rounded-xl text-cream focus:border-gold focus:outline-none transition-colors"
+                      placeholder={t(`fields.${f.key}`)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="mt-8 p-4 bg-navy-light/50 border border-gold/10 rounded-xl">
             <h4 className="text-gold text-sm font-semibold mb-2">{t("legalPreview")}</h4>
             <p className="text-cream/50 text-xs leading-relaxed">{t("legalText")}</p>
@@ -183,8 +258,6 @@ export default function AgreementPage() {
               <div className="text-cream">{form.propertyAddress}</div>
               <div className="text-cream/50">{t("fields.askingPrice")}:</div>
               <div className="text-cream">{form.askingPrice}</div>
-              <div className="text-cream/50">{t("fields.commissionRate")}:</div>
-              <div className="text-cream">{form.commissionRate}</div>
             </div>
           </div>
 
@@ -239,7 +312,7 @@ export default function AgreementPage() {
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="py-3 px-4 bg-navy-light border-2 border-gold/30 text-gold font-semibold rounded-xl hover:border-gold transition-colors text-center">
             {t("viewPdf")}
           </a>
-          <a href="/payment-success" className="py-3 px-4 bg-navy-light border-2 border-gold/30 text-gold font-semibold rounded-xl hover:border-gold transition-colors text-center">
+          <a href="/checkout" className="py-3 px-4 bg-navy-light border-2 border-gold/30 text-gold font-semibold rounded-xl hover:border-gold transition-colors text-center">
             {t("proceedPayment")}
           </a>
         </div>
