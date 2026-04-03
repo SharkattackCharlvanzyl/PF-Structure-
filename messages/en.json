@@ -960,7 +960,10 @@
     "privacy": "Privacy Policy",
     "commissionFees": "Commission & Fees",
     "howItWorks": "How It Works",
-    "tagline": "Find Your Dream Property Anywhere in the World"
+    "tagline": "Find Your Dream Property Anywhere in the World",
+    "property": "Property",
+    "services": "Services",
+    "legal": "Legal"
   },
   "floatingActions": {
     "whatsapp": "Chat on WhatsApp",
