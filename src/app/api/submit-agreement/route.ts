@@ -1,11 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
+import { sendAgreementConfirmation } from "@/lib/email";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function generateReferenceId(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `PF-AGR-${code}`;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { fullName, email, propertyAddress, agreementType, phone, idNumber, askingPrice, commissionRate } = body;
+    const {
+      fullName,
+      email,
+      propertyAddress,
+      agreementType,
+      phone,
+      idNumber,
+      askingPrice,
+      commissionRate,
+    } = body;
 
     // Validate required fields
     const missing: string[] = [];
@@ -30,11 +51,51 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate reference ID
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const referenceId = `PF-AGR-${timestamp}-${random}`;
-
+    const referenceId = generateReferenceId();
     const now = new Date().toISOString();
+
+    // Get client IP from headers
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+
+    // Build agreement record
+    const agreement = {
+      referenceId,
+      status: "pending",
+      agreementType,
+      fullName,
+      email,
+      propertyAddress,
+      phone: phone || null,
+      idNumber: idNumber || null,
+      askingPrice: askingPrice || null,
+      commissionRate: commissionRate || null,
+      createdAt: now,
+      ip,
+    };
+
+    // Save to JSON file
+    const agreementsDir = path.join(process.cwd(), "data", "agreements");
+    fs.mkdirSync(agreementsDir, { recursive: true });
+    const filePath = path.join(agreementsDir, `${referenceId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(agreement, null, 2), "utf-8");
+
+    // Send confirmation email (don't fail the request if email fails)
+    const emailResult = await sendAgreementConfirmation({
+      to: email,
+      fullName,
+      referenceId,
+      agreementType,
+      propertyAddress,
+    });
+
+    if (!emailResult.success) {
+      console.warn(
+        `[submit-agreement] Email failed for ${referenceId}: ${emailResult.error}`
+      );
+    }
 
     return NextResponse.json({
       success: true,
@@ -52,8 +113,11 @@ export async function POST(request: NextRequest) {
       },
       timestamps: {
         submitted: now,
-        expiresAt: new Date(timestamp + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000
+        ).toISOString(),
       },
+      emailSent: emailResult.success,
       message: "Agreement submitted successfully. Awaiting review.",
     });
   } catch {

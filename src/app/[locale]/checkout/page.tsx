@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -13,8 +13,17 @@ const PLAN_PRICES: Record<PlanKey, { monthly: number; annual: number }> = {
   premium:      { monthly: 4999, annual: 47990 },
 };
 
+const PLAN_NAMES: Record<PlanKey, string> = {
+  starter: "Starter",
+  professional: "Professional",
+  enterprise: "Enterprise",
+  premium: "Premium",
+};
+
 const PAYMENT_METHODS = ["creditCard", "payfast", "eft"] as const;
 type PaymentMethod = typeof PAYMENT_METHODS[number];
+
+const PAYFAST_SANDBOX_URL = "https://sandbox.payfast.co.za/eng/process";
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
@@ -30,6 +39,8 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("creditCard");
   const [cardForm, setCardForm] = useState({ number: "", expiry: "", cvv: "", name: "" });
   const [processing, setProcessing] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
 
   const basePrice = PLAN_PRICES[plan][billing];
   const vat = Math.round(basePrice * 0.15);
@@ -42,7 +53,104 @@ export default function CheckoutPage() {
     setCardForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handlePayFastPayment = async () => {
+    if (!customerName.trim() || !customerEmail.trim()) {
+      alert("Please enter your name and email address.");
+      return;
+    }
+
+    setProcessing(true);
+
+    try {
+      const nameParts = customerName.trim().split(/\s+/);
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      const planName = PLAN_NAMES[plan];
+      const billingLabel = billing === "monthly" ? "Monthly" : "Annual";
+      const paymentId = "PF-" + plan.toUpperCase() + "-" + Date.now();
+
+      const fields: Record<string, string> = {
+        merchant_id: "10000100",
+        merchant_key: "46f0cd694581a",
+        return_url: window.location.origin + "/payment-success",
+        cancel_url: window.location.origin + "/checkout?plan=" + plan,
+        notify_url: window.location.origin + "/api/payment-notify",
+        name_first: firstName,
+        name_last: lastName,
+        email_address: customerEmail.trim(),
+        m_payment_id: paymentId,
+        amount: total.toFixed(2),
+        item_name: "PropertyFinder " + planName + " Plan",
+        item_description: billingLabel + " subscription",
+      };
+
+      // Get MD5 signature from server
+      const sigResponse = await fetch("/api/payfast-signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fields),
+      });
+
+      if (!sigResponse.ok) {
+        throw new Error("Failed to generate payment signature");
+      }
+
+      const { signature } = await sigResponse.json();
+
+      // Create hidden form and submit to PayFast
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = PAYFAST_SANDBOX_URL;
+
+      // Add all fields in order
+      const orderedKeys = [
+        "merchant_id",
+        "merchant_key",
+        "return_url",
+        "cancel_url",
+        "notify_url",
+        "name_first",
+        "name_last",
+        "email_address",
+        "m_payment_id",
+        "amount",
+        "item_name",
+        "item_description",
+      ];
+
+      for (const key of orderedKeys) {
+        if (fields[key]) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = key;
+          input.value = fields[key];
+          form.appendChild(input);
+        }
+      }
+
+      // Add signature
+      const sigInput = document.createElement("input");
+      sigInput.type = "hidden";
+      sigInput.name = "signature";
+      sigInput.value = signature;
+      form.appendChild(sigInput);
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("PayFast payment failed:", err);
+      alert("Payment initiation failed. Please try again.");
+      setProcessing(false);
+    }
+  };
+
   const handlePayment = async () => {
+    // PayFast has its own handler
+    if (paymentMethod === "payfast") {
+      return handlePayFastPayment();
+    }
+
     setProcessing(true);
     try {
       await fetch("/api/payment-notify", {
@@ -202,8 +310,33 @@ export default function CheckoutPage() {
             )}
 
             {paymentMethod === "payfast" && (
-              <div className="border-t border-gold/10 pt-6 text-center text-cream/50 text-sm">
-                <p>{t("payfastRedirect")}</p>
+              <div className="space-y-4 border-t border-gold/10 pt-6">
+                <p className="text-cream/50 text-sm mb-4">{t("payfastRedirect")}</p>
+                <div>
+                  <label className="block text-cream/70 text-sm mb-1.5">Full Name *</label>
+                  <input
+                    type="text"
+                    placeholder="John Smith"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="w-full px-4 py-3 bg-navy border-2 border-gold/20 rounded-xl text-cream focus:border-gold focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-cream/70 text-sm mb-1.5">Email Address *</label>
+                  <input
+                    type="email"
+                    placeholder="john@example.com"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    className="w-full px-4 py-3 bg-navy border-2 border-gold/20 rounded-xl text-cream focus:border-gold focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+                <p className="text-cream/30 text-xs">
+                  You will be redirected to PayFast to complete your payment securely.
+                </p>
               </div>
             )}
 

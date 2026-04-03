@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  sendAgreementConfirmation,
+  sendPaymentReceipt,
+} from "@/lib/email";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_TEMPLATES = [
@@ -37,27 +41,102 @@ export async function POST(request: NextRequest) {
     // Validate template type
     if (!VALID_TEMPLATES.includes(template)) {
       return NextResponse.json(
-        { success: false, error: `Invalid template. Must be one of: ${VALID_TEMPLATES.join(", ")}` },
+        {
+          success: false,
+          error: `Invalid template. Must be one of: ${VALID_TEMPLATES.join(", ")}`,
+        },
         { status: 400 }
       );
     }
 
-    // Simulate email queuing (no actual sending)
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const messageId = `PF-MSG-${timestamp}-${random}`;
+    // Dispatch to the appropriate email function
+    let result: { success: boolean; messageId?: string; error?: string };
+
+    switch (template) {
+      case "agreement-confirmation":
+        if (
+          !data?.fullName ||
+          !data?.referenceId ||
+          !data?.agreementType ||
+          !data?.propertyAddress
+        ) {
+          return NextResponse.json(
+            {
+              success: false,
+              error:
+                "Missing data fields for agreement-confirmation: fullName, referenceId, agreementType, propertyAddress",
+            },
+            { status: 400 }
+          );
+        }
+        result = await sendAgreementConfirmation({
+          to,
+          fullName: data.fullName,
+          referenceId: data.referenceId,
+          agreementType: data.agreementType,
+          propertyAddress: data.propertyAddress,
+        });
+        break;
+
+      case "payment-receipt":
+        if (
+          !data?.fullName ||
+          !data?.transactionId ||
+          !data?.plan ||
+          !data?.amount
+        ) {
+          return NextResponse.json(
+            {
+              success: false,
+              error:
+                "Missing data fields for payment-receipt: fullName, transactionId, plan, amount",
+            },
+            { status: 400 }
+          );
+        }
+        result = await sendPaymentReceipt({
+          to,
+          fullName: data.fullName,
+          transactionId: data.transactionId,
+          plan: data.plan,
+          amount: data.amount,
+        });
+        break;
+
+      case "welcome":
+      case "enquiry-notification":
+        // These templates are not yet implemented; return queued status
+        return NextResponse.json({
+          success: true,
+          messageId: `PF-MSG-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+          status: "queued",
+          email: { to, subject, template, data: data || {} },
+          message: `Template "${template}" is not yet wired to a sender. Email queued for future delivery.`,
+        });
+
+      default:
+        return NextResponse.json(
+          { success: false, error: "Unhandled template" },
+          { status: 400 }
+        );
+    }
+
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error || "Failed to send email",
+        },
+        { status: 502 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      messageId,
-      status: "queued",
-      email: {
-        to,
-        subject,
-        template,
-        data: data || {},
-      },
-      message: `Email queued for delivery to ${to}`,
+      messageId: result.messageId,
+      status: "sent",
+      email: { to, subject, template, data: data || {} },
+      message: `Email sent successfully to ${to}`,
     });
   } catch {
     return NextResponse.json(
