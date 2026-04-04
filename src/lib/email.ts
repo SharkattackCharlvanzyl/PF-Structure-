@@ -1,8 +1,8 @@
 import sgMail from "@sendgrid/mail";
 
+// ── SendGrid Configuration ──────────────────────────────────────────
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
-
-const FROM = { email: "charl@property-finder.co.za", name: "Property Finder" };
+const SG_FROM = { email: "charl@property-finder.co.za", name: "Property Finder" };
 const ADMIN_EMAIL = "charl@property-finder.co.za";
 
 // ── Branded HTML wrapper ──────────────────────────────────────────────
@@ -35,7 +35,7 @@ function wrap(content: string): string {
 </body></html>`;
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────
+// ── HTML helpers ──────────────────────────────────────────────────────
 function heading(text: string) {
   return `<h2 style="margin:0 0 20px 0;font-size:22px;font-weight:400;color:#c4a47c;text-align:center;">${text}</h2>`;
 }
@@ -102,7 +102,30 @@ interface ContactData {
   message: string;
 }
 
-// ── 1. Agreement confirmation → client ─────────────────────────────────
+// ── SendGrid send helper ────────────────────────────────────────────
+async function send(
+  to: string | string[],
+  subject: string,
+  html: string,
+  replyTo?: { email: string; name: string }
+): Promise<EmailResult> {
+  try {
+    const msg: Parameters<typeof sgMail.send>[0] = { to, from: SG_FROM, subject, html };
+    if (replyTo) (msg as unknown as Record<string, unknown>).replyTo = replyTo;
+    const [res] = await sgMail.send(msg);
+    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[sendgrid] Failed:", msg);
+    return { success: false, error: msg };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// PUBLIC API — All emails via SendGrid
+// ═══════════════════════════════════════════════════════════════════════
+
+// ── 1. Agreement confirmation → client + admin copy ─────────────────
 export async function sendAgreementConfirmation(data: AgreementData): Promise<EmailResult> {
   const html = wrap(
     heading("Agreement Submitted Successfully") +
@@ -118,18 +141,10 @@ export async function sendAgreementConfirmation(data: AgreementData): Promise<Em
     ) +
     button("https://property-finder.co.za/dashboard", "View Dashboard")
   );
-
-  try {
-    const [res] = await sgMail.send({ to: data.to, from: FROM, subject: `Agreement Confirmation - ${data.referenceId}`, html });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendAgreementConfirmation failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(data.to, `Agreement Confirmation - ${data.referenceId}`, html);
 }
 
-// ── 2. Agreement internal copy → admin ─────────────────────────────────
+// ── 2. Agreement internal copy → admin ──────────────────────────────
 export async function sendAgreementInternalCopy(data: AgreementData): Promise<EmailResult> {
   const html = wrap(
     heading("New Agreement Submission") +
@@ -145,18 +160,10 @@ export async function sendAgreementInternalCopy(data: AgreementData): Promise<Em
     ) +
     button("https://property-finder.co.za/dashboard", "Open Dashboard")
   );
-
-  try {
-    const [res] = await sgMail.send({ to: ADMIN_EMAIL, from: FROM, subject: `[Admin] New Agreement - ${data.referenceId}`, html });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendAgreementInternalCopy failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(ADMIN_EMAIL, `[Admin] New Agreement - ${data.referenceId}`, html);
 }
 
-// ── 3. Valuation confirmation → client ─────────────────────────────────
+// ── 3. Valuation confirmation → client ──────────────────────────────
 export async function sendValuationConfirmation(data: ValuationData): Promise<EmailResult> {
   const html = wrap(
     heading("Valuation Request Received") +
@@ -172,18 +179,10 @@ export async function sendValuationConfirmation(data: ValuationData): Promise<Em
     ) +
     button("https://property-finder.co.za/dashboard", "Track Your Valuation")
   );
-
-  try {
-    const [res] = await sgMail.send({ to: data.to, from: FROM, subject: `Valuation Request - ${data.referenceId}`, html });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendValuationConfirmation failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(data.to, `Valuation Request - ${data.referenceId}`, html);
 }
 
-// ── 4. Payment receipt → client ────────────────────────────────────────
+// ── 4. Payment receipt → client ─────────────────────────────────────
 export async function sendPaymentReceipt(data: PaymentData): Promise<EmailResult> {
   const html = wrap(
     heading("Payment Receipt") +
@@ -198,18 +197,10 @@ export async function sendPaymentReceipt(data: PaymentData): Promise<EmailResult
     ) +
     button("https://property-finder.co.za/dashboard", "View Dashboard")
   );
-
-  try {
-    const [res] = await sgMail.send({ to: data.to, from: FROM, subject: `Payment Receipt - ${data.transactionId}`, html });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendPaymentReceipt failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(data.to, `Payment Receipt - ${data.transactionId}`, html);
 }
 
-// ── 5. Contact message → admin ─────────────────────────────────────────
+// ── 5. Contact message → admin ──────────────────────────────────────
 export async function sendContactMessage(data: ContactData): Promise<EmailResult> {
   const html = wrap(
     heading("New Contact Message") +
@@ -221,29 +212,15 @@ export async function sendContactMessage(data: ContactData): Promise<EmailResult
     ) +
     para(data.message.replace(/\n/g, "<br>"))
   );
-
-  try {
-    const [res] = await sgMail.send({
-      to: ADMIN_EMAIL,
-      from: FROM,
-      replyTo: { email: data.from, name: data.name },
-      subject: `[Contact] ${data.subject}`,
-      html,
-    });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendContactMessage failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(ADMIN_EMAIL, `[Contact] ${data.subject}`, html, { email: data.from, name: data.name });
 }
 
-// ── 6. Test email ──────────────────────────────────────────────────────
+// ── 6. Test email ───────────────────────────────────────────────────
 export async function sendTestEmail(to: string): Promise<EmailResult> {
   const html = wrap(
     heading("Email Integration Test") +
     para("This is a test email from your PropertyFinder Next.js application.") +
-    para("If you are reading this, SendGrid email delivery is working correctly.") +
+    para("If you are reading this, email delivery is working correctly.") +
     table(
       row("Status", "Connected", true) +
       row("Sent At", new Date().toISOString()) +
@@ -251,13 +228,5 @@ export async function sendTestEmail(to: string): Promise<EmailResult> {
     ) +
     button("https://property-finder.co.za", "Visit PropertyFinder")
   );
-
-  try {
-    const [res] = await sgMail.send({ to, from: FROM, subject: "PropertyFinder - Email Test", html });
-    return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[email] sendTestEmail failed:", msg);
-    return { success: false, error: msg };
-  }
+  return send(to, "PropertyFinder - Email Test", html);
 }
