@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@sendgrid/mail": "^8.1.6",
     "@types/react-signature-canvas": "^1.0.7",
     "axios": "^1.14.0",
     "jspdf": "^4.2.1",

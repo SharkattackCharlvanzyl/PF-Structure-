@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { sendAgreementConfirmation } from "@/lib/email";
+import { sendAgreementConfirmation, sendAgreementInternalCopy } from "@/lib/email";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -82,18 +82,31 @@ export async function POST(request: NextRequest) {
     const filePath = path.join(agreementsDir, `${referenceId}.json`);
     fs.writeFileSync(filePath, JSON.stringify(agreement, null, 2), "utf-8");
 
-    // Send confirmation email (don't fail the request if email fails)
-    const emailResult = await sendAgreementConfirmation({
+    // Send confirmation email to client (don't fail the request if email fails)
+    const emailData = {
       to: email,
       fullName,
       referenceId,
       agreementType,
       propertyAddress,
-    });
+      askingPrice: askingPrice || undefined,
+      commissionRate: commissionRate || undefined,
+    };
+
+    const emailResult = await sendAgreementConfirmation(emailData);
 
     if (!emailResult.success) {
       console.warn(
-        `[submit-agreement] Email failed for ${referenceId}: ${emailResult.error}`
+        `[submit-agreement] Client email failed for ${referenceId}: ${emailResult.error}`
+      );
+    }
+
+    // Send internal copy to admin
+    const internalResult = await sendAgreementInternalCopy(emailData);
+
+    if (!internalResult.success) {
+      console.warn(
+        `[submit-agreement] Internal email failed for ${referenceId}: ${internalResult.error}`
       );
     }
 
@@ -118,6 +131,7 @@ export async function POST(request: NextRequest) {
         ).toISOString(),
       },
       emailSent: emailResult.success,
+      adminNotified: internalResult.success,
       message: "Agreement submitted successfully. Awaiting review.",
     });
   } catch {
