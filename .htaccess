@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Proxy all requests to the Node.js app
+RewriteRule ^(.*)$ http://127.0.0.1:%{ENV:PASSENGER_BASE_PORT}/$1 [P,L]

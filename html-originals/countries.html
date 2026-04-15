@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — 11 Browse by Country</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#ffffff;--nb-offwhite:#faf8f4;
+      --nb-snow:#f0ece4;--nb-border:rgba(196,164,124,0.18);--nb-text:#1a1408;--nb-muted:#8a7d5a;
+      --nb-hero-grad:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      --nb-hero-overlay:linear-gradient(160deg,rgba(14,21,32,0.3) 0%,rgba(14,21,32,0.05) 100%);
+      --pf-warn:#D97706;
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#1a1408;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+
+    .hero{position:relative;background:var(--nb-hero-grad);padding:56px 24px 48px;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero h1{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;color:white;margin-bottom:12px}
+    .hero p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:620px;margin:0 auto 24px;line-height:1.6}
+    .hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .hero-stat{padding:14px 22px;border-radius:var(--radius2);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);text-align:center;min-width:110px}
+    .hero-stat .val{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:white}
+    .hero-stat .lbl{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:4px;font-weight:600}
+
+    .search-wrap{max-width:1220px;margin:-24px auto 0;position:relative;z-index:2;padding:0 24px}
+    .search-bar{display:flex;gap:10px;background:var(--nb-white);border-radius:var(--radius);padding:14px 18px;box-shadow:0 8px 32px rgba(0,0,0,0.1);border:1px solid var(--nb-border);flex-wrap:wrap;align-items:center}
+    .search-input{flex:1;min-width:200px;padding:12px 16px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.95rem;font-family:var(--font);color:#e8dfc8;outline:none}
+    .search-input:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .search-input::placeholder{color:var(--nb-muted)}
+    .cont-filters{display:flex;gap:6px;flex-wrap:wrap}
+    .cont-chip{padding:8px 14px;border-radius:var(--radius3);border:1px solid var(--nb-border);background:var(--nb-white);font-size:0.78rem;font-weight:700;color:var(--nb-muted);cursor:pointer;font-family:var(--font);transition:all 0.2s ease;display:flex;align-items:center;gap:5px}
+    .cont-chip:hover{border-color:#c4a47c;color:#c4a47c}
+    .cont-chip.active{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .cont-chip .count{font-size:0.68rem;opacity:0.7}
+
+    /* Status filter */
+    .status-toggle{display:flex;gap:6px;margin-left:auto}
+    .st-btn{padding:8px 14px;border-radius:var(--radius3);border:1px solid var(--nb-border);background:var(--nb-white);font-size:0.78rem;font-weight:700;color:var(--nb-muted);cursor:pointer;font-family:var(--font);transition:all 0.2s ease}
+    .st-btn:hover{border-color:#c4a47c;color:#c4a47c}
+    .st-btn.active{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+
+    .main{max-width:1220px;margin:0 auto;padding:28px 24px 60px}
+    .result-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+    .result-bar .count{font-size:0.92rem;font-weight:700}
+    .result-bar .sort{font-size:0.82rem;color:var(--nb-muted)}
+
+    .cont-header{padding:18px 0 12px;margin-top:12px;display:flex;align-items:center;gap:10px}
+    .cont-header:first-child{margin-top:0}
+    .cont-header .c-ico{font-size:1.5rem}
+    .cont-header h2{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#e8dfc8}
+    .cont-header .c-count{font-size:0.78rem;color:var(--nb-muted);font-weight:600}
+    .cont-header .c-line{flex:1;height:1px;background:var(--nb-border)}
+
+    .cc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:8px}
+    .cc{display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow);cursor:pointer;transition:all 0.25s ease}
+    .cc:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:#c4a47c}
+    .cc.coming{opacity:0.7}
+    .cc.coming:hover{opacity:1}
+    .cc-flag{font-size:2rem;flex-shrink:0;line-height:1}
+    .cc-body{flex:1;min-width:0}
+    .cc-name{font-weight:800;font-size:0.92rem;color:#e8dfc8;margin-bottom:2px}
+    .cc-cities{font-size:0.73rem;color:var(--nb-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cc-count{font-size:0.68rem;font-weight:700;color:#c4a47c;margin-top:4px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;background:rgba(196,164,124,0.06)}
+    .cc-count.coming{color:var(--pf-warn);background:rgba(217,119,6,0.08)}
+
+    .empty{text-align:center;padding:60px 20px;color:var(--nb-muted)}
+    .empty .ico{font-size:3rem;margin-bottom:12px}
+    .empty h3{font-family:var(--font-display);font-size:1.1rem;color:#e8dfc8;margin-bottom:6px}
+
+    .cta{position:relative;padding:48px 24px;background:linear-gradient(135deg,#0e1520,#141c2b));overflow:hidden;text-align:center;margin-top:20px;border-radius:var(--radius)}
+    .cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 80% 50%,rgba(255,255,255,0.05),transparent);pointer-events:none}
+    .cta-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+    .cta-inner h2{font-family:var(--font-display);font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:700;color:white;margin-bottom:10px}
+    .cta-inner p{color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:20px;line-height:1.6}
+    .cta-btn{display:inline-flex;gap:8px;align-items:center;padding:13px 28px;border-radius:4px;background:var(--nb-lime);color:#e8dfc8;font-weight:800;font-size:0.95rem;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s ease;text-decoration:none}
+    .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,164,124,0.3)}
+
+    .footer{max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link  pf-active">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Browse Properties by Country</h1>
+      <p>PropertyFinder covers 185 countries across 5 continents — with 62 active markets and more launching every month.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="val">185</div><div class="lbl">Countries</div></div>
+        <div class="hero-stat"><div class="val">62</div><div class="lbl">Active Markets</div></div>
+        <div class="hero-stat"><div class="val">350K+</div><div class="lbl">Listings</div></div>
+        <div class="hero-stat"><div class="val">5</div><div class="lbl">Continents</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <input class="search-input" type="text" id="countrySearch" placeholder="Search by country name, city, or code..." oninput="filterCountries()">
+      <div class="cont-filters" id="contFilters">
+        <button class="cont-chip active" data-cont="all" onclick="filterCont(this)">🌐 All <span class="count">(185)</span></button>
+        <button class="cont-chip" data-cont="AF" onclick="filterCont(this)">🌍 Africa <span class="count">(54)</span></button><button class="cont-chip" data-cont="EU" onclick="filterCont(this)">🌍 Europe <span class="count">(44)</span></button><button class="cont-chip" data-cont="AS" onclick="filterCont(this)">🌏 Asia & Middle East <span class="count">(38)</span></button><button class="cont-chip" data-cont="AM" onclick="filterCont(this)">🌎 Americas <span class="count">(35)</span></button><button class="cont-chip" data-cont="OC" onclick="filterCont(this)">🌏 Oceania <span class="count">(14)</span></button>
+      </div>
+      <div class="status-toggle">
+        <button class="st-btn active" data-status="all" onclick="filterStatus(this)">All</button>
+        <button class="st-btn" data-status="active" onclick="filterStatus(this)">Active (62)</button>
+        <button class="st-btn" data-status="coming" onclick="filterStatus(this)">Coming Soon (123)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="result-bar">
+      <span class="count" id="resultCount">Showing 185 countries</span>
+      <span class="sort">Active markets first, then Coming Soon alphabetically</span>
+    </div>
+
+    <div id="countryContainer">
+      
+      <div class="cont-group" data-cont="AF">
+        <div class="cont-header">
+          <span class="c-ico">🌍</span>
+          <h2>Africa</h2>
+          <span class="c-count">54 countries (12 active)</span>
+          <div class="c-line"></div>
+        </div>
+        <div class="cc-grid">
+          <div class="cc active" data-cont="AF" data-name="south africa" data-code="za" data-cities="johannesburg, cape town, durban" data-active="1" onclick="selectCountry('ZA','South Africa',true)">
+            <div class="cc-flag">🇿🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">South Africa</div>
+              <div class="cc-cities">Johannesburg, Cape Town, Durban</div>
+              <div class="cc-count">📊 12,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="nigeria" data-code="ng" data-cities="lagos, abuja, port harcourt" data-active="1" onclick="selectCountry('NG','Nigeria',true)">
+            <div class="cc-flag">🇳🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Nigeria</div>
+              <div class="cc-cities">Lagos, Abuja, Port Harcourt</div>
+              <div class="cc-count">📊 3,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="egypt" data-code="eg" data-cities="cairo, alexandria, hurghada" data-active="1" onclick="selectCountry('EG','Egypt',true)">
+            <div class="cc-flag">🇪🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Egypt</div>
+              <div class="cc-cities">Cairo, Alexandria, Hurghada</div>
+              <div class="cc-count">📊 2,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="kenya" data-code="ke" data-cities="nairobi, mombasa, kisumu" data-active="1" onclick="selectCountry('KE','Kenya',true)">
+            <div class="cc-flag">🇰🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Kenya</div>
+              <div class="cc-cities">Nairobi, Mombasa, Kisumu</div>
+              <div class="cc-count">📊 2,100+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="morocco" data-code="ma" data-cities="casablanca, marrakech, rabat" data-active="1" onclick="selectCountry('MA','Morocco',true)">
+            <div class="cc-flag">🇲🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Morocco</div>
+              <div class="cc-cities">Casablanca, Marrakech, Rabat</div>
+              <div class="cc-count">📊 1,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="ghana" data-code="gh" data-cities="accra, kumasi, tamale" data-active="1" onclick="selectCountry('GH','Ghana',true)">
+            <div class="cc-flag">🇬🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Ghana</div>
+              <div class="cc-cities">Accra, Kumasi, Tamale</div>
+              <div class="cc-count">📊 1,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="tanzania" data-code="tz" data-cities="dar es salaam, zanzibar, arusha" data-active="1" onclick="selectCountry('TZ','Tanzania',true)">
+            <div class="cc-flag">🇹🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Tanzania</div>
+              <div class="cc-cities">Dar es Salaam, Zanzibar, Arusha</div>
+              <div class="cc-count">📊 980+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="mauritius" data-code="mu" data-cities="port louis, grand baie, flic en flac" data-active="1" onclick="selectCountry('MU','Mauritius',true)">
+            <div class="cc-flag">🇲🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Mauritius</div>
+              <div class="cc-cities">Port Louis, Grand Baie, Flic en Flac</div>
+              <div class="cc-count">📊 760+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="botswana" data-code="bw" data-cities="gaborone, francistown, maun" data-active="1" onclick="selectCountry('BW','Botswana',true)">
+            <div class="cc-flag">🇧🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Botswana</div>
+              <div class="cc-cities">Gaborone, Francistown, Maun</div>
+              <div class="cc-count">📊 520+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="zambia" data-code="zm" data-cities="lusaka, livingstone, ndola" data-active="1" onclick="selectCountry('ZM','Zambia',true)">
+            <div class="cc-flag">🇿🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Zambia</div>
+              <div class="cc-cities">Lusaka, Livingstone, Ndola</div>
+              <div class="cc-count">📊 480+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="namibia" data-code="na" data-cities="windhoek, swakopmund, walvis bay" data-active="1" onclick="selectCountry('NA','Namibia',true)">
+            <div class="cc-flag">🇳🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Namibia</div>
+              <div class="cc-cities">Windhoek, Swakopmund, Walvis Bay</div>
+              <div class="cc-count">📊 340+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AF" data-name="mozambique" data-code="mz" data-cities="maputo, beira, vilankulo" data-active="1" onclick="selectCountry('MZ','Mozambique',true)">
+            <div class="cc-flag">🇲🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Mozambique</div>
+              <div class="cc-cities">Maputo, Beira, Vilankulo</div>
+              <div class="cc-count">📊 290+ listings</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="algeria" data-code="dz" data-cities="algiers, oran, constantine" data-active="0" onclick="selectCountry('DZ','Algeria',false)">
+            <div class="cc-flag">🇩🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Algeria</div>
+              <div class="cc-cities">Algiers, Oran, Constantine</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="angola" data-code="ao" data-cities="luanda, benguela" data-active="0" onclick="selectCountry('AO','Angola',false)">
+            <div class="cc-flag">🇦🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Angola</div>
+              <div class="cc-cities">Luanda, Benguela</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="benin" data-code="bj" data-cities="cotonou, porto-novo" data-active="0" onclick="selectCountry('BJ','Benin',false)">
+            <div class="cc-flag">🇧🇯</div>
+            <div class="cc-body">
+              <div class="cc-name">Benin</div>
+              <div class="cc-cities">Cotonou, Porto-Novo</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="burkina faso" data-code="bf" data-cities="ouagadougou, bobo-dioulasso" data-active="0" onclick="selectCountry('BF','Burkina Faso',false)">
+            <div class="cc-flag">🇧🇫</div>
+            <div class="cc-body">
+              <div class="cc-name">Burkina Faso</div>
+              <div class="cc-cities">Ouagadougou, Bobo-Dioulasso</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="burundi" data-code="bi" data-cities="bujumbura, gitega" data-active="0" onclick="selectCountry('BI','Burundi',false)">
+            <div class="cc-flag">🇧🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Burundi</div>
+              <div class="cc-cities">Bujumbura, Gitega</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="cameroon" data-code="cm" data-cities="douala, yaoundé" data-active="0" onclick="selectCountry('CM','Cameroon',false)">
+            <div class="cc-flag">🇨🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Cameroon</div>
+              <div class="cc-cities">Douala, Yaoundé</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="cape verde" data-code="cv" data-cities="praia, sal, boa vista" data-active="0" onclick="selectCountry('CV','Cape Verde',false)">
+            <div class="cc-flag">🇨🇻</div>
+            <div class="cc-body">
+              <div class="cc-name">Cape Verde</div>
+              <div class="cc-cities">Praia, Sal, Boa Vista</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="central african republic" data-code="cf" data-cities="bangui" data-active="0" onclick="selectCountry('CF','Central African Republic',false)">
+            <div class="cc-flag">🇨🇫</div>
+            <div class="cc-body">
+              <div class="cc-name">Central African Republic</div>
+              <div class="cc-cities">Bangui</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="chad" data-code="td" data-cities="n'djamena, moundou" data-active="0" onclick="selectCountry('TD','Chad',false)">
+            <div class="cc-flag">🇹🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Chad</div>
+              <div class="cc-cities">N'Djamena, Moundou</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="comoros" data-code="km" data-cities="moroni" data-active="0" onclick="selectCountry('KM','Comoros',false)">
+            <div class="cc-flag">🇰🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Comoros</div>
+              <div class="cc-cities">Moroni</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="congo" data-code="cg" data-cities="brazzaville, pointe-noire" data-active="0" onclick="selectCountry('CG','Congo',false)">
+            <div class="cc-flag">🇨🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Congo</div>
+              <div class="cc-cities">Brazzaville, Pointe-Noire</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="côte d'ivoire" data-code="ci" data-cities="abidjan, yamoussoukro" data-active="0" onclick="selectCountry('CI','Côte d'Ivoire',false)">
+            <div class="cc-flag">🇨🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Côte d'Ivoire</div>
+              <div class="cc-cities">Abidjan, Yamoussoukro</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="dr congo" data-code="cd" data-cities="kinshasa, lubumbashi" data-active="0" onclick="selectCountry('CD','DR Congo',false)">
+            <div class="cc-flag">🇨🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">DR Congo</div>
+              <div class="cc-cities">Kinshasa, Lubumbashi</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="djibouti" data-code="dj" data-cities="djibouti city" data-active="0" onclick="selectCountry('DJ','Djibouti',false)">
+            <div class="cc-flag">🇩🇯</div>
+            <div class="cc-body">
+              <div class="cc-name">Djibouti</div>
+              <div class="cc-cities">Djibouti City</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="equatorial guinea" data-code="gq" data-cities="malabo, bata" data-active="0" onclick="selectCountry('GQ','Equatorial Guinea',false)">
+            <div class="cc-flag">🇬🇶</div>
+            <div class="cc-body">
+              <div class="cc-name">Equatorial Guinea</div>
+              <div class="cc-cities">Malabo, Bata</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="eritrea" data-code="er" data-cities="asmara, massawa" data-active="0" onclick="selectCountry('ER','Eritrea',false)">
+            <div class="cc-flag">🇪🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Eritrea</div>
+              <div class="cc-cities">Asmara, Massawa</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="eswatini" data-code="sz" data-cities="mbabane, manzini" data-active="0" onclick="selectCountry('SZ','Eswatini',false)">
+            <div class="cc-flag">🇸🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Eswatini</div>
+              <div class="cc-cities">Mbabane, Manzini</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="ethiopia" data-code="et" data-cities="addis ababa, dire dawa" data-active="0" onclick="selectCountry('ET','Ethiopia',false)">
+            <div class="cc-flag">🇪🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Ethiopia</div>
+              <div class="cc-cities">Addis Ababa, Dire Dawa</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="gabon" data-code="ga" data-cities="libreville, port-gentil" data-active="0" onclick="selectCountry('GA','Gabon',false)">
+            <div class="cc-flag">🇬🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Gabon</div>
+              <div class="cc-cities">Libreville, Port-Gentil</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="gambia" data-code="gm" data-cities="banjul, serekunda" data-active="0" onclick="selectCountry('GM','Gambia',false)">
+            <div class="cc-flag">🇬🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Gambia</div>
+              <div class="cc-cities">Banjul, Serekunda</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="guinea" data-code="gn" data-cities="conakry, nzérékoré" data-active="0" onclick="selectCountry('GN','Guinea',false)">
+            <div class="cc-flag">🇬🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Guinea</div>
+              <div class="cc-cities">Conakry, Nzérékoré</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="guinea-bissau" data-code="gw" data-cities="bissau" data-active="0" onclick="selectCountry('GW','Guinea-Bissau',false)">
+            <div class="cc-flag">🇬🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Guinea-Bissau</div>
+              <div class="cc-cities">Bissau</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="lesotho" data-code="ls" data-cities="maseru, teyateyaneng" data-active="0" onclick="selectCountry('LS','Lesotho',false)">
+            <div class="cc-flag">🇱🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Lesotho</div>
+              <div class="cc-cities">Maseru, Teyateyaneng</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="liberia" data-code="lr" data-cities="monrovia, buchanan" data-active="0" onclick="selectCountry('LR','Liberia',false)">
+            <div class="cc-flag">🇱🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Liberia</div>
+              <div class="cc-cities">Monrovia, Buchanan</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="libya" data-code="ly" data-cities="tripoli, benghazi" data-active="0" onclick="selectCountry('LY','Libya',false)">
+            <div class="cc-flag">🇱🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Libya</div>
+              <div class="cc-cities">Tripoli, Benghazi</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="madagascar" data-code="mg" data-cities="antananarivo, nosy be" data-active="0" onclick="selectCountry('MG','Madagascar',false)">
+            <div class="cc-flag">🇲🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Madagascar</div>
+              <div class="cc-cities">Antananarivo, Nosy Be</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="malawi" data-code="mw" data-cities="lilongwe, blantyre" data-active="0" onclick="selectCountry('MW','Malawi',false)">
+            <div class="cc-flag">🇲🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Malawi</div>
+              <div class="cc-cities">Lilongwe, Blantyre</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="mali" data-code="ml" data-cities="bamako, timbuktu" data-active="0" onclick="selectCountry('ML','Mali',false)">
+            <div class="cc-flag">🇲🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Mali</div>
+              <div class="cc-cities">Bamako, Timbuktu</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="mauritania" data-code="mr" data-cities="nouakchott, nouadhibou" data-active="0" onclick="selectCountry('MR','Mauritania',false)">
+            <div class="cc-flag">🇲🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Mauritania</div>
+              <div class="cc-cities">Nouakchott, Nouadhibou</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="niger" data-code="ne" data-cities="niamey, zinder" data-active="0" onclick="selectCountry('NE','Niger',false)">
+            <div class="cc-flag">🇳🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Niger</div>
+              <div class="cc-cities">Niamey, Zinder</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="rwanda" data-code="rw" data-cities="kigali, butare" data-active="0" onclick="selectCountry('RW','Rwanda',false)">
+            <div class="cc-flag">🇷🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Rwanda</div>
+              <div class="cc-cities">Kigali, Butare</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="senegal" data-code="sn" data-cities="dakar, saint-louis" data-active="0" onclick="selectCountry('SN','Senegal',false)">
+            <div class="cc-flag">🇸🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Senegal</div>
+              <div class="cc-cities">Dakar, Saint-Louis</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="seychelles" data-code="sc" data-cities="victoria, mahé, praslin" data-active="0" onclick="selectCountry('SC','Seychelles',false)">
+            <div class="cc-flag">🇸🇨</div>
+            <div class="cc-body">
+              <div class="cc-name">Seychelles</div>
+              <div class="cc-cities">Victoria, Mahé, Praslin</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="sierra leone" data-code="sl" data-cities="freetown, bo" data-active="0" onclick="selectCountry('SL','Sierra Leone',false)">
+            <div class="cc-flag">🇸🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Sierra Leone</div>
+              <div class="cc-cities">Freetown, Bo</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="somalia" data-code="so" data-cities="mogadishu, hargeisa" data-active="0" onclick="selectCountry('SO','Somalia',false)">
+            <div class="cc-flag">🇸🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Somalia</div>
+              <div class="cc-cities">Mogadishu, Hargeisa</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="south sudan" data-code="ss" data-cities="juba, malakal" data-active="0" onclick="selectCountry('SS','South Sudan',false)">
+            <div class="cc-flag">🇸🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">South Sudan</div>
+              <div class="cc-cities">Juba, Malakal</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="sudan" data-code="sd" data-cities="khartoum, omdurman" data-active="0" onclick="selectCountry('SD','Sudan',false)">
+            <div class="cc-flag">🇸🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Sudan</div>
+              <div class="cc-cities">Khartoum, Omdurman</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="são tomé" data-code="st" data-cities="são tomé" data-active="0" onclick="selectCountry('ST','São Tomé',false)">
+            <div class="cc-flag">🇸🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">São Tomé</div>
+              <div class="cc-cities">São Tomé</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="togo" data-code="tg" data-cities="lomé, kara" data-active="0" onclick="selectCountry('TG','Togo',false)">
+            <div class="cc-flag">🇹🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Togo</div>
+              <div class="cc-cities">Lomé, Kara</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="tunisia" data-code="tn" data-cities="tunis, sousse, djerba" data-active="0" onclick="selectCountry('TN','Tunisia',false)">
+            <div class="cc-flag">🇹🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Tunisia</div>
+              <div class="cc-cities">Tunis, Sousse, Djerba</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="uganda" data-code="ug" data-cities="kampala, entebbe, jinja" data-active="0" onclick="selectCountry('UG','Uganda',false)">
+            <div class="cc-flag">🇺🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Uganda</div>
+              <div class="cc-cities">Kampala, Entebbe, Jinja</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AF" data-name="zimbabwe" data-code="zw" data-cities="harare, bulawayo, victoria falls" data-active="0" onclick="selectCountry('ZW','Zimbabwe',false)">
+            <div class="cc-flag">🇿🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Zimbabwe</div>
+              <div class="cc-cities">Harare, Bulawayo, Victoria Falls</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div></div>
+      </div>
+      <div class="cont-group" data-cont="EU">
+        <div class="cont-header">
+          <span class="c-ico">🌍</span>
+          <h2>Europe</h2>
+          <span class="c-count">44 countries (22 active)</span>
+          <div class="c-line"></div>
+        </div>
+        <div class="cc-grid">
+          <div class="cc active" data-cont="EU" data-name="united kingdom" data-code="gb" data-cities="london, manchester, edinburgh" data-active="1" onclick="selectCountry('GB','United Kingdom',true)">
+            <div class="cc-flag">🇬🇧</div>
+            <div class="cc-body">
+              <div class="cc-name">United Kingdom</div>
+              <div class="cc-cities">London, Manchester, Edinburgh</div>
+              <div class="cc-count">📊 28,500+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="germany" data-code="de" data-cities="berlin, munich, frankfurt" data-active="1" onclick="selectCountry('DE','Germany',true)">
+            <div class="cc-flag">🇩🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Germany</div>
+              <div class="cc-cities">Berlin, Munich, Frankfurt</div>
+              <div class="cc-count">📊 18,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="france" data-code="fr" data-cities="paris, lyon, nice, bordeaux" data-active="1" onclick="selectCountry('FR','France',true)">
+            <div class="cc-flag">🇫🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">France</div>
+              <div class="cc-cities">Paris, Lyon, Nice, Bordeaux</div>
+              <div class="cc-count">📊 15,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="spain" data-code="es" data-cities="madrid, barcelona, marbella" data-active="1" onclick="selectCountry('ES','Spain',true)">
+            <div class="cc-flag">🇪🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Spain</div>
+              <div class="cc-cities">Madrid, Barcelona, Marbella</div>
+              <div class="cc-count">📊 14,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="italy" data-code="it" data-cities="rome, milan, florence, tuscany" data-active="1" onclick="selectCountry('IT','Italy',true)">
+            <div class="cc-flag">🇮🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Italy</div>
+              <div class="cc-cities">Rome, Milan, Florence, Tuscany</div>
+              <div class="cc-count">📊 11,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="portugal" data-code="pt" data-cities="lisbon, porto, algarve" data-active="1" onclick="selectCountry('PT','Portugal',true)">
+            <div class="cc-flag">🇵🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Portugal</div>
+              <div class="cc-cities">Lisbon, Porto, Algarve</div>
+              <div class="cc-count">📊 8,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="netherlands" data-code="nl" data-cities="amsterdam, rotterdam, the hague" data-active="1" onclick="selectCountry('NL','Netherlands',true)">
+            <div class="cc-flag">🇳🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Netherlands</div>
+              <div class="cc-cities">Amsterdam, Rotterdam, The Hague</div>
+              <div class="cc-count">📊 7,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="switzerland" data-code="ch" data-cities="zurich, geneva, basel, lugano" data-active="1" onclick="selectCountry('CH','Switzerland',true)">
+            <div class="cc-flag">🇨🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Switzerland</div>
+              <div class="cc-cities">Zurich, Geneva, Basel, Lugano</div>
+              <div class="cc-count">📊 6,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="turkey" data-code="tr" data-cities="istanbul, antalya, ankara" data-active="1" onclick="selectCountry('TR','Turkey',true)">
+            <div class="cc-flag">🇹🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Turkey</div>
+              <div class="cc-cities">Istanbul, Antalya, Ankara</div>
+              <div class="cc-count">📊 5,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="sweden" data-code="se" data-cities="stockholm, gothenburg, malmö" data-active="1" onclick="selectCountry('SE','Sweden',true)">
+            <div class="cc-flag">🇸🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Sweden</div>
+              <div class="cc-cities">Stockholm, Gothenburg, Malmö</div>
+              <div class="cc-count">📊 4,500+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="ireland" data-code="ie" data-cities="dublin, cork, galway" data-active="1" onclick="selectCountry('IE','Ireland',true)">
+            <div class="cc-flag">🇮🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Ireland</div>
+              <div class="cc-cities">Dublin, Cork, Galway</div>
+              <div class="cc-count">📊 4,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="austria" data-code="at" data-cities="vienna, salzburg, innsbruck" data-active="1" onclick="selectCountry('AT','Austria',true)">
+            <div class="cc-flag">🇦🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Austria</div>
+              <div class="cc-cities">Vienna, Salzburg, Innsbruck</div>
+              <div class="cc-count">📊 3,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="greece" data-code="gr" data-cities="athens, thessaloniki, crete" data-active="1" onclick="selectCountry('GR','Greece',true)">
+            <div class="cc-flag">🇬🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Greece</div>
+              <div class="cc-cities">Athens, Thessaloniki, Crete</div>
+              <div class="cc-count">📊 3,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="poland" data-code="pl" data-cities="warsaw, krakow, gdansk" data-active="1" onclick="selectCountry('PL','Poland',true)">
+            <div class="cc-flag">🇵🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Poland</div>
+              <div class="cc-cities">Warsaw, Krakow, Gdansk</div>
+              <div class="cc-count">📊 3,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="denmark" data-code="dk" data-cities="copenhagen, aarhus, odense" data-active="1" onclick="selectCountry('DK','Denmark',true)">
+            <div class="cc-flag">🇩🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Denmark</div>
+              <div class="cc-cities">Copenhagen, Aarhus, Odense</div>
+              <div class="cc-count">📊 2,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="czech republic" data-code="cz" data-cities="prague, brno, ostrava" data-active="1" onclick="selectCountry('CZ','Czech Republic',true)">
+            <div class="cc-flag">🇨🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Czech Republic</div>
+              <div class="cc-cities">Prague, Brno, Ostrava</div>
+              <div class="cc-count">📊 2,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="norway" data-code="no" data-cities="oslo, bergen, stavanger" data-active="1" onclick="selectCountry('NO','Norway',true)">
+            <div class="cc-flag">🇳🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Norway</div>
+              <div class="cc-cities">Oslo, Bergen, Stavanger</div>
+              <div class="cc-count">📊 2,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="belgium" data-code="be" data-cities="brussels, antwerp, ghent" data-active="1" onclick="selectCountry('BE','Belgium',true)">
+            <div class="cc-flag">🇧🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Belgium</div>
+              <div class="cc-cities">Brussels, Antwerp, Ghent</div>
+              <div class="cc-count">📊 2,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="hungary" data-code="hu" data-cities="budapest, debrecen, pécs" data-active="1" onclick="selectCountry('HU','Hungary',true)">
+            <div class="cc-flag">🇭🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Hungary</div>
+              <div class="cc-cities">Budapest, Debrecen, Pécs</div>
+              <div class="cc-count">📊 1,900+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="finland" data-code="fi" data-cities="helsinki, tampere, turku" data-active="1" onclick="selectCountry('FI','Finland',true)">
+            <div class="cc-flag">🇫🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Finland</div>
+              <div class="cc-cities">Helsinki, Tampere, Turku</div>
+              <div class="cc-count">📊 1,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="romania" data-code="ro" data-cities="bucharest, cluj, timișoara" data-active="1" onclick="selectCountry('RO','Romania',true)">
+            <div class="cc-flag">🇷🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Romania</div>
+              <div class="cc-cities">Bucharest, Cluj, Timișoara</div>
+              <div class="cc-count">📊 1,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="EU" data-name="ukraine" data-code="ua" data-cities="kyiv, lviv, odesa" data-active="1" onclick="selectCountry('UA','Ukraine',true)">
+            <div class="cc-flag">🇺🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Ukraine</div>
+              <div class="cc-cities">Kyiv, Lviv, Odesa</div>
+              <div class="cc-count">📊 1,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="albania" data-code="al" data-cities="tirana, durrës, vlorë" data-active="0" onclick="selectCountry('AL','Albania',false)">
+            <div class="cc-flag">🇦🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Albania</div>
+              <div class="cc-cities">Tirana, Durrës, Vlorë</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="armenia" data-code="am" data-cities="yerevan, gyumri" data-active="0" onclick="selectCountry('AM','Armenia',false)">
+            <div class="cc-flag">🇦🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Armenia</div>
+              <div class="cc-cities">Yerevan, Gyumri</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="azerbaijan" data-code="az" data-cities="baku, ganja" data-active="0" onclick="selectCountry('AZ','Azerbaijan',false)">
+            <div class="cc-flag">🇦🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Azerbaijan</div>
+              <div class="cc-cities">Baku, Ganja</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="belarus" data-code="by" data-cities="minsk, brest, gomel" data-active="0" onclick="selectCountry('BY','Belarus',false)">
+            <div class="cc-flag">🇧🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Belarus</div>
+              <div class="cc-cities">Minsk, Brest, Gomel</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="bosnia & herzegovina" data-code="ba" data-cities="sarajevo, mostar" data-active="0" onclick="selectCountry('BA','Bosnia & Herzegovina',false)">
+            <div class="cc-flag">🇧🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Bosnia & Herzegovina</div>
+              <div class="cc-cities">Sarajevo, Mostar</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="bulgaria" data-code="bg" data-cities="sofia, plovdiv, varna" data-active="0" onclick="selectCountry('BG','Bulgaria',false)">
+            <div class="cc-flag">🇧🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Bulgaria</div>
+              <div class="cc-cities">Sofia, Plovdiv, Varna</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="croatia" data-code="hr" data-cities="zagreb, split, dubrovnik" data-active="0" onclick="selectCountry('HR','Croatia',false)">
+            <div class="cc-flag">🇭🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Croatia</div>
+              <div class="cc-cities">Zagreb, Split, Dubrovnik</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="cyprus" data-code="cy" data-cities="nicosia, limassol, paphos" data-active="0" onclick="selectCountry('CY','Cyprus',false)">
+            <div class="cc-flag">🇨🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Cyprus</div>
+              <div class="cc-cities">Nicosia, Limassol, Paphos</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="estonia" data-code="ee" data-cities="tallinn, tartu" data-active="0" onclick="selectCountry('EE','Estonia',false)">
+            <div class="cc-flag">🇪🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Estonia</div>
+              <div class="cc-cities">Tallinn, Tartu</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="georgia" data-code="ge" data-cities="tbilisi, batumi, kutaisi" data-active="0" onclick="selectCountry('GE','Georgia',false)">
+            <div class="cc-flag">🇬🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Georgia</div>
+              <div class="cc-cities">Tbilisi, Batumi, Kutaisi</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="iceland" data-code="is" data-cities="reykjavik, akureyri" data-active="0" onclick="selectCountry('IS','Iceland',false)">
+            <div class="cc-flag">🇮🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Iceland</div>
+              <div class="cc-cities">Reykjavik, Akureyri</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="kosovo" data-code="xk" data-cities="pristina, prizren" data-active="0" onclick="selectCountry('XK','Kosovo',false)">
+            <div class="cc-flag">🇽🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Kosovo</div>
+              <div class="cc-cities">Pristina, Prizren</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="latvia" data-code="lv" data-cities="riga, jūrmala" data-active="0" onclick="selectCountry('LV','Latvia',false)">
+            <div class="cc-flag">🇱🇻</div>
+            <div class="cc-body">
+              <div class="cc-name">Latvia</div>
+              <div class="cc-cities">Riga, Jūrmala</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="lithuania" data-code="lt" data-cities="vilnius, kaunas" data-active="0" onclick="selectCountry('LT','Lithuania',false)">
+            <div class="cc-flag">🇱🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Lithuania</div>
+              <div class="cc-cities">Vilnius, Kaunas</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="luxembourg" data-code="lu" data-cities="luxembourg city" data-active="0" onclick="selectCountry('LU','Luxembourg',false)">
+            <div class="cc-flag">🇱🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Luxembourg</div>
+              <div class="cc-cities">Luxembourg City</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="malta" data-code="mt" data-cities="valletta, sliema, st julian's" data-active="0" onclick="selectCountry('MT','Malta',false)">
+            <div class="cc-flag">🇲🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Malta</div>
+              <div class="cc-cities">Valletta, Sliema, St Julian's</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="moldova" data-code="md" data-cities="chișinău, bălți" data-active="0" onclick="selectCountry('MD','Moldova',false)">
+            <div class="cc-flag">🇲🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Moldova</div>
+              <div class="cc-cities">Chișinău, Bălți</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="montenegro" data-code="me" data-cities="podgorica, budva, kotor" data-active="0" onclick="selectCountry('ME','Montenegro',false)">
+            <div class="cc-flag">🇲🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Montenegro</div>
+              <div class="cc-cities">Podgorica, Budva, Kotor</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="north macedonia" data-code="mk" data-cities="skopje, ohrid" data-active="0" onclick="selectCountry('MK','North Macedonia',false)">
+            <div class="cc-flag">🇲🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">North Macedonia</div>
+              <div class="cc-cities">Skopje, Ohrid</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="serbia" data-code="rs" data-cities="belgrade, novi sad, niš" data-active="0" onclick="selectCountry('RS','Serbia',false)">
+            <div class="cc-flag">🇷🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Serbia</div>
+              <div class="cc-cities">Belgrade, Novi Sad, Niš</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="slovakia" data-code="sk" data-cities="bratislava, košice" data-active="0" onclick="selectCountry('SK','Slovakia',false)">
+            <div class="cc-flag">🇸🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Slovakia</div>
+              <div class="cc-cities">Bratislava, Košice</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="EU" data-name="slovenia" data-code="si" data-cities="ljubljana, maribor, bled" data-active="0" onclick="selectCountry('SI','Slovenia',false)">
+            <div class="cc-flag">🇸🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Slovenia</div>
+              <div class="cc-cities">Ljubljana, Maribor, Bled</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div></div>
+      </div>
+      <div class="cont-group" data-cont="AS">
+        <div class="cont-header">
+          <span class="c-ico">🌏</span>
+          <h2>Asia & Middle East</h2>
+          <span class="c-count">38 countries (14 active)</span>
+          <div class="c-line"></div>
+        </div>
+        <div class="cc-grid">
+          <div class="cc active" data-cont="AS" data-name="uae" data-code="ae" data-cities="dubai, abu dhabi, sharjah" data-active="1" onclick="selectCountry('AE','UAE',true)">
+            <div class="cc-flag">🇦🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">UAE</div>
+              <div class="cc-cities">Dubai, Abu Dhabi, Sharjah</div>
+              <div class="cc-count">📊 9,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="india" data-code="in" data-cities="mumbai, delhi, bangalore, goa" data-active="1" onclick="selectCountry('IN','India',true)">
+            <div class="cc-flag">🇮🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">India</div>
+              <div class="cc-cities">Mumbai, Delhi, Bangalore, Goa</div>
+              <div class="cc-count">📊 8,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="china" data-code="cn" data-cities="shanghai, beijing, shenzhen" data-active="1" onclick="selectCountry('CN','China',true)">
+            <div class="cc-flag">🇨🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">China</div>
+              <div class="cc-cities">Shanghai, Beijing, Shenzhen</div>
+              <div class="cc-count">📊 6,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="singapore" data-code="sg" data-cities="central, east, west" data-active="1" onclick="selectCountry('SG','Singapore',true)">
+            <div class="cc-flag">🇸🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Singapore</div>
+              <div class="cc-cities">Central, East, West</div>
+              <div class="cc-count">📊 5,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="japan" data-code="jp" data-cities="tokyo, osaka, kyoto" data-active="1" onclick="selectCountry('JP','Japan',true)">
+            <div class="cc-flag">🇯🇵</div>
+            <div class="cc-body">
+              <div class="cc-name">Japan</div>
+              <div class="cc-cities">Tokyo, Osaka, Kyoto</div>
+              <div class="cc-count">📊 5,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="thailand" data-code="th" data-cities="bangkok, phuket, chiang mai" data-active="1" onclick="selectCountry('TH','Thailand',true)">
+            <div class="cc-flag">🇹🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Thailand</div>
+              <div class="cc-cities">Bangkok, Phuket, Chiang Mai</div>
+              <div class="cc-count">📊 4,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="south korea" data-code="kr" data-cities="seoul, busan, jeju" data-active="1" onclick="selectCountry('KR','South Korea',true)">
+            <div class="cc-flag">🇰🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">South Korea</div>
+              <div class="cc-cities">Seoul, Busan, Jeju</div>
+              <div class="cc-count">📊 3,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="malaysia" data-code="my" data-cities="kuala lumpur, penang, johor" data-active="1" onclick="selectCountry('MY','Malaysia',true)">
+            <div class="cc-flag">🇲🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Malaysia</div>
+              <div class="cc-cities">Kuala Lumpur, Penang, Johor</div>
+              <div class="cc-count">📊 3,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="saudi arabia" data-code="sa" data-cities="riyadh, jeddah, dammam" data-active="1" onclick="selectCountry('SA','Saudi Arabia',true)">
+            <div class="cc-flag">🇸🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Saudi Arabia</div>
+              <div class="cc-cities">Riyadh, Jeddah, Dammam</div>
+              <div class="cc-count">📊 3,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="indonesia" data-code="id" data-cities="jakarta, bali, surabaya" data-active="1" onclick="selectCountry('ID','Indonesia',true)">
+            <div class="cc-flag">🇮🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Indonesia</div>
+              <div class="cc-cities">Jakarta, Bali, Surabaya</div>
+              <div class="cc-count">📊 2,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="israel" data-code="il" data-cities="tel aviv, jerusalem, haifa" data-active="1" onclick="selectCountry('IL','Israel',true)">
+            <div class="cc-flag">🇮🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Israel</div>
+              <div class="cc-cities">Tel Aviv, Jerusalem, Haifa</div>
+              <div class="cc-count">📊 2,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="philippines" data-code="ph" data-cities="manila, cebu, davao" data-active="1" onclick="selectCountry('PH','Philippines',true)">
+            <div class="cc-flag">🇵🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Philippines</div>
+              <div class="cc-cities">Manila, Cebu, Davao</div>
+              <div class="cc-count">📊 2,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="vietnam" data-code="vn" data-cities="ho chi minh, hanoi, da nang" data-active="1" onclick="selectCountry('VN','Vietnam',true)">
+            <div class="cc-flag">🇻🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Vietnam</div>
+              <div class="cc-cities">Ho Chi Minh, Hanoi, Da Nang</div>
+              <div class="cc-count">📊 1,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AS" data-name="qatar" data-code="qa" data-cities="doha, lusail, the pearl" data-active="1" onclick="selectCountry('QA','Qatar',true)">
+            <div class="cc-flag">🇶🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Qatar</div>
+              <div class="cc-cities">Doha, Lusail, The Pearl</div>
+              <div class="cc-count">📊 1,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="afghanistan" data-code="af" data-cities="kabul, herat" data-active="0" onclick="selectCountry('AF','Afghanistan',false)">
+            <div class="cc-flag">🇦🇫</div>
+            <div class="cc-body">
+              <div class="cc-name">Afghanistan</div>
+              <div class="cc-cities">Kabul, Herat</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="bahrain" data-code="bh" data-cities="manama, muharraq" data-active="0" onclick="selectCountry('BH','Bahrain',false)">
+            <div class="cc-flag">🇧🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Bahrain</div>
+              <div class="cc-cities">Manama, Muharraq</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="bangladesh" data-code="bd" data-cities="dhaka, chittagong" data-active="0" onclick="selectCountry('BD','Bangladesh',false)">
+            <div class="cc-flag">🇧🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Bangladesh</div>
+              <div class="cc-cities">Dhaka, Chittagong</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="brunei" data-code="bn" data-cities="bandar seri begawan" data-active="0" onclick="selectCountry('BN','Brunei',false)">
+            <div class="cc-flag">🇧🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Brunei</div>
+              <div class="cc-cities">Bandar Seri Begawan</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="cambodia" data-code="kh" data-cities="phnom penh, siem reap" data-active="0" onclick="selectCountry('KH','Cambodia',false)">
+            <div class="cc-flag">🇰🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Cambodia</div>
+              <div class="cc-cities">Phnom Penh, Siem Reap</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="hong kong" data-code="hk" data-cities="central, kowloon, new territories" data-active="0" onclick="selectCountry('HK','Hong Kong',false)">
+            <div class="cc-flag">🇭🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Hong Kong</div>
+              <div class="cc-cities">Central, Kowloon, New Territories</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="iraq" data-code="iq" data-cities="baghdad, erbil, basra" data-active="0" onclick="selectCountry('IQ','Iraq',false)">
+            <div class="cc-flag">🇮🇶</div>
+            <div class="cc-body">
+              <div class="cc-name">Iraq</div>
+              <div class="cc-cities">Baghdad, Erbil, Basra</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="jordan" data-code="jo" data-cities="amman, aqaba" data-active="0" onclick="selectCountry('JO','Jordan',false)">
+            <div class="cc-flag">🇯🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Jordan</div>
+              <div class="cc-cities">Amman, Aqaba</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="kazakhstan" data-code="kz" data-cities="almaty, nur-sultan, astana" data-active="0" onclick="selectCountry('KZ','Kazakhstan',false)">
+            <div class="cc-flag">🇰🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Kazakhstan</div>
+              <div class="cc-cities">Almaty, Nur-Sultan, Astana</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="kuwait" data-code="kw" data-cities="kuwait city, hawalli" data-active="0" onclick="selectCountry('KW','Kuwait',false)">
+            <div class="cc-flag">🇰🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Kuwait</div>
+              <div class="cc-cities">Kuwait City, Hawalli</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="kyrgyzstan" data-code="kg" data-cities="bishkek, osh" data-active="0" onclick="selectCountry('KG','Kyrgyzstan',false)">
+            <div class="cc-flag">🇰🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Kyrgyzstan</div>
+              <div class="cc-cities">Bishkek, Osh</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="laos" data-code="la" data-cities="vientiane, luang prabang" data-active="0" onclick="selectCountry('LA','Laos',false)">
+            <div class="cc-flag">🇱🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Laos</div>
+              <div class="cc-cities">Vientiane, Luang Prabang</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="lebanon" data-code="lb" data-cities="beirut, jounieh" data-active="0" onclick="selectCountry('LB','Lebanon',false)">
+            <div class="cc-flag">🇱🇧</div>
+            <div class="cc-body">
+              <div class="cc-name">Lebanon</div>
+              <div class="cc-cities">Beirut, Jounieh</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="maldives" data-code="mv" data-cities="malé, hulhumalé" data-active="0" onclick="selectCountry('MV','Maldives',false)">
+            <div class="cc-flag">🇲🇻</div>
+            <div class="cc-body">
+              <div class="cc-name">Maldives</div>
+              <div class="cc-cities">Malé, Hulhumalé</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="mongolia" data-code="mn" data-cities="ulaanbaatar" data-active="0" onclick="selectCountry('MN','Mongolia',false)">
+            <div class="cc-flag">🇲🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Mongolia</div>
+              <div class="cc-cities">Ulaanbaatar</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="myanmar" data-code="mm" data-cities="yangon, mandalay" data-active="0" onclick="selectCountry('MM','Myanmar',false)">
+            <div class="cc-flag">🇲🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Myanmar</div>
+              <div class="cc-cities">Yangon, Mandalay</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="nepal" data-code="np" data-cities="kathmandu, pokhara" data-active="0" onclick="selectCountry('NP','Nepal',false)">
+            <div class="cc-flag">🇳🇵</div>
+            <div class="cc-body">
+              <div class="cc-name">Nepal</div>
+              <div class="cc-cities">Kathmandu, Pokhara</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="oman" data-code="om" data-cities="muscat, salalah" data-active="0" onclick="selectCountry('OM','Oman',false)">
+            <div class="cc-flag">🇴🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Oman</div>
+              <div class="cc-cities">Muscat, Salalah</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="pakistan" data-code="pk" data-cities="karachi, lahore, islamabad" data-active="0" onclick="selectCountry('PK','Pakistan',false)">
+            <div class="cc-flag">🇵🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Pakistan</div>
+              <div class="cc-cities">Karachi, Lahore, Islamabad</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="sri lanka" data-code="lk" data-cities="colombo, kandy, galle" data-active="0" onclick="selectCountry('LK','Sri Lanka',false)">
+            <div class="cc-flag">🇱🇰</div>
+            <div class="cc-body">
+              <div class="cc-name">Sri Lanka</div>
+              <div class="cc-cities">Colombo, Kandy, Galle</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="taiwan" data-code="tw" data-cities="taipei, kaohsiung, taichung" data-active="0" onclick="selectCountry('TW','Taiwan',false)">
+            <div class="cc-flag">🇹🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Taiwan</div>
+              <div class="cc-cities">Taipei, Kaohsiung, Taichung</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="turkmenistan" data-code="tm" data-cities="ashgabat" data-active="0" onclick="selectCountry('TM','Turkmenistan',false)">
+            <div class="cc-flag">🇹🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Turkmenistan</div>
+              <div class="cc-cities">Ashgabat</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="uzbekistan" data-code="uz" data-cities="tashkent, samarkand" data-active="0" onclick="selectCountry('UZ','Uzbekistan',false)">
+            <div class="cc-flag">🇺🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Uzbekistan</div>
+              <div class="cc-cities">Tashkent, Samarkand</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AS" data-name="yemen" data-code="ye" data-cities="sana'a, aden" data-active="0" onclick="selectCountry('YE','Yemen',false)">
+            <div class="cc-flag">🇾🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Yemen</div>
+              <div class="cc-cities">Sana'a, Aden</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div></div>
+      </div>
+      <div class="cont-group" data-cont="AM">
+        <div class="cont-header">
+          <span class="c-ico">🌎</span>
+          <h2>Americas</h2>
+          <span class="c-count">35 countries (10 active)</span>
+          <div class="c-line"></div>
+        </div>
+        <div class="cc-grid">
+          <div class="cc active" data-cont="AM" data-name="united states" data-code="us" data-cities="new york, miami, la, houston" data-active="1" onclick="selectCountry('US','United States',true)">
+            <div class="cc-flag">🇺🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">United States</div>
+              <div class="cc-cities">New York, Miami, LA, Houston</div>
+              <div class="cc-count">📊 42,000+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="canada" data-code="ca" data-cities="toronto, vancouver, montreal" data-active="1" onclick="selectCountry('CA','Canada',true)">
+            <div class="cc-flag">🇨🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Canada</div>
+              <div class="cc-cities">Toronto, Vancouver, Montreal</div>
+              <div class="cc-count">📊 12,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="brazil" data-code="br" data-cities="são paulo, rio, brasília" data-active="1" onclick="selectCountry('BR','Brazil',true)">
+            <div class="cc-flag">🇧🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Brazil</div>
+              <div class="cc-cities">São Paulo, Rio, Brasília</div>
+              <div class="cc-count">📊 6,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="mexico" data-code="mx" data-cities="mexico city, cancún, guadalajara" data-active="1" onclick="selectCountry('MX','Mexico',true)">
+            <div class="cc-flag">🇲🇽</div>
+            <div class="cc-body">
+              <div class="cc-name">Mexico</div>
+              <div class="cc-cities">Mexico City, Cancún, Guadalajara</div>
+              <div class="cc-count">📊 4,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="argentina" data-code="ar" data-cities="buenos aires, mendoza, córdoba" data-active="1" onclick="selectCountry('AR','Argentina',true)">
+            <div class="cc-flag">🇦🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Argentina</div>
+              <div class="cc-cities">Buenos Aires, Mendoza, Córdoba</div>
+              <div class="cc-count">📊 2,600+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="colombia" data-code="co" data-cities="bogotá, medellín, cartagena" data-active="1" onclick="selectCountry('CO','Colombia',true)">
+            <div class="cc-flag">🇨🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Colombia</div>
+              <div class="cc-cities">Bogotá, Medellín, Cartagena</div>
+              <div class="cc-count">📊 2,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="chile" data-code="cl" data-cities="santiago, valparaíso, viña del mar" data-active="1" onclick="selectCountry('CL','Chile',true)">
+            <div class="cc-flag">🇨🇱</div>
+            <div class="cc-body">
+              <div class="cc-name">Chile</div>
+              <div class="cc-cities">Santiago, Valparaíso, Viña del Mar</div>
+              <div class="cc-count">📊 1,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="peru" data-code="pe" data-cities="lima, cusco, arequipa" data-active="1" onclick="selectCountry('PE','Peru',true)">
+            <div class="cc-flag">🇵🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Peru</div>
+              <div class="cc-cities">Lima, Cusco, Arequipa</div>
+              <div class="cc-count">📊 1,400+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="costa rica" data-code="cr" data-cities="san josé, guanacaste, tamarindo" data-active="1" onclick="selectCountry('CR','Costa Rica',true)">
+            <div class="cc-flag">🇨🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Costa Rica</div>
+              <div class="cc-cities">San José, Guanacaste, Tamarindo</div>
+              <div class="cc-count">📊 1,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="AM" data-name="panama" data-code="pa" data-cities="panama city, bocas del toro" data-active="1" onclick="selectCountry('PA','Panama',true)">
+            <div class="cc-flag">🇵🇦</div>
+            <div class="cc-body">
+              <div class="cc-name">Panama</div>
+              <div class="cc-cities">Panama City, Bocas del Toro</div>
+              <div class="cc-count">📊 980+ listings</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="antigua & barbuda" data-code="ag" data-cities="st john's" data-active="0" onclick="selectCountry('AG','Antigua & Barbuda',false)">
+            <div class="cc-flag">🇦🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Antigua & Barbuda</div>
+              <div class="cc-cities">St John's</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="bahamas" data-code="bs" data-cities="nassau, freeport" data-active="0" onclick="selectCountry('BS','Bahamas',false)">
+            <div class="cc-flag">🇧🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Bahamas</div>
+              <div class="cc-cities">Nassau, Freeport</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="barbados" data-code="bb" data-cities="bridgetown, holetown" data-active="0" onclick="selectCountry('BB','Barbados',false)">
+            <div class="cc-flag">🇧🇧</div>
+            <div class="cc-body">
+              <div class="cc-name">Barbados</div>
+              <div class="cc-cities">Bridgetown, Holetown</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="belize" data-code="bz" data-cities="belize city, san pedro" data-active="0" onclick="selectCountry('BZ','Belize',false)">
+            <div class="cc-flag">🇧🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">Belize</div>
+              <div class="cc-cities">Belize City, San Pedro</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="bolivia" data-code="bo" data-cities="la paz, santa cruz, cochabamba" data-active="0" onclick="selectCountry('BO','Bolivia',false)">
+            <div class="cc-flag">🇧🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Bolivia</div>
+              <div class="cc-cities">La Paz, Santa Cruz, Cochabamba</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="cuba" data-code="cu" data-cities="havana, varadero, trinidad" data-active="0" onclick="selectCountry('CU','Cuba',false)">
+            <div class="cc-flag">🇨🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Cuba</div>
+              <div class="cc-cities">Havana, Varadero, Trinidad</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="dominica" data-code="dm" data-cities="roseau" data-active="0" onclick="selectCountry('DM','Dominica',false)">
+            <div class="cc-flag">🇩🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Dominica</div>
+              <div class="cc-cities">Roseau</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="dominican republic" data-code="do" data-cities="santo domingo, punta cana" data-active="0" onclick="selectCountry('DO','Dominican Republic',false)">
+            <div class="cc-flag">🇩🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Dominican Republic</div>
+              <div class="cc-cities">Santo Domingo, Punta Cana</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="ecuador" data-code="ec" data-cities="quito, guayaquil, cuenca" data-active="0" onclick="selectCountry('EC','Ecuador',false)">
+            <div class="cc-flag">🇪🇨</div>
+            <div class="cc-body">
+              <div class="cc-name">Ecuador</div>
+              <div class="cc-cities">Quito, Guayaquil, Cuenca</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="el salvador" data-code="sv" data-cities="san salvador, santa ana" data-active="0" onclick="selectCountry('SV','El Salvador',false)">
+            <div class="cc-flag">🇸🇻</div>
+            <div class="cc-body">
+              <div class="cc-name">El Salvador</div>
+              <div class="cc-cities">San Salvador, Santa Ana</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="grenada" data-code="gd" data-cities="st george's" data-active="0" onclick="selectCountry('GD','Grenada',false)">
+            <div class="cc-flag">🇬🇩</div>
+            <div class="cc-body">
+              <div class="cc-name">Grenada</div>
+              <div class="cc-cities">St George's</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="guatemala" data-code="gt" data-cities="guatemala city, antigua" data-active="0" onclick="selectCountry('GT','Guatemala',false)">
+            <div class="cc-flag">🇬🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Guatemala</div>
+              <div class="cc-cities">Guatemala City, Antigua</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="guyana" data-code="gy" data-cities="georgetown" data-active="0" onclick="selectCountry('GY','Guyana',false)">
+            <div class="cc-flag">🇬🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Guyana</div>
+              <div class="cc-cities">Georgetown</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="haiti" data-code="ht" data-cities="port-au-prince, cap-haïtien" data-active="0" onclick="selectCountry('HT','Haiti',false)">
+            <div class="cc-flag">🇭🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Haiti</div>
+              <div class="cc-cities">Port-au-Prince, Cap-Haïtien</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="honduras" data-code="hn" data-cities="tegucigalpa, san pedro sula" data-active="0" onclick="selectCountry('HN','Honduras',false)">
+            <div class="cc-flag">🇭🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">Honduras</div>
+              <div class="cc-cities">Tegucigalpa, San Pedro Sula</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="jamaica" data-code="jm" data-cities="kingston, montego bay, ocho rios" data-active="0" onclick="selectCountry('JM','Jamaica',false)">
+            <div class="cc-flag">🇯🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Jamaica</div>
+              <div class="cc-cities">Kingston, Montego Bay, Ocho Rios</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="nicaragua" data-code="ni" data-cities="managua, granada" data-active="0" onclick="selectCountry('NI','Nicaragua',false)">
+            <div class="cc-flag">🇳🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Nicaragua</div>
+              <div class="cc-cities">Managua, Granada</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="paraguay" data-code="py" data-cities="asunción, ciudad del este" data-active="0" onclick="selectCountry('PY','Paraguay',false)">
+            <div class="cc-flag">🇵🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Paraguay</div>
+              <div class="cc-cities">Asunción, Ciudad del Este</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="st kitts & nevis" data-code="kn" data-cities="basseterre" data-active="0" onclick="selectCountry('KN','St Kitts & Nevis',false)">
+            <div class="cc-flag">🇰🇳</div>
+            <div class="cc-body">
+              <div class="cc-name">St Kitts & Nevis</div>
+              <div class="cc-cities">Basseterre</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="st lucia" data-code="lc" data-cities="castries, soufrière" data-active="0" onclick="selectCountry('LC','St Lucia',false)">
+            <div class="cc-flag">🇱🇨</div>
+            <div class="cc-body">
+              <div class="cc-name">St Lucia</div>
+              <div class="cc-cities">Castries, Soufrière</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="st vincent" data-code="vc" data-cities="kingstown" data-active="0" onclick="selectCountry('VC','St Vincent',false)">
+            <div class="cc-flag">🇻🇨</div>
+            <div class="cc-body">
+              <div class="cc-name">St Vincent</div>
+              <div class="cc-cities">Kingstown</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="suriname" data-code="sr" data-cities="paramaribo" data-active="0" onclick="selectCountry('SR','Suriname',false)">
+            <div class="cc-flag">🇸🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Suriname</div>
+              <div class="cc-cities">Paramaribo</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="trinidad & tobago" data-code="tt" data-cities="port of spain, san fernando" data-active="0" onclick="selectCountry('TT','Trinidad & Tobago',false)">
+            <div class="cc-flag">🇹🇹</div>
+            <div class="cc-body">
+              <div class="cc-name">Trinidad & Tobago</div>
+              <div class="cc-cities">Port of Spain, San Fernando</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="uruguay" data-code="uy" data-cities="montevideo, punta del este" data-active="0" onclick="selectCountry('UY','Uruguay',false)">
+            <div class="cc-flag">🇺🇾</div>
+            <div class="cc-body">
+              <div class="cc-name">Uruguay</div>
+              <div class="cc-cities">Montevideo, Punta del Este</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="AM" data-name="venezuela" data-code="ve" data-cities="caracas, valencia, maracaibo" data-active="0" onclick="selectCountry('VE','Venezuela',false)">
+            <div class="cc-flag">🇻🇪</div>
+            <div class="cc-body">
+              <div class="cc-name">Venezuela</div>
+              <div class="cc-cities">Caracas, Valencia, Maracaibo</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div></div>
+      </div>
+      <div class="cont-group" data-cont="OC">
+        <div class="cont-header">
+          <span class="c-ico">🌏</span>
+          <h2>Oceania</h2>
+          <span class="c-count">14 countries (4 active)</span>
+          <div class="c-line"></div>
+        </div>
+        <div class="cc-grid">
+          <div class="cc active" data-cont="OC" data-name="australia" data-code="au" data-cities="sydney, melbourne, brisbane, perth" data-active="1" onclick="selectCountry('AU','Australia',true)">
+            <div class="cc-flag">🇦🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Australia</div>
+              <div class="cc-cities">Sydney, Melbourne, Brisbane, Perth</div>
+              <div class="cc-count">📊 16,800+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="OC" data-name="new zealand" data-code="nz" data-cities="auckland, wellington, queenstown" data-active="1" onclick="selectCountry('NZ','New Zealand',true)">
+            <div class="cc-flag">🇳🇿</div>
+            <div class="cc-body">
+              <div class="cc-name">New Zealand</div>
+              <div class="cc-cities">Auckland, Wellington, Queenstown</div>
+              <div class="cc-count">📊 4,200+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="OC" data-name="fiji" data-code="fj" data-cities="suva, nadi, denarau" data-active="1" onclick="selectCountry('FJ','Fiji',true)">
+            <div class="cc-flag">🇫🇯</div>
+            <div class="cc-body">
+              <div class="cc-name">Fiji</div>
+              <div class="cc-cities">Suva, Nadi, Denarau</div>
+              <div class="cc-count">📊 340+ listings</div>
+            </div>
+          </div>
+          <div class="cc active" data-cont="OC" data-name="samoa" data-code="ws" data-cities="apia" data-active="1" onclick="selectCountry('WS','Samoa',true)">
+            <div class="cc-flag">🇼🇸</div>
+            <div class="cc-body">
+              <div class="cc-name">Samoa</div>
+              <div class="cc-cities">Apia</div>
+              <div class="cc-count">📊 120+ listings</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="kiribati" data-code="ki" data-cities="tarawa" data-active="0" onclick="selectCountry('KI','Kiribati',false)">
+            <div class="cc-flag">🇰🇮</div>
+            <div class="cc-body">
+              <div class="cc-name">Kiribati</div>
+              <div class="cc-cities">Tarawa</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="marshall islands" data-code="mh" data-cities="majuro" data-active="0" onclick="selectCountry('MH','Marshall Islands',false)">
+            <div class="cc-flag">🇲🇭</div>
+            <div class="cc-body">
+              <div class="cc-name">Marshall Islands</div>
+              <div class="cc-cities">Majuro</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="micronesia" data-code="fm" data-cities="palikir" data-active="0" onclick="selectCountry('FM','Micronesia',false)">
+            <div class="cc-flag">🇫🇲</div>
+            <div class="cc-body">
+              <div class="cc-name">Micronesia</div>
+              <div class="cc-cities">Palikir</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="nauru" data-code="nr" data-cities="yaren" data-active="0" onclick="selectCountry('NR','Nauru',false)">
+            <div class="cc-flag">🇳🇷</div>
+            <div class="cc-body">
+              <div class="cc-name">Nauru</div>
+              <div class="cc-cities">Yaren</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="palau" data-code="pw" data-cities="ngerulmud" data-active="0" onclick="selectCountry('PW','Palau',false)">
+            <div class="cc-flag">🇵🇼</div>
+            <div class="cc-body">
+              <div class="cc-name">Palau</div>
+              <div class="cc-cities">Ngerulmud</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="papua new guinea" data-code="pg" data-cities="port moresby, lae" data-active="0" onclick="selectCountry('PG','Papua New Guinea',false)">
+            <div class="cc-flag">🇵🇬</div>
+            <div class="cc-body">
+              <div class="cc-name">Papua New Guinea</div>
+              <div class="cc-cities">Port Moresby, Lae</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="solomon islands" data-code="sb" data-cities="honiara" data-active="0" onclick="selectCountry('SB','Solomon Islands',false)">
+            <div class="cc-flag">🇸🇧</div>
+            <div class="cc-body">
+              <div class="cc-name">Solomon Islands</div>
+              <div class="cc-cities">Honiara</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="tonga" data-code="to" data-cities="nuku'alofa" data-active="0" onclick="selectCountry('TO','Tonga',false)">
+            <div class="cc-flag">🇹🇴</div>
+            <div class="cc-body">
+              <div class="cc-name">Tonga</div>
+              <div class="cc-cities">Nuku'alofa</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="tuvalu" data-code="tv" data-cities="funafuti" data-active="0" onclick="selectCountry('TV','Tuvalu',false)">
+            <div class="cc-flag">🇹🇻</div>
+            <div class="cc-body">
+              <div class="cc-name">Tuvalu</div>
+              <div class="cc-cities">Funafuti</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div>
+          <div class="cc coming" data-cont="OC" data-name="vanuatu" data-code="vu" data-cities="port vila, espiritu santo" data-active="0" onclick="selectCountry('VU','Vanuatu',false)">
+            <div class="cc-flag">🇻🇺</div>
+            <div class="cc-body">
+              <div class="cc-name">Vanuatu</div>
+              <div class="cc-cities">Port Vila, Espiritu Santo</div>
+              <div class="cc-count coming">🔜 Coming Soon</div>
+            </div>
+          </div></div>
+      </div>
+    </div>
+
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="ico">🔍</div>
+      <h3>No countries match your search</h3>
+      <p>Try a different country name, city, or continent.</p>
+    </div>
+
+    <div class="cta">
+      <div class="cta-inner">
+        <h2>Want PropertyFinder in Your Country?</h2>
+        <p>We're expanding rapidly. If your country shows "Coming Soon", register your interest and be the first to know when we launch.</p>
+        <a class="cta-btn" href="#" onclick="showToast('Interest registered! We\'ll notify you when we launch.');return false">🌍 Notify Me When You Launch →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © <span id="y"></span> PropertyFinder. 185 countries, 5 continents, 62 active markets. | <a href="terms-of-use.html">Terms</a> | <a href="list-property.html">List Property</a>
+  </div>
+
+  <script>
+    function showToast(msg){const ex=document.querySelector('.pf-toast');if(ex)ex.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+
+    let activeCont='all';
+    let activeStatus='all';
+
+    function filterCont(btn){
+      document.querySelectorAll('.cont-chip').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      activeCont=btn.dataset.cont;
+      filterCountries();
+    }
+
+    function filterStatus(btn){
+      document.querySelectorAll('.st-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStatus=btn.dataset.status;
+      filterCountries();
+    }
+
+    function filterCountries(){
+      const q=document.getElementById('countrySearch').value.toLowerCase().trim();
+      const groups=document.querySelectorAll('.cont-group');
+      let total=0;
+
+      groups.forEach(g=>{
+        const gCont=g.dataset.cont;
+        if(activeCont!=='all'&&gCont!==activeCont){g.style.display='none';return}
+
+        const cards=g.querySelectorAll('.cc');
+        let groupVisible=0;
+        cards.forEach(c=>{
+          const name=c.dataset.name;
+          const code=c.dataset.code;
+          const cities=c.dataset.cities;
+          const isActive=c.dataset.active==='1';
+          const matchText=!q||name.includes(q)||code.includes(q)||cities.includes(q);
+          const matchStatus=activeStatus==='all'||(activeStatus==='active'&&isActive)||(activeStatus==='coming'&&!isActive);
+          const show=matchText&&matchStatus;
+          c.style.display=show?'':'none';
+          if(show)groupVisible++;
+        });
+        g.style.display=groupVisible>0?'':'none';
+        total+=groupVisible;
+      });
+
+      document.getElementById('resultCount').textContent='Showing '+total+(total===1?' country':' countries');
+      document.getElementById('emptyState').style.display=total===0?'':'none';
+    }
+
+    function selectCountry(code,name,isActive){
+      if(!isActive){showToast(name+' is coming soon! Register your interest and we\'ll notify you at launch.');return}
+      localStorage.setItem('pf_selected_country',JSON.stringify({code,name,timestamp:Date.now()}));
+      showToast('Loading '+name+' listings...');
+    }
+
+    document.getElementById('y').textContent=new Date().getFullYear();
+    console.log('%c PropertyFinder — 11 Countries (185 countries) loaded','color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:24px 20px;font-family:'DM Sans',system-ui,sans-serif;font-size:0.82rem;margin-top:40px;line-height:1.8">
+  <div style="max-width:1220px;margin:0 auto">
+    <div style="margin-bottom:10px">
+      <a href="index.html" style="color:#c4a47c;font-weight:700;font-size:0.95rem;text-decoration:none">Property<span style="color:#D4AF77">Finder</span></a>
+      <span style="color:rgba(255,255,255,0.4);margin:0 8px">|</span>
+      <span style="color:rgba(255,255,255,0.6)">Connecting Buyers, Sellers & Businesses Across 185 Countries</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:10px">
+      <a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Home</a>
+      <a href="buy.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Buy</a>
+      <a href="rent.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Rent</a>
+      <a href="auctions.html" style="color:#c4a47c;text-decoration:none">Auctions</a>
+      <a href="business.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Business for Sale</a>
+      <a href="countries.html" style="color:rgba(255,255,255,0.7);text-decoration:none">185 Countries</a>
+      <a href="valuation.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Valuation</a>
+      <a href="calculators.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Calculators</a>
+      <a href="advertise.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Advertise</a>
+      <a href="how-it-works.html" style="color:rgba(255,255,255,0.7);text-decoration:none">How It Works</a>
+      <a href="list-property.html" style="color:rgba(255,255,255,0.7);text-decoration:none">List Property</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:12px">
+      <a href="terms-of-use.html" style="color:#D4AF77;text-decoration:none">Terms of Use</a>
+      <a href="privacy-policy.html" style="color:#D4AF77;text-decoration:none">Privacy</a>
+      <a href="commission-fees.html" style="color:#D4AF77;text-decoration:none">Fees</a>
+      <a href="anti-fraud.html" style="color:#D4AF77;text-decoration:none">Anti-Fraud</a>
+      <a href="auction-terms.html" style="color:#D4AF77;text-decoration:none">Auction Terms</a>
+      <a href="dispute-resolution.html" style="color:#D4AF77;text-decoration:none">Disputes</a>
+      <a href="seller-agent-listing.html" style="color:#D4AF77;text-decoration:none">Seller Agreement</a>
+    </div>
+    <div style="color:rgba(255,255,255,0.4);font-size:0.75rem">
+      © <span id="pf-year"></span> PropertyFinder Global. All rights reserved. | 185 Countries · 10 Business Sectors · AI-Powered · Real-Time Auctions
+    </div>
+  </div>
+</footer>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

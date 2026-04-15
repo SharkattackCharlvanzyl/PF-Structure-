@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Floating Toolbar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --pf-danger:#DC2626;--pf-success:#16A34A;--pf-warn:#D97706;--pf-info:#2563EB;
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-lg:0 12px 40px rgba(0,0,0,0.12),0 4px 16px rgba(0,0,0,0.08);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased;min-height:200vh}
+
+    /* ═══ DEMO PAGE CONTENT ═══ */
+    .demo-page{max-width:900px;margin:0 auto;padding:60px 24px 200px}
+    .demo-page h1{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:#e8dfc8;margin-bottom:12px;text-align:center}
+    .demo-page p{font-size:0.95rem;color:var(--nb-muted);text-align:center;line-height:1.7;max-width:600px;margin:0 auto 32px}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .demo-card{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:all 0.3s ease}
+    .demo-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+    .demo-card img{width:100%;height:160px;object-fit:cover}
+    .demo-card .body{padding:14px}
+    .demo-card h3{font-size:0.92rem;font-weight:800;margin-bottom:4px}
+    .demo-card .price{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#c4a47c}
+    .demo-card .meta{font-size:0.78rem;color:var(--nb-muted);margin-top:4px}
+    .demo-card .actions{display:flex;gap:6px;margin-top:10px}
+    .demo-card .act{padding:6px 12px;border-radius:4px;font-size:0.72rem;font-weight:700;border:1px solid var(--nb-border);cursor:pointer;background:var(--nb-white);color:var(--nb-muted);transition:all 0.2s ease;font-family:var(--font)}
+    .demo-card .act:hover{border-color:#c4a47c;color:#c4a47c}
+    .demo-card .act.fav{color:var(--pf-danger)}
+    .demo-card .act.fav:hover{background:rgba(220,38,38,0.05)}
+
+    /* ═══ FLOATING TOOLBAR ═══ */
+    .ftb{position:fixed;right:20px;top:50%;transform:translateY(calc(-50% + 29px));z-index:9000;display:flex;flex-direction:column;gap:6px}
+    @media(max-width:600px){.ftb{right:10px;gap:4px}}
+    .ftb-btn{width:50px;height:50px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;transition:all 0.25s ease;position:relative}
+    .ftb-btn:hover{background:var(--nb-green);border-color:#c4a47c;transform:scale(1.08);box-shadow:0 6px 20px rgba(196,164,124,0.25)}
+    .ftb-btn:hover .ftb-tip{opacity:1;transform:translateX(-8px)}
+    .ftb-btn .badge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--pf-danger);color:white;font-size:0.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid var(--nb-white)}
+    .ftb-tip{position:absolute;right:100%;margin-right:8px;padding:6px 12px;border-radius:4px;background:var(--nb-text);color:white;font-size:0.72rem;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;transition:all 0.2s ease;transform:translateX(4px)}
+
+    /* ═══ SLIDE-OUT PANEL (shared) ═══ */
+    .panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9100;backdrop-filter:blur(2px)}
+    .panel-overlay.open{display:block;animation:fadeIn 0.2s ease}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .panel{position:fixed;top:58px;right:-420px;width:400px;max-width:90vw;height:100vh;background:var(--nb-white);z-index:9200;box-shadow:-8px 0 40px rgba(0,0,0,0.15);transition:right 0.35s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column}
+    .panel.open{right:0}
+    .panel-hdr{padding:18px 20px;border-bottom:1px solid var(--nb-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--nb-snow)}
+    .panel-hdr h2{font-family:var(--font-display);font-size:1rem;font-weight:700;color:#e8dfc8;display:flex;align-items:center;gap:8px}
+    .panel-hdr .close{width:32px;height:32px;border-radius:50%;border:1px solid var(--nb-border);background:var(--nb-white);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--nb-muted);transition:all 0.2s ease}
+    .panel-hdr .close:hover{background:var(--pf-danger);color:white;border-color:var(--pf-danger)}
+    .panel-body{flex:1;overflow-y:auto;padding:16px 20px}
+    .panel-footer{padding:14px 20px;border-top:1px solid var(--nb-border);flex-shrink:0;background:var(--nb-snow)}
+
+    /* Panel list items */
+    .p-item{display:flex;gap:12px;padding:12px;border-radius:var(--radius2);border:1px solid var(--nb-border);margin-bottom:10px;transition:all 0.2s ease;cursor:pointer;background:var(--nb-white)}
+    .p-item:hover{border-color:#c4a47c;box-shadow:var(--shadow)}
+    .p-item img{width:80px;height:60px;object-fit:cover;border-radius:var(--radius3);flex-shrink:0}
+    .p-item .p-body{flex:1;min-width:0}
+    .p-item h4{font-size:0.85rem;font-weight:800;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .p-item .p-price{font-size:0.82rem;font-weight:700;color:#c4a47c}
+    .p-item .p-meta{font-size:0.7rem;color:var(--nb-muted);margin-top:2px}
+    .p-item .p-remove{width:24px;height:24px;border-radius:50%;border:1px solid var(--nb-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.7rem;color:var(--nb-muted);flex-shrink:0;align-self:center;transition:all 0.2s ease;background:var(--nb-white)}
+    .p-item .p-remove:hover{background:var(--pf-danger);color:white;border-color:var(--pf-danger)}
+    .p-empty{text-align:center;padding:40px 20px;color:var(--nb-muted)}
+    .p-empty .e-ico{font-size:2.5rem;margin-bottom:10px}
+    .p-empty p{font-size:0.85rem;line-height:1.6}
+
+    /* ═══ MODAL (shared) ═══ */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9300;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px)}
+    .modal-overlay.open{display:flex;animation:fadeIn 0.2s ease}
+    .modal{background:var(--nb-white);border-radius:var(--radius);max-width:500px;width:100%;box-shadow:var(--shadow-lg);animation:modalIn 0.3s ease}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-hdr{padding:18px 22px;border-bottom:1px solid var(--nb-border);display:flex;align-items:center;justify-content:space-between}
+    .modal-hdr h2{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#e8dfc8;display:flex;align-items:center;gap:8px}
+    .modal-hdr .close{width:32px;height:32px;border-radius:50%;border:1px solid var(--nb-border);background:var(--nb-white);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--nb-muted)}
+    .modal-hdr .close:hover{background:var(--pf-danger);color:white;border-color:var(--pf-danger)}
+    .modal-body{padding:22px}
+    .modal-footer{padding:14px 22px;border-top:1px solid var(--nb-border);display:flex;justify-content:flex-end;gap:8px}
+
+    /* Buttons */
+    .btn{padding:10px 18px;border-radius:var(--radius3);font-size:0.85rem;font-weight:700;cursor:pointer;font-family:var(--font);border:1px solid var(--nb-border);background:var(--nb-white);color:#e8dfc8;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:6px}
+    .btn:hover{border-color:#c4a47c;color:#c4a47c}
+    .btn.primary{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .btn.primary:hover{background:var(--nb-green-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,164,124,0.25)}
+    .btn.block{width:100%;justify-content:center}
+
+    /* Fields */
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:0.82rem;font-weight:700;margin-bottom:5px}
+    .field label .req{color:var(--pf-danger)}
+    .field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.9rem;font-family:var(--font);outline:none;color:#e8dfc8;transition:border-color 0.2s ease}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .field textarea{resize:vertical;min-height:70px}
+    .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    /* Share icons */
+    .share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+    .share-btn{padding:14px;border-radius:var(--radius2);border:1px solid var(--nb-border);text-align:center;cursor:pointer;transition:all 0.2s ease;background:var(--nb-white)}
+    .share-btn:hover{border-color:#c4a47c;transform:translateY(-2px);box-shadow:var(--shadow)}
+    .share-btn .s-ico{font-size:1.5rem;margin-bottom:4px}
+    .share-btn .s-lbl{font-size:0.68rem;font-weight:700;color:var(--nb-muted)}
+
+    /* Copy link */
+    .copy-row{display:flex;gap:8px}
+    .copy-row input{flex:1;background:var(--nb-snow)}
+    .copy-row .btn{flex-shrink:0}
+
+    /* Saved search card */
+    .ss-card{padding:14px;border-radius:var(--radius2);border:1px solid var(--nb-border);margin-bottom:10px;background:var(--nb-white);transition:all 0.2s ease}
+    .ss-card:hover{border-color:#c4a47c;box-shadow:var(--shadow)}
+    .ss-card .ss-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .ss-card h4{font-size:0.88rem;font-weight:800}
+    .ss-card .ss-alert{font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:4px}
+    .ss-card .ss-alert.on{background:rgba(22,163,74,0.1);color:var(--pf-success)}
+    .ss-card .ss-alert.off{background:var(--nb-snow);color:var(--nb-muted)}
+    .ss-card .ss-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+    .ss-card .ss-tag{padding:3px 8px;border-radius:4px;font-size:0.68rem;font-weight:700;background:var(--nb-snow);color:var(--nb-muted)}
+    .ss-card .ss-bottom{display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:var(--nb-muted)}
+    .ss-card .ss-bottom a{font-size:0.72rem}
+
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  </style>
+</head>
+<body>
+
+  <!-- ═══ DEMO PAGE CONTENT ═══ -->
+  <div class="demo-page">
+    <h1>Floating Toolbar Demo</h1>
+    <p>This page demonstrates the floating toolbar and all its panels. The toolbar appears on the right side of every page. Try the buttons — each opens a different panel or modal.</p>
+    <div class="demo-grid" id="demoGrid"></div>
+  </div>
+
+  <!-- ═══ FLOATING TOOLBAR ═══ -->
+  <div class="ftb" id="ftb">
+    <button class="ftb-btn" onclick="openPanel('favPanel')" aria-label="Favorites">
+      ❤️<span class="badge" id="favCount">3</span>
+      <span class="ftb-tip">Favorites</span>
+    </button>
+    <button class="ftb-btn" onclick="openModal('scheduleModal')" aria-label="Schedule Viewing">
+      📅<span class="ftb-tip">Schedule Viewing</span>
+    </button>
+    <button class="ftb-btn" onclick="openModal('shareModal')" aria-label="Share Property">
+      📤<span class="ftb-tip">Share Property</span>
+    </button>
+    <button class="ftb-btn" onclick="openPanel('searchPanel')" aria-label="Saved Searches">
+      🔍<span class="badge" id="searchCount">2</span>
+      <span class="ftb-tip">Saved Searches</span>
+    </button>
+    <button class="ftb-btn" onclick="openPanel('recentPanel')" aria-label="Recently Viewed">
+      🕐<span class="badge" id="recentCount">5</span>
+      <span class="ftb-tip">Recently Viewed</span>
+    </button>
+    <button class="ftb-btn" onclick="scrollToTop()" aria-label="Back to Top">
+      ⬆️<span class="ftb-tip">Back to Top</span>
+    </button>
+  </div>
+
+  <!-- ═══ FAVORITES PANEL ═══ -->
+  <div class="panel-overlay" id="favOverlay" onclick="closeAllPanels()"></div>
+  <div class="panel" id="favPanel">
+    <div class="panel-hdr">
+      <h2>❤️ Favorites <span style="font-size:0.75rem;color:var(--nb-muted);font-weight:600" id="favLabel">(3 properties)</span></h2>
+      <button class="close" onclick="closeAllPanels()">&times;</button>
+    </div>
+    <div class="panel-body" id="favBody">
+      <div class="p-item" data-id="fav1">
+        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=200&q=60" alt="">
+        <div class="p-body">
+          <h4>Modern Villa — Camps Bay</h4>
+          <div class="p-price">ZAR 8,500,000</div>
+          <div class="p-meta">4 bed · 3 bath · 320 m² · Cape Town</div>
+        </div>
+        <button class="p-remove" onclick="removeFav(this,'fav1')" title="Remove">&times;</button>
+      </div>
+      <div class="p-item" data-id="fav2">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=200&q=60" alt="">
+        <div class="p-body">
+          <h4>Penthouse — Dubai Marina</h4>
+          <div class="p-price">AED 4,200,000</div>
+          <div class="p-meta">3 bed · 2 bath · 180 m² · Dubai</div>
+        </div>
+        <button class="p-remove" onclick="removeFav(this,'fav2')" title="Remove">&times;</button>
+      </div>
+      <div class="p-item" data-id="fav3">
+        <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=200&q=60" alt="">
+        <div class="p-body">
+          <h4>Sea View Villa — Algarve</h4>
+          <div class="p-price">€ 1,250,000</div>
+          <div class="p-meta">5 bed · 4 bath · 420 m² · Lagos</div>
+        </div>
+        <button class="p-remove" onclick="removeFav(this,'fav3')" title="Remove">&times;</button>
+      </div>
+    </div>
+    <div class="panel-footer" style="display:flex;gap:8px">
+      <button class="btn block" onclick="showToast('Opening comparison tool with 3 favorites...')">⚖️ Compare All</button>
+      <button class="btn primary block" onclick="showToast('Opening full favorites page...')">View All ❤️</button>
+    </div>
+  </div>
+
+  <!-- ═══ SAVED SEARCHES PANEL ═══ -->
+  <div class="panel-overlay" id="searchOverlay" onclick="closeAllPanels()"></div>
+  <div class="panel" id="searchPanel">
+    <div class="panel-hdr">
+      <h2>🔍 Saved Searches</h2>
+      <button class="close" onclick="closeAllPanels()">&times;</button>
+    </div>
+    <div class="panel-body">
+      <div class="ss-card">
+        <div class="ss-top">
+          <h4>🏠 Houses in Cape Town</h4>
+          <span class="ss-alert on">🔔 Alerts On</span>
+        </div>
+        <div class="ss-filters">
+          <span class="ss-tag">Cape Town</span>
+          <span class="ss-tag">House</span>
+          <span class="ss-tag">3+ beds</span>
+          <span class="ss-tag">R2M – R5M</span>
+          <span class="ss-tag">For Sale</span>
+        </div>
+        <div class="ss-bottom">
+          <span>142 matching listings · Updated 2h ago</span>
+          <a href="#" onclick="showToast('Running saved search...');return false">Run Search →</a>
+        </div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-top">
+          <h4>🏢 Dubai Marina Apartments</h4>
+          <span class="ss-alert on">🔔 Alerts On</span>
+        </div>
+        <div class="ss-filters">
+          <span class="ss-tag">Dubai</span>
+          <span class="ss-tag">Apartment</span>
+          <span class="ss-tag">2+ beds</span>
+          <span class="ss-tag">AED 1M–3M</span>
+          <span class="ss-tag">Sea View</span>
+        </div>
+        <div class="ss-bottom">
+          <span>87 matching listings · Updated 5h ago</span>
+          <a href="#" onclick="showToast('Running saved search...');return false">Run Search →</a>
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="btn primary block" onclick="openModal('newSearchModal')">+ Save New Search</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RECENTLY VIEWED PANEL ═══ -->
+  <div class="panel-overlay" id="recentOverlay" onclick="closeAllPanels()"></div>
+  <div class="panel" id="recentPanel">
+    <div class="panel-hdr">
+      <h2>🕐 Recently Viewed</h2>
+      <button class="close" onclick="closeAllPanels()">&times;</button>
+    </div>
+    <div class="panel-body" id="recentBody">
+      <div class="p-item"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=200&q=60" alt=""><div class="p-body"><h4>Modern Villa — Camps Bay</h4><div class="p-price">ZAR 8,500,000</div><div class="p-meta">Viewed 5 min ago</div></div></div>
+      <div class="p-item"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=200&q=60" alt=""><div class="p-body"><h4>Family Home — Constantia</h4><div class="p-price">ZAR 6,200,000</div><div class="p-meta">Viewed 12 min ago</div></div></div>
+      <div class="p-item"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=200&q=60" alt=""><div class="p-body"><h4>Penthouse — Dubai Marina</h4><div class="p-price">AED 4,200,000</div><div class="p-meta">Viewed 1 hour ago</div></div></div>
+      <div class="p-item"><img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=200&q=60" alt=""><div class="p-body"><h4>Sea View Villa — Algarve</h4><div class="p-price">€ 1,250,000</div><div class="p-meta">Viewed 3 hours ago</div></div></div>
+      <div class="p-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=200&q=60" alt=""><div class="p-body"><h4>Wine Farm — Stellenbosch</h4><div class="p-price">ZAR 18,500,000</div><div class="p-meta">Viewed yesterday</div></div></div>
+    </div>
+    <div class="panel-footer">
+      <button class="btn block" onclick="clearRecent()">🗑️ Clear History</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCHEDULE VIEWING MODAL ═══ -->
+  <div class="modal-overlay" id="scheduleModal">
+    <div class="modal">
+      <div class="modal-hdr">
+        <h2>📅 Schedule a Viewing</h2>
+        <button class="close" onclick="closeModal('scheduleModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding:12px;border-radius:var(--radius3);background:var(--nb-snow);border:1px solid var(--nb-border);margin-bottom:16px;display:flex;gap:10px;align-items:center;font-size:0.85rem">
+          <span style="font-size:1.3rem">🏠</span>
+          <div><strong>Modern Villa — Camps Bay</strong><br><span style="color:var(--nb-muted);font-size:0.78rem">ZAR 8,500,000 · 4 bed · 3 bath</span></div>
+        </div>
+        <div class="f2">
+          <div class="field"><label>Your Name <span class="req">*</span></label><input type="text" placeholder="Full name" id="svName"></div>
+          <div class="field"><label>Phone <span class="req">*</span></label><input type="tel" placeholder="+27 82 000 0000" id="svPhone"></div>
+        </div>
+        <div class="field"><label>Email <span class="req">*</span></label><input type="email" placeholder="you@email.com" id="svEmail"></div>
+        <div class="f2">
+          <div class="field"><label>Preferred Date <span class="req">*</span></label><input type="date" id="svDate"></div>
+          <div class="field"><label>Preferred Time</label><select id="svTime"><option value="">Select</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option></select></div>
+        </div>
+        <div class="field"><label>Contact Method</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer"><input type="radio" name="contact" value="whatsapp" checked style="accent-color:#c4a47c"> 📱 WhatsApp</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer"><input type="radio" name="contact" value="phone" style="accent-color:#c4a47c"> 📞 Phone Call</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer"><input type="radio" name="contact" value="email" style="accent-color:#c4a47c"> 📧 Email</label>
+          </div>
+        </div>
+        <div class="field"><label>Message <span style="color:var(--nb-muted);font-weight:500;font-size:0.75rem">(optional)</span></label><textarea placeholder="I'm interested in viewing this property. Any specific times that work?" id="svMsg"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('scheduleModal')">Cancel</button>
+        <button class="btn primary" onclick="submitSchedule()">📅 Request Viewing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SHARE PROPERTY MODAL ═══ -->
+  <div class="modal-overlay" id="shareModal">
+    <div class="modal">
+      <div class="modal-hdr">
+        <h2>📤 Share This Property</h2>
+        <button class="close" onclick="closeModal('shareModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding:12px;border-radius:var(--radius3);background:var(--nb-snow);border:1px solid var(--nb-border);margin-bottom:18px;display:flex;gap:10px;align-items:center;font-size:0.85rem">
+          <span style="font-size:1.3rem">🏠</span>
+          <div><strong>Modern Villa — Camps Bay</strong><br><span style="color:var(--nb-muted);font-size:0.78rem">ZAR 8,500,000 · 4 bed · 3 bath</span></div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:10px">Share via</div>
+        <div class="share-grid">
+          <div class="share-btn" onclick="shareVia('whatsapp')"><div class="s-ico">📱</div><div class="s-lbl">WhatsApp</div></div>
+          <div class="share-btn" onclick="shareVia('email')"><div class="s-ico">📧</div><div class="s-lbl">Email</div></div>
+          <div class="share-btn" onclick="shareVia('facebook')"><div class="s-ico">👥</div><div class="s-lbl">Facebook</div></div>
+          <div class="share-btn" onclick="shareVia('twitter')"><div class="s-ico">🐦</div><div class="s-lbl">X / Twitter</div></div>
+          <div class="share-btn" onclick="shareVia('linkedin')"><div class="s-ico">💼</div><div class="s-lbl">LinkedIn</div></div>
+          <div class="share-btn" onclick="shareVia('telegram')"><div class="s-ico">✈️</div><div class="s-lbl">Telegram</div></div>
+          <div class="share-btn" onclick="shareVia('pinterest')"><div class="s-ico">📌</div><div class="s-lbl">Pinterest</div></div>
+          <div class="share-btn" onclick="shareVia('sms')"><div class="s-ico">💬</div><div class="s-lbl">SMS</div></div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:8px">Or copy link</div>
+        <div class="copy-row">
+          <input type="text" value="https://propertyfinder.com/listing/ZA-CT-00421" id="shareUrl" readonly style="font-size:0.82rem">
+          <button class="btn primary" onclick="copyLink()">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SAVE NEW SEARCH MODAL ═══ -->
+  <div class="modal-overlay" id="newSearchModal">
+    <div class="modal">
+      <div class="modal-hdr">
+        <h2>🔍 Save This Search</h2>
+        <button class="close" onclick="closeModal('newSearchModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>Search Name <span class="req">*</span></label><input type="text" placeholder="e.g. Apartments in Barcelona" id="ssName"></div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:8px">Current Search Filters</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+          <span style="padding:5px 10px;border-radius:4px;background:var(--nb-snow);font-size:0.78rem;font-weight:700;color:var(--nb-muted)">🏠 Apartment</span>
+          <span style="padding:5px 10px;border-radius:4px;background:var(--nb-snow);font-size:0.78rem;font-weight:700;color:var(--nb-muted)">📍 Barcelona</span>
+          <span style="padding:5px 10px;border-radius:4px;background:var(--nb-snow);font-size:0.78rem;font-weight:700;color:var(--nb-muted)">🛏️ 2+ beds</span>
+          <span style="padding:5px 10px;border-radius:4px;background:var(--nb-snow);font-size:0.78rem;font-weight:700;color:var(--nb-muted)">💰 €200K–€500K</span>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:8px">Alert Preferences</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer"><input type="checkbox" checked style="accent-color:#c4a47c;width:16px;height:16px"> 📧 Email me new matches daily</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer"><input type="checkbox" checked style="accent-color:#c4a47c;width:16px;height:16px"> 🔔 Push notifications for new listings</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer"><input type="checkbox" style="accent-color:#c4a47c;width:16px;height:16px"> 📉 Alert me on price drops</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('newSearchModal')">Cancel</button>
+        <button class="btn primary" onclick="saveNewSearch()">🔍 Save Search</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showToast(msg){const ex=document.querySelector('.pf-toast');if(ex)ex.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+
+    // Panel open/close
+    function openPanel(id){
+      closeAllPanels();
+      const ovId=id.replace('Panel','Overlay');
+      const ov=document.getElementById(ovId);
+      const p=document.getElementById(id);
+      if(ov)ov.classList.add('open');
+      if(p)p.classList.add('open');
+    }
+    function closeAllPanels(){
+      document.querySelectorAll('.panel-overlay').forEach(o=>o.classList.remove('open'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));
+    }
+
+    // Modal open/close
+    function openModal(id){
+      closeAllPanels();
+      document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id){document.getElementById(id).classList.remove('open')}
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(ov=>{
+      ov.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+    });
+
+    // Favorites
+    function removeFav(btn,id){
+      const item=btn.closest('.p-item');
+      item.style.transition='all 0.3s ease';item.style.opacity='0';item.style.transform='translateX(20px)';
+      setTimeout(()=>{item.remove();updateFavCount()},300);
+    }
+    function updateFavCount(){
+      const c=document.querySelectorAll('#favBody .p-item').length;
+      document.getElementById('favCount').textContent=c;
+      document.getElementById('favLabel').textContent='('+c+' propert'+(c===1?'y':'ies')+')';
+      if(c===0){document.getElementById('favBody').innerHTML='<div class="p-empty"><div class="e-ico">❤️</div><p>No favorites yet.<br>Click the heart icon on any listing to save it here.</p></div>'}
+    }
+    // Persist favourites to localStorage
+    function pfSaveFavs(){
+      const items=[];
+      document.querySelectorAll('#favBody .p-item').forEach(el=>{
+        const img=el.querySelector('img')?.src||'';
+        const h4=el.querySelector('h4')?.textContent||'';
+        const price=el.querySelector('.p-price')?.textContent||'';
+        const meta=el.querySelector('.p-meta')?.textContent||'';
+        const id=el.dataset.id||'';
+        if(id) items.push({id,title:h4,price,meta,img});
+      });
+      try{localStorage.setItem('pf_favourites',JSON.stringify(items));}catch(e){}
+    }
+    function pfLoadFavs(){
+      try{
+        const items=JSON.parse(localStorage.getItem('pf_favourites')||'[]');
+        const body=document.getElementById('favBody');
+        if(!items.length)return;
+        items.forEach(d=>{
+          if(document.querySelector('#favBody .p-item[data-id="'+d.id+'"]'))return;
+          body.insertAdjacentHTML('beforeend',`<div class="p-item" data-id="${d.id}"><img src="${d.img}" alt=""><div class="p-body"><h4>${d.title}</h4><div class="p-price">${d.price}</div><div class="p-meta">${d.meta}</div></div><button class="p-remove" onclick="removeFav(this,'${d.id}')" title="Remove">&times;</button></div>`);
+        });
+        updateFavCount();
+        // Mark cards as saved
+        items.forEach(d=>{
+          const card=document.getElementById('card-'+d.id);
+          if(card){const btn=card.querySelector('.act.fav');if(btn){btn.textContent='♥ Saved';btn.style.color='var(--pf-danger)';}}
+        });
+      }catch(e){}
+    }
+
+    function toggleFav(cardEl,id,title,price,meta,img){
+      const btn=cardEl.querySelector('.act.fav');
+      const isFav=btn.textContent.includes('♥');
+      if(isFav){btn.textContent='♡ Save';btn.style.color='var(--nb-muted)';
+        const existing=document.querySelector('#favBody .p-item[data-id="'+id+'"]');if(existing)existing.remove();
+      }else{
+        btn.textContent='♥ Saved';btn.style.color='var(--pf-danger)';
+        const html=`<div class="p-item" data-id="${id}"><img src="${img}" alt=""><div class="p-body"><h4>${title}</h4><div class="p-price">${price}</div><div class="p-meta">${meta}</div></div><button class="p-remove" onclick="removeFav(this,'${id}')" title="Remove">&times;</button></div>`;
+        document.getElementById('favBody').insertAdjacentHTML('beforeend',html);
+      }
+      updateFavCount(); pfSaveFavs();
+    }
+
+    // Recently viewed — localStorage backed
+    function pfAddRecent(id,title,price,meta,img){
+      try{
+        const r=JSON.parse(localStorage.getItem('pf_recently_viewed')||'[]');
+        const filtered=r.filter(x=>x.id!==id);
+        filtered.unshift({id,title,price,meta,img,ts:Date.now()});
+        localStorage.setItem('pf_recently_viewed',JSON.stringify(filtered.slice(0,10)));
+      }catch(e){}
+      pfLoadRecent();
+    }
+    function pfLoadRecent(){
+      try{
+        const r=JSON.parse(localStorage.getItem('pf_recently_viewed')||'[]');
+        const body=document.getElementById('recentBody');
+        document.getElementById('recentCount').textContent=r.length||'0';
+        if(!r.length){body.innerHTML='<div class="p-empty"><div class="e-ico">🕐</div><p>No recently viewed properties yet.</p></div>';return;}
+        body.innerHTML=r.map(d=>`<div class="p-item" data-id="${d.id}"><img src="${d.img}" alt=""><div class="p-body"><h4>${d.title}</h4><div class="p-price">${d.price}</div><div class="p-meta">${d.meta}</div></div></div>`).join('');
+      }catch(e){}
+    }
+
+    // Recently viewed
+    function clearRecent(){document.getElementById('recentBody').innerHTML='<div class="p-empty"><div class="e-ico">🕐</div><p>History cleared.</p></div>';document.getElementById('recentCount').textContent='0';showToast('Viewing history cleared')}
+
+    // Schedule viewing
+    function submitSchedule(){
+      const name=document.getElementById('svName').value.trim();
+      const phone=document.getElementById('svPhone').value.trim();
+      const email=document.getElementById('svEmail').value.trim();
+      const date=document.getElementById('svDate').value;
+      if(!name||!phone||!email||!date){showToast('Please fill in all required fields');return}
+      closeModal('scheduleModal');showToast('Viewing request sent! The agent will confirm within 24 hours.');
+      try{const v=JSON.parse(localStorage.getItem('pf_viewing_requests')||'[]');v.push({name,phone,email,date,timestamp:Date.now()});localStorage.setItem('pf_viewing_requests',JSON.stringify(v))}catch(e){}
+    }
+
+    // Share
+    function shareVia(platform){
+      const url='https://propertyfinder.com/listing/ZA-CT-00421';
+      const text='Check out this property on PropertyFinder: Modern Villa — Camps Bay';
+      const urls={
+        whatsapp:'https://wa.me/?text='+encodeURIComponent(text+' '+url),
+        email:'mailto:?subject='+encodeURIComponent('Property: Modern Villa — Camps Bay')+'&body='+encodeURIComponent(text+'\n\n'+url),
+        facebook:'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),
+        twitter:'https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url),
+        linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(url),
+        telegram:'https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text),
+        pinterest:'https://pinterest.com/pin/create/button/?url='+encodeURIComponent(url)+'&description='+encodeURIComponent(text),
+        sms:'sms:?body='+encodeURIComponent(text+' '+url)
+      };
+      showToast('Opening '+platform+'...');
+      if(urls[platform]) window.open(urls[platform],'_blank');
+    }
+    function copyLink(){
+      const inp=document.getElementById('shareUrl');
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(inp.value).then(()=>showToast('✓ Link copied!')).catch(()=>{inp.select();document.execCommand('copy');showToast('✓ Link copied!');});
+      } else { inp.select(); document.execCommand('copy'); showToast('✓ Link copied!'); }
+    }
+
+    // Save search
+    function saveNewSearch(){
+      const name=document.getElementById('ssName').value.trim();
+      if(!name){showToast('Please enter a name for this search');return}
+      closeModal('newSearchModal');showToast('Search saved! You\'ll receive alerts for new matches.');
+      const c=parseInt(document.getElementById('searchCount').textContent)+1;
+      document.getElementById('searchCount').textContent=c;
+    }
+
+    // Scroll to top
+    function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
+
+    // Show/hide toolbar on scroll
+    let lastScroll=0;
+    window.addEventListener('scroll',()=>{
+      const ftb=document.getElementById('ftb');
+      ftb.style.opacity=window.scrollY>200?'1':'0.5';
+    });
+
+    // Generate demo property cards
+    const demos=[
+      {title:'Modern Villa — Camps Bay',price:'ZAR 8,500,000',meta:'4 bed · 3 bath · 320 m²',img:'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=400&q=70',id:'d1'},
+      {title:'Family Home — Constantia',price:'ZAR 6,200,000',meta:'5 bed · 3 bath · 380 m²',img:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=70',id:'d2'},
+      {title:'Penthouse — Dubai Marina',price:'AED 4,200,000',meta:'3 bed · 2 bath · 180 m²',img:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=70',id:'d3'},
+      {title:'Sea View Villa — Algarve',price:'€ 1,250,000',meta:'5 bed · 4 bath · 420 m²',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=400&q=70',id:'d4'},
+      {title:'Wine Farm — Stellenbosch',price:'ZAR 18,500,000',meta:'120 ha · 4 bed residence',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=70',id:'d5'},
+      {title:'City Apartment — London',price:'£ 850,000',meta:'2 bed · 2 bath · 95 m²',img:'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=400&q=70',id:'d6'},
+    ];
+    const grid=document.getElementById('demoGrid');
+    demos.forEach(d=>{
+      grid.innerHTML+=`<div class="demo-card" id="card-${d.id}">
+        <img src="${d.img}" alt="${d.title}" loading="lazy">
+        <div class="body">
+          <h3>${d.title}</h3>
+          <div class="price">${d.price}</div>
+          <div class="meta">${d.meta}</div>
+          <div class="actions">
+            <button class="act fav" onclick="event.stopPropagation();toggleFav(document.getElementById('card-${d.id}'),'${d.id}','${d.title}','${d.price}','${d.meta}','${d.img}')">♡ Save</button>
+            <button class="act" onclick="event.stopPropagation();pfAddRecent('${d.id}','${d.title}','${d.price}','${d.meta}','${d.img}');openModal('scheduleModal')">📅 View</button>
+            <button class="act" onclick="event.stopPropagation();openModal('shareModal')">📤 Share</button>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    pfLoadFavs();
+    pfLoadRecent();
+    console.log('%c PropertyFinder — Floating Toolbar loaded','color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PropertyFinder — 04f Farm Online Auction Detail</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --nb-green:#1a2535;
+      --nb-green-dark:#0e1520;
+      --nb-green-hover:#1f2d3d;
+      --nb-white:#1a2535;
+      --nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;
+      --nb-text:#e8dfc8;
+      --nb-muted:#8a7d5a;
+      --nb-border:rgba(196,164,124,0.18);
+      --line:var(--nb-border);
+      --chip:rgba(196,164,124,0.06);
+      --shadow:0 4px 24px rgba(196,164,124,0.06);
+      --shadow-lg:0 12px 44px rgba(0,0,0,0.10);
+      --radius:18px;
+      --radius2:12px;
+      --max:1220px;
+      --stickyH:72px;
+      --font-display:'Cinzel',Georgia,serif;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 18px 110px}
+
+    /* TOPBAR */
+    .topbar{
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      padding:12px 16px;border:1px solid var(--line);
+      background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);
+      border-radius:var(--radius);box-shadow:var(--shadow);
+      position:sticky;top:12px;z-index:50;margin-top:14px
+    }
+    .topbar .left,.topbar .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .chip{
+      display:inline-flex;gap:6px;align-items:center;padding:7px 12px;border-radius:999px;
+      background:var(--chip);border:1px solid var(--line);color:var(--nb-muted);
+      font-size:12.5px;font-weight:500
+    }
+    .chip strong{color:#c4a47c}
+    .select{
+      background:var(--nb-white);border:1px solid var(--line);color:#e8dfc8;
+      border-radius:999px;padding:7px 10px;font-size:12.5px;outline:none;font-family:var(--font)
+    }
+    .select:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .btn{
+      border:1px solid rgba(196,164,124,0.3);background:#c4a47c;color:#0e1520;padding:9px 16px;border-radius:999px;
+      font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-size:13px;font-family:var(--font);
+      transition:all 0.25s ease
+    }
+    .btn:hover{background:var(--nb-green-hover);border-color:var(--nb-green-hover);transform:translateY(-1px)}
+    .btn.secondary{background:var(--nb-white);color:#c4a47c;border-color:var(--line)}
+    .btn.secondary:hover{border-color:#c4a47c}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{background:var(--nb-green);border-color:#c4a47c;color:white}
+    .btn.primary:hover{background:var(--nb-green-hover);border-color:var(--nb-green-hover)}
+
+    /* HERO PHOTO / CAROUSEL */
+    .hero-photo{
+      margin-top:16px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);
+      border:1px solid var(--line);background:var(--nb-snow)
+    }
+    .carousel{position:relative}
+    .carousel .stage{
+      width:100%;height:80vh;min-height:400px;max-height:760px;position:relative;overflow:hidden;background:var(--nb-snow)
+    }
+    .carousel .stage img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease}
+    .carousel .stage:hover img{transform:scale(1.02)}
+    .carousel .badgeRow{position:absolute;left:16px;top:16px;display:flex;gap:8px;flex-wrap:wrap;z-index:2}
+
+    .badge{
+      padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;
+      backdrop-filter:blur(8px)
+    }
+    .badge.sale{background:rgba(196,164,124,0.90);color:white}
+    .badge.available{background:rgba(196,164,124,0.92);color:white}
+    .badge.farm{background:rgba(255,255,255,0.88);color:#c4a47c;border:1px solid rgba(196,164,124,0.18)}
+    .badge.water{background:rgba(59,130,246,0.92);color:white}
+    .badge.livestock{background:rgba(124,58,237,0.92);color:white}
+    .badge.organic{background:rgba(34,197,94,0.92);color:white}
+    .badge.type-b{background:rgba(255,255,255,0.88);color:#c4a47c;border:1px solid rgba(196,164,124,0.15)}
+
+    .carousel .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;pointer-events:none}
+    .nav .navbtn{
+      pointer-events:auto;width:48px;height:48px;border-radius:50%;
+      border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.30);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:1.5rem;transition:all 0.25s ease
+    }
+    .nav .navbtn:hover{background:rgba(0,0,0,0.55)}
+    .carousel .photo-count{
+      position:absolute;bottom:16px;right:16px;padding:8px 18px;border-radius:8px;background:rgba(0,0,0,0.50);
+      backdrop-filter:blur(8px);color:white;font-size:0.85rem;font-weight:500
+    }
+    .thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:10px;background:var(--nb-white);border-top:1px solid var(--line)}
+    @media(max-width:768px){.thumbs{grid-template-columns:repeat(4,1fr)}}
+    .thumb{border-radius:10px;overflow:hidden;border:2px solid transparent;cursor:pointer;background:var(--nb-snow);aspect-ratio:16/10;transition:all 0.25s ease;opacity:0.62}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb.active{border-color:#c4a47c;opacity:1;box-shadow:0 0 0 2px rgba(196,164,124,0.2)}
+    .thumb:hover{opacity:1}
+    @media(max-width:640px){.carousel .stage{height:55vh;min-height:260px}}
+
+    /* OVERVIEW (2 columns) */
+    .hero{margin-top:16px;display:grid;grid-template-columns:1.35fr .65fr;gap:16px;align-items:start}
+    @media(max-width:960px){.hero{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--line);background:var(--nb-white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .overview{padding:18px 20px}
+    .headline{font-family:var(--font-display);font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:700;margin:2px 0 10px;color:#e8dfc8}
+    .subline{color:var(--nb-muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .kvRow{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin-bottom:14px}
+    .priceBox{
+      flex:1;min-width:280px;padding:14px;border-radius:var(--radius2);border:1px solid var(--line);
+      background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.02))
+    }
+    .priceTop{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+    .price{font-family:var(--font-display);font-size:clamp(1.35rem,3vw,1.85rem);font-weight:700;color:#c4a47c}
+    .perUnit{color:var(--nb-muted);font-size:13px}
+    .priceMeta{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+
+    .hlBox{flex:1;min-width:280px;padding:14px;border-radius:var(--radius2);border:1px solid var(--line);background:var(--nb-snow)}
+    .hlTitle{font-weight:700;margin:0 0 8px;font-size:12px;color:#c4a47c;text-transform:uppercase;letter-spacing:.6px}
+    .bullets{margin:0;padding-left:18px;color:#e8dfc8;font-size:14px;line-height:1.7}
+
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+    @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);text-align:center}
+    .stat .k{color:var(--nb-muted);font-size:11.5px;font-weight:500}
+    .stat .v{font-size:1.02rem;font-weight:800;margin-top:4px;color:#e8dfc8}
+    .hr{height:1px;background:var(--line);margin:14px 0}
+    .note{border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);padding:12px;color:var(--nb-muted);font-size:12.5px;background:rgba(196,164,124,0.02);line-height:1.6}
+    .muted{color:var(--nb-muted)}
+
+    /* TABS */
+    .section{margin-top:16px;border:1px solid var(--line);background:var(--nb-white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--line);background:var(--nb-snow)}
+    .tab{
+      padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--nb-white);color:var(--nb-muted);
+      cursor:pointer;font-weight:700;font-size:12.5px;transition:all 0.25s ease;font-family:var(--font)
+    }
+    .tab:hover{border-color:#c4a47c;color:#c4a47c}
+    .tab.active{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .tabPanel{display:none;padding:16px}
+    .tabPanel.active{display:block}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:960px){.grid2{grid-template-columns:1fr}}
+    .card{border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);padding:16px}
+    .card h3{margin:0 0 10px;font-size:12px;color:#c4a47c;text-transform:uppercase;letter-spacing:.6px;font-weight:800}
+    .kv{display:grid;grid-template-columns:1fr;gap:0;font-size:14px}
+    .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:10px 0}
+    .row:last-child{border-bottom:none}
+    .row .label{color:var(--nb-muted);font-size:0.85rem}
+    .row .value{font-weight:800;text-align:right;color:#e8dfc8;font-size:0.88rem}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .tag{
+      padding:7px 14px;border-radius:999px;border:1px solid var(--line);
+      background:var(--nb-white);font-size:12.5px;color:#c4a47c;font-weight:600;transition:all 0.2s ease
+    }
+    .tag:hover{background:rgba(196,164,124,0.06)}
+
+    /* ACCORDION */
+    .accordion{border:1px solid var(--line);border-radius:var(--radius2);overflow:hidden;background:var(--nb-snow);margin-bottom:12px}
+    summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:0.92rem;color:#e8dfc8;transition:background 0.2s ease}
+    summary:hover{background:rgba(196,164,124,0.03)}
+    summary::-webkit-details-marker{display:none}
+    .accBody{padding:0 16px 16px;color:#e8dfc8}
+
+    /* MEDIA */
+    .mediaGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    @media(max-width:960px){.mediaGrid{grid-template-columns:1fr}}
+    .mediaBox{
+      border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);overflow:hidden;
+      aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:var(--nb-muted);font-size:0.9rem
+    }
+    iframe{width:100%;height:100%;border:0}
+
+    /* DESCRIPTION */
+    .desc{line-height:1.7;font-size:14.5px;color:var(--nb-muted);white-space:pre-line}
+
+    /* NEARBY */
+    .nearbyList{display:grid;grid-template-columns:1fr;gap:8px}
+    .nearbyItem{
+      display:flex;gap:12px;justify-content:space-between;align-items:flex-start;padding:12px;border:1px solid var(--line);
+      border-radius:var(--radius2);background:var(--nb-white);transition:all 0.2s ease
+    }
+    .nearbyItem:hover{border-color:rgba(196,164,124,0.2);box-shadow:0 2px 8px rgba(196,164,124,0.04)}
+    .nearbyItem .left{display:flex;flex-direction:column;gap:4px}
+    .nearbyItem .title{font-weight:900;font-size:0.88rem;color:#e8dfc8}
+    .nearbyItem .sub{color:var(--nb-muted);font-size:12.5px}
+    .nearbyItem .right{text-align:right}
+    .metric{color:var(--nb-muted);font-size:12px}
+    .pill{
+      display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--line);
+      border-radius:999px;background:var(--nb-snow);font-size:11.5px;color:#c4a47c;font-weight:800;margin-top:4px
+    }
+
+    /* STICKY ACTION */
+    .actionSticky{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,0.88);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:60}
+    .actionInner{max-width:var(--max);margin:0 auto;padding:10px 18px;display:flex;gap:10px;align-items:center;justify-content:space-between;min-height:var(--stickyH)}
+    .agentMini{display:flex;gap:10px;align-items:center}
+    .avatar{
+      width:42px;height:42px;border-radius:50%;border:2px solid var(--nb-snow);
+      background:linear-gradient(135deg,rgba(196,164,124,0.15),rgba(196,164,124,0.08));
+      display:flex;align-items:center;justify-content:center;font-weight:900;color:#c4a47c;font-size:0.9rem
+    }
+    .agentMini .name{font-weight:900;font-size:14px;color:#e8dfc8}
+    .agentMini .meta{color:var(--nb-muted);font-size:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    /* TOAST */
+    .pf-toast{
+      position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+      padding:12px 24px;border-radius:8px;color:white;font-size:0.88rem;font-weight:600;z-index:10000;
+      box-shadow:0 8px 32px rgba(0,0,0,0.15);
+      animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards;background:var(--nb-green)
+    }
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction pf-active">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+  <div class="wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar" aria-label="Top utilities">
+      <div class="left">
+        <span class="chip"><strong>04f</strong> Farm Online Auction • Detail</span>
+
+        <label class="chip">Units
+          <select class="select" id="unitSelect" aria-label="Units">
+            <option value="metric">Metric (ha / sqm / km)</option>
+            <option value="imperial">Imperial (ac / sqft / mi)</option>
+          </select>
+        </label>
+
+        <label class="chip">Currency
+          <select class="select" id="currencySelect" aria-label="Currency">
+            <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+            <option value="ZAR">ZAR</option><option value="AUD">AUD</option><option value="NZD">NZD</option>
+            <option value="CAD">CAD</option><option value="BRL">BRL</option><option value="AED">AED</option>
+          </select>
+        </label>
+
+        <label class="chip">Country
+          <select class="select" id="countryPreset" aria-label="Country preset">
+            <option value="AUTO">Auto (from listing)</option>
+            <option value="US">United States (US)</option>
+            <option value="UK">United Kingdom (UK)</option>
+            <option value="EU">European Union (EU)</option>
+            <option value="AU">Australia (AU)</option>
+            <option value="NZ">New Zealand (NZ)</option>
+            <option value="ZA">South Africa (ZA)</option>
+            <option value="BR">Brazil (BR)</option>
+            <option value="AE">UAE (AE)</option>
+          </select>
+        </label>
+
+        <span class="chip">Source: <strong id="sourceText">Demo</strong></span>
+      </div>
+
+      <div class="right">
+        <button class="btn secondary" id="backBtn" type="button">Back</button>
+        <button class="btn secondary" id="shareBtn" type="button">Share</button>
+        <button class="btn secondary" id="saveBtn" type="button">Save</button>
+        <button class="btn" id="printBtn" type="button">Print</button>
+      </div>
+    </div>
+
+    <!-- HERO PHOTO -->
+    <div class="hero-photo">
+      <div class="carousel" aria-label="Photo carousel">
+        <div class="stage">
+          <div class="badgeRow" id="badgeRow"></div>
+
+          <img id="stageImg" alt="Farm image"
+               src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80" />
+
+          <div class="nav">
+            <div class="navbtn" id="prevBtn" role="button" aria-label="Previous image">&#8249;</div>
+            <div class="navbtn" id="nextBtn" role="button" aria-label="Next image">&#8250;</div>
+          </div>
+
+          <div class="photo-count" id="photoCount">1 / 6</div>
+        </div>
+
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="hero">
+      <div class="panel overview" aria-label="Overview">
+        <div class="headline" id="headline">Farm Online Auction</div>
+
+        <div class="subline" id="locationLine">
+          <span>📍 <span id="locationText">—</span></span>
+          <span>• <span class="muted" id="privacyNote">Approximate location shown (farm privacy mode)</span></span>
+        </div>
+
+        <div class="kvRow">
+          <div class="priceBox">
+            <div class="priceTop">
+              <div class="price" id="priceMain">—</div>
+              <div class="perUnit" id="priceUnit">Opening bid / Price on request</div>
+            </div>
+            <div class="priceMeta">
+              <span class="chip">Listing: <strong id="listingStatus">—</strong></span>
+              <span class="chip">Tenure: <strong id="tenureText">—</strong></span>
+              <span class="chip">Handover: <strong id="handoverText">—</strong></span>
+            </div>
+          </div>
+
+          <div class="hlBox">
+            <div class="hlTitle">Farm highlights</div>
+            <ul class="bullets" id="highlights"></ul>
+          </div>
+        </div>
+
+        <div class="stats" aria-label="Core stats">
+          <div class="stat"><div class="k">Total Land</div><div class="v" id="landTotal">—</div></div>
+          <div class="stat"><div class="k">Arable</div><div class="v" id="landArable">—</div></div>
+          <div class="stat"><div class="k">Irrigated</div><div class="v" id="landIrrigated">—</div></div>
+          <div class="stat"><div class="k">Water Sources</div><div class="v" id="waterSources">—</div></div>
+          <div class="stat"><div class="k">Power</div><div class="v" id="powerText">—</div></div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="note" id="autoNote">
+          Tip: In the final webapp, your import can pull the core listing fields, and your map/tools can auto-fill farm extras like
+          nearest grain silo, abattoir, milk processor, auction yard, veterinary services, irrigation district data, drought index, and soil layers (if available).
+        </div>
+      </div>
+
+      <!-- RIGHT: quick contact sidebar -->
+      <div class="panel overview" aria-label="Quick contact">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div class="avatar">PF</div>
+          <div>
+            <div style="font-weight:900;font-size:0.95rem" id="agentNameSide">Property Finder Auction Desk</div>
+            <div class="muted" style="font-size:12px" id="agentOrgSide">Property Finder Auctions</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn primary" style="width:100%;justify-content:center" onclick="showToast('Opening auction contact...')">📞 Contact Auction Desk</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Opening auction question form...')">✉️ Ask an Auction Question</button>
+          <button style="width:100%;padding:12px;border-radius:999px;border:none;background:#25D366;color:white;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--font);transition:all 0.25s ease"
+                  onmouseover="this.style.background='#1EBE5A'" onmouseout="this.style.background='#25D366'"
+                  onclick="showToast('Opening auction WhatsApp...')">Auction WhatsApp</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Booking farm inspection...')">📅 Book Inspection</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Requesting full auction pack...')">📦 Request Auction Pack</button>
+        </div>
+
+        <div class="hr"></div>
+        <div class="note">
+          Auction pack may include: title deed summary, water rights/allocations, borehole logs, soil maps, yield history (if shared),
+          compliance certificates, equipment list, livestock schedule, boundary/GPS data, bidder registration requirements, and auction terms & conditions.
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS TABS -->
+    <div class="section" aria-label="Farm sale details">
+      <div class="tabs" role="tablist" aria-label="Detail tabs">
+        <div class="tab active" data-tab="tab-overview" role="tab" aria-selected="true">Overview</div>
+        <div class="tab" data-tab="tab-land" role="tab">Land &amp; Soil</div>
+        <div class="tab" data-tab="tab-water" role="tab">Water Rights</div>
+        <div class="tab" data-tab="tab-infra" role="tab">Infrastructure</div>
+        <div class="tab" data-tab="tab-equipment" role="tab">Equipment Included</div>
+        <div class="tab" data-tab="tab-livestock" role="tab">Livestock</div>
+        <div class="tab" data-tab="tab-production" role="tab">Production</div>
+        <div class="tab" data-tab="tab-compliance" role="tab">Compliance</div>
+        <div class="tab" data-tab="tab-location" role="tab">Location &amp; Logistics</div>
+        <div class="tab" data-tab="tab-media" role="tab">Media</div>
+        <div class="tab" data-tab="tab-desc" role="tab">Description</div>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div class="tabPanel active" id="tab-overview" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Sale summary</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Opening bid / Price on request</span><span class="value" id="sumPrice">—</span></div>
+              <div class="row"><span class="label">Currency</span><span class="value" id="sumCurrency">—</span></div>
+              <div class="row"><span class="label">Tenure / title</span><span class="value" id="sumTenure">—</span></div>
+              <div class="row"><span class="label">Boundaries</span><span class="value" id="sumBoundaries">—</span></div>
+              <div class="row"><span class="label">Hand-over</span><span class="value" id="sumHandover">—</span></div>
+              <div class="row"><span class="label">Included in sale</span><span class="value" id="sumIncluded">—</span></div>
+              <div class="row"><span class="label">Exclusions</span><span class="value" id="sumExcluded">—</span></div>
+            </div>
+            <div class="note" id="countrySaleNote" style="margin-top:10px"></div>
+          </div>
+
+          <div class="card">
+            <h3>What the import should capture</h3>
+            <div class="chips">
+              <span class="tag">Total land + arable</span><span class="tag">Irrigation + water rights</span><span class="tag">Boreholes + pumps</span>
+              <span class="tag">Dams / rivers</span><span class="tag">Power + backup</span><span class="tag">Fencing + security</span>
+              <span class="tag">Buildings + sheds</span><span class="tag">Equipment list</span><span class="tag">Livestock schedule</span>
+              <span class="tag">Permits + compliance</span><span class="tag">Access roads</span><span class="tag">Nearest markets</span>
+            </div>
+            <div class="note" style="margin-top:10px">
+              If the source listing doesn't provide detail (e.g., nearest abattoir / grain silo), your app can fill it using the property coordinates + sector datasets.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAND & SOIL -->
+      <div class="tabPanel" id="tab-land" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Land breakdown</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Total land</span><span class="value" id="landTotalRow">—</span></div>
+              <div class="row"><span class="label">Arable / cultivation</span><span class="value" id="landArableRow">—</span></div>
+              <div class="row"><span class="label">Grazing / pasture</span><span class="value" id="landGrazingRow">—</span></div>
+              <div class="row"><span class="label">Irrigated area</span><span class="value" id="landIrrigatedRow">—</span></div>
+              <div class="row"><span class="label">Orchards / vineyards</span><span class="value" id="landOrchardRow">—</span></div>
+              <div class="row"><span class="label">Forestry / natural</span><span class="value" id="landForestRow">—</span></div>
+              <div class="row"><span class="label">Infrastructure footprint</span><span class="value" id="landInfraRow">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Soil & climate</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Soil types</span><span class="value" id="soilTypes">—</span></div>
+              <div class="row"><span class="label">Soil depth</span><span class="value" id="soilDepth">—</span></div>
+              <div class="row"><span class="label">pH / fertility</span><span class="value" id="soilPH">—</span></div>
+              <div class="row"><span class="label">Rainfall (avg)</span><span class="value" id="rainfall">—</span></div>
+              <div class="row"><span class="label">Frost / heat risk</span><span class="value" id="climateRisk">—</span></div>
+              <div class="row"><span class="label">Erosion control</span><span class="value" id="erosion">—</span></div>
+            </div>
+            <div class="note" style="margin-top:10px">Optional uploads: soil map, lab tests, topo/contours, yield maps.</div>
+          </div>
+        </div>
+
+        <details class="accordion" open style="margin-top:14px">
+          <summary>Land notes (farmers love this) <span class="muted">tap to expand/collapse</span></summary>
+          <div class="accBody">
+            <div class="chips" id="landTags"></div>
+            <div class="note" style="margin-top:10px">
+              Examples: "3 pivot circles", "laser-leveled lands", "contour banks", "drainage tiles", "high carrying capacity", "game-fenced block".
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- WATER RIGHTS -->
+      <div class="tabPanel" id="tab-water" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Water sources</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Boreholes</span><span class="value" id="boreholes">—</span></div>
+              <div class="row"><span class="label">Borehole yield</span><span class="value" id="boreYield">—</span></div>
+              <div class="row"><span class="label">Dams / reservoirs</span><span class="value" id="dams">—</span></div>
+              <div class="row"><span class="label">Rivers / streams</span><span class="value" id="rivers">—</span></div>
+              <div class="row"><span class="label">Municipal / scheme</span><span class="value" id="schemeWater">—</span></div>
+              <div class="row"><span class="label">Rainwater harvesting</span><span class="value" id="rainHarvest">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Water rights & allocations</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Registered water rights</span><span class="value" id="waterRights">—</span></div>
+              <div class="row"><span class="label">Irrigation allocation</span><span class="value" id="waterAlloc">—</span></div>
+              <div class="row"><span class="label">Licences / permits</span><span class="value" id="waterPermits">—</span></div>
+              <div class="row"><span class="label">Meters / monitoring</span><span class="value" id="waterMeters">—</span></div>
+              <div class="row"><span class="label">Water quality</span><span class="value" id="waterQuality">—</span></div>
+              <div class="row"><span class="label">Servitudes / easements</span><span class="value" id="waterServitudes">—</span></div>
+            </div>
+            <div class="note" id="waterNote" style="margin-top:10px"></div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Irrigation</h3>
+            <div class="kv">
+              <div class="row"><span class="label">System type</span><span class="value" id="irrType">—</span></div>
+              <div class="row"><span class="label">Pivots / drippers</span><span class="value" id="irrUnits">—</span></div>
+              <div class="row"><span class="label">Pumps</span><span class="value" id="irrPumps">—</span></div>
+              <div class="row"><span class="label">Filters / fertigation</span><span class="value" id="irrFert">—</span></div>
+              <div class="row"><span class="label">Main lines / hydrants</span><span class="value" id="irrLines">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>What to list for boreholes</h3>
+            <div class="note">
+              • Borehole depth + casing (if known)<br/>
+              • Tested yield (litres/min or m³/hr) + date tested<br/>
+              • Pump type + power requirement<br/>
+              • Storage (tanks / reservoirs) + distribution to pivots / troughs<br/>
+              • Water analysis (salinity, pH, nitrates) if available
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFRASTRUCTURE -->
+      <div class="tabPanel" id="tab-infra" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Buildings & facilities</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Main farmhouse</span><span class="value" id="mainHouse">—</span></div>
+              <div class="row"><span class="label">Staff housing</span><span class="value" id="staffHousing">—</span></div>
+              <div class="row"><span class="label">Sheds / workshops</span><span class="value" id="sheds">—</span></div>
+              <div class="row"><span class="label">Barns / kraals / pens</span><span class="value" id="barns">—</span></div>
+              <div class="row"><span class="label">Cold room / packhouse</span><span class="value" id="packhouse">—</span></div>
+              <div class="row"><span class="label">Silos / grain storage</span><span class="value" id="silos">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Power, fuel & security</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Grid power</span><span class="value" id="gridPower">—</span></div>
+              <div class="row"><span class="label">Solar / wind</span><span class="value" id="renewables">—</span></div>
+              <div class="row"><span class="label">Generator</span><span class="value" id="generator">—</span></div>
+              <div class="row"><span class="label">Diesel tanks</span><span class="value" id="dieselTanks">—</span></div>
+              <div class="row"><span class="label">Petrol tanks</span><span class="value" id="petrolTanks">—</span></div>
+              <div class="row"><span class="label">Security / fencing</span><span class="value" id="securityFence">—</span></div>
+            </div>
+            <div class="note" style="margin-top:10px">
+              Fuel tanks: list capacity, bunding/secondary containment, pump type, compliance certificate (if required), and location.
+            </div>
+          </div>
+        </div>
+
+        <details class="accordion" style="margin-top:14px" open>
+          <summary>Roads, access & services <span class="muted">logistics</span></summary>
+          <div class="accBody">
+            <div class="grid2">
+              <div class="card">
+                <h3>Access</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Primary access road</span><span class="value" id="accessRoad">—</span></div>
+                  <div class="row"><span class="label">Internal roads</span><span class="value" id="internalRoads">—</span></div>
+                  <div class="row"><span class="label">Truck access</span><span class="value" id="truckAccess">—</span></div>
+                  <div class="row"><span class="label">Loading areas</span><span class="value" id="loading">—</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Connectivity</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Mobile coverage</span><span class="value" id="mobileCoverage">—</span></div>
+                  <div class="row"><span class="label">Internet</span><span class="value" id="internet">—</span></div>
+                  <div class="row"><span class="label">Farm management tech</span><span class="value" id="farmTech">—</span></div>
+                </div>
+                <div class="chips" id="infraTags"></div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- EQUIPMENT INCLUDED -->
+      <div class="tabPanel" id="tab-equipment" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Machinery & implements (included)</h3>
+            <div class="chips" id="equipmentTags"></div>
+            <div class="note" style="margin-top:10px">
+              Best practice: list brand, model, year, hours, service history, and what stays vs negotiable.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Equipment detail</h3>
+            <div class="kv" id="equipmentKv"></div>
+          </div>
+        </div>
+
+        <details class="accordion" style="margin-top:14px">
+          <summary>Inputs & inventory (optional) <span class="muted">seed, feed, spares</span></summary>
+          <div class="accBody">
+            <div class="chips" id="inventoryTags"></div>
+            <div class="note" style="margin-top:10px">Only show if provided. Keep optional so imports never "block" a listing.</div>
+          </div>
+        </details>
+      </div>
+
+      <!-- LIVESTOCK -->
+      <div class="tabPanel" id="tab-livestock" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Livestock included (if any)</h3>
+            <div class="kv" id="livestockKv"></div>
+            <div class="note" style="margin-top:10px">
+              List counts, breeds, age classes, identification system, and whether livestock is included, optional, or excluded.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Livestock infrastructure</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Handling facilities</span><span class="value" id="handling">—</span></div>
+              <div class="row"><span class="label">Fencing type</span><span class="value" id="fenceType">—</span></div>
+              <div class="row"><span class="label">Troughs / water points</span><span class="value" id="waterPoints">—</span></div>
+              <div class="row"><span class="label">Feed storage</span><span class="value" id="feedStorage">—</span></div>
+              <div class="row"><span class="label">Biosecurity</span><span class="value" id="biosecurity">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Grazing & carrying capacity</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Grazing blocks</span><span class="value" id="grazBlocks">—</span></div>
+              <div class="row"><span class="label">Carrying capacity</span><span class="value" id="carrying">—</span></div>
+              <div class="row"><span class="label">Rotational plan</span><span class="value" id="rotation">—</span></div>
+              <div class="row"><span class="label">Supplement strategy</span><span class="value" id="supplements">—</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Animal-related notes</h3>
+            <div class="note" id="animalNote"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTION -->
+      <div class="tabPanel" id="tab-production" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Current / historical production</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Primary enterprise</span><span class="value" id="enterprise">—</span></div>
+              <div class="row"><span class="label">Crops</span><span class="value" id="crops">—</span></div>
+              <div class="row"><span class="label">Livestock enterprise</span><span class="value" id="livEnterprise">—</span></div>
+              <div class="row"><span class="label">Yield history</span><span class="value" id="yieldHist">—</span></div>
+              <div class="row"><span class="label">Irrigation schedule</span><span class="value" id="irrSched">—</span></div>
+              <div class="row"><span class="label">Storage & logistics</span><span class="value" id="logistics">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Markets & supply chain</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Nearest market hub</span><span class="value" id="marketHub">—</span></div>
+              <div class="row"><span class="label">Processors</span><span class="value" id="processors">—</span></div>
+              <div class="row"><span class="label">Auction / agents</span><span class="value" id="auction">—</span></div>
+              <div class="row"><span class="label">Input suppliers</span><span class="value" id="suppliers">—</span></div>
+            </div>
+            <div class="note" style="margin-top:10px">International: keep names optional; use distance + type (e.g., "abattoir", "grain elevator", "milk processor").</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE -->
+      <div class="tabPanel" id="tab-compliance" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Legal & compliance</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Title / deeds</span><span class="value" id="legalTitle">—</span></div>
+              <div class="row"><span class="label">Zoning / land use</span><span class="value" id="zoning">—</span></div>
+              <div class="row"><span class="label">Water licences</span><span class="value" id="legalWater">—</span></div>
+              <div class="row"><span class="label">Environmental</span><span class="value" id="env">—</span></div>
+              <div class="row"><span class="label">Labour / housing</span><span class="value" id="labour">—</span></div>
+              <div class="row"><span class="label">Boundaries survey</span><span class="value" id="survey">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Certifications & audits (optional)</h3>
+            <div class="chips" id="certTags"></div>
+            <div class="note" style="margin-top:10px">
+              Examples: organic certification, GAP audits, animal welfare audits, food safety, export packhouse compliance.
+            </div>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:14px" id="complianceNote"></div>
+      </div>
+
+      <!-- LOCATION & LOGISTICS -->
+      <div class="tabPanel" id="tab-location" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Farm location overview</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Area description</span><span class="value" id="areaDesc">—</span></div>
+              <div class="row"><span class="label">Topography</span><span class="value" id="topography">—</span></div>
+              <div class="row"><span class="label">Climate zone</span><span class="value" id="climateZone">—</span></div>
+              <div class="row"><span class="label">Biosecurity region</span><span class="value" id="bioRegion">—</span></div>
+              <div class="row"><span class="label">Nearest town</span><span class="value" id="town">—</span></div>
+            </div>
+            <div class="chips" id="locationTags"></div>
+          </div>
+
+          <div class="card">
+            <h3>Interactive map (placeholder)</h3>
+            <div class="mediaBox">Map embed goes here (Google/Mapbox/Here)</div>
+            <div class="note" style="margin-top:10px">
+              Farm privacy mode: show approximate pin / radius. Reveal exact coordinates only after buyer verification / NDA if needed.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px" class="card">
+          <h3>Nearby farm logistics (auto-fill ready)</h3>
+          <div class="nearbyList" id="nearbyList"></div>
+        </div>
+      </div>
+
+      <!-- MEDIA -->
+      <div class="tabPanel" id="tab-media" role="tabpanel">
+        <div id="pfuMedia_auctions_farm_wrap">
+          <div class="card">
+            <h3>Drone video</h3>
+            <div class="mediaBox"><iframe title="Drone video placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px">Perfect for farms: boundary lines, dams, pivots, sheds, access roads.</div>
+          </div>
+          <div class="card">
+            <h3>Virtual tour / walkthrough</h3>
+            <div class="mediaBox"><iframe title="Virtual tour placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px">Optional: farmhouse + packhouse + workshops.</div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Farm map pack</h3>
+            <div class="mediaBox">Boundary map / topo / soil map / irrigation layout</div>
+            <div class="note" style="margin-top:10px">Upload PDFs or images, show download links in final app.</div>
+          </div>
+          <div class="card">
+            <h3>Photo categories</h3>
+            <div class="chips">
+              <span class="tag">Aerial</span><span class="tag">Crops</span><span class="tag">Livestock</span>
+              <span class="tag">Irrigation</span><span class="tag">Buildings</span><span class="tag">Equipment</span>
+              <span class="tag">Water sources</span><span class="tag">Roads</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="tabPanel" id="tab-desc" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Public description</h3>
+            <div class="desc" id="publicDesc">—</div>
+            <div class="note" style="margin-top:10px">
+              Recommendation: 250–900 words. Farmers want numbers: land split, water, storage, equipment, and what's included.
+            </div>
+          </div>
+          <div class="card">
+            <h3>Private remarks (auction team only)</h3>
+            <div class="desc muted" id="privateRemarks">[Auction-only notes] • Inspection windows • Bidder registration / KYC / FICA • Sensitive access details • Reserve / seller approval notes</div>
+            <div class="note" style="margin-top:10px">In public mode, hide this panel completely.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /section -->
+  </div><!-- /wrap -->
+
+  <!-- STICKY ACTION BAR -->
+  <div class="actionSticky" aria-label="Contact actions">
+    <div class="actionInner">
+      <div class="agentMini">
+        <div class="avatar">PF</div>
+        <div>
+          <div class="name" id="agentName">Property Finder Auction Desk</div>
+          <div class="meta" id="agentMeta">Property Finder Auctions • +00 000 0000 • WhatsApp</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" type="button" id="infoBtn">Request Auction Pack</button>
+        <button class="btn secondary" type="button" id="packBtn">Ask an Auction Question</button>
+        <button class="btn primary" type="button" id="offerBtn">Book Inspection</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 04f Farm Online Auction — Standalone Farm Online Auction Detail
+     * Integration method: localStorage.pf_selected_farm_sale (JSON).
+     * Your "for sale" farm cards page can save the selected object, then open 04f.
+     ********************************************************************/
+
+    // Toast
+    function showToast(msg){
+      const ex=document.querySelector('.pf-toast'); if(ex) ex.remove();
+      const t=document.createElement('div'); t.className='pf-toast'; t.textContent=msg;
+      document.body.appendChild(t); setTimeout(()=>t.remove(),3200);
+    }
+
+    // Pull selected farm from a master page (if present)
+    function loadSelected(){
+      try{
+        const raw = localStorage.getItem('pf_selected_farm_sale');
+        if(!raw) return null;
+        const obj = JSON.parse(raw);
+        if(!obj || !obj.title) return null;
+        return obj;
+      }catch(e){ return null; }
+    }
+
+    // ===== Demo Farm Listing (fallback) =====
+    const demoFarm = {
+      title: "Irrigated Mixed Farm with Packhouse & Water Rights",
+      price: "$ 6,950,000",
+      currency: "USD",
+      location: "Near a regional town, Western Cape, South Africa",
+      country: "ZA",
+      badges: ["sale","available","farm","water","livestock"],
+      images: [
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1527847263472-aa5338d178b8?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1472141521881-95d0e87e2e39?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=80"
+      ],
+      meta: {
+        privacyMode: true,
+        listingStatus: "Active",
+        tenure: "Freehold / Title deed",
+        handover: "By arrangement",
+        boundaries: "Fenced + surveyed (verify pack)",
+        included: "Selected equipment + some livestock (see schedules)",
+        excluded: "Personal effects, certain implements (by negotiation)",
+        highlights: [
+          "Reliable water: boreholes + dam + registered allocations",
+          "High-value irrigated lands + grazing blocks",
+          "Packhouse / cold room + workshops",
+          "Fuel storage + generator backup",
+          "Good access for trucks + proximity to markets"
+        ],
+        land: {
+          totalHa: 420,
+          arableHa: 180,
+          irrigatedHa: 95,
+          grazingHa: 210,
+          orchardHa: 35,
+          forestHa: 20,
+          infraHa: 10,
+          soilTypes: "Loam / Sandy loam (varies by block)",
+          soilDepth: "Medium–deep",
+          soilPH: "Neutral–slightly acidic (tests available)",
+          rainfallMm: 520,
+          climateRisk: "Low frost • summer heat moderate",
+          erosion: "Contours + groundcover program"
+        },
+        water: {
+          sources: "4 boreholes • 1 main dam • seasonal stream",
+          boreholes: "4 (2 equipped)",
+          boreYield: "Combined tested yield: ~ 90,000 L/hr (verify test dates)",
+          dams: "1 main dam + 2 small reservoirs",
+          rivers: "Seasonal stream (winter flow)",
+          schemeWater: "Irrigation board connection (optional)",
+          rainHarvest: "Roof collection to tanks",
+          rights: "Registered allocation + borehole use rights (pack)",
+          alloc: "Irrigation allocation: 95 ha equivalent (country-specific)",
+          permits: "Water use licence/registration (country rules apply)",
+          meters: "Main meter + pivot meters",
+          quality: "Good (lab test available)",
+          servitudes: "Access servitude on boundary (pack)"
+        },
+        irrigation: {
+          type: "Pivots + drip lines",
+          units: "3 pivots • drip blocks in orchard",
+          pumps: "2 pump stations (diesel + electric)",
+          fert: "Inline fertigation on orchard",
+          lines: "Mainline + hydrants"
+        },
+        infra: {
+          mainHouse: "4-bedroom farmhouse",
+          staffHousing: "8 units (basic) + ablutions",
+          sheds: "Large workshop + implement shed",
+          barns: "Cattle handling pens + lambing camps",
+          packhouse: "Packhouse + cold room + loading bay",
+          silos: "Grain storage (small) + feed room",
+          gridPower: "3-phase (where available) + farm lines",
+          renewables: "Solar array for house + office",
+          generator: "100 kVA standby generator",
+          dieselTanks: "2 × 10,000 L (bunded) + transfer pump",
+          petrolTanks: "1 × 2,000 L (bunded)",
+          securityFence: "Perimeter + internal camps • access gate",
+          accessRoad: "All-weather gravel to main road",
+          internalRoads: "Gravel farm roads",
+          truckAccess: "Yes (packhouse yard)",
+          loading: "Loading bay + turning circle",
+          mobileCoverage: "Good (verify carrier)",
+          internet: "Fixed wireless / LTE (options)",
+          farmTech: "Basic CCTV + pump monitoring",
+          tags: ["3-Phase Power","Generator Backup","Bunded Fuel Storage","Packhouse","Cold Room","CCTV","Truck Access"]
+        },
+        equipment: [
+          { item:"Tractor", detail:"2 × 120–140 hp (hours by schedule)", included:true },
+          { item:"Front-end loader", detail:"1 unit", included:true },
+          { item:"Planter / seeder", detail:"Row crop planter", included:true },
+          { item:"Sprayer", detail:"Boom sprayer", included:true },
+          { item:"Disc harrow", detail:"Heavy duty", included:true },
+          { item:"Slasher / mower", detail:"Pasture management", included:true },
+          { item:"Backup pump set", detail:"Portable pump", included:true }
+        ],
+        inventory: ["Spare filters (irrigation)","Workshop spares (basic)","Feed stock (optional)"],
+        livestock: [
+          { species:"Cattle", detail:"~ 120 head (mixed ages)", included:"Optional / negotiable" },
+          { species:"Sheep", detail:"~ 380 (ewes + lambs seasonally)", included:"Optional / negotiable" },
+          { species:"Working dogs", detail:"2 trained dogs", included:"Excluded" }
+        ],
+        livestockInfra: {
+          handling:"Cattle crush + race + loading ramp",
+          fenceType:"Stock fence + camp rotation",
+          waterPoints:"Multiple troughs fed from dam/boreholes",
+          feedStorage:"Feed room + small silos",
+          biosecurity:"Standard farm protocols"
+        },
+        grazing: {
+          blocks:"12 camps",
+          carrying:"Depends on rainfall • estimate available in pack",
+          rotation:"Rotational grazing in camps",
+          supplements:"Seasonal lick + hay (optional)"
+        },
+        production: {
+          enterprise:"Mixed irrigation + livestock",
+          crops:"Lucerne, vegetables (rotation), orchard fruit (seasonal)",
+          livestockEnterprise:"Beef + sheep",
+          yieldHist:"Available on request (seller disclosures)",
+          irrSched:"Pivot schedule + orchard drip timing",
+          logistics:"Packhouse loading + nearby cold chain"
+        },
+        markets: {
+          hub:"Regional agri hub within 60–90 min",
+          processors:"Abattoir / packers (distance-based)",
+          auction:"Auction yard within 1–2 hours (typical)",
+          suppliers:"Input suppliers in nearest town"
+        },
+        compliance: {
+          legalTitle:"Title deed summary (pack)",
+          zoning:"Agricultural",
+          legalWater:"Water rights + registration docs",
+          env:"Environmental compliance (where required)",
+          labour:"Staff housing compliance varies by country",
+          survey:"Boundary diagram available"
+        },
+        certs:["Organic transition-ready (optional)","GAP-ready packhouse (optional)"],
+        location: {
+          areaDesc:"Well-known agricultural district with reliable logistics, seasonal labour pool and good access to main routes.",
+          topography:"Gentle slopes • some river flats",
+          climateZone:"Mediterranean / dry summer",
+          bioRegion:"Standard livestock zone (check local regs)",
+          town:"Nearest town: ~ 25–40 min"
+        },
+        notes: {
+          publicDesc:
+`Premium mixed farm with strong water profile and a practical infrastructure set-up for commercial operations.
+Land is well balanced between irrigated blocks, arable lands, and grazing camps. Existing packhouse/cold-room footprint supports
+horticulture and value-add logistics.
+
+Key assets include multiple boreholes, a main dam, established irrigation systems (pivots + drip), bunded fuel storage,
+workshop facilities, staff accommodation, and solid access for trucks.
+
+Equipment and livestock can be negotiated as part of the transaction (see schedules). A full farm information pack is available
+on request, including title summary, water documentation, maps, and inventory lists.`,
+          privateRemarks:"[Agent-only] Inspection is by appointment only. Bidder registration, KYC / FICA and acceptance of auction terms are required before full auction pack release. Exact coordinates released after buyer verification."
+        }
+      }
+    };
+
+    // Selected listing or demo
+    const selected = loadSelected();
+    const listing = selected ? normalizeSelected(selected) : demoFarm;
+
+    // Normalize incoming object (so your importer can be "light" and still render)
+    function normalizeSelected(p){
+      const out = JSON.parse(JSON.stringify(demoFarm));
+      out.title = p.title || out.title;
+      out.price = p.price || out.price;
+      out.currency = p.currency || out.currency;
+      out.location = p.location || out.location;
+      out.country = p.country || out.country;
+      out.badges = Array.isArray(p.badges) ? p.badges : out.badges;
+      out.images = (Array.isArray(p.images) && p.images.length) ? p.images : out.images;
+      out.meta = { ...out.meta, ...(p.meta||{}) };
+      // Defensive nested merge for common sections
+      out.meta.land = { ...out.meta.land, ...(p.meta?.land||{}) };
+      out.meta.water = { ...out.meta.water, ...(p.meta?.water||{}) };
+      out.meta.irrigation = { ...out.meta.irrigation, ...(p.meta?.irrigation||{}) };
+      out.meta.infra = { ...out.meta.infra, ...(p.meta?.infra||{}) };
+      out.meta.livestockInfra = { ...out.meta.livestockInfra, ...(p.meta?.livestockInfra||{}) };
+      out.meta.grazing = { ...out.meta.grazing, ...(p.meta?.grazing||{}) };
+      out.meta.production = { ...out.meta.production, ...(p.meta?.production||{}) };
+      out.meta.markets = { ...out.meta.markets, ...(p.meta?.markets||{}) };
+      out.meta.compliance = { ...out.meta.compliance, ...(p.meta?.compliance||{}) };
+      out.meta.location = { ...out.meta.location, ...(p.meta?.location||{}) };
+      out.meta.notes = { ...out.meta.notes, ...(p.meta?.notes||{}) };
+      // arrays
+      out.meta.equipment = Array.isArray(p.meta?.equipment) ? p.meta.equipment : out.meta.equipment;
+      out.meta.inventory = Array.isArray(p.meta?.inventory) ? p.meta.inventory : out.meta.inventory;
+      out.meta.livestock = Array.isArray(p.meta?.livestock) ? p.meta.livestock : out.meta.livestock;
+      out.meta.certs = Array.isArray(p.meta?.certs) ? p.meta.certs : out.meta.certs;
+      return out;
+    }
+
+    // ===== Units helpers =====
+    const HA_TO_AC = 2.4710538147;
+    const KM_TO_MI = 0.621371;
+
+    function areaLandText(ha,u){
+      if(ha==null || ha===undefined) return "N/A";
+      if(u==="imperial"){
+        const ac = ha*HA_TO_AC;
+        return ac.toLocaleString(undefined,{maximumFractionDigits:1})+" ac";
+      }
+      return ha.toLocaleString(undefined,{maximumFractionDigits:1})+" ha";
+    }
+    function distanceText(km,u){
+      if(km==null) return "—";
+      if(u==="imperial"){
+        const mi=km*KM_TO_MI;
+        return mi.toFixed(mi<1?2:1)+" mi";
+      }
+      return km.toFixed(km<1?2:1)+" km";
+    }
+    function modeLabel(m){ return {drive:"Drive",walk:"Walk",haul:"Haul",rail:"Rail",port:"Port",air:"Air",info:"Info"}[m]||"—"; }
+
+    // ===== Nearby templates (farm logistics) =====
+    const nearbyTemplates = {
+      ZA: [
+        { name:"Grain silo / co-op", desc:"Storage / deliveries", distanceKm:28, timeMin:32, mode:"drive" },
+        { name:"Auction yard", desc:"Livestock auctions (if applicable)", distanceKm:68, timeMin:70, mode:"drive" },
+        { name:"Abattoir", desc:"Processing options", distanceKm:85, timeMin:85, mode:"drive" },
+        { name:"Agri supplies", desc:"Seed, feed, spares", distanceKm:32, timeMin:35, mode:"drive" },
+        { name:"Nearest town", desc:"Services, labour, banking", distanceKm:22, timeMin:25, mode:"drive" },
+        { name:"Export port", desc:"If relevant", distanceKm:140, timeMin:120, mode:"port" }
+      ],
+      US: [
+        { name:"Grain elevator", desc:"Storage / deliveries", distanceKm:35, timeMin:35, mode:"drive" },
+        { name:"Livestock market", desc:"Sale barn / auction", distanceKm:62, timeMin:60, mode:"drive" },
+        { name:"Meat processor", desc:"Regional plant", distanceKm:95, timeMin:85, mode:"drive" },
+        { name:"Input supplier", desc:"Fertilizer / seed / parts", distanceKm:28, timeMin:25, mode:"drive" },
+        { name:"Interstate access", desc:"Main haul route", distanceKm:18, timeMin:20, mode:"haul" }
+      ],
+      EU: [
+        { name:"Co-op / grain intake", desc:"Regional storage", distanceKm:22, timeMin:25, mode:"drive" },
+        { name:"Dairy / processor", desc:"If relevant", distanceKm:45, timeMin:45, mode:"drive" },
+        { name:"Abattoir", desc:"Processing options", distanceKm:58, timeMin:55, mode:"drive" },
+        { name:"Rail freight terminal", desc:"Optional logistics", distanceKm:40, timeMin:42, mode:"rail" },
+        { name:"Agri supplies", desc:"Inputs & spares", distanceKm:18, timeMin:20, mode:"drive" }
+      ],
+      AU: [
+        { name:"Grain receival site", desc:"Storage / deliveries", distanceKm:55, timeMin:55, mode:"drive" },
+        { name:"Livestock saleyards", desc:"Auction yards", distanceKm:80, timeMin:78, mode:"drive" },
+        { name:"Processor", desc:"Meat / horticulture", distanceKm:120, timeMin:110, mode:"drive" },
+        { name:"Port", desc:"Export logistics", distanceKm:180, timeMin:150, mode:"port" }
+      ]
+    };
+
+    function buildNearbyItem(item,u){
+      const dist = distanceText(item.distanceKm,u);
+      const time = item.timeMin!=null ? (item.timeMin+" min") : "";
+      const rt = (dist!=="—" && time) ? (dist+" • "+time) : (dist!=="—" ? dist : (time||"—"));
+      return `
+        <div class="nearbyItem">
+          <div class="left">
+            <div class="title">${item.name}</div>
+            <div class="sub">${item.desc}</div>
+            <div class="pill">${modeLabel(item.mode)}</div>
+          </div>
+          <div class="right">
+            <div class="title">${rt}</div>
+            <div class="metric muted">Approx.</div>
+          </div>
+        </div>`;
+    }
+
+    function renderNearby(country,u){
+      const key = nearbyTemplates[country] ? country : (nearbyTemplates.US ? "US" : "ZA");
+      const list = nearbyTemplates[key] || [];
+      document.getElementById("nearbyList").innerHTML = list.map(x=>buildNearbyItem(x,u)).join("");
+    }
+
+    // ===== Carousel =====
+    let imgIndex = 0;
+    const stageImg = document.getElementById("stageImg");
+
+    function renderThumbs(){
+      const t=document.getElementById("thumbs"); t.innerHTML="";
+      listing.images.forEach((src,i)=>{
+        const d=document.createElement("div");
+        d.className="thumb"+(i===imgIndex?" active":"");
+        d.innerHTML='<img alt="Thumbnail '+(i+1)+'" src="'+src+'">';
+        d.addEventListener("click",()=>{ imgIndex=i; renderCarousel(); });
+        t.appendChild(d);
+      });
+    }
+    function renderCarousel(){
+      stageImg.src=listing.images[imgIndex];
+      document.getElementById("photoCount").textContent=(imgIndex+1)+" / "+listing.images.length;
+      renderThumbs();
+    }
+    document.getElementById("prevBtn").addEventListener("click",()=>{
+      imgIndex=(imgIndex-1+listing.images.length)%listing.images.length; renderCarousel();
+    });
+    document.getElementById("nextBtn").addEventListener("click",()=>{
+      imgIndex=(imgIndex+1)%listing.images.length; renderCarousel();
+    });
+
+    // ===== Tabs =====
+    const tabs=Array.from(document.querySelectorAll(".tab"));
+    const panels=Array.from(document.querySelectorAll(".tabPanel"));
+    tabs.forEach(t=>{ t.addEventListener("click",()=>{
+      tabs.forEach(x=>x.classList.remove("active"));
+      panels.forEach(p=>p.classList.remove("active"));
+      t.classList.add("active");
+      document.getElementById(t.dataset.tab).classList.add("active");
+    }); });
+
+    // ===== Badges =====
+    function badgeLabel(b){
+      return b === "sale" ? "For Sale" :
+             b === "available" ? "Available" :
+             b === "farm" ? "Farm" :
+             b === "water" ? "Water Rights" :
+             b === "livestock" ? "Livestock" :
+             b === "organic" ? "Organic" : b;
+    }
+    function renderBadges(){
+      const row = document.getElementById("badgeRow");
+      row.innerHTML = "";
+      row.insertAdjacentHTML("beforeend", `<span class="badge type-b">Farm Property</span>`);
+      (listing.badges||["sale"]).forEach(b=>{
+        row.insertAdjacentHTML("beforeend", `<span class="badge ${b}">${badgeLabel(b)}</span>`);
+      });
+    }
+
+    // ===== Render listing =====
+    function renderListing(){
+      const u = document.getElementById("unitSelect").value;
+      const preset = document.getElementById("countryPreset").value;
+      const country = (preset==="AUTO") ? (listing.country || listing.meta?.country || "US") : preset;
+
+      // Top
+      document.getElementById("headline").textContent = listing.title || "Farm Online Auction";
+      document.getElementById("locationText").textContent = listing.location || "—";
+      document.getElementById("privacyNote").textContent = (listing.meta?.privacyMode) ? "Approximate location shown (farm privacy mode)" : "Exact location shown";
+
+      // Price summary
+      document.getElementById("priceMain").textContent = listing.price || "—";
+      document.getElementById("listingStatus").textContent = listing.meta?.listingStatus || "—";
+      document.getElementById("tenureText").textContent = listing.meta?.tenure || "—";
+      document.getElementById("handoverText").textContent = listing.meta?.handover || "—";
+
+      // Highlights
+      const hl=document.getElementById("highlights"); hl.innerHTML="";
+      const highs = listing.meta?.highlights || [];
+      (highs.length ? highs : ["Strong water profile","Good access","Practical infrastructure"]).forEach(h=>{
+        const li=document.createElement("li"); li.textContent=h; hl.appendChild(li);
+      });
+
+      // Stats
+      const land = listing.meta?.land || {};
+      const water = listing.meta?.water || {};
+      document.getElementById("landTotal").textContent = areaLandText(land.totalHa,u);
+      document.getElementById("landArable").textContent = areaLandText(land.arableHa,u);
+      document.getElementById("landIrrigated").textContent = areaLandText(land.irrigatedHa,u);
+      document.getElementById("waterSources").textContent = water.sources || "—";
+      document.getElementById("powerText").textContent = listing.meta?.infra?.gridPower ? "Grid + backup" : "Varies";
+
+      // Overview tab
+      document.getElementById("sumPrice").textContent = listing.price || "—";
+      document.getElementById("sumCurrency").textContent = listing.currency || "—";
+      document.getElementById("sumTenure").textContent = listing.meta?.tenure || "—";
+      document.getElementById("sumBoundaries").textContent = listing.meta?.boundaries || "—";
+      document.getElementById("sumHandover").textContent = listing.meta?.handover || "—";
+      document.getElementById("sumIncluded").textContent = listing.meta?.included || "—";
+      document.getElementById("sumExcluded").textContent = listing.meta?.excluded || "—";
+
+      const saleNote =
+        (country==="US") ? "US-smart: acreage, water rights vary by state; disclose mineral rights, conservation easements, and irrigation district details if applicable." :
+        (country==="EU") ? "EU-smart: CAP considerations, environmental zones, nitrate directives, and water abstraction permits can matter." :
+        (country==="AU") ? "AU-smart: water entitlements and allocations are critical; disclose bore licences and drought management." :
+        (country==="ZA") ? "ZA-smart: water use registration/licences and servitudes are key; disclose fencing/security and power resilience." :
+        "Country-smart: include local tenure rules, water licensing, and disclosure requirements in your farm pack.";
+      document.getElementById("countrySaleNote").textContent = saleNote;
+
+      // Land tab
+      document.getElementById("landTotalRow").textContent = areaLandText(land.totalHa,u);
+      document.getElementById("landArableRow").textContent = areaLandText(land.arableHa,u);
+      document.getElementById("landGrazingRow").textContent = areaLandText(land.grazingHa,u);
+      document.getElementById("landIrrigatedRow").textContent = areaLandText(land.irrigatedHa,u);
+      document.getElementById("landOrchardRow").textContent = areaLandText(land.orchardHa,u);
+      document.getElementById("landForestRow").textContent = areaLandText(land.forestHa,u);
+      document.getElementById("landInfraRow").textContent = areaLandText(land.infraHa,u);
+
+      document.getElementById("soilTypes").textContent = land.soilTypes || "—";
+      document.getElementById("soilDepth").textContent = land.soilDepth || "—";
+      document.getElementById("soilPH").textContent = land.soilPH || "—";
+      document.getElementById("rainfall").textContent = (land.rainfallMm!=null) ? (land.rainfallMm+" mm/yr (avg)") : "—";
+      document.getElementById("climateRisk").textContent = land.climateRisk || "—";
+      document.getElementById("erosion").textContent = land.erosion || "—";
+
+      const landTags = document.getElementById("landTags");
+      landTags.innerHTML="";
+      const lt = [
+        land.irrigatedHa ? "Irrigated blocks" : null,
+        land.orchardHa ? "Orchard/vine potential" : null,
+        land.grazingHa ? "Grazing camps" : null,
+        "Soil tests available (optional)",
+        "Yield history (optional)"
+      ].filter(Boolean);
+      lt.forEach(x=> landTags.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Water tab
+      document.getElementById("boreholes").textContent = water.boreholes || "—";
+      document.getElementById("boreYield").textContent = water.boreYield || "—";
+      document.getElementById("dams").textContent = water.dams || "—";
+      document.getElementById("rivers").textContent = water.rivers || "—";
+      document.getElementById("schemeWater").textContent = water.schemeWater || "—";
+      document.getElementById("rainHarvest").textContent = water.rainHarvest || "—";
+
+      document.getElementById("waterRights").textContent = water.rights || "—";
+      document.getElementById("waterAlloc").textContent = water.alloc || "—";
+      document.getElementById("waterPermits").textContent = water.permits || "—";
+      document.getElementById("waterMeters").textContent = water.meters || "—";
+      document.getElementById("waterQuality").textContent = water.quality || "—";
+      document.getElementById("waterServitudes").textContent = water.servitudes || "—";
+
+      const waterNote =
+        (country==="AU") ? "AU note: water entitlements vs seasonal allocations are different—show both if you can." :
+        (country==="US") ? "US note: surface water vs groundwater rules differ by state—capture permit IDs and district info." :
+        (country==="EU") ? "EU note: abstraction permits and environmental zones can affect irrigation—include docs in pack." :
+        (country==="ZA") ? "ZA note: water use registration/licences and servitudes are key—include authorisations and diagrams." :
+        "Water note: always include proof documents, test dates, and any restrictions.";
+      document.getElementById("waterNote").textContent = waterNote;
+
+      const irr = listing.meta?.irrigation || {};
+      document.getElementById("irrType").textContent = irr.type || "—";
+      document.getElementById("irrUnits").textContent = irr.units || "—";
+      document.getElementById("irrPumps").textContent = irr.pumps || "—";
+      document.getElementById("irrFert").textContent = irr.fert || "—";
+      document.getElementById("irrLines").textContent = irr.lines || "—";
+
+      // Infra tab
+      const infra = listing.meta?.infra || {};
+      document.getElementById("mainHouse").textContent = infra.mainHouse || "—";
+      document.getElementById("staffHousing").textContent = infra.staffHousing || "—";
+      document.getElementById("sheds").textContent = infra.sheds || "—";
+      document.getElementById("barns").textContent = infra.barns || "—";
+      document.getElementById("packhouse").textContent = infra.packhouse || "—";
+      document.getElementById("silos").textContent = infra.silos || "—";
+
+      document.getElementById("gridPower").textContent = infra.gridPower || "—";
+      document.getElementById("renewables").textContent = infra.renewables || "—";
+      document.getElementById("generator").textContent = infra.generator || "—";
+      document.getElementById("dieselTanks").textContent = infra.dieselTanks || "—";
+      document.getElementById("petrolTanks").textContent = infra.petrolTanks || "—";
+      document.getElementById("securityFence").textContent = infra.securityFence || "—";
+
+      document.getElementById("accessRoad").textContent = infra.accessRoad || "—";
+      document.getElementById("internalRoads").textContent = infra.internalRoads || "—";
+      document.getElementById("truckAccess").textContent = infra.truckAccess || "—";
+      document.getElementById("loading").textContent = infra.loading || "—";
+
+      document.getElementById("mobileCoverage").textContent = infra.mobileCoverage || "—";
+      document.getElementById("internet").textContent = infra.internet || "—";
+      document.getElementById("farmTech").textContent = infra.farmTech || "—";
+
+      const infraTags = document.getElementById("infraTags");
+      infraTags.innerHTML="";
+      (infra.tags || []).forEach(x=> infraTags.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Equipment tab
+      const eqTags = document.getElementById("equipmentTags");
+      const eqKv = document.getElementById("equipmentKv");
+      eqTags.innerHTML=""; eqKv.innerHTML="";
+      const equipment = listing.meta?.equipment || [];
+      equipment.forEach(e=>{
+        eqTags.insertAdjacentHTML("beforeend", `<span class="tag">${e.item}</span>`);
+        eqKv.insertAdjacentHTML("beforeend", `
+          <div class="row"><span class="label">${e.item}</span><span class="value">${e.detail}${e.included===false ? " (excluded)" : ""}</span></div>
+        `);
+      });
+
+      const inv = document.getElementById("inventoryTags");
+      inv.innerHTML="";
+      (listing.meta?.inventory || []).forEach(x=> inv.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Livestock tab
+      const lvKv = document.getElementById("livestockKv");
+      lvKv.innerHTML="";
+      (listing.meta?.livestock || []).forEach(l=>{
+        lvKv.insertAdjacentHTML("beforeend", `
+          <div class="row"><span class="label">${l.species}</span><span class="value">${l.detail} • ${l.included}</span></div>
+        `);
+      });
+
+      const li = listing.meta?.livestockInfra || {};
+      document.getElementById("handling").textContent = li.handling || "—";
+      document.getElementById("fenceType").textContent = li.fenceType || "—";
+      document.getElementById("waterPoints").textContent = li.waterPoints || "—";
+      document.getElementById("feedStorage").textContent = li.feedStorage || "—";
+      document.getElementById("biosecurity").textContent = li.biosecurity || "—";
+
+      const g = listing.meta?.grazing || {};
+      document.getElementById("grazBlocks").textContent = g.blocks || "—";
+      document.getElementById("carrying").textContent = g.carrying || "—";
+      document.getElementById("rotation").textContent = g.rotation || "—";
+      document.getElementById("supplements").textContent = g.supplements || "—";
+
+      document.getElementById("animalNote").textContent =
+        (country==="EU") ? "EU note: animal movement rules and welfare documentation can be important—include herd/flock records if shared." :
+        (country==="US") ? "US note: check local brand inspection / movement requirements; disclose any grazing leases." :
+        (country==="ZA") ? "ZA note: disclose fencing type, security, and water points for camps; list animal IDs if provided." :
+        "Animal note: keep livestock optional/negotiable unless clearly included in the deed of sale.";
+
+      // Production tab
+      const pr = listing.meta?.production || {};
+      document.getElementById("enterprise").textContent = pr.enterprise || "—";
+      document.getElementById("crops").textContent = pr.crops || "—";
+      document.getElementById("livEnterprise").textContent = pr.livestockEnterprise || "—";
+      document.getElementById("yieldHist").textContent = pr.yieldHist || "—";
+      document.getElementById("irrSched").textContent = pr.irrSched || "—";
+      document.getElementById("logistics").textContent = pr.logistics || "—";
+
+      const mk = listing.meta?.markets || {};
+      document.getElementById("marketHub").textContent = mk.hub || "—";
+      document.getElementById("processors").textContent = mk.processors || "—";
+      document.getElementById("auction").textContent = mk.auction || "—";
+      document.getElementById("suppliers").textContent = mk.suppliers || "—";
+
+      // Compliance tab
+      const cp = listing.meta?.compliance || {};
+      document.getElementById("legalTitle").textContent = cp.legalTitle || "—";
+      document.getElementById("zoning").textContent = cp.zoning || "—";
+      document.getElementById("legalWater").textContent = cp.legalWater || "—";
+      document.getElementById("env").textContent = cp.env || "—";
+      document.getElementById("labour").textContent = cp.labour || "—";
+      document.getElementById("survey").textContent = cp.survey || "—";
+
+      const certTags = document.getElementById("certTags");
+      certTags.innerHTML="";
+      (listing.meta?.certs || []).forEach(x=> certTags.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      document.getElementById("complianceNote").textContent =
+        "Important: This is a template. In the final webapp, show country-specific disclaimers (water, environmental, labour housing, movement of animals, chemical storage, fuel storage compliance) and attach proof documents in the farm pack.";
+
+      // Location tab
+      const lo = listing.meta?.location || {};
+      document.getElementById("areaDesc").textContent = lo.areaDesc || "—";
+      document.getElementById("topography").textContent = lo.topography || "—";
+      document.getElementById("climateZone").textContent = lo.climateZone || "—";
+      document.getElementById("bioRegion").textContent = lo.bioRegion || "—";
+      document.getElementById("town").textContent = lo.town || "—";
+
+      const locTags = document.getElementById("locationTags");
+      locTags.innerHTML="";
+      ["Truck access","Agri district","Market proximity"].forEach(x=> locTags.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Description
+      document.getElementById("publicDesc").textContent = listing.meta?.notes?.publicDesc || "—";
+      document.getElementById("privateRemarks").textContent = listing.meta?.notes?.privateRemarks || "[Agent-only]";
+
+      // Nearby
+      renderNearby(country,u);
+
+      // Currency selector (cosmetic): keep it synced
+      const curSel = document.getElementById("currencySelect");
+      if(listing.currency && Array.from(curSel.options).some(o=>o.value===listing.currency)){
+        curSel.value = listing.currency;
+      }
+    }
+
+    // ===== Wire up top controls =====
+    document.getElementById("unitSelect").addEventListener("change",renderListing);
+    document.getElementById("countryPreset").addEventListener("change",renderListing);
+
+    document.getElementById("printBtn").addEventListener("click",()=>window.print());
+    document.getElementById("shareBtn").addEventListener("click",()=>showToast("Link copied to clipboard!"));
+    document.getElementById("saveBtn").addEventListener("click",()=>showToast("Saved to favourites!"));
+
+    document.getElementById("infoBtn").addEventListener("click",()=>showToast("Auction pack request opening..."));
+    document.getElementById("packBtn").addEventListener("click",()=>showToast("Auction question form opening..."));
+    document.getElementById("offerBtn").addEventListener("click",()=>showToast("Inspection booking opening..."));
+
+    document.getElementById("backBtn").addEventListener("click",()=>{
+      if(history.length>1) history.back();
+      else showToast("Back to farm auction results in final app");
+    });
+
+    // ===== Init =====
+    (function init(){
+      document.getElementById("sourceText").textContent = selected ? "From selection" : "Demo";
+      document.getElementById("countryPreset").value = "AUTO";
+      stageImg.src = listing.images[0] || stageImg.src;
+      renderBadges();
+      renderCarousel();
+      renderListing();
+      console.log("%c PropertyFinder — 04f Farm Online Auction Detail loaded","color:#141c2b;font-weight:bold;font-size:12px");
+    })();
+  </script>
+
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:20px;font-family:Inter,system-ui,sans-serif;font-size:0.85rem;margin-top:40px;">
+  <span id="yf"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#D4AF77;">Terms</a> |
+  <a href="privacy-policy.html" style="color:#D4AF77;">Privacy</a> |
+  <a href="anti-fraud.html" style="color:#D4AF77;">Anti-Fraud</a>
+</footer>
+<script>document.getElementById("yf").textContent = new Date().getFullYear();</script>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+
+    // pf-calc-widget adapter
+    function _setAucFarmData(){
+      var rawP=parseFloat((listing.price||'0').toString().replace(/[^0-9.]/g,''))||6950000;
+      var cSel=document.getElementById('currencySelect'), cPreset=document.getElementById('countryPreset');
+      window.pfListingData={
+        price:rawP,
+        country:(cPreset&&cPreset.value!=='AUTO')?cPreset.value:(listing.country||'ZA'),
+        currency:(cSel?cSel.value:null)||listing.currency||'USD',
+        title:listing.title||listing.headline||document.title, type:'Agricultural'
+      };
+    }
+    _setAucFarmData();
+    var _afp=document.getElementById('countryPreset'),_afs=document.getElementById('currencySelect');
+    if(_afp) _afp.addEventListener('change',function(){_setAucFarmData();setTimeout(function(){try{pfcwCalcMort();pfcwCalcTC();pfcwCalcSD();pfcwCalcYield();pfcwCalcBond();pfcwCalcAfford();}catch(e){}},100);});
+    if(_afs) _afs.addEventListener('change',function(){_setAucFarmData();setTimeout(function(){try{pfcwCalcMort();pfcwCalcTC();pfcwCalcSD();pfcwCalcYield();pfcwCalcBond();pfcwCalcAfford();}catch(e){}},100);});
+
+<script src="pf-photo-upload.js"></script>
+<script src="pf-core.js"></script>
+<script src="pf-calc-widget.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  if(document.getElementById("pfuMedia_auctions_farm")){
+    PFUpload.init("pfuMedia_auctions_farm", {
+      maxPhotos: 30,
+      showVideoUpload: true,
+      onPhotosChanged: function(photos){
+        console.log("[PFUpload] auctions-farm: " + photos.length + " photos");
+      }
+    });
+  }
+});
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

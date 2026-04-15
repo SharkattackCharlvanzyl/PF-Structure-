@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Online Auction Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-border-strong:#D1D9D4;
+      --nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --pf-danger:#DC2626;--pf-danger-light:#FEF2F2;
+      --pf-warn:#D97706;--pf-warn-light:#FFFBEB;
+      --pf-success:#16A34A;--pf-success-light:#F0FDF4;
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased;min-height:100vh}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    /* Header */
+    .page-header{
+      background:linear-gradient(135deg,#0e1520,#141c2b) 55%,var(--nb-green-hover) 100%);
+      padding:40px 24px 32px;color:#fff;position:relative;overflow:hidden;
+    }
+    .page-header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    .header-inner{position:relative;z-index:1;max-width:680px;margin:0 auto;text-align:center}
+    .header-inner h1{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;margin:0 0 10px}
+    .header-inner p{color:rgba(255,255,255,0.75);font-size:0.9rem;line-height:1.6;max-width:560px;margin:0 auto}
+
+    /* Progress bar */
+    .progress-wrap{max-width:680px;margin:-20px auto 0;position:relative;z-index:2;padding:0 24px}
+    .progress-bar{display:flex;align-items:center;background:var(--nb-white);border-radius:var(--radius);padding:16px 20px;box-shadow:0 4px 24px rgba(0,0,0,0.08);border:1px solid var(--nb-border);gap:4px}
+    .prog-step{flex:1;text-align:center;position:relative}
+    .prog-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--nb-border);background:var(--nb-white);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:900;color:var(--nb-muted);margin:0 auto 6px;transition:all 0.3s ease}
+    .prog-step.active .prog-dot{background:var(--nb-green);border-color:#c4a47c;color:#fff}
+    .prog-step.done .prog-dot{background:var(--pf-success);border-color:var(--pf-success);color:#fff}
+    .prog-label{font-size:0.68rem;font-weight:700;color:var(--nb-muted);text-transform:uppercase;letter-spacing:0.5px}
+    .prog-step.active .prog-label{color:#c4a47c}
+    .prog-step.done .prog-label{color:var(--pf-success)}
+    .prog-line{flex:0 0 auto;width:40px;height:2px;background:var(--nb-border);margin-bottom:18px}
+    .prog-line.done{background:var(--pf-success)}
+
+    /* Form container */
+    .form-wrap{max-width:680px;margin:24px auto;padding:0 24px 60px}
+    .form-card{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:0 2px 12px rgba(0,0,0,0.04);overflow:hidden}
+    .form-card-header{padding:20px 24px;border-bottom:1px solid var(--nb-border);background:var(--nb-snow)}
+    .form-card-header h2{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#e8dfc8;margin:0 0 4px}
+    .form-card-header p{font-size:0.82rem;color:var(--nb-muted);margin:0}
+    .form-card-body{padding:24px}
+
+    /* Step panels */
+    .step-panel{display:none}
+    .step-panel.active{display:block;animation:fadeIn 0.3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Fields */
+    .field{margin-bottom:20px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+    .field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+    @media(max-width:560px){.field-row,.field-row-3{grid-template-columns:1fr}}
+    .field label{display:block;font-size:0.82rem;font-weight:700;color:#e8dfc8;margin-bottom:6px}
+    .field label .req{color:var(--pf-danger);margin-left:2px}
+    .field label .opt{color:var(--nb-muted);font-weight:500;font-size:0.75rem;margin-left:4px}
+    .field .hint{font-size:0.75rem;color:var(--nb-muted);margin-top:4px;line-height:1.4}
+    .field input,.field select,.field textarea{
+      width:100%;padding:12px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);
+      font-size:0.92rem;font-family:var(--font);color:#e8dfc8;background:var(--nb-white);
+      outline:none;transition:border-color 0.2s ease,box-shadow 0.2s ease;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .field textarea{resize:vertical;min-height:80px}
+    .field input.error{border-color:var(--pf-danger);box-shadow:0 0 0 3px rgba(220,38,38,0.08)}
+    .field .error-msg{font-size:0.75rem;color:var(--pf-danger);margin-top:4px;display:none;font-weight:600}
+    .field .error-msg.show{display:block}
+
+    /* Password strength */
+    .pw-bar{height:4px;border-radius:2px;background:var(--nb-border);overflow:hidden;margin-top:6px}
+    .pw-bar-fill{height:100%;border-radius:2px;width:0%;transition:width 0.3s ease,background 0.3s ease}
+    .pw-wrap{position:relative}
+    .pw-wrap input{padding-right:44px}
+    .pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--nb-muted);font-size:16px;padding:4px}
+    .pw-toggle:hover{color:#e8dfc8}
+
+    /* File upload */
+    .upload-zone{
+      border:2px dashed var(--nb-border);border-radius:var(--radius2);padding:24px;text-align:center;
+      cursor:pointer;transition:all 0.2s ease;background:var(--nb-snow);
+    }
+    .upload-zone:hover{border-color:#c4a47c;background:rgba(196,164,124,0.03)}
+    .upload-zone .uz-icon{font-size:2rem;margin-bottom:8px}
+    .upload-zone .uz-text{font-size:0.85rem;color:var(--nb-muted);font-weight:600}
+    .upload-zone .uz-hint{font-size:0.72rem;color:var(--nb-muted);margin-top:4px}
+    .upload-zone input[type="file"]{display:none}
+    .upload-zone.has-file{border-color:var(--pf-success);background:var(--pf-success-light)}
+    .upload-zone.has-file .uz-text{color:var(--pf-success)}
+
+    /* Checkboxes */
+    .check-group{margin-bottom:16px}
+    .check-label{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:#e8dfc8;cursor:pointer;padding:8px 0;line-height:1.5}
+    .check-label input[type="checkbox"]{width:18px;height:18px;accent-color:#c4a47c;cursor:pointer;margin-top:2px;flex-shrink:0}
+    .check-label a{color:#c4a47c}
+
+    /* Callout */
+    .callout{padding:16px;border-radius:var(--radius2);margin:20px 0;line-height:1.6}
+    .callout.info{background:rgba(196,164,124,0.04);border:1px solid rgba(196,164,124,0.12)}
+    .callout.warn{background:var(--pf-warn-light);border:1px solid rgba(217,119,6,0.15);border-left:4px solid var(--pf-warn)}
+    .callout.deposit{background:var(--nb-snow);border:1px solid var(--nb-border)}
+    .callout h3{font-size:0.9rem;font-weight:800;margin:0 0 8px;color:#e8dfc8}
+    .callout p{font-size:0.84rem;color:var(--nb-muted);margin:6px 0;line-height:1.55}
+    .callout ul{margin:8px 0 0 18px;font-size:0.84rem;color:var(--nb-muted)}
+    .callout ul li{margin-bottom:4px;line-height:1.5}
+
+    /* Interest chips */
+    .chip-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip-opt{padding:8px 16px;border-radius:4px;border:1px solid var(--nb-border);background:var(--nb-white);font-size:0.82rem;font-weight:700;color:var(--nb-muted);cursor:pointer;transition:all 0.2s ease;font-family:var(--font)}
+    .chip-opt:hover{border-color:#c4a47c;color:#c4a47c}
+    .chip-opt.selected{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+
+    /* Buttons */
+    .btn-row{display:flex;gap:10px;justify-content:space-between;margin-top:24px;flex-wrap:wrap}
+    .btn{padding:13px 24px;border-radius:var(--radius3);font-size:0.92rem;font-weight:700;cursor:pointer;font-family:var(--font);border:1px solid var(--nb-border);background:var(--nb-white);color:#e8dfc8;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:8px}
+    .btn:hover{border-color:#c4a47c;color:#c4a47c}
+    .btn.primary{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .btn.primary:hover{background:var(--nb-green-hover);border-color:var(--nb-green-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,164,124,0.25)}
+
+    /* Success panel */
+    .success-panel{display:none;text-align:center;padding:40px 24px}
+    .success-panel.active{display:block;animation:fadeIn 0.4s ease}
+    .success-panel .s-icon{font-size:3.5rem;margin-bottom:16px}
+    .success-panel h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:0 0 10px;color:#e8dfc8}
+    .success-panel p{font-size:0.9rem;color:var(--nb-muted);line-height:1.6;max-width:440px;margin:0 auto 14px}
+    .success-panel .checklist{text-align:left;max-width:400px;margin:20px auto;padding:16px;background:var(--nb-snow);border-radius:var(--radius2);border:1px solid var(--nb-border)}
+    .success-panel .cl-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:0.85rem;font-weight:600}
+    .success-panel .cl-item .dot{width:8px;height:8px;border-radius:50%;background:var(--pf-success);flex-shrink:0}
+
+    /* Note */
+    .note{font-size:0.78rem;color:var(--nb-muted);padding:12px;margin-top:14px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    /* Footer */
+    .page-footer{max-width:680px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+
+    @media print{.page-header{background:var(--nb-green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-inner">
+      <h1>Online Auction Registration</h1>
+      <p>Welcome to PropertyFinder — your secure gateway to international property auctions. Registration is quick, straightforward, and designed for your convenience.</p>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar">
+      <div class="prog-step active" data-step="1"><div class="prog-dot">1</div><div class="prog-label">Account</div></div>
+      <div class="prog-line" id="line1"></div>
+      <div class="prog-step" data-step="2"><div class="prog-dot">2</div><div class="prog-label">Details</div></div>
+      <div class="prog-line" id="line2"></div>
+      <div class="prog-step" data-step="3"><div class="prog-dot">3</div><div class="prog-label">Documents</div></div>
+      <div class="prog-line" id="line3"></div>
+      <div class="prog-step" data-step="4"><div class="prog-dot">4</div><div class="prog-label">Confirm</div></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-wrap">
+    <div class="form-card">
+
+      <!-- ═══ STEP 1: Basic Account Setup ═══ -->
+      <div class="step-panel active" id="step1">
+        <div class="form-card-header">
+          <h2>Step 1 — Basic Account Setup</h2>
+          <p>Quick setup to start browsing auctions</p>
+        </div>
+        <div class="form-card-body">
+          <div class="field">
+            <label for="fullName">Full Name <span class="req">*</span></label>
+            <input type="text" id="fullName" placeholder="Legal name as it appears on official identification" required>
+            <div class="hint">Please use your legal name as it appears on your passport or national ID.</div>
+          </div>
+          <div class="field">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="you@example.com" required>
+            <div class="hint">Used for account verification, auction alerts, and secure communication.</div>
+          </div>
+          <div class="field">
+            <label for="password">Password <span class="req">*</span></label>
+            <div class="pw-wrap">
+              <input type="password" id="password" placeholder="Minimum 8 characters, 1 number, 1 symbol" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('password',this)">👁</button>
+            </div>
+            <div class="pw-bar"><div class="pw-bar-fill" id="pwFill"></div></div>
+            <div class="hint">Minimum 8 characters, including at least one number and one symbol.</div>
+          </div>
+          <div class="field">
+            <label for="confirmPw">Confirm Password <span class="req">*</span></label>
+            <div class="pw-wrap">
+              <input type="password" id="confirmPw" placeholder="Re-enter your password" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('confirmPw',this)">👁</button>
+            </div>
+            <div class="error-msg" id="confirmPwError">Passwords do not match</div>
+          </div>
+          <div class="field">
+            <label for="referral">Referral Code <span class="opt">(optional)</span></label>
+            <input type="text" id="referral" placeholder="Enter referral code if you have one">
+          </div>
+          <div class="btn-row" style="justify-content:flex-end">
+            <button class="btn primary" type="button" onclick="goStep(2)">Continue to Step 2 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 2: Personal & Contact Details ═══ -->
+      <div class="step-panel" id="step2">
+        <div class="form-card-header">
+          <h2>Step 2 — Personal &amp; Contact Details</h2>
+          <p>We need a few more details for compliance and correspondence</p>
+        </div>
+        <div class="form-card-body">
+          <div class="field">
+            <label for="dob">Date of Birth <span class="req">*</span></label>
+            <input type="date" id="dob" required>
+            <div class="hint">You must be 18 years or older to participate in bidding.</div>
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <div class="field-row" style="margin-bottom:0">
+              <div class="field" style="margin-bottom:0">
+                <select id="phoneCode">
+                  <option value="+27">🇿🇦 South Africa +27</option>
+                  <option value="+44">🇬🇧 United Kingdom +44</option>
+                  <option value="+1">🇺🇸 United States +1</option>
+                  <option value="+41">🇨🇭 Switzerland +41</option>
+                  <option value="+49">🇩🇪 Germany +49</option>
+                  <option value="+971">🇦🇪 UAE +971</option>
+                  <option value="+65">🇸🇬 Singapore +65</option>
+                  <option value="+61">🇦🇺 Australia +61</option>
+                  <option value="+33">🇫🇷 France +33</option>
+                  <option value="+351">🇵🇹 Portugal +351</option>
+                  <option value="+34">🇪🇸 Spain +34</option>
+                  <option value="+39">🇮🇹 Italy +39</option>
+                  <option value="+31">🇳🇱 Netherlands +31</option>
+                  <option value="+353">🇮🇪 Ireland +353</option>
+                  <option value="+91">🇮🇳 India +91</option>
+                  <option value="+86">🇨🇳 China +86</option>
+                  <option value="+81">🇯🇵 Japan +81</option>
+                  <option value="+82">🇰🇷 South Korea +82</option>
+                  <option value="+55">🇧🇷 Brazil +55</option>
+                  <option value="+52">🇲🇽 Mexico +52</option>
+                  <option value="+234">🇳🇬 Nigeria +234</option>
+                  <option value="+254">🇰🇪 Kenya +254</option>
+                  <option value="+966">🇸🇦 Saudi Arabia +966</option>
+                  <option value="+974">🇶🇦 Qatar +974</option>
+                  <option value="+64">🇳🇿 New Zealand +64</option>
+                </select>
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <input type="tel" id="phone" placeholder="82 000 0000" required>
+              </div>
+            </div>
+            <div class="hint">Used for two-factor authentication and important auction notifications.</div>
+          </div>
+
+          <div style="margin:20px 0 8px;font-weight:800;font-size:0.88rem">Residential Address <span style="color:var(--pf-danger)">*</span></div>
+          <div class="field">
+            <label for="street">Street Address</label>
+            <input type="text" id="street" placeholder="123 Main Street" required>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="city">City</label><input type="text" id="city" placeholder="City" required></div>
+            <div class="field"><label for="state">State / Province</label><input type="text" id="state" placeholder="State or Province"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="postal">Postal / ZIP Code</label><input type="text" id="postal" placeholder="Postal code" required></div>
+            <div class="field">
+              <label for="country">Country <span class="req">*</span></label>
+              <select id="country" required>
+                <option value="">Select country</option>
+                <option value="ZA">South Africa</option>
+                <option value="UK">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="CH">Switzerland</option>
+                <option value="DE">Germany</option>
+                <option value="AE">United Arab Emirates</option>
+                <option value="SG">Singapore</option>
+                <option value="AU">Australia</option>
+                <option value="FR">France</option>
+                <option value="PT">Portugal</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="prefLang">Preferred Language <span class="opt">(optional)</span></label>
+              <select id="prefLang"><option value="en">English</option><option value="af">Afrikaans</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="pt">Português</option><option value="ar">العربية</option><option value="zh">中文</option></select>
+            </div>
+            <div class="field">
+              <label for="prefCurrency">Display Currency <span class="opt">(optional)</span></label>
+              <select id="prefCurrency"><option value="USD">USD ($)</option><option value="ZAR">ZAR (R)</option><option value="GBP">GBP (£)</option><option value="EUR">EUR (€)</option><option value="CHF">CHF</option><option value="AED">AED</option><option value="SGD">SGD</option><option value="AUD">AUD</option></select>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" type="button" onclick="goStep(1)">← Back</button>
+            <button class="btn primary" type="button" onclick="goStep(3)">Continue to Step 3 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 3: Verification Documents ═══ -->
+      <div class="step-panel" id="step3">
+        <div class="form-card-header">
+          <h2>Step 3 — Verification Documents</h2>
+          <p>Required for full bidding or selling access. Viewers can skip bidding-related items.</p>
+        </div>
+        <div class="form-card-body">
+          <div class="field">
+            <label>Identity Proof <span class="req">*</span></label>
+            <div class="upload-zone" id="idUpload" onclick="document.getElementById('idFile').click()">
+              <div class="uz-icon">🪪</div>
+              <div class="uz-text">Click to upload ID document</div>
+              <div class="uz-hint">Valid passport, national ID card, or driver's license — front and back if applicable</div>
+              <input type="file" id="idFile" accept=".pdf,.jpg,.jpeg,.png" onchange="handleUpload('idUpload','idFile')">
+            </div>
+            <div class="hint">Securely verifies your identity in accordance with international KYC standards.</div>
+          </div>
+
+          <div class="field">
+            <label>Proof of Funds <span class="req">* for bidders</span></label>
+            <div class="upload-zone" id="fundsUpload" onclick="document.getElementById('fundsFile').click()">
+              <div class="uz-icon">💰</div>
+              <div class="uz-text">Click to upload proof of funds</div>
+              <div class="uz-hint">Recent bank statement, letter from a financial institution, or equivalent (recommended within last 3 months)</div>
+              <input type="file" id="fundsFile" accept=".pdf,.jpg,.jpeg,.png" onchange="handleUpload('fundsUpload','fundsFile')">
+            </div>
+            <div class="hint">Required for bidders. Can be submitted later for viewers/observers.</div>
+          </div>
+
+          <div class="field">
+            <label>Additional Documents <span class="opt">(optional — if requested for specific auctions)</span></label>
+            <div class="upload-zone" id="extraUpload" onclick="document.getElementById('extraFile').click()">
+              <div class="uz-icon">📄</div>
+              <div class="uz-text">Click to upload additional documents</div>
+              <div class="uz-hint">Residency/visa documents, company registration, board resolution, etc.</div>
+              <input type="file" id="extraFile" accept=".pdf,.jpg,.jpeg,.png" onchange="handleUpload('extraUpload','extraFile')">
+            </div>
+          </div>
+
+          <div class="callout info">
+            <p style="margin:0"><strong>🔒 Security:</strong> All uploaded documents are encrypted and handled securely. Verification is typically completed within 1–2 business days, and you will receive an email update.</p>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" type="button" onclick="goStep(2)">← Back</button>
+            <button class="btn primary" type="button" onclick="goStep(4)">Continue to Step 4 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 4: Preferences & Agreements ═══ -->
+      <div class="step-panel" id="step4">
+        <div class="form-card-header">
+          <h2>Step 4 — Preferences &amp; Agreements</h2>
+          <p>Final step to unlock full platform features</p>
+        </div>
+        <div class="form-card-body">
+          <div class="field">
+            <label>User Type <span class="req">*</span> <span class="hint" style="display:inline">(select one or more)</span></label>
+            <div class="chip-group" id="userTypeChips">
+              <button class="chip-opt" data-val="buyer" type="button">🔨 Buyer / Bidder</button>
+              <button class="chip-opt" data-val="seller" type="button">🏠 Seller</button>
+              <button class="chip-opt" data-val="viewer" type="button">👀 Viewer / Observer</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Auction Interests <span class="opt">(optional)</span></label>
+            <div class="chip-group" id="interestChips">
+              <button class="chip-opt" data-val="residential" type="button">Residential</button>
+              <button class="chip-opt" data-val="commercial" type="button">Commercial</button>
+              <button class="chip-opt" data-val="land" type="button">Land / Development</button>
+              <button class="chip-opt" data-val="business" type="button">Business for Sale</button>
+              <button class="chip-opt" data-val="europe" type="button">🌍 Europe</button>
+              <button class="chip-opt" data-val="africa" type="button">🌍 Africa</button>
+              <button class="chip-opt" data-val="asia" type="button">🌏 Asia</button>
+              <button class="chip-opt" data-val="americas" type="button">🌎 Americas</button>
+            </div>
+          </div>
+
+          <!-- Deposit requirement (shown for bidders) -->
+          <div class="callout deposit" id="depositCallout">
+            <h3>💰 Bidder Commitment &amp; Deposit Requirement</h3>
+            <p>To ensure fairness, transparency, and serious participation for all parties in our international property auctions, we require a fully refundable commitment deposit from potential bidders:</p>
+            <ul>
+              <li>Deposit <strong>USD 1,000</strong> (or equivalent in an agreed currency) into your attorney's trust account or a compliant escrow/attorney holding account in your jurisdiction.</li>
+              <li>Your attorney or authorised financial representative must provide PropertyFinder with an <strong>official letter</strong> confirming that the funds have been received and are held in trust.</li>
+              <li>If you are the successful bidder, this USD 1,000 will be <strong>credited toward the final purchase price</strong> (including any required deposit or balance payment).</li>
+              <li>The deposit is <strong>fully refundable</strong> if you do not win the auction, or if the transaction does not proceed due to circumstances beyond your control. Refunds are processed promptly — typically within 5–7 business days.</li>
+            </ul>
+            <p style="font-size:0.8rem;color:var(--nb-muted);margin-top:10px">This is a standard, widely accepted practice in property auctions globally. It protects sellers, maintains auction integrity, and allows genuine bidders to participate confidently with minimal risk.</p>
+          </div>
+
+          <div class="check-group">
+            <label class="check-label">
+              <input type="checkbox" id="agreeDeposit">
+              I confirm that I have read, understand, and agree to the <a href="auction-bidding-terms.html">Bidder Commitment &amp; Deposit Requirement</a> as described above. <span class="req">*</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="agreeTerms" required>
+              I agree to the PropertyFinder <a href="terms-of-use.html">Terms of Service</a>, <a href="auction-bidding-terms.html">Auction Rules</a>, <a href="commission-fees.html">Bidder Commitment Policy</a>, and <a href="privacy-policy.html">Privacy Policy</a>. <span class="req">*</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="agreeMarketing">
+              I would like to receive notifications about upcoming auctions, market insights, and exclusive opportunities. <span class="opt">(optional)</span>
+            </label>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" type="button" onclick="goStep(3)">← Back</button>
+            <button class="btn primary" type="button" id="submitBtn" onclick="submitRegistration()">Complete Registration &amp; Proceed to Verification →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SUCCESS ═══ -->
+      <div class="success-panel" id="successPanel">
+        <div class="s-icon">🎉</div>
+        <h2>Thank you for registering!</h2>
+        <p>Your account is being activated. Please check your email for the verification link.</p>
+        <div class="checklist">
+          <div class="cl-item"><div class="dot"></div> Account created</div>
+          <div class="cl-item"><div class="dot"></div> Verification email sent</div>
+          <div class="cl-item"><div class="dot"></div> Documents submitted for review (1–2 business days)</div>
+          <div class="cl-item"><div class="dot"></div> Browse auctions immediately</div>
+          <div class="cl-item"><div class="dot"></div> Full bidding enabled after ID &amp; funds verification + deposit confirmation</div>
+        </div>
+        <button class="btn primary" type="button" onclick="window.location.href='auctions.html'" style="margin-top:16px">Browse Live Auctions →</button>
+      </div>
+
+    </div>
+
+    <div class="note">
+      <strong>Privacy &amp; Security:</strong> Your personal data is encrypted and processed in accordance with our <a href="privacy-policy.html">Privacy Policy</a> and applicable data protection laws (GDPR, POPIA, CCPA). PropertyFinder will never share your documents with unauthorised parties.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    © <span id="y"></span> PropertyFinder. All rights reserved. | <a href="auctions.html">Back to Auctions</a> | <a href="terms-of-use.html">Terms</a> | <a href="privacy-policy.html">Privacy</a>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    function goStep(n) {
+      // Basic validation before advancing
+      if (n > currentStep) {
+        if (currentStep === 1) {
+          const name = document.getElementById('fullName').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const pw = document.getElementById('password').value;
+          const cpw = document.getElementById('confirmPw').value;
+          if (!name || !email) { alert('Please fill in your full name and email address.'); return; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
+          if (pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+          if (pw !== cpw) { document.getElementById('confirmPwError').classList.add('show'); return; }
+          document.getElementById('confirmPwError').classList.remove('show');
+        }
+        if (currentStep === 2) {
+          const dob = document.getElementById('dob').value;
+          const phone = document.getElementById('phone').value.trim();
+          const country = document.getElementById('country').value;
+          if (!dob) { alert('Please enter your date of birth.'); return; }
+          // Age check
+          const age = (new Date() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000);
+          if (age < 18) { alert('You must be 18 years or older to register.'); return; }
+          if (!phone) { alert('Please enter your phone number.'); return; }
+          if (!country) { alert('Please select your country.'); return; }
+        }
+      }
+
+      currentStep = n;
+      // Update panels
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('step' + n);
+      if (panel) panel.classList.add('active');
+
+      // Update progress bar
+      document.querySelectorAll('.prog-step').forEach(s => {
+        const sn = parseInt(s.dataset.step);
+        s.classList.remove('active', 'done');
+        if (sn < n) s.classList.add('done');
+        else if (sn === n) s.classList.add('active');
+      });
+      document.querySelectorAll('.prog-line').forEach((l, i) => {
+        l.classList.toggle('done', i < n - 1);
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Password eye toggle
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') { input.type = 'text'; btn.textContent = '🔒'; }
+      else { input.type = 'password'; btn.textContent = '👁'; }
+    }
+
+    // Password strength
+    document.getElementById('password').addEventListener('input', function() {
+      const pw = this.value;
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+      const pct = (score / 5) * 100;
+      const fill = document.getElementById('pwFill');
+      fill.style.width = pct + '%';
+      fill.style.background = pct <= 40 ? '#DC2626' : pct <= 70 ? '#D97706' : '#16A34A';
+    });
+
+    // File upload handler
+    function handleUpload(zoneId, fileId) {
+      const zone = document.getElementById(zoneId);
+      const file = document.getElementById(fileId);
+      if (file.files.length > 0) {
+        zone.classList.add('has-file');
+        zone.querySelector('.uz-text').textContent = '✅ ' + file.files[0].name;
+        zone.querySelector('.uz-hint').textContent = 'Click to change file';
+      }
+    }
+
+    // Chip toggles
+    document.querySelectorAll('.chip-opt').forEach(chip => {
+      chip.addEventListener('click', () => chip.classList.toggle('selected'));
+    });
+
+    // Submit
+    function submitRegistration() {
+      const terms = document.getElementById('agreeTerms').checked;
+      if (!terms) { alert('Please agree to the Terms of Service and Auction Rules.'); return; }
+
+      // Check if bidder selected and deposit agreed
+      const isBidder = document.querySelector('#userTypeChips .chip-opt[data-val="buyer"].selected');
+      if (isBidder && !document.getElementById('agreeDeposit').checked) {
+        alert('Bidders must agree to the Deposit Requirement. Please tick the checkbox.'); return;
+      }
+
+      // Collect data
+      const data = {
+        fullName: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phoneCode').value + ' ' + document.getElementById('phone').value.trim(),
+        country: document.getElementById('country').value,
+        userTypes: Array.from(document.querySelectorAll('#userTypeChips .chip-opt.selected')).map(c => c.dataset.val),
+        interests: Array.from(document.querySelectorAll('#interestChips .chip-opt.selected')).map(c => c.dataset.val),
+        marketing: document.getElementById('agreeMarketing').checked,
+        timestamp: Date.now()
+      };
+
+      // Save to localStorage
+      try {
+        const regs = JSON.parse(localStorage.getItem('pf_auction_registrations') || '[]');
+        regs.push(data);
+        localStorage.setItem('pf_auction_registrations', JSON.stringify(regs));
+      } catch(e) {}
+
+      // Show success
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('successPanel').classList.add('active');
+
+      // Update progress to all done
+      document.querySelectorAll('.prog-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+      document.querySelectorAll('.prog-line').forEach(l => l.classList.add('done'));
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+    console.log('%c PropertyFinder — Auction Registration Form loaded', 'color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

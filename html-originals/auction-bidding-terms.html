@@ -1,0 +1,346 @@
+<!-- FILE: auction-bidding-terms.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PropertyFinder — Online Auction Bidding Terms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);--accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;
+      --lime:#c4a47c;--snow:#EDF2EF;
+      --warn:#D97706;--warn-bg:#FFFBEB;
+      --danger:#DC2626;--danger-bg:#FEF2F2;
+      --radius:14px;--radius2:10px;--max:980px;
+      --font:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    /* Header */
+    header{
+      background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%) 0%,var(--accent) 55%,var(--accent2) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);
+      pointer-events:none;
+    }
+    header .wrap{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    h1{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;margin:0 0 10px;letter-spacing:0.3px}
+    .meta{color:rgba(255,255,255,0.75);font-size:0.82rem;margin-bottom:16px;line-height:1.5}
+    .meta .strong{color:#fff}
+    .btnbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .btn{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:8px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.85);
+      font-weight:700;font-size:0.82rem;text-decoration:none;transition:all 0.2s ease;
+    }
+    .btn:hover{background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3);text-decoration:none}
+    nav{display:flex;flex-wrap:wrap;gap:8px}
+    nav a{
+      color:rgba(255,255,255,0.8);font-weight:600;font-size:0.78rem;
+      padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);transition:all 0.2s ease;text-decoration:none;
+    }
+    nav a:hover{background:rgba(255,255,255,0.1);color:#fff;text-decoration:none}
+
+    /* Main */
+    main{max-width:var(--max);margin:0 auto;padding:24px 24px 60px}
+    section{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,0.03);
+    }
+    h2{
+      font-family:var(--font-display);font-size:1.1rem;font-weight:700;
+      margin:0 0 14px;color:var(--accent-dark);letter-spacing:0.2px;
+    }
+    h2::before{
+      content:'';display:inline-block;width:4px;height:18px;
+      background:linear-gradient(180deg,var(--accent),var(--accent2));
+      border-radius:2px;margin-right:10px;vertical-align:middle;
+    }
+    h3{margin:18px 0 8px;font-size:0.95rem;font-weight:800;color:var(--text)}
+    p{margin:10px 0;font-size:0.9rem;line-height:1.65;color:var(--text)}
+    ul{margin:10px 0 0 20px;font-size:0.9rem}
+    ul li{margin-bottom:6px;line-height:1.55}
+    .strong{font-weight:800;color:var(--text)}
+
+    /* Callout boxes */
+    .callout{
+      border-left:4px solid var(--warn);background:var(--warn-bg);
+      padding:14px 16px;border-radius:var(--radius2);margin:14px 0;
+    }
+    .callout p{margin:0;font-size:0.88rem;line-height:1.5}
+    .callout .strong{color:var(--warn)}
+
+    .danger{
+      border-left:4px solid var(--danger);background:var(--danger-bg);
+      padding:14px 16px;border-radius:var(--radius2);margin:14px 0;
+    }
+    .danger p{margin:0;font-size:0.88rem;line-height:1.5}
+    .danger .strong{color:var(--danger)}
+
+    .note{
+      font-size:0.82rem;color:var(--muted);padding:12px;margin-top:12px;
+      border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);
+      background:rgba(196,164,124,0.03);line-height:1.5;
+    }
+
+    /* Footer */
+    footer{
+      max-width:var(--max);margin:0 auto;padding:20px 24px 40px;
+      color:var(--muted);font-size:0.78rem;text-align:center;
+      border-top:1px solid var(--line);
+    }
+
+    @media print{
+      header{background:var(--accent)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      section{box-shadow:none!important;break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Online Auction Bidding Terms &amp; Conditions</h1>
+    <div class="meta">
+      Version 1.0 | Effective: <span class="strong">[Insert Date]</span> | Applies to all auctions hosted on PropertyFinder ("Platform")
+    </div>
+    <div class="btnbar">
+      <a class="btn" href="terms-of-use.html">← Terms of Use</a>
+      <a class="btn" href="commission-fees.html">Fees &amp; Commission</a>
+      <a class="btn" href="anti-fraud-bid-integrity.html">Bid Integrity</a>
+    </div>
+    <nav>
+      <a href="#binding">Binding Nature</a>
+      <a href="#process">How Auctions Work</a>
+      <a href="#acceptance">Seller Acceptance</a>
+      <a href="#withdrawal">Withdrawals &amp; Default</a>
+      <a href="#commission">5% Commission + 48 Hours</a>
+      <a href="#anti">Anti-Manipulation</a>
+      <a href="#sanctions">Sanctions</a>
+      <a href="#law">Law</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>0) Agreement &amp; Priority</h2>
+    <p>
+      These Online Auction Bidding Terms ("Auction Terms") form a binding agreement between you ("Bidder", "you") and
+      <span class="strong">PropertyFinder Head Office</span> ("PropertyFinder", "we", "us").
+      They apply when you place, increase, or confirm any bid on the Platform.
+    </p>
+    <div class="note">
+      You must also comply with the <a href="terms-of-use.html">Terms of Use</a> and all auction-specific rules shown on the auction page
+      (reserve price status, bid increments, closing time, deposit requirements, special conditions, etc.).
+      If there is a conflict, these Auction Terms prevail for auction activity.
+    </div>
+  </section>
+
+  <section id="binding">
+    <h2>1) Binding Nature of Online Bids</h2>
+    <div class="callout">
+      <p><span class="strong">Important:</span>
+        Bids placed on the Platform are intended to be legally binding offers.
+        Do not bid unless you are ready, willing, and able to proceed on the stated terms.
+      </p>
+    </div>
+    <h3>1.1 Your Warranties</h3>
+    <ul>
+      <li>You have legal capacity and authority to bid and enter contracts.</li>
+      <li>Your identity and payment details are accurate and verifiable.</li>
+      <li>You have performed your own due diligence and will not rely on PropertyFinder as a financial/legal advisor.</li>
+      <li>You understand that properties may be sold "voetstoots / as-is" where applicable, subject to seller conditions and local law.</li>
+    </ul>
+  </section>
+
+  <section id="process">
+    <h2>2) How Auctions Work</h2>
+    <h3>2.1 Auction Mechanics</h3>
+    <ul>
+      <li><span class="strong">Start/End Times:</span> Each auction shows its opening and scheduled closing time.</li>
+      <li><span class="strong">Bid Increments:</span> Minimum increments may apply and are shown on the auction page.</li>
+      <li><span class="strong">Soft Close / Extension:</span> If a bid is placed near the end, we may extend the auction to prevent last-second sniping.</li>
+      <li><span class="strong">Reserve:</span> Listings may have a reserve. "Reserve met" status may be shown where permitted.</li>
+    </ul>
+
+    <h3>2.2 Technical Events</h3>
+    <div class="note">
+      You are responsible for your own internet/device access. We may pause, extend, or restart an auction where there is a verified technical issue,
+      fraud risk, or system integrity concern.
+    </div>
+  </section>
+
+  <section id="acceptance">
+    <h2>3) Seller Acceptance &amp; Winning Bid</h2>
+    <h3>3.1 Highest Bid vs. Accepted Bid</h3>
+    <p>
+      The highest bid at the scheduled close is not automatically an "Accepted Bid" unless the seller confirms acceptance through the Platform
+      or as otherwise stated in auction-specific terms.
+    </p>
+
+    <h3>3.2 Acceptance Process</h3>
+    <ul>
+      <li>Seller/agent may accept, reject, or counter a bid, subject to local law and the seller's mandate.</li>
+      <li>When your bid is accepted online, the Platform will notify you electronically (in-app + email/SMS where enabled).</li>
+      <li>Upon acceptance, you must promptly comply with the post-auction steps shown (signing, deposits, KYC, providing documents, etc.).</li>
+    </ul>
+  </section>
+
+  <section id="withdrawal">
+    <h2>4) Bid Withdrawal, Default &amp; Non-Completion</h2>
+    <h3>4.1 No Withdrawal After Acceptance</h3>
+    <p>
+      After an Accepted Bid occurs, you may not withdraw without the seller's written consent and compliance with these Auction Terms.
+      Any failure to proceed may be treated as a default.
+    </p>
+
+    <h3>4.2 Buyer Default Includes (non-exhaustive)</h3>
+    <ul>
+      <li>Refusing or failing to sign required documents within stated timelines.</li>
+      <li>Failing to pay deposits/amounts due (where applicable).</li>
+      <li>Failing verification/KYC checks due to inaccurate information.</li>
+      <li>Attempting to renegotiate material terms after acceptance outside a lawful process.</li>
+      <li>Indicating you "changed your mind" after acceptance.</li>
+    </ul>
+  </section>
+
+  <section id="commission">
+    <h2>5) PropertyFinder Commission (5%) &amp; 48-Hour Payment Obligation</h2>
+
+    <div class="danger">
+      <p><span class="strong">Commission on Accepted Bid — Payable even if you walk away:</span>
+        If your bid is accepted online (an "Accepted Bid") and you do not proceed to complete the transaction for any reason not caused by PropertyFinder,
+        you agree to pay PropertyFinder a commission equal to <span class="strong">5% of the Accepted Bid amount</span> ("Platform Commission").
+      </p>
+    </div>
+
+    <h3>5.1 When the 5% becomes due</h3>
+    <p>
+      The Platform Commission becomes immediately due and payable when:
+      (a) your bid is accepted online; and
+      (b) you subsequently fail or refuse to proceed, withdraw, or default (as defined above),
+      whether before or after signing further documents, unless a mandatory legal cooling-off right applies in your jurisdiction
+      and is properly exercised (where applicable).
+    </p>
+
+    <h3>5.2 48-Hour Payment Clause</h3>
+    <p>
+      You must pay the Platform Commission <span class="strong">within 48 hours</span> of the earliest of:
+    </p>
+    <ul>
+      <li>PropertyFinder issuing an in-app invoice/notice of default; or</li>
+      <li>PropertyFinder emailing the default notice to your registered email address; or</li>
+      <li>PropertyFinder sending an SMS/notification to your registered number (if enabled).</li>
+    </ul>
+
+    <h3>5.3 Payment Methods</h3>
+    <ul>
+      <li><span class="strong">EFT:</span> Pay to the bank account shown on the Platform invoice/Head Office payment page.</li>
+      <li><span class="strong">Online Payment:</span> Pay via the Platform's payment gateway (card/instant EFT/other supported methods).</li>
+    </ul>
+
+    <h3>5.4 Late Payment, Recovery Costs</h3>
+    <p>
+      If the Platform Commission is not paid within 48 hours, PropertyFinder may (subject to law):
+      (a) suspend/terminate your account and block further bidding; (b) refer the matter for collection; and/or
+      (c) recover reasonable legal fees and collection costs, plus interest at the maximum lawful rate from due date until paid.
+    </p>
+
+    <div class="note">
+      This Platform Commission is separate from any deposit forfeiture or damages payable to the seller under the sale agreement or local auction rules.
+    </div>
+  </section>
+
+  <section id="anti">
+    <h2>6) "Bid Withdrawal Manipulation" Protection Clause</h2>
+
+    <div class="danger">
+      <p><span class="strong">Zero-Tolerance for Bid Manipulation:</span>
+        You may not place bids (including high "spoof" bids) with the purpose or effect of inflating price, testing market appetite,
+        blocking other bidders, shill bidding, creating false demand, or later withdrawing to avoid completion.
+      </p>
+    </div>
+
+    <h3>6.1 Integrity Monitoring &amp; Digital Evidence</h3>
+    <p>
+      To protect auction integrity, you consent to reasonable monitoring and analysis aimed at detecting manipulation, including:
+      device/browser identifiers, IP/geolocation signals, behavioural bidding patterns, account link analysis, payment verification outcomes,
+      and other technical indicators permitted by law and our <a href="privacy-policy.html">Privacy Policy</a>.
+    </p>
+
+    <h3>6.2 Manipulation Events (Examples)</h3>
+    <ul>
+      <li>Repeatedly placing high bids and then refusing to proceed after acceptance or near closing.</li>
+      <li>Creating or controlling multiple accounts to influence auction outcomes.</li>
+      <li>Coordinating with others to suppress competition or inflate prices.</li>
+      <li>Attempting to move negotiations off-platform to avoid commission or to "reset" the auction.</li>
+    </ul>
+
+    <h3>6.3 Contractual Remedies (In addition to the 5% Commission)</h3>
+    <p>
+      If PropertyFinder reasonably determines that you engaged in bid withdrawal manipulation or attempted circumvention, you agree that PropertyFinder may,
+      subject to law and without limiting other rights:
+    </p>
+    <ul>
+      <li><span class="strong">Immediately cancel</span> bids, revoke a win, or rerun/relist the auction to restore fairness.</li>
+      <li><span class="strong">Suspend/ban</span> your account and any related accounts, devices, payment methods, or entities.</li>
+      <li><span class="strong">Recover losses</span> caused by the manipulation, including re-auction costs, seller claims passed to PropertyFinder,
+          investigation costs, and platform disruption losses, where lawful.</li>
+      <li><span class="strong">Report suspected fraud</span> to payment providers, verification partners, and/or relevant authorities where appropriate.</li>
+    </ul>
+
+    <h3>6.4 Anti-Circumvention (Off-Platform Deal Blocking)</h3>
+    <p>
+      If you contact a seller/agent introduced through the Platform and attempt to conclude the transaction off-platform to avoid fees/commission,
+      PropertyFinder may treat this as circumvention and enforce its fees/commission and remedies to the maximum extent permitted by law.
+    </p>
+
+    <div class="note">
+      This clause is designed to protect honest bidders and sellers. It allows the Platform to act quickly against abusive patterns,
+      using technical proof plus contractual remedies.
+    </div>
+  </section>
+
+  <section id="sanctions">
+    <h2>7) Sanctions, AML/KYC &amp; Eligibility</h2>
+    <p>
+      You may not bid if you are subject to sanctions or prohibited by law from participating. We may block users and transactions where required
+      by sanctions laws, AML rules, or platform risk policies.
+    </p>
+  </section>
+
+  <section id="law">
+    <h2>8) Governing Law &amp; Disputes</h2>
+    <p>
+      Governing law, jurisdiction, and dispute process are described in <a href="dispute-resolution.html">Dispute Resolution &amp; Arbitration</a>,
+      subject to mandatory consumer protections in your jurisdiction.
+    </p>
+    <div class="note">
+      If your local law requires specific auction disclosures (cooling-off, statutory notices, etc.), those can be added per country as an annex.
+    </div>
+  </section>
+
+  <section>
+    <h2>9) Contact &amp; Notices</h2>
+    <p>
+      Official notices will be delivered via in-app notification and/or the registered email address on your account.
+      You must keep contact details current.
+    </p>
+    <p><span class="strong">Legal Notices:</span> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7aba2a0a6ab87b7b5a8b7a2b5b3bea1aea9a3a2b5e9b3aba3">[email&#160;protected]</a>] | <span class="strong">Head Office:</span> [Entity + Address]</p>
+  </section>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder. This page must be accepted b  <script src="/social-share.js?v=2.1"></script>

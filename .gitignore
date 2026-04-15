@@ -37,3 +37,4 @@ next-env.d.ts
 
 # agreement data files
 data/agreements/*.json
+.env.local

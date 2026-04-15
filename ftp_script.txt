@@ -1,0 +1,6 @@
+open property-finder.co.za
+charl@property-finder.co.za
+Texas@450
+cd HTML\ Files\ 19\ March\ live
+ls
+bye

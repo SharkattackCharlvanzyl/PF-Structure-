@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PropertyFinder — Auctions | Bid. Win. Own.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;--lime:#c4a47c;--bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;--line:rgba(196,164,124,0.18);--shadow:0 4px 24px rgba(196,164,124,0.07);--shadow-lg:0 12px 48px rgba(0,0,0,0.10);--r:16px;--r2:12px;--max:1220px;--font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+
+/* LIVE GLOW BUTTON */
+.pf-live-btn{display:inline-flex!important;align-items:center!important;gap:6px!important;background:linear-gradient(135deg,#141c2b,#1a2535)!important;color:#fff!important;font-size:0.76rem!important;font-weight:800!important;padding:7px 13px!important;border-radius:6px!important;border:1px solid rgba(196,164,124,0.5)!important;animation:live-pulse 2s infinite!important;position:relative!important;white-space:nowrap!important;text-decoration:none!important;}
+.pf-live-dot{width:7px;height:7px;border-radius:50%;background:#c4a47c;flex-shrink:0;animation:live-dot 1.4s infinite}
+@keyframes live-pulse{0%,100%{box-shadow:0 0 6px 1px rgba(196,164,124,0.5)}50%{box-shadow:0 0 18px 5px rgba(196,164,124,0.75),0 0 0 6px rgba(196,164,124,0)}}
+@keyframes live-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.5)}}
+
+/* HERO */
+.hero-banner{background:linear-gradient(135deg,#0e1520 0%,#0e1520 40%,#141c2b 75%,#1a2535 100%);position:relative;overflow:hidden;padding:32px 20px 30px}
+.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 75% 50%,rgba(196,164,124,0.13) 0%,transparent 65%);pointer-events:none}
+.hero-banner::after{content:'🔨';position:absolute;right:4%;top:50%;transform:translateY(-50%);font-size:clamp(80px,14vw,180px);opacity:0.05;pointer-events:none;line-height:1}
+.hero-inner{max-width:var(--max);margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(196,164,124,0.15);border:1px solid rgba(196,164,124,0.4);color:#c4a47c;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+.hero-title{font-family:var(--font-d);font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:8px}
+.hero-title span{color:#c4a47c}
+.hero-sub{color:rgba(255,255,255,0.72);font-size:clamp(13px,1.4vw,14.5px);line-height:1.6;max-width:580px;margin-bottom:16px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:24px}
+.h-stat .num{font-family:var(--font-d);font-size:1.4rem;font-weight:700;color:#c4a47c;line-height:1}
+.h-stat .lbl{color:rgba(255,255,255,0.55);font-size:11px}
+
+/* TYPE TABS */
+.type-strip{background:var(--panel);border-bottom:2px solid var(--line)}
+.type-strip-inner{max-width:var(--max);margin:0 auto;display:flex;overflow-x:auto}
+.type-tab{flex:1;min-width:160px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:18px 14px;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;text-align:center;border-right:1px solid var(--line);background:var(--panel)}
+.type-tab:last-child{border-right:none}
+.type-tab:hover{background:rgba(196,164,124,0.03);border-bottom-color:rgba(196,164,124,0.3)}
+.type-tab.active{border-bottom-color:#c4a47c;background:rgba(196,164,124,0.04)}
+.type-tab .t-icon{font-size:24px}
+.type-tab .t-name{font-size:13.5px;font-weight:700;color:var(--text)}
+.type-tab.active .t-name{color:var(--accent)}
+.type-tab .t-desc{font-size:11.5px;color:var(--muted)}
+.type-tab .t-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(196,164,124,0.1);color:var(--accent)}
+.type-tab.active .t-badge{background:#c4a47c;color:#0e1520}
+
+/* MAIN */
+.main-wrap{padding:44px 20px 80px}
+.panel-container{display:none}
+.panel-container.active{display:block}
+
+/* ATYPE HERO */
+.atype-hero{border-radius:var(--r);overflow:hidden;margin-bottom:28px;background:linear-gradient(135deg,#0e1520,#0e1520,#141c2b);padding:36px 40px;position:relative}
+.atype-hero::after{content:attr(data-emoji);position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:90px;opacity:0.12;pointer-events:none}
+.atype-eyebrow{font-size:11px;font-weight:700;color:#c4a47c;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+.atype-title{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2}
+.atype-sub{color:rgba(255,255,255,0.7);font-size:14.5px;line-height:1.7;max-width:600px}
+
+/* FEAT GRID */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:768px){.feat-grid{grid-template-columns:1fr}}
+.feat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:20px;display:flex;gap:14px;align-items:flex-start;transition:all 0.2s}
+.feat-card:hover{box-shadow:var(--shadow);border-color:rgba(196,164,124,0.2)}
+.feat-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.feat-title{font-weight:700;font-size:14px;margin-bottom:5px}
+.feat-body{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* RULES BOX */
+.rules-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-bottom:28px}
+.rules-header{background:rgba(196,164,124,0.05);padding:14px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;color:var(--accent)}
+.rule-row{display:flex;align-items:flex-start;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);font-size:13.5px}
+.rule-row:last-child{border-bottom:none}
+.rule-row .bullet{color:var(--lime);font-size:16px;flex-shrink:0;margin-top:2px}
+.rule-row .txt{line-height:1.6}
+.rule-row .txt strong{color:var(--accent)}
+
+/* LIVE DEMO */
+.live-demo-wrap{background:linear-gradient(135deg,#0e1520,#1a2535);border-radius:var(--r);overflow:hidden;margin-bottom:28px;border:1px solid rgba(196,164,124,0.2)}
+.live-top{padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.live-top-title{font-family:var(--font-d);color:#fff;font-size:1rem;font-weight:600}
+.live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);color:#ff6b6b;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px}
+.live-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#ff4444;animation:live-dot 1.4s infinite}
+.live-body{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:640px){.live-body{grid-template-columns:1fr}}
+.live-prop,.live-bids{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:20px}
+.l-label{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.l-name{color:#fff;font-weight:700;font-size:15px;margin-bottom:3px}
+.l-loc{color:rgba(255,255,255,0.5);font-size:12.5px;margin-bottom:18px}
+.l-bid-lbl{font-size:11px;color:#c4a47c;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.l-bid-amt{font-family:var(--font-d);font-size:2.1rem;color:#fff;font-weight:700;line-height:1.1}
+.l-bid-meta{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px}
+.l-timer{display:flex;gap:10px;margin-top:16px}
+.l-t-seg{flex:1;background:rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center}
+.l-t-num{font-family:var(--font-d);font-size:1.6rem;color:#c4a47c;font-weight:700;line-height:1}
+.l-t-lbl{font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+.bid-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.bid-row:last-of-type{border-bottom:none}
+.bid-row .bddr{color:rgba(255,255,255,0.65)}
+.bid-row .bval{color:#c4a47c;font-weight:700}
+.bid-row .btime{color:rgba(255,255,255,0.3);font-size:11px}
+.bid-row.top .bddr{color:#fff;font-weight:700}
+.bid-inp{display:flex;gap:8px;margin-top:14px}
+.bid-inp input{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;font-family:var(--font);outline:none}
+.bid-inp input:focus{border-color:#c4a47c}
+.bid-btn{background:#c4a47c;color:#0e1520;font-weight:800;font-size:13px;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all 0.2s}
+.bid-btn:hover{background:#b8976a}
+
+/* SECTION HEADINGS */
+.sec-eyebrow{font-size:11px;font-weight:700;color:#c4a47c;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px}
+.sec-title{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:var(--text);margin-bottom:6px}
+.sec-sub{color:var(--muted);font-size:14px;line-height:1.65;margin-bottom:32px}
+
+/* PROCESS SPOTLIGHT */
+.process-spotlight{background:linear-gradient(135deg,#f0f7f0,#e8f5e8);border:1px solid rgba(196,164,124,0.15);border-radius:var(--r);padding:36px 40px;margin-bottom:52px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media(max-width:768px){.process-spotlight{grid-template-columns:1fr;padding:24px 20px}}
+.ps-eyebrow{font-size:11px;font-weight:700;color:#c4a47c;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+.ps-title{font-family:var(--font-d);font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;color:var(--text);margin-bottom:12px;line-height:1.25}
+.ps-body{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.ps-btn{display:inline-flex;align-items:center;gap:8px;background:#c4a47c;color:#0e1520;font-size:14px;font-weight:700;padding:13px 24px;border-radius:999px;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+.ps-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.ps-tl-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(196,164,124,0.12)}
+.ps-tl-item:last-child{border-bottom:none}
+.ps-tl-dot{width:36px;height:36px;border-radius:50%;background:#c4a47c;color:#0e1520;font-family:var(--font-d);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ps-day{font-size:11px;font-weight:700;color:#c4a47c;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:3px}
+.ps-tl-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:2px}
+.ps-tl-desc{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+/* STEPS */
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:52px}
+@media(max-width:768px){.steps-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.steps-row{grid-template-columns:1fr}}
+.step-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px 20px;position:relative;overflow:hidden;transition:all 0.25s}
+.step-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.step-card::before{content:attr(data-n);position:absolute;right:12px;top:6px;font-family:var(--font-d);font-size:4rem;font-weight:700;color:rgba(196,164,124,0.05);line-height:1}
+.step-icon{font-size:30px;margin-bottom:14px;display:block}
+.step-title{font-weight:700;font-size:15px;margin-bottom:6px}
+.step-body{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* SECTORS */
+.sectors-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:52px}
+@media(max-width:640px){.sectors-grid{grid-template-columns:1fr}}
+.sector-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:all 0.3s;cursor:pointer;display:flex;flex-direction:column}
+.sector-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(196,164,124,0.25)}
+.sc-img{height:200px;overflow:hidden;position:relative;background:#1f2d3d}
+.sc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s}
+.sector-card:hover .sc-img img{transform:scale(1.04)}
+.sc-img .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,40,20,0.75) 0%,transparent 55%)}
+.sc-badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.92);color:#c4a47c;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px}
+.sc-count{position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,0.5);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px}
+.sc-body{padding:22px;flex:1;display:flex;flex-direction:column;gap:12px}
+.sc-name{font-family:var(--font-d);font-size:1.2rem;font-weight:700}
+.sc-desc{font-size:13.5px;color:var(--muted);line-height:1.65}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.sc-tag{font-size:11px;font-weight:600;color:#c4a47c;background:rgba(196,164,124,0.07);border:1px solid rgba(196,164,124,0.15);padding:4px 10px;border-radius:999px}
+.sc-cta{display:inline-flex;align-items:center;gap:8px;margin-top:auto;background:#c4a47c;color:#0e1520;font-size:13.5px;font-weight:700;padding:11px 20px;border-radius:999px;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s;width:fit-content}
+.sc-cta:hover{background:var(--accent2)}
+
+/* RESOURCES */
+.resources-section{margin-bottom:52px}
+.res-cat-title{font-size:12px;font-weight:700;color:#c4a47c;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.res-cat-title::after{content:'';flex:1;height:1px;background:var(--line)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:768px){.res-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.res-grid{grid-template-columns:1fr}}
+.res-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:all 0.2s;cursor:pointer}
+.res-card:hover{box-shadow:var(--shadow);border-color:rgba(196,164,124,0.22);transform:translateY(-1px)}
+.res-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.res-title{font-weight:700;font-size:14px;margin-bottom:3px}
+.res-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.res-arrow{margin-left:auto;color:#c4a47c;font-size:14px;flex-shrink:0;align-self:center;opacity:0;transition:all 0.2s}
+.res-card:hover .res-arrow{opacity:1;transform:translateX(2px)}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:640px){.faq-grid{grid-template-columns:1fr}}
+.faq-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
+.faq-q{padding:15px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:600;font-size:14px;gap:12px;transition:background 0.15s}
+.faq-q:hover{background:rgba(196,164,124,0.03)}
+.faq-q .arr{color:var(--muted);transition:transform 0.2s;flex-shrink:0}
+.faq-item.open .faq-q .arr{transform:rotate(180deg);color:var(--accent)}
+.faq-item.open .faq-q{color:var(--accent)}
+.faq-a{display:none;padding:0 18px 16px;font-size:13.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line)}
+.faq-item.open .faq-a{display:block;padding-top:14px}
+
+/* REGISTER CTA */
+.reg-banner{background:linear-gradient(135deg,#0e1520,#0e1520,#141c2b);border-radius:var(--r);padding:48px 40px;text-align:center;position:relative;overflow:hidden;margin-bottom:52px}
+.reg-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle 600px at 50% 50%,rgba(196,164,124,0.1),transparent);pointer-events:none}
+.reg-banner h2{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;color:#fff;margin-bottom:12px;position:relative}
+.reg-banner p{color:rgba(255,255,255,0.7);font-size:15px;line-height:1.65;max-width:540px;margin:0 auto 28px;position:relative}
+.reg-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-primary{background:#c4a47c;color:#0e1520;font-size:15px;font-weight:800;padding:14px 32px;border-radius:999px;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-primary:hover{background:#b8976a;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:#fff;font-size:15px;font-weight:600;padding:14px 32px;border-radius:999px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;font-family:var(--font);transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-outline:hover{border-color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08)}
+
+/* TOAST */
+.pf-toast-h{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;z-index:10000;background:var(--accent);box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:tIn 0.3s ease,tOut 0.3s ease 2.6s forwards}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tOut{to{opacity:0;transform:translateX(-50%) translateY(10px)}}
+
+@media(max-width:640px){.hero-banner{padding:44px 16px 40px}.atype-hero{padding:24px 20px}.atype-hero::after{display:none}.reg-banner{padding:32px 20px}.process-spotlight{padding:24px 18px}}
+</style>
+</head>
+<body>
+
+<div class="hero-banner">
+  <div class="hero-inner wrap">
+    <div class="hero-eyebrow">🔨 Property Auctions — 185 Countries</div>
+    <h1 class="hero-title">Bid. Win. <span>Own.</span></h1>
+    <p class="hero-sub">Transparent, competitive property auctions — residential, commercial, industrial and agricultural. With reserve, without reserve, or live online bidding from anywhere in the world.</p>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="num">4</div><div class="lbl">Property Sectors</div></div>
+      <div class="h-stat"><div class="num">3</div><div class="lbl">Auction Formats</div></div>
+      <div class="h-stat"><div class="num">185</div><div class="lbl">Countries</div></div>
+      <div class="h-stat"><div class="num">100%</div><div class="lbl">Online</div></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <a href="auctions-live-preview.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#141c2b,#1a2535);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;padding:14px 28px;border-radius:999px;text-decoration:none;border:1px solid rgba(196,164,124,0.5);animation:pfLivePulse 2s infinite">
+        <span style="width:9px;height:9px;border-radius:50%;background:#c4a47c;display:inline-block;animation:pfLiveDot 1.4s infinite"></span>
+        🔴 View Live Auctions Now
+      </a>
+      <a href="auction-registration-form.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:13px 24px;border-radius:999px;text-decoration:none;border:2px solid rgba(255,255,255,0.3)">
+        📋 Register to Bid →
+      </a>
+    </div>
+    <style>
+      @keyframes pfLivePulse{0%,100%{box-shadow:0 0 6px 1px rgba(196,164,124,0.5)}50%{box-shadow:0 0 18px 5px rgba(196,164,124,0.75),0 0 0 8px rgba(196,164,124,0)}}
+      @keyframes pfLiveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.7)}}
+    </style>
+  </div>
+</div>
+
+<div class="type-strip">
+
+<!-- ══ LIVE AUCTIONS BLOCK — full glowing clickable banner ══ -->
+<style>
+.live-block-wrap{max-width:var(--max);margin:0 auto;padding:20px 20px 0}
+.live-block{
+  background:linear-gradient(135deg,#0e1520,#1a2535);
+  border-radius:16px; border:2px solid rgba(196,164,124,0.4);
+  padding:28px 36px; cursor:pointer; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; flex-wrap:wrap; text-decoration:none;
+  animation:blockGlow 2.5s ease-in-out infinite;
+  transition:transform 0.2s, border-color 0.2s;
+  margin-bottom:0;
+}
+.live-block:hover{transform:translateY(-2px);border-color:rgba(196,164,124,0.8)}
+@keyframes blockGlow{
+  0%,100%{box-shadow:0 0 12px 2px rgba(196,164,124,0.25),inset 0 0 40px rgba(196,164,124,0.04)}
+  50%{box-shadow:0 0 32px 8px rgba(196,164,124,0.45),inset 0 0 60px rgba(196,164,124,0.08)}
+}
+.live-block::before{
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(196,164,124,0.08),transparent);
+  pointer-events:none;
+}
+.live-block::after{
+  content:'🔨'; position:absolute; right:200px; top:50%;
+  transform:translateY(-50%); font-size:80px; opacity:0.06; pointer-events:none;
+}
+.lb-left{display:flex;align-items:center;gap:20px;position:relative;z-index:1}
+.lb-pulse-ring{
+  width:56px; height:56px; border-radius:50%; flex-shrink:0;
+  background:rgba(220,38,38,0.15); border:2px solid rgba(220,38,38,0.5);
+  display:flex; align-items:center; justify-content:center;
+  animation:ringPulse 1.5s ease-in-out infinite; font-size:22px;
+}
+@keyframes ringPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.5);border-color:rgba(220,38,38,0.5)}
+  50%{box-shadow:0 0 0 10px rgba(220,38,38,0);border-color:rgba(220,38,38,0.9)}
+}
+.lb-text .lb-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(220,38,38,0.2);border:1px solid rgba(220,38,38,0.45);
+  color:#ff7070;font-size:11px;font-weight:800;padding:4px 12px;
+  border-radius:999px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;
+}
+.lb-text .lb-eyebrow::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:#ff4444;
+  animation:live-dot 1.2s infinite;
+}
+.lb-text .lb-title{
+  font-family:'Cinzel',Georgia,serif;font-size:clamp(1.2rem,2.5vw,1.7rem);
+  font-weight:700;color:#fff;line-height:1.2;margin-bottom:5px;
+}
+.lb-text .lb-sub{color:rgba(255,255,255,0.6);font-size:13.5px;line-height:1.6}
+.lb-stats{
+  display:flex;gap:24px;flex-wrap:wrap;position:relative;z-index:1;
+}
+.lb-stat{text-align:center;min-width:70px}
+.lb-stat .ls-num{
+  font-family:'Cinzel',Georgia,serif;font-size:1.6rem;font-weight:700;
+  color:#c4a47c;line-height:1;
+}
+.lb-stat .ls-lbl{color:rgba(255,255,255,0.5);font-size:11px;margin-top:3px}
+.lb-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#c4a47c,#c4a47c);
+  color:#1a1408;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;
+  padding:14px 28px;border-radius:999px;border:none;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;position:relative;z-index:1;
+  box-shadow:0 4px 20px rgba(196,164,124,0.4);
+  animation:ctaGlow 2.5s ease-in-out infinite;
+}
+@keyframes ctaGlow{
+  0%,100%{box-shadow:0 4px 20px rgba(196,164,124,0.4)}
+  50%{box-shadow:0 4px 32px rgba(196,164,124,0.7),0 0 0 4px rgba(196,164,124,0.15)}
+}
+.lb-cta .cta-arr{font-size:18px;transition:transform 0.2s}
+.live-block:hover .lb-cta .cta-arr{transform:translateX(4px)}
+@media(max-width:768px){
+  .live-block{padding:22px 20px;flex-direction:column;align-items:flex-start}
+  .live-block::after{display:none}
+  .lb-cta{width:100%;justify-content:center}
+  .lb-stats{gap:16px}
+}
+</style>
+
+<div style="background:var(--panel);padding:20px 20px 0">
+<div style="max-width:1220px;margin:0 auto">
+<a href="auctions-live-preview.html" class="live-block">
+  <div class="lb-left">
+    <div class="lb-pulse-ring">🔴</div>
+    <div class="lb-text">
+      <div class="lb-eyebrow">Live Now</div>
+      <div class="lb-title">Active Live Auctions</div>
+      <div class="lb-sub">8 properties bidding in real time · Residential, Commercial, Industrial & Agricultural · Timers counting down now</div>
+    </div>
+  </div>
+  <div class="lb-stats">
+    <div class="lb-stat"><div class="ls-num" id="lbBids">47</div><div class="ls-lbl">Bids today</div></div>
+    <div class="lb-stat"><div class="ls-num">8</div><div class="ls-lbl">Live now</div></div>
+    <div class="lb-stat"><div class="ls-num">R 89M</div><div class="ls-lbl">On auction</div></div>
+  </div>
+  <div class="lb-cta">View Live Auctions <span class="cta-arr">→</span></div>
+</a>
+</div>
+</div>
+
+
+  <div class="type-strip-inner">
+    <div class="type-tab active" onclick="switchType(this,'with-reserve')">
+      <span class="t-icon">🔒</span><span class="t-name">With Reserve</span>
+      <span class="t-desc">Minimum price by seller</span><span class="t-badge">Most Common</span>
+    </div>
+    <div class="type-tab" onclick="switchType(this,'without-reserve')">
+      <span class="t-icon">⚡</span><span class="t-name">Without Reserve</span>
+      <span class="t-desc">Highest bid wins, no floor</span><span class="t-badge">Best Deals</span>
+    </div>
+    <div class="type-tab" onclick="switchType(this,'live-bidding')">
+      <span class="t-icon">🔴</span><span class="t-name">Live Bidding</span>
+      <span class="t-desc">Real-time online auction</span>
+      <span class="t-badge" style="background:rgba(220,38,38,0.12);color:#dc2626;border:1px solid rgba(220,38,38,0.25)">● LIVE NOW</span>
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+ <div class="wrap">
+
+  <!-- WITH RESERVE -->
+  <div class="panel-container active" id="panel-with-reserve">
+    <div class="atype-hero" data-emoji="🔒">
+      <div class="atype-eyebrow">Auction Format 1 of 3</div>
+      <div class="atype-title">With Reserve Auctions</div>
+      <div class="atype-sub">The seller sets a confidential minimum price. If bidding does not reach it, the seller is not obligated to sell. The most common auction format globally — fair for both buyers and sellers.</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><span class="feat-icon">🛡️</span><div><div class="feat-title">Seller Protection</div><div class="feat-body">Confidential reserve ensures the seller retains the right not to sell below their minimum acceptable price.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">🤝</span><div><div class="feat-title">Fair Competition</div><div class="feat-body">All registered bidders compete equally. The highest bid above reserve wins unconditionally.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">📋</span><div><div class="feat-title">FICA & KYC Required</div><div class="feat-body">All bidders must register, verify identity, and accept auction terms before bidding begins.</div></div></div>
+    </div>
+    <div class="rules-box">
+      <div class="rules-header">🔒 How With Reserve Works</div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Register to bid</strong> — complete FICA/KYC and accept the auction terms and conditions.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Inspect the property</strong> — attend the open day and review the auction pack (title deed, conditions, defect disclosure).</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Bid online or in person</strong> — place bids during the auction window. Increments are fixed and displayed.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Reserve determines sale</strong> — if the highest bid meets or exceeds the reserve, the property sells unconditionally.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Immediate binding contract</strong> — the fall of the hammer creates a legally binding sale. Deposit payable on the day.</span></div>
+    </div>
+  </div>
+
+  <!-- WITHOUT RESERVE -->
+  <div class="panel-container" id="panel-without-reserve">
+    <div class="atype-hero" data-emoji="⚡">
+      <div class="atype-eyebrow">Auction Format 2 of 3</div>
+      <div class="atype-title">Without Reserve Auctions</div>
+      <div class="atype-sub">No minimum price. The property sells to the highest bidder — no matter what. These generate maximum competitive tension and often represent the best buying opportunities.</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><span class="feat-icon">⚡</span><div><div class="feat-title">Guaranteed Sale</div><div class="feat-body">The property sells on the day, unconditionally. The highest bid wins regardless of amount.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">🎯</span><div><div class="feat-title">Best Buyer Opportunity</div><div class="feat-body">No reserve means you can acquire property below market value if competition is limited on auction day.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">🔥</span><div><div class="feat-title">High Urgency</div><div class="feat-body">Buyers know it will sell — creating active bidding and urgency from the very first increment.</div></div></div>
+    </div>
+    <div class="rules-box">
+      <div class="rules-header">⚡ How Without Reserve Works</div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>No floor price</strong> — the seller commits to selling regardless of the final bid. Pure market price discovery.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Same registration process</strong> — FICA/KYC required. Review the auction pack before bidding.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>First bid opens the auction</strong> — once the first valid bid is placed, the property is on the market.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Highest bid is final</strong> — when the auctioneer calls "sold", the sale is unconditional and immediately binding.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Deposit & transfer</strong> — typically 10% deposit payable on the day. Transfer through appointed conveyancer.</span></div>
+    </div>
+  </div>
+
+  <!-- LIVE BIDDING -->
+  <div class="panel-container" id="panel-live-bidding">
+    <div class="atype-hero" data-emoji="🔴">
+      <div class="atype-eyebrow">Auction Format 3 of 3</div>
+      <div class="atype-title">Live Online Bidding</div>
+      <div class="atype-sub">Participate in real-time auctions from anywhere in the world. Watch the live bid stream, place bids instantly, and see where you stand — from your browser or mobile.</div>
+    </div>
+    <div class="live-demo-wrap">
+      <div class="live-top">
+        <span class="live-top-title">🔴 Live Auction — Active Now</span>
+        <span class="live-badge">LIVE NOW</span>
+      </div>
+      <div class="live-body">
+        <div class="live-prop">
+          <div class="l-label">Current Property</div>
+          <div class="l-name">3-Bedroom Home, Constantia</div>
+          <div class="l-loc">📍 Cape Town, South Africa</div>
+          <div class="l-bid-lbl">Current Highest Bid</div>
+          <div class="l-bid-amt" id="liveBidAmt">R 2,850,000</div>
+          <div class="l-bid-meta" id="liveBidMeta">Bidder #7 — 12 seconds ago</div>
+          <div class="l-timer">
+            <div class="l-t-seg"><div class="l-t-num" id="tH">00</div><div class="l-t-lbl">Hrs</div></div>
+            <div class="l-t-seg"><div class="l-t-num" id="tM">04</div><div class="l-t-lbl">Min</div></div>
+            <div class="l-t-seg"><div class="l-t-num" id="tS">37</div><div class="l-t-lbl">Sec</div></div>
+          </div>
+        </div>
+        <div class="live-bids">
+          <div class="l-label" style="margin-bottom:10px">Bid History</div>
+          <div id="bidHist">
+            <div class="bid-row top"><span class="bddr">Bidder #7</span><span class="bval">R 2,850,000</span><span class="btime">12s ago</span></div>
+            <div class="bid-row"><span class="bddr">Bidder #3</span><span class="bval">R 2,800,000</span><span class="btime">38s ago</span></div>
+            <div class="bid-row"><span class="bddr">Bidder #7</span><span class="bval">R 2,750,000</span><span class="btime">1m ago</span></div>
+            <div class="bid-row"><span class="bddr">Bidder #1</span><span class="bval">R 2,700,000</span><span class="btime">2m ago</span></div>
+          </div>
+          <div class="bid-inp">
+            <input type="text" id="myBid" placeholder="R 2,900,000">
+            <button class="bid-btn" onclick="placeBid()">Place Bid</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><span class="feat-icon">📱</span><div><div class="feat-title">Bid From Anywhere</div><div class="feat-body">Desktop, tablet or mobile. Real-time updates mean you never miss a bid increment.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">🔔</span><div><div class="feat-title">Outbid Alerts</div><div class="feat-body">Instant notifications when you're outbid. Set a maximum auto-bid and let the system bid for you.</div></div></div>
+      <div class="feat-card"><span class="feat-icon">🔒</span><div><div class="feat-title">Secure & Verified</div><div class="feat-body">All bidders FICA/KYC verified. Every bid time-stamped, logged, and legally recorded.</div></div></div>
+    </div>
+    <div class="rules-box">
+      <div class="rules-header">🔴 How Live Bidding Works</div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Register & verify</strong> — complete FICA/KYC. A deposit hold may be required to activate your bidder number.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Join the live auction room</strong> — at the published start time, view the property, auctioneer, and live bid ladder.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Bid in real time</strong> — click to bid at the displayed increment or enter a maximum auto-bid.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Outbid alerts</strong> — instant push/SMS/email notification if another bidder exceeds your amount.</span></div>
+      <div class="rule-row"><span class="bullet">✓</span><span class="txt"><strong>Hammer falls</strong> — winning bidder announced live. Contracts and deposit instructions issued immediately.</span></div>
+    </div>
+  </div>
+
+  <!-- PROCESS SPOTLIGHT -->
+  <div class="process-spotlight">
+    <div>
+      <div class="ps-eyebrow">📅 Complete Timeline</div>
+      <div class="ps-title">From Listing to Keys in Hand</div>
+      <div class="ps-body">Our detailed process timeline walks you through every stage — from the moment a property is listed through to transfer and completion. Know exactly what to expect at every step.</div>
+      <a href="auction-process-timeline.html" class="ps-btn">View Full Process Timeline →</a>
+    </div>
+    <div>
+      <div class="ps-tl-item"><div class="ps-tl-dot">1</div><div><div class="ps-day">Day 1–3</div><div class="ps-tl-title">Auction Announced & Listed</div><div class="ps-tl-desc">Property listed with full legal pack, photos, inspection dates, and conditions.</div></div></div>
+      <div class="ps-tl-item"><div class="ps-tl-dot">2</div><div><div class="ps-day">Day 3–7</div><div class="ps-tl-title">Registration & Inspections</div><div class="ps-tl-desc">Bidders register, verify ID, review the auction pack and inspect the property.</div></div></div>
+      <div class="ps-tl-item"><div class="ps-tl-dot">3</div><div><div class="ps-day">Day 10</div><div class="ps-tl-title">🔴 Live Auction Day</div><div class="ps-tl-desc">Online bidding opens. Highest qualifying bid wins. Binding contract on hammer fall.</div></div></div>
+      <div class="ps-tl-item"><div class="ps-tl-dot">4</div><div><div class="ps-day">Day 14–42</div><div class="ps-tl-title">Transfer & Completion</div><div class="ps-tl-desc">Conveyancer handles transfer. Balance paid. Title registered. Keys handed over.</div></div></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="margin-bottom:52px">
+    <div class="sec-eyebrow">The Process</div>
+    <div class="sec-title">4 Steps to Winning a Bid</div>
+    <div class="sec-sub">From registration to ownership — here's exactly what every bidder needs to do.</div>
+    <div class="steps-row">
+      <div class="step-card" data-n="1"><span class="step-icon">📋</span><div class="step-title">Register & Verify</div><div class="step-body">Complete FICA/KYC, review the auction pack, and understand the conditions before you bid.</div></div>
+      <div class="step-card" data-n="2"><span class="step-icon">🏠</span><div class="step-title">Inspect the Property</div><div class="step-body">Book an inspection. Review title deeds, zoning, rates. Arrange finance pre-approval before auction day.</div></div>
+      <div class="step-card" data-n="3"><span class="step-icon">🔨</span><div class="step-title">Bid & Win</div><div class="step-body">Participate online or in person. Highest qualifying bid wins. Hammer fall = legally binding contract.</div></div>
+      <div class="step-card" data-n="4"><span class="step-icon">🔑</span><div class="step-title">Transfer & Own</div><div class="step-body">Pay deposit on the day. Conveyancer handles the rest. Transfer typically takes 4–8 weeks.</div></div>
+    </div>
+  </div>
+
+  <!-- SECTORS -->
+  <div class="sec-eyebrow">Browse by Sector</div>
+  <div class="sec-title">Choose Your Property Type</div>
+  <div class="sec-sub">All four sectors use the same transparent auction process.</div>
+  <div class="sectors-grid">
+    <div class="sector-card" onclick="location.href='auctions-residential.html'">
+      <div class="sc-img"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=75" alt="Residential" loading="lazy"><div class="ov"></div><span class="sc-badge">🏠 Residential</span><span class="sc-count">View Properties →</span></div>
+      <div class="sc-body"><div><div class="sc-name">Residential Auctions</div><div class="sc-desc">Houses, townhouses, apartments, cluster homes, luxury estates and sectional title units across all price bands.</div></div><div class="sc-tags"><span class="sc-tag">Houses</span><span class="sc-tag">Apartments</span><span class="sc-tag">Townhouses</span><span class="sc-tag">Estates</span></div><button class="sc-cta">View Residential →</button></div>
+    </div>
+    <div class="sector-card" onclick="location.href='auctions-commercial.html'">
+      <div class="sc-img"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=75" alt="Commercial" loading="lazy"><div class="ov"></div><span class="sc-badge">🏢 Commercial</span><span class="sc-count">View Properties →</span></div>
+      <div class="sc-body"><div><div class="sc-name">Commercial Auctions</div><div class="sc-desc">Office parks, retail centres, shopping malls, hotels, mixed-use developments and income-producing real estate.</div></div><div class="sc-tags"><span class="sc-tag">Offices</span><span class="sc-tag">Retail</span><span class="sc-tag">Hotels</span><span class="sc-tag">Mixed-Use</span></div><button class="sc-cta">View Commercial →</button></div>
+    </div>
+    <div class="sector-card" onclick="location.href='auctions-industrial.html'">
+      <div class="sc-img"><img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=75" alt="Industrial" loading="lazy"><div class="ov"></div><span class="sc-badge">🏭 Industrial</span><span class="sc-count">View Properties →</span></div>
+      <div class="sc-body"><div><div class="sc-name">Industrial Auctions</div><div class="sc-desc">Warehouses, manufacturing plants, logistics hubs, cold storage facilities and distribution centres.</div></div><div class="sc-tags"><span class="sc-tag">Warehouses</span><span class="sc-tag">Logistics</span><span class="sc-tag">Manufacturing</span></div><button class="sc-cta">View Industrial →</button></div>
+    </div>
+    <div class="sector-card" onclick="location.href='auctions-farm.html'">
+      <div class="sc-img"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=75" alt="Agricultural" loading="lazy"><div class="ov"></div><span class="sc-badge">🌾 Agricultural</span><span class="sc-count">View Properties →</span></div>
+      <div class="sc-body"><div><div class="sc-name">Agricultural & Farm Auctions</div><div class="sc-desc">Crop farms, livestock farms, wine estates, game farms, smallholdings and mixed agricultural operations.</div></div><div class="sc-tags"><span class="sc-tag">Crop Farms</span><span class="sc-tag">Game Farms</span><span class="sc-tag">Wine Estates</span></div><button class="sc-cta">View Agricultural →</button></div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="resources-section">
+    <div class="sec-eyebrow">Everything You Need</div>
+    <div class="sec-title">Auction Resources & Documents</div>
+    <div class="sec-sub" style="margin-bottom:28px">All guides, forms, agreements and legal documents in one place.</div>
+
+    <div class="res-cat-title">📖 Bidder Guides</div>
+    <div class="res-grid">
+      <a href="auction-how-to-bid.html" class="res-card"><span class="res-icon">🔨</span><div><div class="res-title">How to Bid</div><div class="res-desc">Step-by-step guide from registration to winning</div></div><span class="res-arrow">→</span></a>
+      <a href="auction-process-timeline.html" class="res-card"><span class="res-icon">📅</span><div><div class="res-title">Process Timeline</div><div class="res-desc">Day-by-day from listing to completion</div></div><span class="res-arrow">→</span></a>
+      <a href="auction-faq.html" class="res-card"><span class="res-icon">❓</span><div><div class="res-title">Auction FAQ</div><div class="res-desc">Answers to the most common questions</div></div><span class="res-arrow">→</span></a>
+    </div>
+
+    <div class="res-cat-title">📄 Forms & Agreements</div>
+    <div class="res-grid">
+      <a href="auction-registration-form.html" class="res-card"><span class="res-icon">📋</span><div><div class="res-title">Register to Bid</div><div class="res-desc">Online auction bidder registration form</div></div><span class="res-arrow">→</span></a>
+      <a href="auction-seller-agreement.html" class="res-card"><span class="res-icon">✍️</span><div><div class="res-title">Seller Agreement</div><div class="res-desc">Online auction seller listing agreement</div></div><span class="res-arrow">→</span></a>
+      <a href="private-seller-listing-agreement.html" class="res-card"><span class="res-icon">🏡</span><div><div class="res-title">Private Seller Listing</div><div class="res-desc">Agreement for private / owner-listed properties</div></div><span class="res-arrow">→</span></a>
+    </div>
+
+    <div class="res-cat-title">⚖️ Terms, Fees & Legal</div>
+    <div class="res-grid">
+      <a href="auction-bidding-terms.html" class="res-card"><span class="res-icon">📜</span><div><div class="res-title">Bidding Terms & Conditions</div><div class="res-desc">Full online auction bidding terms</div></div><span class="res-arrow">→</span></a>
+      <a href="auction-commission-breakdown.html" class="res-card"><span class="res-icon">💰</span><div><div class="res-title">Commission Breakdown</div><div class="res-desc">Auction commission and net proceeds calculator</div></div><span class="res-arrow">→</span></a>
+      <a href="commission-fees.html" class="res-card"><span class="res-icon">🧾</span><div><div class="res-title">Commission & Fees Policy</div><div class="res-desc">Platform fee and commission policy</div></div><span class="res-arrow">→</span></a>
+      <a href="buyer-obligations.html" class="res-card"><span class="res-icon">🤝</span><div><div class="res-title">Buyer Obligations</div><div class="res-desc">What you commit to when you bid</div></div><span class="res-arrow">→</span></a>
+      <a href="anti-fraud-bid-integrity.html" class="res-card"><span class="res-icon">🛡️</span><div><div class="res-title">Anti-Fraud & Bid Integrity</div><div class="res-desc">How we protect auction fairness</div></div><span class="res-arrow">→</span></a>
+      <a href="dispute-resolution.html" class="res-card"><span class="res-icon">⚖️</span><div><div class="res-title">Dispute Resolution</div><div class="res-desc">How disputes are handled and resolved</div></div><span class="res-arrow">→</span></a>
+    </div>
+
+    <div class="res-cat-title">🔐 Platform Policies</div>
+    <div class="res-grid">
+      <a href="terms-of-use.html" class="res-card"><span class="res-icon">📖</span><div><div class="res-title">Terms of Use</div><div class="res-desc">Platform terms governing all users</div></div><span class="res-arrow">→</span></a>
+      <a href="privacy-policy.html" class="res-card"><span class="res-icon">🔒</span><div><div class="res-title">Privacy Policy</div><div class="res-desc">How we collect and use your data</div></div><span class="res-arrow">→</span></a>
+      <a href="payment-terms.html" class="res-card"><span class="res-icon">💳</span><div><div class="res-title">Payment Terms</div><div class="res-desc">Payment methods, non-payment and refunds</div></div><span class="res-arrow">→</span></a>
+      <a href="copyright-ip.html" class="res-card"><span class="res-icon">©</span><div><div class="res-title">Copyright & IP</div><div class="res-desc">Intellectual property and content rights</div></div><span class="res-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="margin-bottom:52px">
+    <div class="sec-eyebrow">FAQs</div>
+    <div class="sec-title">Common Questions</div>
+    <div class="sec-sub" style="margin-bottom:24px">Everything you need to know before you bid.</div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I need finance pre-approved before bidding?<span class="arr">▾</span></div><div class="faq-a">Yes — auction purchases are unconditional. You must have finance pre-approved or cash available before you bid. The hammer fall is a binding contract. Failure to complete may result in forfeiture of your deposit.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What deposit is payable on auction day?<span class="arr">▾</span></div><div class="faq-a">Typically 10% of the purchase price is payable immediately on the fall of the hammer. The exact amount is specified in each property's auction pack — always read this before bidding.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is in the auction pack?<span class="arr">▾</span></div><div class="faq-a">The auction pack contains the title deed, conditions of sale, defect disclosure, municipal rates statement, and any special conditions. Request it from the auction desk before bidding on any property.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I bid online from another country?<span class="arr">▾</span></div><div class="faq-a">Yes. Our live bidding platform supports bidders from all 185 countries. You must complete FICA/KYC verification and a deposit hold may be required to activate your bidder number internationally.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the difference between with and without reserve?<span class="arr">▾</span></div><div class="faq-a">In a <strong>with reserve</strong> auction, the seller sets a confidential minimum — if bids don't reach it, they're not obligated to sell. In a <strong>without reserve</strong> auction, the property sells unconditionally to the highest bidder, no matter the final amount.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How long does transfer take after winning?<span class="arr">▾</span></div><div class="faq-a">Transfer is handled by the appointed conveyancer. Typical timeframes are 4–8 weeks for cash and 6–12 weeks where a bond is involved, depending on the country, municipality, and Deeds Office workload.</div></div>
+    </div>
+    <div style="margin-top:14px;text-align:center"><a href="auction-faq.html" style="color:#c4a47c;font-weight:700;font-size:14px">View all auction FAQs →</a></div>
+  </div>
+
+  <!-- REGISTER CTA -->
+  <div class="reg-banner">
+    <h2>Ready to Bid?</h2>
+    <p>Register as a bidder in minutes. Complete your FICA verification, browse the auction pack, book your inspection — and bid with confidence.</p>
+    <div class="reg-btns">
+      <a href="auction-registration-form.html" class="btn-primary">🔨 Register to Bid</a>
+      <button class="btn-outline" onclick="showToast('Auction desk connecting...')">📞 Contact Auction Desk</button>
+      <a href="auction-bidding-terms.html" class="btn-outline">📄 Auction Terms</a>
+    </div>
+  </div>
+
+ </div>
+</div>
+
+<footer style="background:#0e1520;color:#fff;text-align:center;padding:24px 20px;font-family:'DM Sans',sans-serif;font-size:0.85rem">
+  <span id="pf-year"></span> PropertyFinder Global. All rights reserved. &nbsp;|&nbsp;
+  <a href="terms-of-use.html" style="color:#c4a47c">Terms</a> &nbsp;|&nbsp;
+  <a href="privacy-policy.html" style="color:#c4a47c">Privacy</a> &nbsp;|&nbsp;
+  <a href="auction-faq.html" style="color:#c4a47c">Auction FAQ</a> &nbsp;|&nbsp;
+  <a href="auction-bidding-terms.html" style="color:#c4a47c">Bidding Terms</a> &nbsp;|&nbsp;
+  <a href="anti-fraud-bid-integrity.html" style="color:#c4a47c">Anti-Fraud</a>
+</footer>
+
+<script>
+function switchType(el,id){document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel-container').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('panel-'+id).classList.add('active');window.scrollTo({top:document.querySelector('.type-strip').offsetTop-70,behavior:'smooth'});}
+
+// Animate live bids counter
+var lbBids = 47;
+setInterval(function(){
+  if(Math.random()>0.6){ lbBids++; var el=document.getElementById('lbBids'); if(el)el.textContent=lbBids; }
+},5000);
+function toggleFaq(el){const i=el.parentElement,o=i.classList.contains('open');document.querySelectorAll('.faq-item').forEach(x=>x.classList.remove('open'));if(!o)i.classList.add('open');}
+function showToast(msg){document.querySelectorAll('.pf-toast-h').forEach(t=>t.remove());const t=document.createElement('div');t.className='pf-toast-h';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+
+let bids=[2850000];let nextB=[7,3,5,2,9,4,6,8];let nbI=0;let secs=4*60+37;
+const fmtR=n=>'R '+n.toLocaleString('en-ZA');
+function tick(){secs--;if(secs<0)secs=5*60;const p=n=>String(n).padStart(2,'0');document.getElementById('tH').textContent=p(Math.floor(secs/3600));document.getElementById('tM').textContent=p(Math.floor((secs%3600)/60));document.getElementById('tS').textContent=p(secs%60);}
+function addBid(manual){const nb=bids[0]+50000;const bd=manual?'You':'Bidder #'+nextB[nbI++%nextB.length];bids.unshift(nb);document.getElementById('liveBidAmt').textContent=fmtR(nb);document.getElementById('liveBidMeta').textContent=bd+' — just now';const h=document.getElementById('bidHist');h.querySelectorAll('.bid-row').forEach(r=>r.classList.remove('top'));const r=document.createElement('div');r.className='bid-row top';r.innerHTML='<span class="bddr">'+bd+'</span><span class="bval">'+fmtR(nb)+'</span><span class="btime">just now</span>';h.insertBefore(r,h.firstChild);if(h.children.length>4)h.removeChild(h.lastChild);const t=['12s ago','38s ago','1m ago'];h.querySelectorAll('.bid-row:not(:first-child)').forEach((r,i)=>{const x=r.querySelector('.btime');if(x)x.textContent=t[i]||'2m ago';});}
+function placeBid(){addBid(true);showToast('✓ Bid placed! You are the highest bidder.');document.getElementById('myBid').value='';}
+setInterval(tick,1000);
+setInterval(()=>{if(Math.random()>0.55)addBid(false);},8000);
+document.getElementById('pf-year').textContent=new Date().getFullYear();
+</script>
+
+<script>
+/* Override pf-core nav: make Auctions link glow like a LIVE button */
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    var nav=document.getElementById('pfCoreNav');
+    if(!nav)return;
+    nav.querySelectorAll('a').forEach(function(a){
+      if(a.href&&a.href.includes('auctions.html')&&!a.href.includes('auctions-')){
+        var live=document.createElement('a');
+        live.href='auctions.html';
+        live.className='pf-live-btn';
+        live.innerHTML='<span class="pf-live-dot"></span>🔨 Auctions';
+        a.parentNode.replaceChild(live,a);
+      }
+    });
+  },150);
+});
+</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

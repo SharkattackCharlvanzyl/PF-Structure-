@@ -1,0 +1,1755 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>04c Industrial — Property Detail (Standalone)</title>
+  <style>
+    :root{
+      --bg:#141c2b;
+      --panel:#1a2535;
+      --panel2:#F0F4F2;
+      --text:#e8dfc8;
+      --muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);
+      --accent:#141c2b;
+      --accent2:#1a2535;
+      --warn:#EA580C;
+      --danger:#D32F2F;
+      --chip:rgba(196,164,124,.06);
+      --shadow:0 1px 3px rgba(196,164,124,.04), 0 4px 16px rgba(196,164,124,.03);
+      --radius:16px;
+      --radius2:12px;
+      --max:1220px;
+      --stickyH:72px;
+      --font: 'DM Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:22px 18px 90px; }
+
+    /* Top bar */
+    .topbar{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:12px 14px; border:1px solid var(--line); background:var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:sticky; top:12px; z-index:50;
+    }
+    .topbar .left, .topbar .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border-radius:999px; background:var(--chip);
+      border:1px solid var(--line); color:var(--muted); font-size:13px;
+    }
+    .select, .input{
+      background:var(--panel); border:1px solid var(--line);
+      color:var(--text); border-radius:999px; padding:9px 12px;
+      font-size:13px; outline:none;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(196,164,124,.12), rgba(196,164,124,.06));
+      color:#c4a47c;
+      padding:10px 12px; border-radius:999px; font-weight:600; cursor:pointer;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .btn.secondary{ background:var(--panel); font-weight:600; }
+    .btn.primary{
+      background:linear-gradient(180deg, var(--accent), var(--accent2));
+      border-color: var(--accent); color:#fff;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    /* Hero layout */
+    .hero{
+      margin-top:16px;
+      display:grid; grid-template-columns: 1.35fr .65fr; gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .hero{ grid-template-columns: 1fr; } }
+    .panel{
+      border:1px solid var(--line); background:var(--panel);
+      border-radius:var(--radius); box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    /* Carousel */
+    .carousel{ position:relative; background:var(--panel2); }
+    .carousel .stage{
+      aspect-ratio: 16/9;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg, rgba(196,164,124,.05), rgba(196,164,124,.03));
+      min-height: 280px;
+      position:relative;
+    }
+    .carousel img{ width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.05); }
+    .carousel .badgeRow{
+      position:absolute; left:14px; top:14px; display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .badge{
+      padding:7px 10px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(0,0,0,.55); backdrop-filter: blur(8px);
+      font-size:12px; color:var(--text);
+    }
+    .badge.status{ background:rgba(196,164,124,.85); color:#fff; }
+    .badge.warn{ background:rgba(234,88,12,.85); color:#fff; }
+    .badge.danger{ background:rgba(211,47,47,.85); color:#fff; }
+    .carousel .nav{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 10px;
+      pointer-events:none;
+    }
+    .nav .navbtn{
+      pointer-events:auto;
+      width:44px; height:44px; border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+    }
+    .thumbs{
+      display:grid; grid-template-columns: repeat(6, 1fr);
+      gap:8px; padding:12px;
+      background:var(--panel2);
+      border-top:1px solid var(--line);
+    }
+    @media (max-width: 980px){ .thumbs{ grid-template-columns: repeat(4, 1fr); } }
+    .thumb{
+      border-radius:12px; overflow:hidden; border:1px solid var(--line);
+      cursor:pointer; position:relative; background:var(--panel2);
+      aspect-ratio: 16/10;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; opacity:.92; }
+    .thumb.active{ outline:2px solid var(--accent); }
+
+    /* Overview card */
+    .overview{ padding:14px 14px 16px; }
+    .headline{ font-size:22px; font-weight:800; margin:2px 0 10px; letter-spacing:.2px; }
+    .subline{ color:var(--muted); font-size:13px; display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .kvRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+    .priceBox{
+      flex:1; min-width: 260px;
+      padding:12px; border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(196,164,124,.06), rgba(196,164,124,.02));
+    }
+    .priceTop{ display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+    .price{ font-size:26px; font-weight:900; }
+    .perUnit{ color:var(--muted); font-size:13px; }
+    .priceMeta{ margin-top:6px; color:var(--muted); font-size:13px; display:flex; gap:10px; flex-wrap:wrap; }
+    .hlBox{
+      flex:1; min-width: 260px;
+      padding:12px; border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:var(--panel2);
+    }
+    .hlTitle{ font-weight:800; margin:0 0 8px; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; }
+    .bullets{ margin:0; padding-left:18px; color:var(--text); font-size:14px; }
+    .stats{
+      display:grid; grid-template-columns: repeat(5, 1fr);
+      gap:10px; margin-top:12px;
+    }
+    @media (max-width: 980px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+    .stat{
+      padding:12px; border:1px solid var(--line); border-radius: var(--radius2);
+      background:var(--panel2);
+    }
+    .stat .k{ color:var(--muted); font-size:12px; }
+    .stat .v{ font-size:16px; font-weight:800; margin-top:4px; }
+
+    /* Main section */
+    .section{
+      margin-top:14px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      padding:12px; border-bottom:1px solid var(--line);
+      background:var(--panel2);
+    }
+    .tab{
+      padding:10px 12px; border-radius:999px; border:1px solid var(--line);
+      background:var(--panel);
+      color:var(--muted); cursor:pointer; font-weight:700; font-size:13px;
+    }
+    .tab.active{
+      background:var(--accent);
+      color:var(--text);
+      border-color: var(--accent); color:#fff;
+    }
+    .tabPanel{ display:none; padding:14px; }
+    .tabPanel.active{ display:block; }
+
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      background:var(--panel);
+      padding:12px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:13px; color:var(--muted);
+      text-transform:uppercase; letter-spacing:.6px;
+    }
+    .kv{ display:grid; grid-template-columns: 1fr; gap:8px; font-size:14px; }
+    .row{
+      display:flex; align-items:baseline; justify-content:space-between;
+      gap:14px; border-bottom:1px dashed var(--line);
+      padding-bottom:8px; margin-bottom:8px;
+    }
+    .row:last-child{ border-bottom:none; padding-bottom:0; margin-bottom:0; }
+    .row .label{ color:var(--muted); }
+    .row .value{ font-weight:800; text-align:right; }
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .tag{
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(196,164,124,.06);
+      font-size:13px; color:var(--text);
+    }
+    .accordion{
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      overflow:hidden;
+      background:var(--panel);
+      margin-bottom:12px;
+    }
+    summary{
+      list-style:none; cursor:pointer;
+      padding:12px 12px;
+      display:flex; align-items:center; justify-content:space-between;
+      font-weight:900;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .accBody{ padding:0 12px 12px; color:var(--text); }
+    .muted{ color:var(--muted); }
+    .note{
+      border:1px dashed rgba(196,164,124,.20);
+      border-radius:var(--radius2);
+      padding:10px; color:var(--muted); font-size:13px;
+      background:rgba(196,164,124,.03);
+    }
+    .hr{ height:1px; background:var(--line); margin:12px 0; }
+
+    /* Media */
+    .mediaGrid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:12px; }
+    @media (max-width: 980px){ .mediaGrid{ grid-template-columns: 1fr; } }
+    .mediaBox{
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      background:var(--panel2);
+      overflow:hidden;
+      aspect-ratio: 16/9;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--muted);
+    }
+    iframe{ width:100%; height:100%; border:0; }
+
+    /* Nearby */
+    .nearbyList{ display:grid; grid-template-columns: 1fr; gap:10px; }
+    .nearbyItem{
+      display:flex; gap:12px; justify-content:space-between; align-items:flex-start;
+      padding:10px; border:1px solid var(--line); border-radius:var(--radius2);
+      background:var(--panel);
+    }
+    .nearbyItem .left{ display:flex; flex-direction:column; gap:4px; }
+    .nearbyItem .title{ font-weight:900; }
+    .nearbyItem .sub{ color:var(--muted); font-size:13px; }
+    .nearbyItem .right{ text-align:right; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 9px; border:1px solid var(--line); border-radius:999px;
+      background:rgba(196,164,124,.06);
+      font-size:12px; color:#c4a47c;
+      margin-top:6px;
+    }
+
+    /* Import panel */
+    .importWrap{ margin-top:12px; }
+    .importGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 980px){ .importGrid{ grid-template-columns: 1fr; } }
+    textarea{
+      width:100%; min-height:150px;
+      background:var(--panel); border:1px solid var(--line);
+      border-radius:12px; color:var(--text);
+      padding:10px; outline:none; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12.5px;
+    }
+    .miniRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .hint{ color:var(--muted); font-size:12px; }
+
+    /* Sticky actions */
+    .actionSticky{
+      position:fixed; left:0; right:0; bottom:0;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-top:1px solid var(--line);
+      z-index:60;
+    }
+    .actionInner{
+      max-width:var(--max); margin:0 auto;
+      padding:10px 18px;
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      min-height:var(--stickyH);
+    }
+    .agentMini{ display:flex; gap:10px; align-items:center; }
+    .avatar{
+      width:40px; height:40px; border-radius:50%;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; color:#fff;
+    }
+    .agentMini .name{ font-weight:900; font-size:14px; }
+    .agentMini .meta{ color:var(--muted); font-size:12px; }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
+    @media print{
+      .actionSticky, .topbar{ display:none !important; }
+      body{ background:#1a2535; color:#e8dfc8; }
+      .panel, .section, .card{ box-shadow:none !important; background:#fff !important; color:#111 !important; }
+      .muted{ color:#444 !important; }
+      .badge{ background:#eee !important; color:#111 !important; }
+    }
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction pf-active">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+  <div class="wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar" aria-label="Top utilities">
+      <div class="left">
+        <span class="chip">04c Industrial • Online Auction Detail</span>
+
+        <label class="chip">
+          Units
+          <select class="select" id="unitSelect" aria-label="Units">
+            <option value="metric">Metric (sqm)</option>
+            <option value="imperial">Imperial (sqft)</option>
+          </select>
+        </label>
+
+        <label class="chip">
+          Currency
+          <select class="select" id="currencySelect" aria-label="Currency">
+            <option value="CHF">CHF</option>
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="ZAR">ZAR</option>
+            <option value="AED">AED</option>
+          </select>
+        </label>
+
+        <label class="chip">
+          Country preset
+          <select class="select" id="countryPreset" aria-label="Country preset">
+            <option value="AUTO">Auto (from listing)</option>
+            <option value="CH">Switzerland (CH)</option>
+            <option value="US">United States (US)</option>
+            <option value="UK">United Kingdom (UK)</option>
+            <option value="DE">Germany (DE)</option>
+            <option value="AE">UAE (AE)</option>
+            <option value="ZA">South Africa (ZA)</option>
+            <option value="SG">Singapore (SG)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="right">
+        <button class="btn secondary" id="importToggleBtn" type="button">Import / Map</button>
+        <button class="btn secondary" id="enrichBtn" type="button">Enrich Location</button>
+        <button class="btn secondary" id="shareBtn" type="button">Share</button>
+        <button class="btn secondary" id="saveBtn" type="button">Save</button>
+        <button class="btn" id="printBtn" type="button">Print</button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+
+      <!-- LEFT: CAROUSEL -->
+      <div class="panel carousel" aria-label="Photo carousel">
+        <div class="stage">
+          <div class="badgeRow">
+            <span class="badge status" id="statusBadge">Active</span>
+            <span class="badge" id="typeBadge">Warehouse</span>
+            <span class="badge" id="dealBadge">Online Auction</span>
+            <span class="badge" id="specBadge">High-Clear</span>
+            <span class="badge" id="dockBadge">Dock-High</span>
+          </div>
+
+          <img id="stageImg" alt="Property image"
+               src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80" />
+
+          <div class="nav">
+            <div class="navbtn" id="prevBtn" role="button" aria-label="Previous image">&#8249;</div>
+            <div class="navbtn" id="nextBtn" role="button" aria-label="Next image">&#8250;</div>
+          </div>
+        </div>
+
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+
+      <!-- RIGHT: OVERVIEW -->
+      <div class="panel overview" aria-label="Overview">
+        <div class="headline" id="headline">Modern Distribution Warehouse — 8,500 sqm + Yard (Logistics Park)</div>
+        <div class="subline">
+          <span>&#128205; <span id="locationText">Logistics District, Zürich Region, Switzerland</span></span>
+          <span>• <span class="muted" id="privacyNote">Exact address hidden (privacy mode)</span></span>
+        </div>
+
+        <div class="kvRow">
+          <div class="priceBox">
+            <div class="priceTop">
+              <div class="price" id="priceMain">CHF 145 / sqm / year</div>
+              <div class="perUnit" id="pricePerUnit">CHF 145 / sqm / year</div>
+            </div>
+            <div class="priceMeta">
+              <span class="chip">Sale Format: <strong id="dealType">Online Auction</strong></span>
+              <span class="chip">Auction Status: <strong id="availability">Registration open</strong></span>
+              <span class="chip">Auction Timing: <strong id="leaseTerm">Auction timetable applies</strong></span>
+            </div>
+          </div>
+
+          <div class="hlBox">
+            <div class="hlTitle">Quick highlights</div>
+            <ul class="bullets" id="highlights">
+              <li>High-clear warehouse</li>
+              <li>Dock-high + grade doors</li>
+              <li>Large secured yard</li>
+              <li>Excellent highway access</li>
+              <li>ESFR sprinklers (if applicable)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Industrial core stats -->
+        <div class="stats" aria-label="Core stats">
+          <div class="stat"><div class="k">Warehouse Area</div><div class="v" id="whArea">8,500 sqm</div></div>
+          <div class="stat"><div class="k">Office Area</div><div class="v" id="officeArea">650 sqm</div></div>
+          <div class="stat"><div class="k">Clear Height</div><div class="v" id="clearHeightTop">12 m</div></div>
+          <div class="stat"><div class="k">Dock Doors</div><div class="v" id="dockDoorsTop">10</div></div>
+          <div class="stat"><div class="k">Yard / Site</div><div class="v" id="yardTop">Secured</div></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          Industrial focus: clear height, loading, power, yard, truck flow, fire systems, zoning/permits, and proximity to highways/ports/air cargo/rail freight.
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIONAL IMPORT / MAPPING PANEL -->
+    <div class="section importWrap" id="importSection" style="display:none;" aria-label="Import panel">
+      <div class="tabs">
+        <div class="tab active" data-tab="imp-a">Import</div>
+        <div class="tab" data-tab="imp-b">Map Fields</div>
+        <div class="tab" data-tab="imp-c">Apply</div>
+      </div>
+
+      <div class="tabPanel active" id="imp-a">
+        <div class="importGrid">
+          <div class="card">
+            <h3>Import listing from external portal (prototype)</h3>
+            <div class="miniRow">
+              <input class="input" id="sourceName" placeholder="Source portal name (e.g., 'BrokerSiteX')" style="flex:1; min-width:220px;">
+              <input class="input" id="listingUrl" placeholder="Listing URL" style="flex:1; min-width:260px;">
+            </div>
+            <div class="miniRow" style="margin-top:10px;">
+              <input class="input" id="username" placeholder="Username" style="flex:1; min-width:200px;">
+              <input class="input" id="password" placeholder="Password" type="password" style="flex:1; min-width:200px;">
+              <button class="btn" id="mockImportBtn" type="button">Mock Import</button>
+            </div>
+            <div class="hint" style="margin-top:10px;">
+              Production note: do NOT handle passwords in the browser. Use a server-side import service. This panel is only for UI prototyping.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Imported raw JSON (paste or mock)</h3>
+            <textarea id="rawJson" placeholder='Paste external listing JSON here (optional).'></textarea>
+            <div class="miniRow" style="margin-top:10px;">
+              <button class="btn secondary" id="validateJsonBtn" type="button">Validate JSON</button>
+              <span class="hint" id="jsonStatus">Waiting…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" id="imp-b">
+        <div class="card">
+          <h3>Field mapping (external → Property Finder industrial schema)</h3>
+          <div class="note">
+            In production, mappings are auto-suggested (confidence scoring). Industrial requires extra fields: clear height, dock/grade doors, yard depth, truck courts, power, sprinklers, crane, and HazMat.
+          </div>
+          <div class="hr"></div>
+          <div class="grid2">
+            <div class="card">
+              <h3>External keys (examples)</h3>
+              <div class="kv" id="extKeys"></div>
+            </div>
+            <div class="card">
+              <h3>Target keys (our schema)</h3>
+              <div class="kv">
+                <div class="row"><span class="label">headline</span><span class="value">string</span></div>
+                <div class="row"><span class="label">dealType</span><span class="value">Lease / Sale</span></div>
+                <div class="row"><span class="label">warehouseAreaSqm</span><span class="value">number</span></div>
+                <div class="row"><span class="label">officeAreaSqm</span><span class="value">number</span></div>
+                <div class="row"><span class="label">clearHeightM</span><span class="value">number</span></div>
+                <div class="row"><span class="label">dockDoors</span><span class="value">integer</span></div>
+                <div class="row"><span class="label">gradeDoors</span><span class="value">integer</span></div>
+                <div class="row"><span class="label">yardType</span><span class="value">secured/shared/private</span></div>
+                <div class="row"><span class="label">powerKVA / amps</span><span class="value">number</span></div>
+                <div class="row"><span class="label">sprinklers</span><span class="value">ESFR / wet / dry / none</span></div>
+                <div class="row"><span class="label">crane</span><span class="value">tonnage (optional)</span></div>
+                <div class="row"><span class="label">hazmat</span><span class="value">allowed? (optional)</span></div>
+                <div class="row"><span class="label">address + geo</span><span class="value">private/public</span></div>
+                <div class="row"><span class="label">nearby freight</span><span class="value">highway/rail/port/air cargo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" id="imp-c">
+        <div class="card">
+          <h3>Apply imported data to this page</h3>
+          <div class="miniRow">
+            <button class="btn primary" id="applyBtn" type="button">Apply to Listing</button>
+            <button class="btn secondary" id="resetBtn" type="button">Reset to Default</button>
+            <span class="hint" id="applyStatus">After applying, click "Enrich Location" to auto-fill nearby freight/logistics distances.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS SECTION -->
+    <div class="section" aria-label="Industrial details">
+      <div class="tabs" role="tablist" aria-label="Detail tabs">
+        <div class="tab active" data-tab="tab-basic" role="tab" aria-selected="true">Basics</div>
+        <div class="tab" data-tab="tab-areas" role="tab">Areas</div>
+        <div class="tab" data-tab="tab-loading" role="tab">Loading &amp; Truck Flow</div>
+        <div class="tab" data-tab="tab-building" role="tab">Building &amp; Specs</div>
+        <div class="tab" data-tab="tab-power" role="tab">Power &amp; Utilities</div>
+        <div class="tab" data-tab="tab-safety" role="tab">Safety &amp; Compliance</div>
+        <div class="tab" data-tab="tab-financial" role="tab">Financial &amp; Legal</div>
+        <div class="tab" data-tab="tab-location" role="tab">Location &amp; Freight</div>
+        <div class="tab" data-tab="tab-media" role="tab">Media</div>
+        <div class="tab" data-tab="tab-desc" role="tab">Description</div>
+      </div>
+
+      <!-- BASICS -->
+      <div class="tabPanel active" id="tab-basic" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Industrial basics</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Use type</span><span class="value" id="useTypeLong">Industrial / Logistics</span></div>
+              <div class="row"><span class="label">Sub-type</span><span class="value" id="subType">Distribution Warehouse</span></div>
+              <div class="row"><span class="label">Zoning / permitted use</span><span class="value" id="zoning">Industrial</span></div>
+              <div class="row"><span class="label">Availability</span><span class="value" id="availabilityLong">Q2 2026</span></div>
+              <div class="row"><span class="label">Year built</span><span class="value" id="yearBuilt">2019</span></div>
+              <div class="row"><span class="label">Condition</span><span class="value" id="condition">Excellent</span></div>
+              <div class="row"><span class="label">ESG / green features</span><span class="value" id="esg">Solar-ready (optional)</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Listing info</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Listing ID</span><span class="value" id="listingId">PF-CH-04c-0001</span></div>
+              <div class="row"><span class="label">Status</span><span class="value" id="statusLong">Active</span></div>
+              <div class="row"><span class="label">Sale format</span><span class="value" id="dealTypeLong">Online Auction</span></div>
+              <div class="row"><span class="label">Auction type</span><span class="value" id="leaseTypeLong">Online industrial auction</span></div>
+              <div class="row"><span class="label">Auction timing</span><span class="value" id="termLong">As per published auction timetable</span></div>
+              <div class="row"><span class="label">Bid status</span><span class="value" id="occupancyLong">Registration open</span></div>
+              <div class="row"><span class="label">Site security</span><span class="value" id="siteSecurity">Gated + CCTV</span></div>
+            </div>
+            <div class="chips">
+              <span class="tag">Cross-dock capable</span>
+              <span class="tag">High-clear</span>
+              <span class="tag">Large yard</span>
+              <span class="tag">Highway access</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AREAS -->
+      <div class="tabPanel" id="tab-areas" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Area breakdown</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Warehouse area</span><span class="value" id="warehouseArea">8,500 sqm</span></div>
+              <div class="row"><span class="label">Office area</span><span class="value" id="officeAreaLong">650 sqm</span></div>
+              <div class="row"><span class="label">Mezzanine (if any)</span><span class="value" id="mezzanine">250 sqm</span></div>
+              <div class="row"><span class="label">Site / land area</span><span class="value" id="siteArea">18,000 sqm</span></div>
+              <div class="row"><span class="label">Yard area</span><span class="value" id="yardArea">Secured yard</span></div>
+              <div class="row"><span class="label">Office %</span><span class="value" id="officePct">~7%</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Measurement notes</h3>
+            <div class="note">
+              International differences: some markets quote GLA / NLA / rentable vs usable. Keep "warehouse", "office", "mezzanine", "site/land" separate for industrial clarity.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOADING & TRUCK FLOW -->
+      <div class="tabPanel" id="tab-loading" role="tabpanel">
+        <details class="accordion" open>
+          <summary>Docking &amp; doors <span class="muted">dock-high, grade, cross-dock</span></summary>
+          <div class="accBody">
+            <div class="grid2">
+              <div class="card">
+                <h3>Doors</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Dock doors</span><span class="value" id="dockDoors">10</span></div>
+                  <div class="row"><span class="label">Grade-level doors</span><span class="value" id="gradeDoors">4</span></div>
+                  <div class="row"><span class="label">Dock equipment</span><span class="value" id="dockEquip">Levelers + seals (optional)</span></div>
+                  <div class="row"><span class="label">Cross-dock</span><span class="value" id="crossDock">Possible</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Truck courts</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Truck court depth</span><span class="value" id="courtDepth">35 m</span></div>
+                  <div class="row"><span class="label">Turning radius</span><span class="value" id="turning">Semi-trailer capable</span></div>
+                  <div class="row"><span class="label">Trailer parking</span><span class="value" id="trailer">Optional</span></div>
+                  <div class="row"><span class="label">Gatehouse</span><span class="value" id="gatehouse">Yes</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>Yard &amp; access control <span class="muted">security, fencing, circulation</span></summary>
+          <div class="accBody">
+            <div class="grid2">
+              <div class="card">
+                <h3>Yard</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Yard type</span><span class="value" id="yardType">Private secured yard</span></div>
+                  <div class="row"><span class="label">Paving</span><span class="value" id="paving">Heavy-duty</span></div>
+                  <div class="row"><span class="label">Fencing</span><span class="value" id="fencing">Perimeter fencing</span></div>
+                  <div class="row"><span class="label">CCTV</span><span class="value" id="cctv">Yes</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Access</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Truck access</span><span class="value" id="truckAccess">24/7 (subject to rules)</span></div>
+                  <div class="row"><span class="label">Container access</span><span class="value" id="containerAccess">Yes</span></div>
+                  <div class="row"><span class="label">Weighbridge</span><span class="value" id="weighbridge">Nearby (optional)</span></div>
+                  <div class="row"><span class="label">Loading restrictions</span><span class="value" id="restrictions">None disclosed</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- BUILDING & SPECS -->
+      <div class="tabPanel" id="tab-building" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Warehouse specs</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Clear height</span><span class="value" id="clearHeight">12 m</span></div>
+              <div class="row"><span class="label">Column spacing</span><span class="value" id="columns">Wide bay (optional)</span></div>
+              <div class="row"><span class="label">Floor slab</span><span class="value" id="slab">Heavy-duty</span></div>
+              <div class="row"><span class="label">Floor load</span><span class="value" id="floorLoad">High (spec on request)</span></div>
+              <div class="row"><span class="label">Lighting</span><span class="value" id="lighting">LED high-bay</span></div>
+              <div class="row"><span class="label">Racking</span><span class="value" id="racking">Allowed / existing (optional)</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Office / admin specs</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Office fit-out</span><span class="value" id="officeFit">Modern</span></div>
+              <div class="row"><span class="label">HVAC</span><span class="value" id="officeHvac">Yes</span></div>
+              <div class="row"><span class="label">Meeting rooms</span><span class="value" id="meeting">Yes</span></div>
+              <div class="row"><span class="label">Canteen</span><span class="value" id="canteen">Optional</span></div>
+              <div class="row"><span class="label">Showers/lockers</span><span class="value" id="lockers">Optional</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Special equipment (optional)</h3>
+            <div class="chips">
+              <span class="tag">Overhead crane</span>
+              <span class="tag">Cold storage</span>
+              <span class="tag">Refrigeration</span>
+              <span class="tag">Clean room</span>
+              <span class="tag">Heavy power</span>
+              <span class="tag">Compressed air</span>
+              <span class="tag">Gas lines</span>
+              <span class="tag">Wash bay</span>
+              <span class="tag">Mezzanine pick module</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Flexibility</h3>
+            <div class="note">
+              Industrial buyers want: "divisible?", "expansion land?", "additional bays?", "multi-tenant possible?" Include optional fields for expansion potential and demising plans.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POWER & UTILITIES -->
+      <div class="tabPanel" id="tab-power" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Power</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Power capacity</span><span class="value" id="powerCap">1,000 kVA (example)</span></div>
+              <div class="row"><span class="label">3-phase power</span><span class="value" id="threePhase">Yes</span></div>
+              <div class="row"><span class="label">Backup power</span><span class="value" id="backup">Generator / UPS (optional)</span></div>
+              <div class="row"><span class="label">EV / fleet charging</span><span class="value" id="fleet">Optional</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Utilities</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Water</span><span class="value" id="water">Municipal / borehole (country)</span></div>
+              <div class="row"><span class="label">Sewage</span><span class="value" id="sewage">Municipal / septic</span></div>
+              <div class="row"><span class="label">Gas</span><span class="value" id="gas">Optional</span></div>
+              <div class="row"><span class="label">Internet</span><span class="value" id="internet">Fiber available</span></div>
+            </div>
+            <div class="note">ZA-smart: highlight inverter/generator readiness and water systems; EU: energy certificates; US: utility metering details.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAFETY & COMPLIANCE -->
+      <div class="tabPanel" id="tab-safety" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Fire systems</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Sprinklers</span><span class="value" id="sprinklers">ESFR (if applicable)</span></div>
+              <div class="row"><span class="label">Fire alarm</span><span class="value" id="fireAlarm">Yes</span></div>
+              <div class="row"><span class="label">Smoke vents</span><span class="value" id="smokeVents">Optional</span></div>
+              <div class="row"><span class="label">Hydrants</span><span class="value" id="hydrants">On-site / nearby</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Compliance &amp; permits</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Occupancy certificate</span><span class="value" id="occCert">Available / on request</span></div>
+              <div class="row"><span class="label">HazMat allowed</span><span class="value" id="hazmat">Optional / restricted</span></div>
+              <div class="row"><span class="label">Noise / operating hours</span><span class="value" id="hours">24/7 allowed? (rules)</span></div>
+              <div class="row"><span class="label">Environmental</span><span class="value" id="env">Optional report</span></div>
+            </div>
+            <div class="note">Country-smart: show what matters locally (fire certificates, environmental permits, seismic in some regions, etc.).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINANCIAL & LEGAL -->
+      <div class="tabPanel" id="tab-financial" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Pricing</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Pricing basis</span><span class="value" id="pricingBasis">Online auction</span></div>
+              <div class="row"><span class="label">Opening bid / guide</span><span class="value" id="askRent">Opening bid / price on request</span></div>
+              <div class="row"><span class="label">OPEX / service charges</span><span class="value" id="opex">Varies</span></div>
+              <div class="row"><span class="label">Taxes / rates</span><span class="value" id="taxes">Varies by country</span></div>
+              <div class="row"><span class="label">Lease type</span><span class="value" id="leaseType">Gross / NNN (country)</span></div>
+            </div>
+            <div class="note">US: NNN + CAM + taxes. UK: business rates. EU: service charges. ZA: operating costs and utilities vary widely.</div>
+          </div>
+
+          <div class="card">
+            <h3>Legal</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Zoning</span><span class="value" id="legalZoning">Industrial</span></div>
+              <div class="row"><span class="label">Permitted use</span><span class="value" id="permUse">Warehousing / logistics</span></div>
+              <div class="row"><span class="label">Restrictions</span><span class="value" id="legalRestrictions">None disclosed</span></div>
+              <div class="row"><span class="label">VAT / GST</span><span class="value" id="vat">May apply (country)</span></div>
+              <div class="row"><span class="label">Auction / buyer terms</span><span class="value" id="brokerFee">As per published auction terms</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCATION & FREIGHT -->
+      <div class="tabPanel" id="tab-location" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Freight &amp; distribution intelligence</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Highway access</span><span class="value" id="hwy">Excellent</span></div>
+              <div class="row"><span class="label">Air cargo</span><span class="value" id="airCargo">Nearby airport (optional)</span></div>
+              <div class="row"><span class="label">Rail freight / intermodal</span><span class="value" id="railFreight">Optional</span></div>
+              <div class="row"><span class="label">Port / seaport</span><span class="value" id="port">If applicable</span></div>
+            </div>
+            <div class="chips">
+              <span class="tag">Last-mile delivery</span>
+              <span class="tag">Regional distribution</span>
+              <span class="tag">Cross-border logistics</span>
+            </div>
+            <div class="note" style="margin-top:10px;">
+              Industrial enrichment should prioritize: highways, freight rail, intermodal terminals, ports, air cargo, customs zones, and truck services (fuel/repairs/tyre).
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Interactive map (placeholder)</h3>
+            <div class="mediaBox">Map embed goes here (Google/Mapbox/Here)</div>
+            <div class="note" style="margin-top:10px;">Privacy mode: show approximate pin / blurred radius if needed.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;" class="card">
+          <h3>Nearby freight nodes (country-smart)</h3>
+          <div class="nearbyList" id="nearbyFreight"></div>
+        </div>
+
+        <div style="margin-top:12px;" class="grid2">
+          <div class="card">
+            <h3>Truck services &amp; labor</h3>
+            <div class="nearbyList" id="nearbyServices"></div>
+          </div>
+
+          <div class="card">
+            <h3>Industrial ecosystem</h3>
+            <div class="nearbyList" id="nearbyEcosystem"></div>
+            <div class="note" style="margin-top:10px;">
+              Add optional layers: customs/bonded zones, logistics parks, industrial clusters, major shippers, and shift-worker transit access.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIA -->
+      <div class="tabPanel" id="tab-media" role="tabpanel">
+        <div id="pfuMedia_auctions_industrial_wrap">
+          <div class="card">
+            <h3>Video / drone</h3>
+            <div class="mediaBox"><iframe title="Video placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px;">Drone shots matter for yard, docking, and highway proximity.</div>
+          </div>
+          <div class="card">
+            <h3>Virtual tour / walkthrough</h3>
+            <div class="mediaBox"><iframe title="Virtual tour placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px;">For industrial, add "dock diagram" and "truck flow" images as media items.</div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Plans &amp; docs (optional)</h3>
+            <div class="chips">
+              <span class="tag">Site plan</span>
+              <span class="tag">Warehouse plan</span>
+              <span class="tag">Mezzanine plan</span>
+              <span class="tag">Dock layout</span>
+              <span class="tag">Fire certificate</span>
+              <span class="tag">Environmental report</span>
+              <span class="tag">Racking plan</span>
+              <span class="tag">Power single-line diagram</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Photo categories</h3>
+            <div class="chips">
+              <span class="tag">Exterior / yard</span>
+              <span class="tag">Warehouse interior</span>
+              <span class="tag">Loading docks</span>
+              <span class="tag">Office / admin</span>
+              <span class="tag">Site access</span>
+              <span class="tag">Aerial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="tabPanel" id="tab-desc" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Public description</h3>
+            <div id="publicDesc" style="line-height:1.55; font-size:14.5px; white-space:pre-line;">
+High-clear modern distribution facility in a secure logistics park with excellent motorway access. The building offers dock-high and grade-level loading, a large secured yard for truck circulation, and strong power availability for light industrial operations.
+
+Ideal for regional distribution, last-mile delivery, or light manufacturing (subject to zoning). Fire systems and compliance documentation available on request.
+            </div>
+            <div class="note" style="margin-top:10px;">Industrial tip: lead with specs (clear height, doors, yard, power), then access (highway/port/air cargo), then compliance.</div>
+          </div>
+
+          <div class="card">
+            <h3>Private remarks (agent-only)</h3>
+            <div class="muted" id="privateRemarks" style="line-height:1.55; font-size:14.5px; white-space:pre-line;">
+[Auction-only notes]
+• Access to the auction pack is subject to bidder registration, KYC/FICA, and acceptance of auction terms
+• Industrial inspections are by scheduled appointment only and may require site-safety compliance before entry
+• Confirm power, HazMat, environmental permits, operating-hour restrictions, and all due diligence documents before bidding
+            </div>
+            <div class="note" style="margin-top:10px;">In public mode, hide this panel completely.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /section -->
+
+  </div><!-- /wrap -->
+
+  <!-- STICKY ACTION / CONTACT -->
+  <div class="actionSticky" aria-label="Contact actions">
+    <div class="actionInner">
+      <div class="agentMini">
+        <div class="avatar" aria-hidden="true">PF</div>
+        <div>
+          <div class="name" id="agentName">Property Finder Auction Desk</div>
+          <div class="meta" id="agentMeta">Property Finder Auctions • +41 79 000 0000 • Auction WhatsApp</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" type="button" id="specBtn">Request Auction Pack</button>
+        <button class="btn secondary" type="button" id="infoBtn">Ask an Auction Question</button>
+        <button class="btn primary" type="button" id="tourBtn">Book Inspection</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 04c Industrial — Standalone Property Detail
+     * - Includes: hero overview, deep industrial specs, import/map panel,
+     *   and country-smart freight proximity + services/ecosystem lists.
+     * - Replace placeholder data with real listing payload later.
+     ********************************************************************/
+
+    // ---------- Listing data (replace later with your real JSON) ----------
+    const listingDefault = {
+      country: "CH",
+      headline: "Modern Distribution Warehouse \u2014 8,500 sqm + Yard (Logistics Park)",
+      status: "Active",
+      dealType: "Online Auction",
+      availability: "Registration open",
+      leaseTerm: "3\u201310 yrs",
+      leaseType: "Gross / NNN (country)",
+      pricingBasis: "Online auction",
+      currency: "CHF",
+      askingRentPerSqmYear: null,
+      askingSalePrice: null,
+
+      warehouseAreaSqm: 8500,
+      officeAreaSqm: 650,
+      mezzanineSqm: 250,
+      siteAreaSqm: 18000,
+
+      clearHeightM: 12,
+      dockDoors: 10,
+      gradeDoors: 4,
+      yardType: "Private secured yard",
+
+      truckCourtDepthM: 35,
+      turningRadius: "Semi-trailer capable",
+      crossDock: "Possible",
+      gatehouse: "Yes",
+
+      yearBuilt: 2019,
+      condition: "Excellent",
+      slab: "Heavy-duty",
+      lighting: "LED high-bay",
+      racking: "Allowed / existing (optional)",
+
+      powerCapacity: "1,000 kVA (example)",
+      threePhase: "Yes",
+      backupPower: "Generator / UPS (optional)",
+      water: "Municipal / borehole (country)",
+      sewage: "Municipal / septic",
+      gas: "Optional",
+      internet: "Fiber available",
+
+      sprinklers: "ESFR (if applicable)",
+      fireAlarm: "Yes",
+      occupancyCert: "Available / on request",
+      hazmat: "Optional / restricted",
+      operatingHours: "24/7 allowed? (rules)",
+
+      locationText: "Logistics District, Z\u00fcrich Region, Switzerland",
+      privacyMode: true,
+
+      highlights: ["High-clear warehouse", "Dock-high + grade doors", "Large secured yard", "Excellent highway access", "ESFR sprinklers (if applicable)"],
+      images: [
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1565610222536-ef125c59da2e?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=1600&q=80"
+      ]
+    };
+
+    let listing = structuredClone(listingDefault);
+
+    // ---------- Country-smart nearby templates (industrial-focused) ----------
+    const nearbyTemplates = {
+      CH: {
+        freight: [
+          { name:"Motorway / Highway Access", desc:"Primary freight corridor access", km:2.6, min:8, mode:"drive" },
+          { name:"Air Cargo Airport", desc:"International air freight hub", km:14.0, min:20, mode:"drive" },
+          { name:"Rail Freight / Intermodal", desc:"Container/rail terminal (if available)", km:9.5, min:18, mode:"drive" },
+          { name:"Customs / Clearance", desc:"Trade support (optional)", km:null, min:null, mode:"info" }
+        ],
+        services: [
+          { name:"Truck Fuel Station", desc:"Diesel + services", km:3.2, min:9, mode:"drive" },
+          { name:"Truck Repair / Tyres", desc:"Fleet maintenance", km:6.0, min:14, mode:"drive" },
+          { name:"Weighbridge", desc:"Compliance support", km:5.1, min:12, mode:"drive" },
+          { name:"Public Transport (shift workers)", desc:"Bus/rail access for staff", km:1.2, min:6, mode:"walk" }
+        ],
+        ecosystem: [
+          { name:"Logistics Parks", desc:"Cluster of 3PLs / carriers", km:null, min:null, mode:"info" },
+          { name:"Major Shippers", desc:"Demand drivers in region", km:null, min:null, mode:"info" },
+          { name:"Industrial Suppliers", desc:"Packaging, pallets, etc.", km:4.4, min:12, mode:"drive" }
+        ],
+        notes:["CH/EU: emphasize motorway access and any rail freight options; show truck restrictions if city-adjacent."]
+      },
+
+      US: {
+        freight: [
+          { name:"Interstate Access", desc:"Primary freight corridor", km:3.1, min:7, mode:"drive" },
+          { name:"Intermodal Rail Terminal", desc:"Container rail hub", km:18.0, min:22, mode:"drive" },
+          { name:"Air Cargo Airport", desc:"Domestic/international cargo", km:26.0, min:30, mode:"drive" },
+          { name:"Port / Seaport", desc:"If coastal market", km:null, min:null, mode:"info" }
+        ],
+        services: [
+          { name:"Truck Stop", desc:"Fuel + parking", km:7.5, min:14, mode:"drive" },
+          { name:"Fleet Service Center", desc:"Repairs/tyres", km:9.0, min:16, mode:"drive" },
+          { name:"Weigh Station", desc:"Regulatory (route dependent)", km:null, min:null, mode:"info" },
+          { name:"Labor Pool", desc:"Workforce density (optional)", km:null, min:null, mode:"info" }
+        ],
+        ecosystem: [
+          { name:"3PL / Freight Forwarders", desc:"Logistics services nearby", km:6.5, min:12, mode:"drive" },
+          { name:"Industrial Suppliers", desc:"Packaging + pallets", km:5.8, min:11, mode:"drive" },
+          { name:"Customs Broker", desc:"If cross-border", km:null, min:null, mode:"info" }
+        ],
+        notes:["US: show NNN lease, truck court, dock package, and power clearly. Add 'rail intermodal' when present."]
+      },
+
+      UK: {
+        freight: [
+          { name:"Motorway Access", desc:"Freight corridor connectivity", km:4.2, min:11, mode:"drive" },
+          { name:"Rail Freight Terminal", desc:"If applicable", km:null, min:null, mode:"info" },
+          { name:"Port", desc:"If relevant", km:null, min:null, mode:"info" },
+          { name:"Airport Cargo", desc:"If near hub", km:18.5, min:24, mode:"drive" }
+        ],
+        services: [
+          { name:"Truck Fuel / Services", desc:"Fleet support", km:6.1, min:15, mode:"drive" },
+          { name:"Weighbridge", desc:"Compliance", km:null, min:null, mode:"info" },
+          { name:"Public Transport", desc:"Shift worker access", km:1.8, min:8, mode:"bus" }
+        ],
+        ecosystem: [
+          { name:"Industrial Estate Cluster", desc:"Warehousing density", km:null, min:null, mode:"info" },
+          { name:"Courier / Parcel Hubs", desc:"Last-mile integration", km:7.0, min:16, mode:"drive" }
+        ],
+        notes:["UK: business rates can matter; show operating hour restrictions if near residential zones."]
+      },
+
+      DE: {
+        freight: [
+          { name:"Autobahn Access", desc:"Freight corridors", km:3.6, min:10, mode:"drive" },
+          { name:"Rail Freight / Container Terminal", desc:"Intermodal options", km:14.0, min:20, mode:"drive" },
+          { name:"Airport Cargo", desc:"If applicable", km:22.0, min:26, mode:"drive" }
+        ],
+        services: [
+          { name:"Truck Services", desc:"Fuel + maintenance", km:6.4, min:14, mode:"drive" },
+          { name:"Weighbridge", desc:"Compliance", km:null, min:null, mode:"info" },
+          { name:"Public Transport", desc:"Shift worker access", km:1.5, min:8, mode:"bus" }
+        ],
+        ecosystem: [
+          { name:"Industrial Zone", desc:"Supplier proximity", km:null, min:null, mode:"info" },
+          { name:"Packaging / Pallet Suppliers", desc:"Ops support", km:5.2, min:12, mode:"drive" }
+        ],
+        notes:["DE: show Energieausweis and heating type; confirm truck route restrictions in city-adjacent sites."]
+      },
+
+      AE: {
+        freight: [
+          { name:"Main Road / Highway", desc:"Truck connectivity", km:2.0, min:8, mode:"drive" },
+          { name:"Port", desc:"Seaport logistics", km:14.0, min:18, mode:"drive" },
+          { name:"Air Cargo Airport", desc:"International air freight", km:20.0, min:24, mode:"drive" },
+          { name:"Free Zone / Customs", desc:"If in free zone", km:null, min:null, mode:"info" }
+        ],
+        services: [
+          { name:"Truck Services", desc:"Fuel + fleet", km:5.0, min:12, mode:"drive" },
+          { name:"Labor Transport", desc:"Staff buses (optional)", km:null, min:null, mode:"info" }
+        ],
+        ecosystem: [
+          { name:"Logistics Parks", desc:"3PL clusters", km:null, min:null, mode:"info" },
+          { name:"Industrial Suppliers", desc:"Ops support", km:6.0, min:15, mode:"drive" }
+        ],
+        notes:["UAE: highlight free zone status, customs, and port connectivity when relevant."]
+      },
+
+      ZA: {
+        freight: [
+          { name:"National Road Access", desc:"Freight corridor", km:2.8, min:9, mode:"drive" },
+          { name:"Port", desc:"If coastal market", km:null, min:null, mode:"info" },
+          { name:"Airport Cargo", desc:"If near hub", km:19.0, min:25, mode:"drive" },
+          { name:"Rail Freight", desc:"Limited in many areas (optional)", km:null, min:null, mode:"info" }
+        ],
+        services: [
+          { name:"Truck Stop / Fuel", desc:"Fleet support", km:6.2, min:15, mode:"drive" },
+          { name:"Security Services", desc:"Guarding + response", km:null, min:null, mode:"info" },
+          { name:"Backup Power Vendors", desc:"Generators/inverters (optional)", km:null, min:null, mode:"info" }
+        ],
+        ecosystem: [
+          { name:"Industrial Park", desc:"Manufacturing/logistics cluster", km:null, min:null, mode:"info" },
+          { name:"Courier Hubs", desc:"Last-mile integration", km:7.4, min:18, mode:"drive" }
+        ],
+        notes:["ZA: emphasize security, backup power, and water systems. Confirm truck access rules in estates."]
+      },
+
+      SG: {
+        freight: [
+          { name:"Expressway Access", desc:"Freight corridors", km:2.4, min:8, mode:"drive" },
+          { name:"Port", desc:"Major seaport logistics", km:12.0, min:18, mode:"drive" },
+          { name:"Changi Air Cargo", desc:"Air freight access", km:16.0, min:20, mode:"drive" }
+        ],
+        services: [
+          { name:"Fleet Services", desc:"Maintenance + ops", km:5.0, min:12, mode:"drive" },
+          { name:"Worker Transport", desc:"MRT/bus access for shifts", km:1.2, min:8, mode:"bus" }
+        ],
+        ecosystem: [
+          { name:"Logistics Clusters", desc:"3PL + distribution hubs", km:null, min:null, mode:"info" },
+          { name:"Supplier Network", desc:"Ops support", km:4.5, min:11, mode:"drive" }
+        ],
+        notes:["SG: port/air cargo access and expressways matter; show restrictions and permitted use clearly."]
+      }
+    };
+
+    // ---------- Helpers ----------
+    const SQM_TO_SQFT = 10.76391041671;
+    const currencySymbols = { CHF:"CHF", EUR:"\u20ac", USD:"$", GBP:"\u00a3", ZAR:"R", AED:"AED" };
+
+    function formatMoney(value, currency){
+      const sym = currencySymbols[currency] ?? currency;
+      const num = Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 });
+      if(currency === "USD" || currency === "GBP" || currency === "EUR") return `${sym}${num}`;
+      if(currency === "ZAR") return `${sym}${num}`;
+      return `${sym} ${num}`;
+    }
+
+    function areaText(sqm, unitMode){
+      if(sqm == null) return "\u2014";
+      if(unitMode === "imperial"){
+        const sqft = Math.round(sqm * SQM_TO_SQFT);
+        return `${sqft.toLocaleString()} sqft`;
+      }
+      return `${sqm.toLocaleString()} sqm`;
+    }
+
+    function distanceText(km, unitMode){
+      if(km == null) return "\u2014";
+      if(unitMode === "imperial"){
+        const mi = km * 0.621371;
+        return `${mi.toFixed(mi < 1 ? 2 : 1)} mi`;
+      }
+      return `${km.toFixed(km < 1 ? 2 : 1)} km`;
+    }
+
+    function modeLabel(mode){
+      const map = { walk:"Walk", drive:"Drive", tram:"Tram", bus:"Bus", train:"Train", mrt:"MRT", info:"Info" };
+      return map[mode] || "\u2014";
+    }
+
+    // ---------- Carousel ----------
+    let imgIndex = 0;
+    const stageImg = document.getElementById("stageImg");
+    const thumbs = document.getElementById("thumbs");
+
+    function renderThumbs(){
+      thumbs.innerHTML = "";
+      (listing.images || []).forEach((src, idx) => {
+        const div = document.createElement("div");
+        div.className = "thumb" + (idx === imgIndex ? " active" : "");
+        div.innerHTML = `<img alt="Thumbnail ${idx+1}" src="${src}">`;
+        div.addEventListener("click", () => { imgIndex = idx; renderCarousel(); });
+        thumbs.appendChild(div);
+      });
+    }
+    function renderCarousel(){
+      stageImg.src = (listing.images || [])[imgIndex] || stageImg.src;
+      renderThumbs();
+    }
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      const n = (listing.images || []).length || 1;
+      imgIndex = (imgIndex - 1 + n) % n;
+      renderCarousel();
+    });
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      const n = (listing.images || []).length || 1;
+      imgIndex = (imgIndex + 1) % n;
+      renderCarousel();
+    });
+
+    // ---------- Tabs (main + import) ----------
+    function wireTabs(scopeEl){
+      const tabs = Array.from(scopeEl.querySelectorAll(".tab"));
+      const panels = Array.from(scopeEl.querySelectorAll(".tabPanel"));
+      tabs.forEach(t => {
+        t.addEventListener("click", () => {
+          tabs.forEach(x => x.classList.remove("active"));
+          panels.forEach(p => p.classList.remove("active"));
+          t.classList.add("active");
+          const id = t.dataset.tab;
+          const panel = scopeEl.querySelector("#" + CSS.escape(id));
+          if(panel) panel.classList.add("active");
+        });
+      });
+    }
+    wireTabs(document);
+
+    // ---------- Nearby render ----------
+    function buildNearbyItem(item, unitMode){
+      const dist = item.km == null ? "\u2014" : distanceText(item.km, unitMode);
+      const time = item.min == null ? "" : `${item.min} min`;
+      const rightTop = (dist !== "\u2014" && time) ? `${dist} \u2022 ${time}` : (dist !== "\u2014" ? dist : (time || "\u2014"));
+      return `
+        <div class="nearbyItem">
+          <div class="left">
+            <div class="title">${item.name}</div>
+            <div class="sub">${item.desc}</div>
+            <div class="pill">${modeLabel(item.mode)}</div>
+          </div>
+          <div class="right">
+            <div class="title">${rightTop}</div>
+            <div class="sub muted">${item.mode === "info" ? "Country-specific" : "Approx."}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNearby(country, unitMode){
+      const t = nearbyTemplates[country] || nearbyTemplates.CH;
+
+      document.getElementById("nearbyFreight").innerHTML =
+        t.freight.map(i => buildNearbyItem(i, unitMode)).join("") +
+        (t.notes || []).map(n => `
+          <div class="nearbyItem">
+            <div class="left">
+              <div class="title">Country note</div>
+              <div class="sub">${n}</div>
+              <div class="pill">Guidance</div>
+            </div>
+            <div class="right">
+              <div class="title">\u2014</div>
+              <div class="sub muted">Auto rules</div>
+            </div>
+          </div>
+        `).join("");
+
+      document.getElementById("nearbyServices").innerHTML = t.services.map(i => buildNearbyItem(i, unitMode)).join("");
+      document.getElementById("nearbyEcosystem").innerHTML = t.ecosystem.map(i => buildNearbyItem(i, unitMode)).join("");
+    }
+
+    // ---------- Pricing render ----------
+    function renderPricing(unitMode, currency){
+      const priceMain = document.getElementById("priceMain");
+      const pricePerUnit = document.getElementById("pricePerUnit");
+
+      if((listing.dealType || "").toLowerCase().includes("sale") || listing.askingSalePrice){
+        const sale = listing.askingSalePrice ?? 0;
+        priceMain.textContent = sale ? formatMoney(sale, currency) : "Price on request";
+        const totalBld = (listing.warehouseAreaSqm || 0) + (listing.officeAreaSqm || 0) + (listing.mezzanineSqm || 0);
+        if(sale && totalBld){
+          const denom = unitMode === "imperial" ? (totalBld * SQM_TO_SQFT) : totalBld;
+          const p = Math.round(sale / denom);
+          pricePerUnit.textContent = `${formatMoney(p, currency)} / ${unitMode === "imperial" ? "sqft" : "sqm"}`;
+        } else pricePerUnit.textContent = "\u2014";
+        document.getElementById("pricingBasis").textContent = "Total sale price";
+      } else {
+        const sale = listing.askingSalePrice ?? 0;
+        const auctionText = sale ? formatMoney(sale, currency) : "Opening bid / price on request";
+        priceMain.textContent = auctionText;
+        pricePerUnit.textContent = "Online auction";
+        document.getElementById("pricingBasis").textContent = "Online auction";
+        document.getElementById("askRent").textContent = auctionText;
+      }
+
+      document.getElementById("dealType").textContent = listing.dealType;
+      document.getElementById("availability").textContent = listing.availability;
+      document.getElementById("leaseTerm").textContent = listing.leaseTerm;
+
+      document.getElementById("availabilityLong").textContent = listing.availability;
+      document.getElementById("dealTypeLong").textContent = listing.dealType;
+      document.getElementById("leaseTypeLong").textContent = listing.leaseType;
+      document.getElementById("termLong").textContent = listing.leaseTerm;
+      document.getElementById("leaseType").textContent = listing.leaseType;
+    }
+
+    // ---------- Render listing ----------
+    function renderListing(){
+      const unitMode = document.getElementById("unitSelect").value;
+      const currency = document.getElementById("currencySelect").value;
+
+      document.getElementById("headline").textContent = listing.headline;
+      document.getElementById("locationText").textContent = listing.locationText;
+      document.getElementById("privacyNote").textContent = listing.privacyMode ? "Exact address hidden (privacy mode)" : "Full address shown";
+
+      document.getElementById("statusBadge").textContent = listing.status;
+      document.getElementById("statusLong").textContent = listing.status;
+      document.getElementById("typeBadge").textContent = "Warehouse";
+      document.getElementById("dealBadge").textContent = listing.dealType;
+      document.getElementById("specBadge").textContent = listing.clearHeightM + "m Clear";
+      document.getElementById("dockBadge").textContent = listing.dockDoors + " Docks";
+
+      const hl = document.getElementById("highlights");
+      hl.innerHTML = "";
+      (listing.highlights || []).forEach(h => { const li=document.createElement("li"); li.textContent=h; hl.appendChild(li); });
+
+      document.getElementById("whArea").textContent = areaText(listing.warehouseAreaSqm, unitMode);
+      document.getElementById("officeArea").textContent = areaText(listing.officeAreaSqm, unitMode);
+      document.getElementById("clearHeightTop").textContent = `${listing.clearHeightM} m`;
+      document.getElementById("dockDoorsTop").textContent = listing.dockDoors;
+      document.getElementById("yardTop").textContent = listing.yardType.includes("secured") ? "Secured" : listing.yardType;
+
+      document.getElementById("useTypeLong").textContent = "Industrial / Logistics";
+      document.getElementById("subType").textContent = "Distribution Warehouse";
+      document.getElementById("zoning").textContent = listingDefault.zoning;
+      document.getElementById("availabilityLong").textContent = listing.availability;
+      document.getElementById("yearBuilt").textContent = listing.yearBuilt;
+      document.getElementById("condition").textContent = listing.condition;
+      document.getElementById("esg").textContent = listing.esg || "\u2014";
+
+      document.getElementById("dealTypeLong").textContent = listing.dealType;
+      document.getElementById("termLong").textContent = listing.leaseTerm;
+      document.getElementById("leaseTypeLong").textContent = listing.leaseType;
+      document.getElementById("occupancyLong").textContent = "Vacant";
+      document.getElementById("siteSecurity").textContent = "Gated + CCTV";
+
+      document.getElementById("warehouseArea").textContent = areaText(listing.warehouseAreaSqm, unitMode);
+      document.getElementById("officeAreaLong").textContent = areaText(listing.officeAreaSqm, unitMode);
+      document.getElementById("mezzanine").textContent = areaText(listing.mezzanineSqm, unitMode);
+      document.getElementById("siteArea").textContent = areaText(listing.siteAreaSqm, unitMode);
+      document.getElementById("yardArea").textContent = listing.yardType;
+      const officePct = Math.round((listing.officeAreaSqm / ((listing.warehouseAreaSqm||0)+(listing.officeAreaSqm||0)+(listing.mezzanineSqm||0))) * 100);
+      document.getElementById("officePct").textContent = isFinite(officePct) ? `~${officePct}%` : "\u2014";
+
+      document.getElementById("dockDoors").textContent = listing.dockDoors;
+      document.getElementById("gradeDoors").textContent = listing.gradeDoors;
+      document.getElementById("dockEquip").textContent = "Levelers + seals (optional)";
+      document.getElementById("crossDock").textContent = listing.crossDock;
+
+      document.getElementById("courtDepth").textContent = `${listing.truckCourtDepthM} m`;
+      document.getElementById("turning").textContent = listing.turningRadius;
+      document.getElementById("trailer").textContent = "Optional";
+      document.getElementById("gatehouse").textContent = listing.gatehouse;
+
+      document.getElementById("yardType").textContent = listing.yardType;
+      document.getElementById("paving").textContent = "Heavy-duty";
+      document.getElementById("fencing").textContent = "Perimeter fencing";
+      document.getElementById("cctv").textContent = "Yes";
+
+      document.getElementById("truckAccess").textContent = "24/7 (subject to rules)";
+      document.getElementById("containerAccess").textContent = "Yes";
+      document.getElementById("weighbridge").textContent = "Nearby (optional)";
+      document.getElementById("restrictions").textContent = "None disclosed";
+
+      document.getElementById("clearHeight").textContent = `${listing.clearHeightM} m`;
+      document.getElementById("columns").textContent = "Wide bay (optional)";
+      document.getElementById("slab").textContent = listing.slab;
+      document.getElementById("floorLoad").textContent = "High (spec on request)";
+      document.getElementById("lighting").textContent = listing.lighting;
+      document.getElementById("racking").textContent = listing.racking;
+
+      document.getElementById("officeFit").textContent = "Modern";
+      document.getElementById("officeHvac").textContent = "Yes";
+      document.getElementById("meeting").textContent = "Yes";
+      document.getElementById("canteen").textContent = "Optional";
+      document.getElementById("lockers").textContent = "Optional";
+
+      document.getElementById("powerCap").textContent = listing.powerCapacity;
+      document.getElementById("threePhase").textContent = listing.threePhase;
+      document.getElementById("backup").textContent = listing.backupPower;
+      document.getElementById("fleet").textContent = "Optional";
+
+      document.getElementById("water").textContent = listing.water;
+      document.getElementById("sewage").textContent = listing.sewage;
+      document.getElementById("gas").textContent = listing.gas;
+      document.getElementById("internet").textContent = listing.internet;
+
+      document.getElementById("sprinklers").textContent = listing.sprinklers;
+      document.getElementById("fireAlarm").textContent = listing.fireAlarm;
+      document.getElementById("smokeVents").textContent = "Optional";
+      document.getElementById("hydrants").textContent = "On-site / nearby";
+
+      document.getElementById("occCert").textContent = listing.occupancyCert;
+      document.getElementById("hazmat").textContent = listing.hazmat;
+      document.getElementById("hours").textContent = listing.operatingHours;
+      document.getElementById("env").textContent = "Optional report";
+
+      renderPricing(unitMode, currency);
+
+      const preset = document.getElementById("countryPreset").value;
+      const country = (preset === "AUTO") ? listing.country : preset;
+      renderNearby(country, unitMode);
+
+      renderCarousel();
+    }
+
+    // ---------- Import prototype ----------
+    function setJsonStatus(ok, msg){
+      const el = document.getElementById("jsonStatus");
+      el.textContent = msg;
+      el.style.color = ok ? "var(--accent)" : "var(--danger)";
+    }
+
+    function populateExtKeys(obj){
+      const el = document.getElementById("extKeys");
+      el.innerHTML = "";
+      const keys = Object.keys(obj || {}).slice(0, 18);
+      if(!keys.length){
+        el.innerHTML = `<div class="note">No JSON loaded. Paste JSON on Import tab, then Validate.</div>`;
+        return;
+      }
+      keys.forEach(k => {
+        const v = obj[k];
+        const val = (typeof v === "string" || typeof v === "number" || typeof v === "boolean") ? String(v) : (Array.isArray(v) ? `[array:${v.length}]` : "{object}");
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span class="label">${k}</span><span class="value">${val}</span>`;
+        el.appendChild(row);
+      });
+    }
+
+    function tryParseRawJson(){
+      const raw = document.getElementById("rawJson").value.trim();
+      if(!raw){
+        setJsonStatus(false, "No JSON provided.");
+        populateExtKeys({});
+        return null;
+      }
+      try{
+        const obj = JSON.parse(raw);
+        setJsonStatus(true, "Valid JSON loaded.");
+        populateExtKeys(obj);
+        return obj;
+      }catch(e){
+        setJsonStatus(false, "Invalid JSON: " + e.message);
+        populateExtKeys({});
+        return null;
+      }
+    }
+
+    function applyFromExternal(ext){
+      const out = structuredClone(listingDefault);
+
+      out.country = ext.country || out.country;
+      out.headline = ext.headline || ext.title || out.headline;
+      out.status = ext.status || out.status;
+      out.dealType = ext.dealType || ext.transactionType || out.dealType;
+      out.currency = ext.currency || out.currency;
+
+      out.askingRentPerSqmYear = ext.askingRentPerSqmYear ?? ext.rentPerSqmYear ?? out.askingRentPerSqmYear;
+      out.askingSalePrice = ext.askingSalePrice ?? ext.salePrice ?? out.askingSalePrice;
+
+      out.warehouseAreaSqm = ext.warehouseAreaSqm ?? ext.whAreaSqm ?? out.warehouseAreaSqm;
+      out.officeAreaSqm = ext.officeAreaSqm ?? ext.adminAreaSqm ?? out.officeAreaSqm;
+      out.mezzanineSqm = ext.mezzanineSqm ?? out.mezzanineSqm;
+      out.siteAreaSqm = ext.siteAreaSqm ?? ext.landSqm ?? out.siteAreaSqm;
+
+      out.clearHeightM = ext.clearHeightM ?? ext.clearHeight ?? out.clearHeightM;
+      out.dockDoors = ext.dockDoors ?? ext.docks ?? out.dockDoors;
+      out.gradeDoors = ext.gradeDoors ?? ext.grade ?? out.gradeDoors;
+      out.yardType = ext.yardType || out.yardType;
+
+      out.truckCourtDepthM = ext.truckCourtDepthM ?? out.truckCourtDepthM;
+      out.turningRadius = ext.turningRadius || out.turningRadius;
+      out.crossDock = ext.crossDock || out.crossDock;
+
+      out.powerCapacity = ext.powerCapacity || out.powerCapacity;
+      out.threePhase = ext.threePhase || out.threePhase;
+      out.backupPower = ext.backupPower || out.backupPower;
+
+      out.sprinklers = ext.sprinklers || out.sprinklers;
+      out.hazmat = ext.hazmat || out.hazmat;
+
+      out.locationText = ext.locationText || ext.city || out.locationText;
+      out.privacyMode = (typeof ext.privacyMode === "boolean") ? ext.privacyMode : out.privacyMode;
+
+      out.highlights = ext.highlights || out.highlights;
+      out.images = ext.images || out.images;
+
+      return out;
+    }
+
+    // ---------- Wire controls ----------
+    document.getElementById("unitSelect").addEventListener("change", renderListing);
+    document.getElementById("currencySelect").addEventListener("change", renderListing);
+    document.getElementById("countryPreset").addEventListener("change", renderListing);
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("shareBtn").addEventListener("click", () => alert("Share: hook this to your final share modal."));
+    document.getElementById("saveBtn").addEventListener("click", () => alert("Save: hook this to favorites/login."));
+    document.getElementById("specBtn").addEventListener("click", () => alert("Request spec sheet: open lead form / send PDF spec sheet."));
+    document.getElementById("infoBtn").addEventListener("click", () => alert("Ask an auction question: open bidder enquiry modal."));
+    document.getElementById("tourBtn").addEventListener("click", () => alert("Book inspection: open auction inspection booking modal."));
+
+    document.getElementById("importToggleBtn").addEventListener("click", () => {
+      const s = document.getElementById("importSection");
+      s.style.display = (s.style.display === "none") ? "block" : "none";
+      if(s.style.display === "block") window.scrollTo({ top: s.offsetTop - 10, behavior:"smooth" });
+    });
+
+    document.getElementById("validateJsonBtn").addEventListener("click", tryParseRawJson);
+
+    document.getElementById("mockImportBtn").addEventListener("click", () => {
+      const sampleExternal = {
+        country: "CH",
+        headline: "High-Clear Warehouse \u2014 7,800 sqm + Secured Yard",
+        status: "Active",
+        dealType: "Online Auction",
+        currency: "CHF",
+        askingRentPerSqmYear: 155,
+        warehouseAreaSqm: 7800,
+        officeAreaSqm: 600,
+        mezzanineSqm: 200,
+        siteAreaSqm: 16000,
+        clearHeightM: 12,
+        dockDoors: 8,
+        gradeDoors: 4,
+        yardType: "Private secured yard",
+        truckCourtDepthM: 35,
+        turningRadius: "Semi-trailer capable",
+        crossDock: "Possible",
+        powerCapacity: "900 kVA",
+        threePhase: "Yes",
+        sprinklers: "ESFR",
+        hazmat: "Restricted",
+        locationText: "Z\u00fcrich Logistics Corridor, Switzerland",
+        privacyMode: true,
+        highlights: ["12m clear height", "8 dock doors + 4 grade doors", "Secured yard", "Motorway access", "ESFR sprinklers"],
+        images: listingDefault.images
+      };
+      document.getElementById("rawJson").value = JSON.stringify(sampleExternal, null, 2);
+      tryParseRawJson();
+    });
+
+    document.getElementById("applyBtn").addEventListener("click", () => {
+      const ext = tryParseRawJson();
+      if(!ext){
+        document.getElementById("applyStatus").textContent = "Cannot apply: JSON invalid or missing.";
+        return;
+      }
+      listing = applyFromExternal(ext);
+      document.getElementById("currencySelect").value = listing.currency || document.getElementById("currencySelect").value;
+      renderListing();
+      document.getElementById("applyStatus").textContent = "Applied imported data to page. Now click \u201cEnrich Location\u201d.";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      listing = structuredClone(listingDefault);
+      document.getElementById("rawJson").value = "";
+      setJsonStatus(false, "Reset. Waiting\u2026");
+      populateExtKeys({});
+      document.getElementById("currencySelect").value = listing.currency;
+      renderListing();
+      document.getElementById("applyStatus").textContent = "Reset to default.";
+    });
+
+    document.getElementById("enrichBtn").addEventListener("click", () => {
+      renderListing();
+      alert("Enrich Location (prototype): In production, this would geocode the property and fetch real nearby freight distances (highways/rail intermodal/port/air cargo/truck services).");
+    });
+
+    // ---------- Init ----------
+    document.getElementById("currencySelect").value = listing.currency;
+    populateExtKeys({});
+    renderListing();
+  </script>
+
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:20px;font-family:Inter,system-ui,sans-serif;font-size:0.85rem;margin-top:40px;">
+  <span id="yf"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#D4AF77;">Terms</a> |
+  <a href="privacy-policy.html" style="color:#D4AF77;">Privacy</a> |
+  <a href="anti-fraud.html" style="color:#D4AF77;">Anti-Fraud</a>
+</footer>
+<script>document.getElementById("yf").textContent = new Date().getFullYear();</script>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+
+    // pf-calc-widget adapter
+    function _setAucIndData(){
+      var el=document.getElementById('priceMain');
+      var rawP=el?parseFloat(el.textContent.replace(/[^0-9.]/g,'')):0;
+      var cPreset=document.getElementById('countryPreset'),cSel=document.getElementById('currencySelect');
+      window.pfListingData={
+        price: listing.askingSalePrice||listing.askingPrice||rawP||(listing.askingRentPerSqmYear?listing.askingRentPerSqmYear*(listing.warehouseAreaSqm||8500)*10:0)||85000000,
+        country:(cPreset&&cPreset.value!=='AUTO')?cPreset.value:(listing.country||'CH'),
+        currency:(cSel?cSel.value:null)||listing.currency||'CHF',
+        title:listing.headline||document.title, type:'Industrial'
+      };
+    }
+    setTimeout(_setAucIndData,400);
+    var _aip=document.getElementById('countryPreset'),_ais=document.getElementById('currencySelect');
+    if(_aip) _aip.addEventListener('change',function(){_setAucIndData();setTimeout(function(){try{pfcwCalcMort();pfcwCalcTC();pfcwCalcSD();pfcwCalcYield();pfcwCalcBond();pfcwCalcAfford();}catch(e){}},100);});
+    if(_ais) _ais.addEventListener('change',function(){_setAucIndData();setTimeout(function(){try{pfcwCalcMort();pfcwCalcTC();pfcwCalcSD();pfcwCalcYield();pfcwCalcBond();pfcwCalcAfford();}catch(e){}},100);});
+
+<script src="pf-photo-upload.js"></script>
+<script src="pf-core.js"></script>
+<script src="pf-calc-widget.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  if(document.getElementById("pfuMedia_auctions_industrial")){
+    PFUpload.init("pfuMedia_auctions_industrial", {
+      maxPhotos: 30,
+      showVideoUpload: true,
+      onPhotosChanged: function(photos){
+        console.log("[PFUpload] auctions-industrial: " + photos.length + " photos");
+      }
+    });
+  }
+});
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

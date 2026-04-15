@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Auction FAQ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --radius:14px;--radius2:10px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    header{
+      background:linear-gradient(135deg,#0e1520,#141c2b) 55%,var(--nb-green-hover) 100%);
+      padding:40px 24px 32px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto}
+    header h1{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;margin:0 0 8px}
+    header p{color:rgba(255,255,255,0.75);font-size:0.88rem;margin:0}
+    .nav-links{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+    .nav-links a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;font-size:0.8rem}
+    .nav-links a:hover{background:rgba(255,255,255,0.12);color:#fff;text-decoration:none}
+
+    main{max-width:980px;margin:0 auto;padding:24px 24px 60px}
+
+    .info-panel{padding:24px;border-radius:var(--radius);background:var(--nb-snow);border:1px solid var(--nb-border);margin-bottom:20px}
+    .info-panel h3{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#e8dfc8;margin-bottom:14px}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .info-item{padding:16px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+    .info-item .ii-ico{font-size:1.8rem;margin-bottom:10px}
+    .info-item .ii-title{font-weight:800;font-size:0.9rem;color:#c4a47c;margin-bottom:6px}
+    .info-item .ii-desc{font-size:0.84rem;color:var(--nb-muted);line-height:1.55}
+
+    .accord{border:1px solid var(--nb-border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--nb-white)}
+    .accord:last-child{margin-bottom:0}
+    .accord summary{padding:16px 18px;cursor:pointer;font-weight:800;font-size:0.92rem;background:var(--nb-white);border-bottom:1px solid transparent;list-style:none;display:flex;justify-content:space-between;align-items:center;transition:background 0.2s ease}
+    .accord summary::-webkit-details-marker{display:none}
+    .accord summary::after{content:"▸";font-size:14px;color:var(--nb-muted);transition:transform 0.25s ease}
+    .accord[open] summary{background:var(--nb-offwhite);border-bottom-color:var(--nb-border)}
+    .accord[open] summary::after{transform:rotate(90deg)}
+    .accord .acc-body{padding:18px}
+    .accord .acc-body p{font-size:0.9rem;color:var(--nb-muted);line-height:1.65;margin:0 0 10px}
+    .accord .acc-body p:last-child{margin:0}
+    .accord .acc-body ul{margin:8px 0 0 20px;font-size:0.88rem}
+    .accord .acc-body ul li{margin-bottom:6px;line-height:1.5;color:var(--nb-muted)}
+    .accord .acc-body strong{color:#e8dfc8}
+
+    .timeline{position:relative;padding-left:32px}
+    .timeline::before{content:'';position:absolute;left:13px;top:0;bottom:0;width:2px;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),var(--nb-lime))}
+    .tl-item{position:relative;margin-bottom:28px;padding-left:20px}
+    .tl-item:last-child{margin-bottom:0}
+    .tl-dot{position:absolute;left:-21px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--nb-green);border:2px solid var(--nb-white);box-shadow:0 0 0 2px var(--nb-green)}
+    .tl-day{font-size:0.72rem;font-weight:800;color:#c4a47c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .tl-title{font-weight:800;font-size:0.95rem;margin-bottom:6px;color:#e8dfc8}
+    .tl-desc{font-size:0.85rem;color:var(--nb-muted);line-height:1.55}
+
+    .field{margin-bottom:18px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+    @media(max-width:560px){.field-row{grid-template-columns:1fr}}
+    .field label{display:block;font-size:0.82rem;font-weight:700;color:#e8dfc8;margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--nb-border);border-radius:6px;font-size:0.92rem;font-family:var(--font);color:#e8dfc8;background:var(--nb-white);outline:none;transition:border-color 0.2s ease,box-shadow 0.2s ease}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .field textarea{resize:vertical;min-height:80px}
+    .check-label{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--nb-muted);cursor:pointer}
+    .check-label input[type="checkbox"]{width:16px;height:16px;accent-color:#c4a47c;cursor:pointer}
+    .form-submit{width:100%;padding:14px;border:none;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s ease}
+    .form-submit:hover{background:var(--nb-green-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,164,124,0.25)}
+
+    .note{font-size:0.82rem;color:var(--nb-muted);padding:12px;margin-top:14px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    footer{max-width:980px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+
+    @media print{header{background:var(--nb-green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Auction FAQ</h1>
+    <p>Frequently asked questions about bidding, fees, inspections, and winning</p>
+    <div class="nav-links">
+      <a href="auctions.html">← All Auctions</a>
+      <a href="auction-how-to-bid.html">How to Bid</a>
+      <a href="auction-faq.html">FAQ</a>
+      <a href="auction-process-timeline.html">Process Timeline</a>
+      <a href="auctions.html">Auction Types</a>
+      <a href="auction-registration-form.html">Register to Bid</a>
+    </div>
+  </div>
+</header>
+<main>
+  <details class="accord" open>
+    <summary>What types of auctions are available?</summary>
+    <div class="acc-body">
+      <p><strong>Absolute (No Reserve)</strong> — The property sells to the highest bidder regardless of price. There is no minimum. This creates urgency and often attracts more bidders.</p>
+      <p><strong>Reserve</strong> — The seller sets a confidential minimum price. If bidding does not reach the reserve, the property may not sell. "Reserve met" status may be shown during the auction.</p>
+      <p><strong>Sealed Bid</strong> — All bids are submitted privately before a deadline. The highest bid wins. Bidders do not see other bids.</p>
+      <p><strong>Online Timed</strong> — Bidding opens and closes at scheduled times. If a bid is placed in the final <strong>5 minutes</strong>, the auction automatically extends by 5 minutes to prevent last-second sniping (soft close).</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>What documents do I need to register as a bidder?</summary>
+    <div class="acc-body">
+      <p><strong>Individual buyers:</strong></p>
+      <ul>
+        <li>Valid government-issued ID (passport or national ID card)</li>
+        <li>Proof of address (utility bill or bank statement dated within 3 months)</li>
+        <li>Proof of funds or pre-approval letter from your bank</li>
+        <li>Signed auction terms &amp; conditions agreement</li>
+      </ul>
+      <p><strong>Corporate / company buyers additionally need:</strong></p>
+      <ul>
+        <li>Company registration documents (certificate of incorporation)</li>
+        <li>Board resolution authorising the bidder to act on behalf of the company</li>
+        <li>Director ID and proof of authority</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>What is the USD 10,000 Bidder Security Deposit and how does it work?</summary>
+    <div class="acc-body">
+      <p><strong>Before you can place any bid on a PropertyFinder auction, you are required to complete a mandatory security deposit process.</strong> This ensures that only serious, financially capable bidders participate and protects sellers from non-genuine bids.</p>
+      <p><strong>Step 1 — Pay the deposit:</strong> Transfer <strong>USD 10,000</strong> into your own <strong>attorney's trust account</strong> (or equivalent regulated client trust / escrow account in your jurisdiction). PropertyFinder does not hold or receive these funds — they remain with your attorney at all times.</p>
+      <p><strong>Step 2 — Obtain proof of deposit:</strong> Ask your attorney to issue a <strong>Proof of Funds / Trust Account Confirmation letter</strong> on their official letterhead, confirming that USD 10,000 is held in trust for the purpose of bidding on the specified PropertyFinder listing.</p>
+      <p><strong>Step 3 — Upload the document:</strong></p>
+      <ul>
+        <li>Upload the attorney's confirmation letter directly on the auction listing page through the PropertyFinder webapp before placing your bid.</li>
+        <li>The document <strong>must include the Auction Listing Reference Number</strong> (e.g. PF-AUC-XXXX) as shown on the listing page.</li>
+        <li>A copy is automatically forwarded to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b1a5b3a4b9bfbea390a0a2bfa0b5a2a4a9b6b9beb4b5a2feb3bfbd">[email&#160;protected]</a></strong> with the reference number for verification.</li>
+        <li>Bank statements alone are <strong>not accepted</strong> — the letter must be on your attorney's letterhead.</li>
+      </ul>
+      <p><strong>Step 4 — Verification:</strong> PropertyFinder verifies the document, typically within <strong>24 hours</strong> during business hours. Once verified, your ability to bid is activated. Tip: complete this process well before the auction opens.</p>
+      <p><strong>If you WIN the auction:</strong> The USD 10,000 is <strong>deducted from your final purchase price</strong> at closing. It is reflected in the sale agreement and settlement statement.</p>
+      <p><strong>If you DO NOT WIN:</strong> The USD 10,000 is <strong>fully refunded directly by your own attorney</strong> from the trust account back to you — no action needed from PropertyFinder or the seller. PropertyFinder issues a Release Confirmation to your attorney within 3 business days of auction close to facilitate the refund.</p>
+      <p><strong>If you DEFAULT after winning:</strong> The deposit may be withheld pending resolution of the default. The seller may pursue a claim against the held funds. The separate <strong>5% Platform Commission</strong> on the accepted bid also remains payable within 48 hours — these are two separate obligations.</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>How does the commission structure work for sellers?</summary>  <details class="accord">
+    <summary>How does the commission structure work for sellers?</summary>
+    <div class="acc-body">
+      <p><strong>Commission is only charged on a successfully completed sale — never on unsold or withdrawn listings.</strong></p>
+      <p><strong>Agent or Auctioneer listed auction:</strong></p>
+      <ul>
+        <li>Total commission = <strong>10% of the final sale price</strong></li>
+        <li><strong>5%</strong> goes to PropertyFinder</li>
+        <li><strong>5%</strong> goes to your agent or auctioneer</li>
+        <li>Both portions are deducted from your sale proceeds at closing</li>
+      </ul>
+      <p><strong>Private / Owner listed auction (no agent):</strong></p>
+      <ul>
+        <li>Total commission = <strong>5% of the final sale price</strong></li>
+        <li><strong>5%</strong> goes to PropertyFinder only — nothing further</li>
+        <li>You keep the remaining 95% of the sale price (before transfer costs)</li>
+      </ul>
+      <p><strong>Example — Agent listed, sold at USD 500,000:</strong></p>
+      <ul>
+        <li>PropertyFinder: USD 25,000 (5%)</li>
+        <li>Agent: USD 25,000 (5%)</li>
+        <li>Seller receives: <strong>USD 450,000</strong> net (before transfer costs)</li>
+      </ul>
+      <p><strong>Example — Private listing, sold at USD 500,000:</strong></p>
+      <ul>
+        <li>PropertyFinder: USD 25,000 (5%)</li>
+        <li>Seller receives: <strong>USD 475,000</strong> net (before transfer costs)</li>
+      </ul>
+      <p>Commission is deducted at closing. A tax invoice is issued automatically. Full terms in the <a href="auction-seller-agreement.html">Seller Agreement — Section 5</a>.</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>What fees and costs apply when buying at auction?</summary>
+    <div class="acc-body">
+      <p><strong>Bidder Security Deposit (pre-bid, refundable):</strong> Before placing any bid you must deposit <strong>USD 10,000</strong> into your own attorney's trust account and upload proof to the listing page. This is credited to your purchase price if you win, or fully refunded by your attorney if you do not win. See the security deposit FAQ above for full details.</p>
+      <p><strong>Commission — paid by the seller, not you:</strong> The 10% commission (agent-listed) or 5% (private listing) is a seller-side obligation deducted from the seller's proceeds at closing. It is not an additional charge on top of your bid as a buyer.</p>
+      <p><strong>Sale deposit (on winning):</strong> If you win, you pay a deposit — typically 10% of the hammer price — into the designated conveyancer or trust account within 24 hours. Your USD 10,000 pre-bid security deposit is credited towards this amount.</p>
+      <p><strong>Transfer costs:</strong> Legal/conveyancing fees, stamp duty, and registration fees as required by local law in the country of sale. Responsibility for these varies — check the listing's special conditions and get local legal advice.</p>
+      <p><strong>PropertyFinder does not charge buyers</strong> a listing or platform access fee. Platform commission on buyer default (if applicable) is a separate matter — see the default FAQ below.</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>Can I inspect the property before bidding?</summary>
+    <div class="acc-body">
+      <p><strong>Yes — and we strongly recommend it.</strong> Most auctions schedule open inspection days, listed on the auction detail page. You can also request a private viewing through the auctioneer.</p>
+      <p>Before bidding, you should:</p>
+      <ul>
+        <li>Physically visit the property and verify its condition</li>
+        <li>Review the full legal pack (title deed, survey, zoning, compliance)</li>
+        <li>Get independent legal advice — auction purchases are typically binding</li>
+        <li>Arrange a building inspection if the property type warrants it</li>
+      </ul>
+      <p><strong>Remember:</strong> Properties sold at auction are often sold "voetstoots" (as-is). You cannot claim for defects discovered after the sale unless fraud applies.</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>What happens if I win the auction?</summary>
+    <div class="acc-body">
+      <p><strong>Immediately after the auction closes:</strong></p>
+      <ul>
+        <li>You receive an in-app and email notification confirming your winning bid.</li>
+        <li>The seller/auctioneer confirms acceptance (for reserve auctions, this may take up to 24 hours).</li>
+      </ul>
+      <p><strong>Within 24 hours:</strong></p>
+      <ul>
+        <li>You sign the agreement of sale / memorandum of sale.</li>
+        <li>You pay the sale deposit (typically 10% of the hammer price) into the designated conveyancer or trust account. Your <strong>USD 10,000 pre-bid security deposit is credited towards this amount</strong> — your attorney releases it as directed by the conveyancer.</li>
+        <li>Commission (10% if agent-listed, 5% if private) is deducted from the seller's proceeds at closing — this is not an additional charge to you as the buyer.</li>
+      </ul>
+      <p><strong>Within 28–42 days (varies by country):</strong></p>
+      <ul>
+        <li>Conveyancing/closing attorneys handle the legal transfer.</li>
+        <li>FICA/AML compliance checks are completed.</li>
+        <li>Bond/mortgage application processed (if applicable).</li>
+        <li>Balance of purchase price is paid.</li>
+        <li>Title is transferred — keys handed over. Congratulations!</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>What if I can't complete the purchase after winning?</summary>
+    <div class="acc-body">
+      <p><strong>This is a serious matter.</strong> An accepted bid is legally binding. If you fail to complete:</p>
+      <ul>
+        <li>You will lose your sale deposit (forfeiture applies under the sale agreement).</li>
+        <li>The seller may claim damages and re-auction costs against you.</li>
+        <li>PropertyFinder will charge a <strong>5% Platform Commission</strong> on the accepted bid amount, payable within <strong>48 hours</strong> of the default notice — this is separate from the sale deposit and any claims by the seller.</li>
+        <li>Your USD 10,000 security deposit held in your attorney's trust account may be withheld pending resolution of the default and any claims against you.</li>
+        <li>Your account will be suspended or banned from future auctions.</li>
+      </ul>
+      <p>See <a href="auction-bidding-terms.html#commission">Auction Bidding Terms — Section 5</a> for the full commission and default policy.</p>
+    </div>
+  </details>
+
+  <details class="accord">
+    <summary>Is online bidding safe and secure?</summary>
+    <div class="acc-body">
+      <p><strong>Yes.</strong> PropertyFinder uses:</p>
+      <ul>
+        <li>Encrypted connections (SSL/TLS) for all bidding activity</li>
+        <li>Identity verification (KYC) before bidding is enabled</li>
+        <li>Anti-manipulation monitoring (shill bidding detection, multi-account analysis)</li>
+        <li>Auto-extend ("soft close") to prevent last-second sniping</li>
+        <li>Full audit trail — every bid is logged with timestamp, IP, and device</li>
+      </ul>
+      <p>See <a href="anti-fraud-bid-integrity.html">Anti-Fraud &amp; Bid Integrity</a> for our full policy.</p>
+    </div>
+  </details>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder. All rights reserved. | <a href="auctions.html">Back to Auctions</a> | <a href="terms-of-u  <script src="/social-share.js?v=2.1"></script>

@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>My Dashboard — PropertyFinder Global</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1520;--panel:#141c2b;--card:#1a2535;--hover:#1f2d3d;
+  --gold:#c4a47c;--gold-mid:#a8845a;--gold-dim:#b8976a;
+  --cream:#e8dfc8;--mid:#c8b98a;--subtle:#8a7d5a;
+  --border:rgba(196,164,124,0.18);--border-s:rgba(196,164,124,0.4);
+  --success:#16A34A;--danger:#DC2626;--warn:#D97706;--info:#2563EB;--purple:#7C3AED;
+  --font:'DM Sans',sans-serif;--serif:'Cinzel',serif;
+  --r:12px;--r2:8px;--r3:6px;
+  --sw:260px;
+  --sh:0 2px 12px rgba(0,0,0,0.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#faf8f4}
+body{font-family:var(--font);background:#faf8f4;color:#1a1408;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--gold);text-decoration:none}a:hover{color:var(--gold-dim)}
+input,select,textarea,button{font-family:var(--font)}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sw);background:linear-gradient(180deg,#0a1018 0%,#0e1520 100%);position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow-y:auto;border-right:1px solid var(--border);transition:transform 0.3s}
+.main{margin-left:var(--sw);flex:1;min-width:0;display:flex;flex-direction:column;background:#faf8f4}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0;background:#faf8f4}}
+
+/* ── SIDEBAR ── */
+.sb-brand{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
+.sb-logo{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--cream);letter-spacing:0.04em}
+.sb-logo span{color:var(--gold)}
+.sb-tagline{font-size:0.65rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:0.12em;margin-top:3px}
+.sb-nav{flex:1;padding:14px 12px;overflow-y:auto}
+.sb-section-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:var(--subtle);padding:12px 10px 6px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r3);color:rgba(232,223,200,0.55);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.18s;margin-bottom:2px;position:relative;border:none;background:none;width:100%;text-align:left}
+.sb-item:hover{background:rgba(196,164,124,0.08);color:var(--cream)}
+.sb-item.active{background:var(--gold);color:#1a1408;font-weight:800}
+.sb-ico{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--danger);color:white;padding:2px 6px;border-radius:10px;font-size:0.62rem;font-weight:800}
+.sb-badge.gold{background:var(--gold);color:#1a1408}
+.sb-badge.green{background:var(--success)}
+.sb-divider{height:1px;background:var(--border);margin:8px 12px}
+.sb-user{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold-mid),var(--gold));display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:800;color:#1a1408;flex-shrink:0}
+.sb-uname{font-size:0.82rem;font-weight:700;color:var(--cream)}
+.sb-urole{font-size:0.65rem;color:var(--subtle);margin-top:1px}
+.sb-plan{display:inline-block;font-size:0.58rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:2px 6px;border-radius:3px;background:rgba(196,164,124,0.15);color:var(--gold);margin-top:3px}
+.sb-toggle{display:none;position:fixed;top:14px;left:14px;z-index:300;width:40px;height:40px;border-radius:var(--r2);background:var(--card);border:1px solid var(--border);color:var(--cream);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:900px){.sb-toggle{display:flex}}
+
+/* ── TOP BAR ── */
+.top-bar{padding:14px 24px;background:#ffffff;border-bottom:1px solid rgba(184,151,106,0.2);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2)}
+.tb-title{font-family:var(--serif);font-size:1rem;font-weight:700;color:#1a1408}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-btn{padding:8px 16px;border-radius:var(--r2);background:var(--gold);color:#1a1408;font-size:0.82rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;white-space:nowrap}
+.tb-btn:hover{background:var(--gold-dim);transform:translateY(-1px)}
+.tb-btn.outline{background:transparent;color:var(--gold);border:1.5px solid var(--border-s)}
+.tb-btn.outline:hover{background:rgba(196,164,124,0.1);transform:none}
+.tb-btn.danger{background:rgba(220,38,38,0.1);color:var(--danger);border:1.5px solid rgba(220,38,38,0.25)}
+.tb-notif{position:relative;width:38px;height:38px;border-radius:var(--r2);background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem}
+.tb-notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--danger);border:2px solid var(--panel)}
+
+/* ── CONTENT ── */
+.content{padding:22px 24px;flex:1}
+@media(max-width:900px){.content{padding:14px 16px}.top-bar{padding:12px 16px 12px 56px}}
+.panel{display:none}.panel.active{display:block}
+
+/* ── WELCOME BANNER ── */
+.welcome-banner{background:linear-gradient(135deg,#fdf8f0 0%,#faf8f4 50%,#f5f0e8 100%);border:1px solid rgba(184,151,106,0.3);border-radius:var(--r);padding:24px 28px;margin-bottom:20px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.welcome-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.wb-text h2{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:#1a1408;margin-bottom:4px}
+.wb-text p{font-size:0.85rem;color:#4a3f2a;line-height:1.6}
+.wb-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--gold-mid),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:#1a1408;flex-shrink:0;box-shadow:0 4px 16px rgba(196,164,124,0.3)}
+.wb-stats{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap}
+.wb-stat{text-align:center}
+.wb-stat-val{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--gold)}
+.wb-stat-lbl{font-size:0.65rem;color:#6a5a3a;text-transform:uppercase;letter-spacing:0.08em;font-weight:700}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{padding:16px;border-radius:var(--r2);background:#ffffff;border:1px solid rgba(184,151,106,0.2);position:relative;overflow:hidden;box-shadow:0 1px 8px rgba(0,0,0,0.06)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0.5}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sc-ico{width:36px;height:36px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.sc-trend{font-size:0.68rem;font-weight:800;padding:3px 7px;border-radius:4px}
+.sc-trend.up{background:rgba(22,163,74,0.12);color:var(--success)}
+.sc-trend.down{background:rgba(220,38,38,0.12);color:var(--danger)}
+.sc-trend.flat{background:rgba(196,164,124,0.1);color:var(--subtle)}
+.sc-val{font-family:var(--serif);font-size:1.55rem;font-weight:700;color:#1a1408;line-height:1}
+.sc-lbl{font-size:0.7rem;color:#6a5a3a;font-weight:600;margin-top:4px}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r2);border:1px solid rgba(184,151,106,0.2)}
+.dtable{width:100%;border-collapse:collapse;font-size:0.8rem;background:#ffffff;min-width:500px}
+.dtable th{padding:10px 14px;text-align:left;font-size:0.65rem;font-weight:800;color:#6a5a3a;text-transform:uppercase;letter-spacing:0.5px;background:#f0ece4;border-bottom:2px solid rgba(184,151,106,0.25);white-space:nowrap}
+.dtable td{padding:10px 14px;border-bottom:1px solid rgba(184,151,106,0.15);vertical-align:middle;color:#1a1408}
+.dtable tr:last-child td{border-bottom:none}
+.dtable tr:hover td{background:#fdf8f0}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:4px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap}
+.badge.active{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.pending{background:rgba(217,119,6,0.12);color:var(--warn)}
+.badge.draft{background:rgba(196,164,124,0.1);color:var(--subtle)}
+.badge.rejected{background:rgba(220,38,38,0.12);color:var(--danger)}
+.badge.sold{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.expired{background:rgba(220,38,38,0.08);color:var(--danger)}
+.badge.live{background:rgba(220,38,38,0.12);color:var(--danger);animation:badgePulse 1.5s infinite}
+@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.badge.new{background:rgba(37,99,235,0.1);color:var(--info)}
+.badge.replied{background:rgba(22,163,74,0.1);color:var(--success)}
+.badge.unread{background:rgba(220,38,38,0.1);color:var(--danger)}
+.badge.paid{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.due{background:rgba(217,119,6,0.12);color:var(--warn)}
+.badge.private{background:rgba(37,99,235,0.1);color:var(--info)}
+.badge.agent{background:rgba(196,164,124,0.12);color:var(--gold)}
+.badge.enterprise{background:rgba(139,92,246,0.1);color:var(--purple)}
+.badge.won{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.outbid{background:rgba(220,38,38,0.12);color:var(--danger)}
+
+/* ── ACTION BUTTONS ── */
+.act-btn{padding:5px 11px;border-radius:4px;font-size:0.73rem;font-weight:800;border:none;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.act-btn.view{background:rgba(37,99,235,0.1);color:var(--info)}.act-btn.view:hover{background:var(--info);color:white}
+.act-btn.edit{background:rgba(217,119,6,0.1);color:var(--warn)}.act-btn.edit:hover{background:var(--warn);color:white}
+.act-btn.del{background:rgba(220,38,38,0.1);color:var(--danger)}.act-btn.del:hover{background:var(--danger);color:white}
+.act-btn.reply{background:rgba(22,163,74,0.1);color:var(--success)}.act-btn.reply:hover{background:var(--success);color:white}
+.act-btn.primary{background:var(--gold);color:#1a1408;font-weight:800}.act-btn.primary:hover{background:var(--gold-dim)}
+.act-btn.boost{background:rgba(139,92,246,0.1);color:var(--purple)}.act-btn.boost:hover{background:var(--purple);color:white}
+.act-btn.renew{background:rgba(196,164,124,0.12);color:var(--gold)}.act-btn.renew:hover{background:var(--gold);color:#1a1408}
+
+/* ── CARDS ── */
+.card-panel{background:#ffffff;border-radius:var(--r2);border:1px solid rgba(184,151,106,0.2);padding:18px;margin-bottom:14px;box-shadow:0 1px 8px rgba(0,0,0,0.06)}
+.card-panel h3{font-size:0.9rem;font-weight:800;color:#1a1408;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.sec-header h2{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:#1a1408}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-chip{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(184,151,106,0.25);background:#ffffff;color:#6a5a3a;transition:all 0.18s}
+.filter-chip:hover{border-color:var(--gold);color:var(--gold)}
+.filter-chip.active{background:var(--gold);border-color:var(--gold);color:#1a1408}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ── LISTING CARDS ── */
+.listing-card{background:#ffffff;border:1px solid rgba(184,151,106,0.2);border-radius:var(--r2);padding:16px;margin-bottom:10px;display:flex;gap:14px;transition:border-color 0.2s;position:relative;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.listing-card:hover{border-color:rgba(184,151,106,0.5)}
+.listing-card.draft{border-left:3px solid var(--subtle)}
+.listing-card.active{border-left:3px solid var(--success)}
+.listing-card.pending{border-left:3px solid var(--warn)}
+.listing-card.rejected{border-left:3px solid var(--danger)}
+.listing-card.sold{border-left:3px solid var(--info);opacity:0.8}
+.lc-thumb{width:80px;height:64px;border-radius:var(--r3);background:var(--hover);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
+.lc-info{flex:1;min-width:0}
+.lc-title{font-size:0.88rem;font-weight:800;color:#1a1408;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-loc{font-size:0.75rem;color:var(--subtle);margin-bottom:6px}
+.lc-price{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--gold)}
+.lc-meta{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+.lc-meta-item{font-size:0.7rem;color:var(--subtle);display:flex;align-items:center;gap:3px}
+.lc-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.lc-stats{display:flex;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(184,151,106,0.15)}
+.lc-stat{text-align:center;min-width:50px}
+.lc-stat-val{font-size:0.88rem;font-weight:800;color:#1a1408}
+.lc-stat-lbl{font-size:0.6rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.06em}
+
+/* ── ENQUIRY CARDS ── */
+.enq-card{background:#ffffff;border:1px solid rgba(184,151,106,0.2);border-radius:var(--r2);padding:14px 16px;margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color 0.2s;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.enq-card:hover{border-color:rgba(184,151,106,0.5)}
+.enq-card.unread{border-color:rgba(37,99,235,0.35);background:rgba(37,99,235,0.03)}
+.enq-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--hover),var(--card));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border:1px solid var(--border)}
+.enq-info{flex:1;min-width:0}
+.enq-name{font-size:0.85rem;font-weight:800;color:#1a1408;margin-bottom:2px}
+.enq-prop{font-size:0.75rem;color:var(--gold);margin-bottom:4px}
+.enq-msg{font-size:0.78rem;color:#4a3f2a;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.enq-meta{font-size:0.68rem;color:var(--subtle);margin-top:4px}
+.enq-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+
+/* ── WALLET ── */
+.wallet-card{background:linear-gradient(135deg,#141c2b 0%,#1a2535 60%,#1f2d3d 100%);border:1px solid var(--border-s);border-radius:var(--r);padding:24px;position:relative;overflow:hidden;margin-bottom:16px}
+.wallet-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.wc-bal-lbl{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--subtle);margin-bottom:6px}
+.wc-bal{font-family:var(--serif);font-size:2.5rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.wc-bal-sub{font-size:0.78rem;color:var(--subtle)}
+.wc-row{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap}
+.wc-stat{background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.25);border-radius:var(--r2);padding:12px 16px;flex:1;min-width:100px}
+.wc-stat-val{font-size:1rem;font-weight:800;color:var(--cream);margin-bottom:2px}
+.wc-stat-lbl{font-size:0.68rem;color:var(--subtle)}
+.topup-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+@media(max-width:600px){.topup-grid{grid-template-columns:repeat(2,1fr)}}
+.topup-btn{background:#ffffff;border:1.5px solid rgba(184,151,106,0.25);border-radius:var(--r2);padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.topup-btn:hover{border-color:var(--gold);background:rgba(196,164,124,0.08)}
+.topup-btn.popular{border-color:var(--gold);background:rgba(184,151,106,0.08)}
+.topup-amt{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--gold)}
+.topup-bonus{font-size:0.65rem;font-weight:800;color:var(--success);margin-top:2px}
+.topup-cpc{font-size:0.68rem;color:var(--subtle)}
+
+/* ── AD PERFORMANCE ── */
+.ad-card{background:#ffffff;border:1px solid rgba(184,151,106,0.2);border-radius:var(--r2);padding:14px 16px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.ad-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ad-title{font-size:0.85rem;font-weight:800;color:#1a1408}
+.ad-type{font-size:0.68rem;color:var(--subtle)}
+.ad-metrics{display:flex;gap:16px;flex-wrap:wrap}
+.ad-metric{text-align:center}
+.ad-metric-val{font-size:1rem;font-weight:800;color:#1a1408}
+.ad-metric-lbl{font-size:0.62rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.06em}
+.progress-bar{height:6px;background:#f0ece4;border-radius:3px;margin-top:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.5s ease;background:var(--gold)}
+
+/* ── PROVAL ── */
+.proval-card{background:linear-gradient(135deg,#ffffff,#fdf8f0);border:1px solid rgba(184,151,106,0.3);border-radius:var(--r);padding:20px;margin-bottom:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.proval-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.proval-title{font-size:0.92rem;font-weight:800;color:#1a1408;margin-bottom:3px}
+.proval-addr{font-size:0.75rem;color:var(--subtle)}
+.proval-val{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--gold);text-align:right;line-height:1}
+.proval-val-lbl{font-size:0.65rem;color:var(--subtle);text-align:right;margin-top:3px}
+.proval-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+@media(max-width:600px){.proval-metrics{grid-template-columns:repeat(2,1fr)}}
+.pv-metric{background:rgba(184,151,106,0.08);border:1px solid rgba(184,151,106,0.2);border-radius:var(--r3);padding:10px;text-align:center}
+.pv-metric-val{font-size:0.9rem;font-weight:800;color:#1a1408}
+.pv-metric-lbl{font-size:0.62rem;color:var(--subtle);margin-top:2px}
+
+/* ── AUCTION ── */
+.auction-card{background:#ffffff;border:1px solid rgba(184,151,106,0.2);border-radius:var(--r2);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.auction-card.live-now{border-color:rgba(220,38,38,0.4);background:rgba(220,38,38,0.03)}
+.au-info{flex:1;min-width:0}
+.au-title{font-size:0.85rem;font-weight:800;color:#1a1408;margin-bottom:2px}
+.au-meta{font-size:0.72rem;color:var(--subtle)}
+.au-price{text-align:right;flex-shrink:0}
+.au-current{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--gold)}
+.au-label{font-size:0.65rem;color:var(--subtle);margin-top:2px}
+.countdown{font-size:0.75rem;font-weight:800;color:var(--danger);background:rgba(220,38,38,0.1);padding:4px 10px;border-radius:4px;margin-top:4px}
+
+/* ── FORM ── */
+.form-section{background:#ffffff;border:1px solid rgba(184,151,106,0.2);border-radius:var(--r2);padding:20px;margin-bottom:14px;box-shadow:0 1px 8px rgba(0,0,0,0.05)}
+.form-section-title{font-size:0.88rem;font-weight:800;color:#1a1408;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(184,151,106,0.2);display:flex;align-items:center;gap:8px}
+.form-row{margin-bottom:14px}
+.form-row.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.form-row.two{grid-template-columns:1fr}}
+.form-label{font-size:0.72rem;font-weight:700;color:#6a5a3a;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px}
+.form-label .req{color:var(--danger);margin-left:3px}
+.form-input{width:100%;padding:10px 14px;background:#faf8f4;border:1.5px solid rgba(184,151,106,0.3);border-radius:var(--r2);color:#1a1408;font-size:0.85rem;outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:#a89060}
+.form-input.error{border-color:var(--danger)}
+select.form-input option{background:var(--card)}
+textarea.form-input{min-height:90px;resize:vertical;line-height:1.5}
+.form-help{font-size:0.7rem;color:#8a7050;margin-top:4px}
+.form-hint{background:rgba(184,151,106,0.08);border:1px solid rgba(184,151,106,0.25);border-radius:var(--r2);padding:10px 14px;font-size:0.78rem;color:#4a3f2a;margin-bottom:14px;line-height:1.6}
+.char-counter{font-size:0.68rem;color:var(--subtle);text-align:right;margin-top:3px}
+.photo-upload{border:2px dashed rgba(184,151,106,0.35);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;background:#f0ece4}
+.photo-upload:hover{border-color:var(--gold);background:rgba(196,164,124,0.05)}
+.photo-upload-ico{font-size:2rem;margin-bottom:8px}
+.photo-upload-text{font-size:0.82rem;color:#6a5a3a}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:12px}
+.photo-thumb{width:100%;aspect-ratio:1;border-radius:var(--r3);background:#f0ece4;display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative;border:1px solid rgba(184,151,106,0.25)}
+.photo-del{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--danger);color:white;font-size:0.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.feature-check{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:#4a3f2a;cursor:pointer}
+.feature-check input{accent-color:var(--gold);width:15px;height:15px;cursor:pointer}
+
+/* ── PROFILE ── */
+.profile-avatar-big{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold-mid),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#1a1408;margin-bottom:12px;box-shadow:0 4px 16px rgba(196,164,124,0.3)}
+.plan-card{background:#ffffff;border:1.5px solid var(--gold);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(184,151,106,0.15)}
+.plan-card::before{content:'YOUR PLAN';position:absolute;top:12px;right:12px;font-size:0.6rem;font-weight:800;letter-spacing:0.1em;color:var(--subtle)}
+.plan-name{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--gold);margin-bottom:4px}
+.plan-features{display:grid;gap:6px;margin-top:12px}
+.plan-feature{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:#4a3f2a}
+.plan-feature.ok::before{content:'✓';color:var(--success);font-weight:800}
+.plan-feature.no::before{content:'✗';color:var(--danger);font-weight:800}
+
+/* ── ACTIVITY ── */
+.act-feed{max-height:360px;overflow-y:auto}
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.act-dot.g{background:var(--success)}.act-dot.a{background:var(--warn)}.act-dot.r{background:var(--danger)}.act-dot.b{background:var(--info)}.act-dot.p{background:var(--gold)}
+.act-text{font-size:0.8rem;color:#1a1408;line-height:1.5}
+.act-time{font-size:0.68rem;color:var(--subtle);margin-top:2px}
+
+/* ── BAR CHART ── */
+.bar-chart{display:flex;gap:8px;align-items:flex-end;height:120px;padding:4px 0 0}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height 0.5s ease;position:relative;min-height:3px;cursor:pointer}
+.bar:hover{opacity:0.8}
+.bar-lbl{font-size:0.62rem;font-weight:700;color:#6a5a3a;text-align:center}
+.bar-axis{height:1px;background:rgba(184,151,106,0.25);margin-bottom:4px}
+
+/* ── NOTIFICATION ── */
+.notif-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.notif-item:last-child{border-bottom:none}
+.notif-item.unread{background:rgba(37,99,235,0.03);margin:0 -4px;padding:12px 4px;border-radius:var(--r3)}
+.notif-ico{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.notif-text{font-size:0.82rem;color:#1a1408;line-height:1.5}
+.notif-time{font-size:0.68rem;color:var(--subtle);margin-top:2px}
+
+/* ── TOAST ── */
+.pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--r2);color:#1a1408;font-size:0.85rem;font-weight:700;z-index:9999;background:#ffffff;border:1px solid rgba(184,151,106,0.4);box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.7s forwards;white-space:nowrap}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes toastOut{to{opacity:0}}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{width:100%;max-width:520px;background:#ffffff;border-radius:var(--r);border:1px solid rgba(184,151,106,0.3);box-shadow:0 24px 80px rgba(0,0,0,0.2);animation:mIn 0.3s ease;max-height:90vh;overflow-y:auto}
+@keyframes mIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:18px 22px;background:#f0ece4;border-bottom:1px solid rgba(184,151,106,0.2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0}
+.modal-head h3{font-size:1rem;font-weight:800;color:#1a1408}
+.modal-close{width:32px;height:32px;border-radius:50%;background:rgba(196,164,124,0.1);border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--subtle)}
+.modal-body{padding:22px;color:#1a1408}
+.modal-foot{padding:14px 22px;border-top:1px solid rgba(184,151,106,0.2);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:#ffffff}
+.modal-btn{padding:10px 20px;border-radius:var(--r2);font-size:0.85rem;font-weight:800;border:none;cursor:pointer}
+.modal-btn.cancel{background:#f0ece4;color:#6a5a3a}
+.modal-btn.primary{background:var(--gold);color:#1a1408}
+.modal-btn.danger{background:var(--danger);color:white}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold-mid);border-radius:3px}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:48px 24px;color:var(--subtle)}
+.empty-ico{font-size:3rem;margin-bottom:12px;opacity:0.5}
+.empty-title{font-size:1rem;font-weight:800;color:var(--mid);margin-bottom:6px}
+.empty-sub{font-size:0.82rem;color:var(--subtle);margin-bottom:20px}
+
+/* ── STEPS / PROGRESS ── */
+.step-bar{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:14px;left:50%;right:-50%;height:2px;background:rgba(184,151,106,0.2);z-index:0}
+.step.done:not(:last-child)::after,.step.active:not(:last-child)::after{background:var(--gold)}
+.step-circle{width:28px;height:28px;border-radius:50%;background:#f0ece4;border:2px solid rgba(184,151,106,0.3);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:#6a5a3a;z-index:1;position:relative}
+.step.done .step-circle{background:var(--success);border-color:var(--success);color:white}
+.step.active .step-circle{background:var(--gold);border-color:var(--gold);color:#1a1408}
+.step-label{font-size:0.65rem;font-weight:700;color:#6a5a3a;text-align:center;white-space:nowrap}
+.step.active .step-label{color:var(--gold)}
+.step.done .step-label{color:var(--success)}
+
+/* ── UPGRADE BANNER ── */
+.upgrade-banner{background:linear-gradient(135deg,rgba(184,151,106,0.1),rgba(184,151,106,0.18));border:1px solid rgba(184,151,106,0.4);border-radius:var(--r2);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.ub-ico{font-size:1.6rem;flex-shrink:0}
+.ub-text{flex:1}
+.ub-title{font-size:0.88rem;font-weight:800;color:#1a1408;margin-bottom:2px}
+.ub-sub{font-size:0.75rem;color:#4a3f2a}
+
+/* ── REFERRAL ── */
+.ref-box{background:#f0ece4;border:1px solid rgba(184,151,106,0.25);border-radius:var(--r2);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ref-code{font-family:monospace;font-size:1rem;font-weight:800;color:var(--gold);letter-spacing:0.1em;flex:1}
+.ref-copy{padding:7px 14px;background:var(--gold);color:#1a1408;border:none;border-radius:var(--r3);font-size:0.78rem;font-weight:800;cursor:pointer}
+</style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+<button class="sb-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">Property<span>Finder</span></div>
+    <div class="sb-tagline">Agent Dashboard</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section-label">Main</div>
+    <button class="sb-item active" onclick="showPanel('overview',this)"><span class="sb-ico">📊</span>Overview</button>
+    <button class="sb-item" onclick="showPanel('listings',this)"><span class="sb-ico">🏡</span>My Listings<span class="sb-badge gold" id="sbListings">45</span></button>
+    <button class="sb-item" onclick="showPanel('add-listing',this)"><span class="sb-ico">➕</span>Add New Listing</button>
+
+    <div class="sb-section-label">Leads & Buyers</div>
+    <button class="sb-item" onclick="showPanel('enquiries',this)"><span class="sb-ico">📩</span>Enquiries<span class="sb-badge" id="sbEnq">3</span></button>
+    <button class="sb-item" onclick="showPanel('saved',this)"><span class="sb-ico">❤️</span>Saved by Buyers</button>
+
+    <div class="sb-section-label">Finance</div>
+    <button class="sb-item" onclick="showPanel('billing',this)"><span class="sb-ico">💳</span>Billing & Invoices</button>
+    <button class="sb-item" onclick="showPanel('wallet',this)"><span class="sb-ico">💰</span>Ad Wallet</button>
+
+    <div class="sb-section-label">Tools</div>
+    <button class="sb-item" onclick="showPanel('auctions',this)"><span class="sb-ico">🔨</span>My Auctions<span class="sb-badge" style="background:var(--warn)" id="sbAuc">2</span></button>
+    <button class="sb-item" onclick="showPanel('proval',this)"><span class="sb-ico">🏠</span>ProVal Reports</button>
+    <button class="sb-item" onclick="showPanel('analytics',this)"><span class="sb-ico">📈</span>Analytics</button>
+
+    <div class="sb-section-label">Account</div>
+    <button class="sb-item" onclick="showPanel('notifications',this)"><span class="sb-ico">🔔</span>Notifications<span class="sb-badge" id="sbNotif">5</span></button>
+    <button class="sb-item" onclick="showPanel('profile',this)"><span class="sb-ico">👤</span>My Profile</button>
+    <button class="sb-item" onclick="showPanel('help',this)"><span class="sb-ico">❓</span>Help & Support</button>
+
+    <div class="sb-divider"></div>
+    <a class="sb-item" href="index.html" target="_blank"><span class="sb-ico">🌐</span>View Live Site</a>
+  </nav>
+  <div class="sb-user">
+    <div class="sb-avatar">MR</div>
+    <div>
+      <div class="sb-uname">Metro Realty</div>
+      <div class="sb-urole"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="442d2a222b04292130362b6a272b6a3e25">[email&#160;protected]</a></div>
+      <div class="sb-plan">Agency Plan · $3/listing</div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="top-bar">
+    <div class="tb-title" id="panelTitle">📊 Dashboard Overview</div>
+    <div class="tb-right">
+      <button class="tb-notif" onclick="showPanel('notifications',document.querySelector('[onclick*=notifications]'))">
+        🔔<span class="tb-notif-dot"></span>
+      </button>
+      <button class="tb-btn outline" onclick="showPanel('add-listing',document.querySelector('[onclick*=add-listing]'))">➕ Add Listing</button>
+      <button class="tb-btn" onclick="showPanel('wallet',document.querySelector('[onclick*=wallet]'))">💰 Top Up Wallet</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+<!-- ══════════════════════════════════════════════════════
+     OVERVIEW
+══════════════════════════════════════════════════════ -->
+<div class="panel active" id="p-overview">
+  <div class="welcome-banner">
+    <div class="wb-avatar">MR</div>
+    <div class="wb-text">
+      <h2>Good morning, Metro Realty! 👋</h2>
+      <p>You have <strong style="color:var(--gold)">3 new enquiries</strong> and <strong style="color:var(--gold)">45 active listings</strong> across 3 countries. Your top listing had <strong style="color:var(--gold)">128 views</strong> this week.</p>
+      <div class="wb-stats">
+        <div class="wb-stat"><div class="wb-stat-val">45</div><div class="wb-stat-lbl">Listings</div></div>
+        <div class="wb-stat"><div class="wb-stat-val">3</div><div class="wb-stat-lbl">New Leads</div></div>
+        <div class="wb-stat"><div class="wb-stat-val">$135</div><div class="wb-stat-lbl">Monthly Fee</div></div>
+        <div class="wb-stat"><div class="wb-stat-val">1,284</div><div class="wb-stat-lbl">Views This Month</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-grid" id="overviewStats"></div>
+
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>📩 Recent Enquiries <span style="font-size:0.72rem;color:var(--subtle);font-weight:500">— buyers contacting you</span></h3>
+      <div id="recentEnquiries"></div>
+      <button class="tb-btn outline" style="width:100%;justify-content:center;margin-top:12px" onclick="showPanel('enquiries',document.querySelector('[onclick*=enquiries]'))">View All Enquiries →</button>
+    </div>
+    <div class="card-panel">
+      <h3>⚡ Recent Activity</h3>
+      <div class="act-feed" id="overviewActivity"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>📊 Views per Listing — Last 7 Days</h3>
+      <div class="bar-chart" id="viewsChart"></div>
+      <div class="bar-axis"></div>
+    </div>
+    <div class="card-panel">
+      <h3>🏡 Listing Status Summary</h3>
+      <div id="listingSummary"></div>
+    </div>
+  </div>
+
+  <div class="upgrade-banner">
+    <div class="ub-ico">⭐</div>
+    <div class="ub-text">
+      <div class="ub-title">Upgrade to Enterprise — Save 33% per listing</div>
+      <div class="ub-sub">At 45 listings you pay $135/month. On Enterprise (2000+ listings) you pay $2/listing. Upgrade when you're ready to scale.</div>
+    </div>
+    <button class="tb-btn" onclick="showToast('Opening upgrade options...')">Upgrade Plan →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MY LISTINGS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-listings">
+  <div class="sec-header">
+    <h2>🏡 My Listings</h2>
+    <div style="display:flex;gap:8px">
+      <button class="tb-btn outline" onclick="showToast('📥 Exporting listing data...')">📥 Export</button>
+      <button class="tb-btn" onclick="showPanel('add-listing',document.querySelector('[onclick*=add-listing]'))">➕ Add Listing</button>
+    </div>
+  </div>
+
+  <div class="form-hint">💡 <strong>How listings work:</strong> Each listing costs <strong>$3.00/month</strong> on your Agency plan. New listings go <strong>live within 2 hours</strong> after approval. You can have up to <strong>2,000 listings</strong> on this plan. Add photos, videos and a description to get more views.</div>
+
+  <div class="stat-grid" id="listingStats"></div>
+
+  <div class="filter-bar">
+    <span class="filter-chip active" onclick="filterListings('all',this)">All (45)</span>
+    <span class="filter-chip" onclick="filterListings('active',this)">Active (38)</span>
+    <span class="filter-chip" onclick="filterListings('pending',this)">Pending (4)</span>
+    <span class="filter-chip" onclick="filterListings('draft',this)">Draft (2)</span>
+    <span class="filter-chip" onclick="filterListings('sold',this)">Sold (1)</span>
+  </div>
+
+  <div id="listingCards"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADD NEW LISTING
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-add-listing">
+  <div class="sec-header">
+    <h2>➕ Add New Listing</h2>
+    <div style="font-size:0.8rem;color:var(--subtle)">Cost: <strong style="color:var(--gold)">$3.00/month</strong> · Goes live within 2 hours</div>
+  </div>
+
+  <div class="step-bar">
+    <div class="step done" id="step1"><div class="step-circle">1</div><div class="step-label">Property Details</div></div>
+    <div class="step active" id="step2"><div class="step-circle">2</div><div class="step-label">Location & Price</div></div>
+    <div class="step" id="step3"><div class="step-circle">3</div><div class="step-label">Photos & Video</div></div>
+    <div class="step" id="step4"><div class="step-circle">4</div><div class="step-label">Features</div></div>
+    <div class="step" id="step5"><div class="step-circle">5</div><div class="step-label">Submit</div></div>
+  </div>
+
+  <div class="form-hint">💡 <strong>Tips for more views:</strong> Listings with 10+ photos get <strong>3x more enquiries</strong>. A detailed description adds <strong>60% more views</strong>. Always include the exact price — listings without prices get <strong>40% fewer clicks</strong>.</div>
+
+  <!-- Step 1: Property Details -->
+  <div class="form-section">
+    <div class="form-section-title">🏠 Step 1 — Property Details</div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Listing Type<span class="req">*</span></label>
+        <select class="form-input" id="f-type" onchange="updateListingCost()">
+          <option>For Sale</option><option>For Rent</option><option>Auction</option><option>Business for Sale</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Property Category<span class="req">*</span></label>
+        <select class="form-input" id="f-category">
+          <option>Residential — House</option><option>Residential — Apartment</option><option>Residential — Townhouse</option>
+          <option>Commercial — Office</option><option>Commercial — Retail</option><option>Industrial — Warehouse</option>
+          <option>Farm & Agriculture</option><option>Vacant Land</option><option>New Development</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Listing Title<span class="req">*</span></label>
+      <input class="form-input" type="text" id="f-title" placeholder="e.g. Spacious 3-Bed Family Home with Pool" maxlength="80" oninput="document.getElementById('titleCount').textContent=this.value.length+'/80'">
+      <div class="char-counter" id="titleCount">0/80</div>
+      <div class="form-help">Make it descriptive — mention bedrooms, key features, and location. This is the first thing buyers see.</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Description<span class="req">*</span></label>
+      <textarea class="form-input" id="f-desc" placeholder="Describe the property in detail — layout, condition, special features, nearby amenities, transport links, garden, garage, views..." maxlength="2000" oninput="document.getElementById('descCount').textContent=this.value.length+'/2000'"></textarea>
+      <div class="char-counter" id="descCount">0/2000</div>
+      <div class="form-help">Minimum 100 characters recommended. The more detail you provide, the more enquiries you'll receive.</div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Bedrooms</label>
+        <select class="form-input"><option>Studio</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option><option>N/A (Commercial)</option></select>
+      </div>
+      <div>
+        <label class="form-label">Bathrooms</label>
+        <select class="form-input"><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option><option>N/A</option></select>
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Property Size (m²)</label>
+        <input class="form-input" type="number" placeholder="e.g. 250">
+        <div class="form-help">Interior floor area</div>
+      </div>
+      <div>
+        <label class="form-label">Land / Erf Size (m²)</label>
+        <input class="form-input" type="number" placeholder="e.g. 800">
+        <div class="form-help">Total plot size (if applicable)</div>
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Garages / Parking</label>
+        <select class="form-input"><option>None</option><option>1 Garage</option><option>2 Garages</option><option>3 Garages</option><option>Carport</option><option>Open Parking</option><option>Multiple Bays</option></select>
+      </div>
+      <div>
+        <label class="form-label">Year Built</label>
+        <input class="form-input" type="number" placeholder="e.g. 2018">
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Location & Price -->
+  <div class="form-section">
+    <div class="form-section-title">📍 Step 2 — Location & Price</div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Country<span class="req">*</span></label>
+        <select class="form-input">
+          <option>🇿🇦 South Africa</option><option>🇦🇪 United Arab Emirates</option><option>🇬🇧 United Kingdom</option>
+          <option>🇺🇸 United States</option><option>🇵🇹 Portugal</option><option>🇸🇬 Singapore</option>
+          <option>🇰🇪 Kenya</option><option>🇦🇺 Australia</option><option>🇳🇬 Nigeria</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">City / Town<span class="req">*</span></label>
+        <input class="form-input" type="text" placeholder="e.g. Cape Town">
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Suburb / Area<span class="req">*</span></label>
+        <input class="form-input" type="text" placeholder="e.g. Constantia">
+      </div>
+      <div>
+        <label class="form-label">Street Address</label>
+        <input class="form-input" type="text" placeholder="e.g. 12 Oak Avenue (optional — for map pin)">
+        <div class="form-help">Optional. Used for map display only — not shown publicly.</div>
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Price<span class="req">*</span></label>
+        <input class="form-input" type="number" id="f-price" placeholder="e.g. 3500000">
+        <div class="form-help">Enter in the country's local currency. Our system auto-converts to 50 currencies.</div>
+      </div>
+      <div>
+        <label class="form-label">Currency</label>
+        <select class="form-input">
+          <option>ZAR — South African Rand</option><option>USD — US Dollar</option><option>EUR — Euro</option>
+          <option>GBP — British Pound</option><option>AED — UAE Dirham</option><option>SGD — Singapore Dollar</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Price Type</label>
+        <select class="form-input"><option>Fixed Price</option><option>Price on Application (POA)</option><option>Price Negotiable</option><option>From Price</option></select>
+      </div>
+      <div>
+        <label class="form-label">Occupation / Transfer</label>
+        <select class="form-input"><option>Immediate</option><option>30 Days</option><option>60 Days</option><option>90 Days</option><option>By Arrangement</option><option>Tenanted</option></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Photos & Video -->
+  <div class="form-section">
+    <div class="form-section-title">📸 Step 3 — Photos & Video</div>
+    <div class="form-hint">📸 <strong>Photo tips:</strong> Upload at least 10 photos. Include exterior, all rooms, kitchen, bathrooms, garden and views. Use landscape orientation. Max 10MB per photo. Formats: JPG, PNG, WebP. Your plan allows <strong>30 photos</strong>.</div>
+    <div class="photo-upload" onclick="showToast('Photo upload — connect to your hosting to enable file uploads')">
+      <div class="photo-upload-ico">📸</div>
+      <div class="photo-upload-text"><strong style="color:var(--cream)">Click to upload photos</strong><br>or drag and drop · JPG, PNG, WebP · Max 10MB each · Up to 30 photos</div>
+    </div>
+    <div class="photo-grid" id="photoGrid">
+      <div class="photo-thumb">🏠<div class="photo-del">✕</div></div>
+      <div class="photo-thumb">🛋<div class="photo-del">✕</div></div>
+      <div class="photo-thumb">🛏<div class="photo-del">✕</div></div>
+      <div class="photo-thumb">🍳<div class="photo-del">✕</div></div>
+      <div class="photo-thumb">🌿<div class="photo-del">✕</div></div>
+    </div>
+    <div class="form-row" style="margin-top:16px">
+      <label class="form-label">Video Tour URL (optional)</label>
+      <input class="form-input" type="url" placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
+      <div class="form-help">Listings with video get <strong>2.4x more enquiries</strong>. Paste a YouTube or Vimeo link.</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Virtual Tour URL (optional)</label>
+      <input class="form-input" type="url" placeholder="https://my.matterport.com/show/?m=...">
+      <div class="form-help">Matterport or similar 360° virtual tour link.</div>
+    </div>
+  </div>
+
+  <!-- Step 4: Features -->
+  <div class="form-section">
+    <div class="form-section-title">✅ Step 4 — Features & Amenities</div>
+    <div class="form-hint">💡 Tick all features that apply. Buyers filter by features — the more you tick, the more your listing appears in searches.</div>
+    <div class="features-grid">
+      ${['Swimming Pool','Jacuzzi / Spa','Garden / Landscaped','Braai / BBQ Area','Solar Power','Backup Generator','Borehole / Water Tank','Air Conditioning','Underfloor Heating','Fireplace','Fibre Internet','Smart Home','Security System','Electric Fence','24h Security / Estate','Gym / Fitness Room','Staff Quarters','Pet Friendly','Wheelchair Access','Sea View','Mountain View','Golf Course View','Waterfront / On Water','Near Schools','Near Hospitals','Near Shopping','Near Public Transport','Investment Property','Furnished','New Development'].map(f=>`
+      <label class="feature-check"><input type="checkbox"> ${f}</label>`).join('')}
+    </div>
+  </div>
+
+  <!-- Step 5: Submit -->
+  <div class="form-section">
+    <div class="form-section-title">🚀 Step 5 — Review & Submit</div>
+    <div class="form-hint">🔍 <strong>What happens after you submit:</strong><br>
+      1. Our team reviews your listing (usually within 1–2 hours)<br>
+      2. You'll receive an email confirmation once approved<br>
+      3. Your listing goes live across 185 countries instantly<br>
+      4. Your monthly fee of <strong style="color:var(--gold)">$3.00</strong> is added to your invoice
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">Contact Name<span class="req">*</span></label>
+        <input class="form-input" type="text" value="Metro Realty" placeholder="Your name or agency name">
+      </div>
+      <div>
+        <label class="form-label">Contact Number<span class="req">*</span></label>
+        <input class="form-input" type="tel" placeholder="+27 11 000 0000">
+      </div>
+    </div>
+    <div class="form-row two">
+      <div>
+        <label class="form-label">WhatsApp Number</label>
+        <input class="form-input" type="tel" placeholder="+27 82 000 0000">
+        <div class="form-help">Buyers can message you directly on WhatsApp</div>
+      </div>
+      <div>
+        <label class="form-label">Contact Email<span class="req">*</span></label>
+        <input class="form-input" type="email" value="info@metro.co.za">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Listing Visibility</label>
+      <select class="form-input">
+        <option>Public — visible to all buyers worldwide</option>
+        <option>Private — visible only to registered users</option>
+        <option>Save as Draft — not visible yet</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+      <button class="tb-btn" onclick="showToast('✅ Listing submitted! Goes live within 2 hours.')">🚀 Submit Listing</button>
+      <button class="tb-btn outline" onclick="showToast('💾 Draft saved')">💾 Save Draft</button>
+      <button class="tb-btn danger" onclick="showToast('🗑️ Form cleared')">🗑️ Clear Form</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ENQUIRIES
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-enquiries">
+  <div class="sec-header">
+    <h2>📩 Buyer Enquiries</h2>
+    <button class="tb-btn outline" onclick="showToast('📥 Exporting enquiry data...')">📥 Export CSV</button>
+  </div>
+  <div class="form-hint">💡 <strong>Responding quickly matters:</strong> Buyers who receive a reply within <strong>1 hour</strong> are <strong>7x more likely</strong> to proceed with a viewing. Reply to all enquiries as soon as possible.</div>
+  <div class="stat-grid" id="enqStats"></div>
+  <div class="filter-bar">
+    <span class="filter-chip active" onclick="filterEnq('all',this)">All</span>
+    <span class="filter-chip" onclick="filterEnq('unread',this)">Unread (3)</span>
+    <span class="filter-chip" onclick="filterEnq('replied',this)">Replied</span>
+    <span class="filter-chip" onclick="filterEnq('viewing',this)">Viewing Scheduled</span>
+  </div>
+  <div id="enquiryCards"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SAVED BY BUYERS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-saved">
+  <div class="sec-header"><h2>❤️ Saved by Buyers</h2></div>
+  <div class="form-hint">💡 These are buyers who saved your listings to their favourites. They haven't enquired yet but are interested. Consider <strong>boosting</strong> these listings to show them higher in search results.</div>
+  <div class="stat-grid" id="savedStats"></div>
+  <div class="tbl-wrap">
+    <table class="dtable">
+      <thead><tr><th>Listing</th><th>Times Saved</th><th>Views This Week</th><th>Enquiries</th><th>Last Saved</th><th>Action</th></tr></thead>
+      <tbody id="savedBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     BILLING
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-billing">
+  <div class="sec-header">
+    <h2>💳 Billing & Invoices</h2>
+    <button class="tb-btn" onclick="showToast('💳 Opening payment portal...')">💳 Make Payment</button>
+  </div>
+  <div class="form-hint">💡 <strong>How billing works:</strong> You are billed monthly based on your <strong>number of active listings × $3.00</strong>. Invoices are sent on the 1st of each month. Payment via Stripe (card) or PayFast (EFT/Instant EFT).</div>
+
+  <div class="three-col" style="margin-bottom:16px">
+    <div class="card-panel" style="text-align:center;margin-bottom:0">
+      <div style="font-size:0.7rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Current Month</div>
+      <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--gold)">$135.00</div>
+      <div style="font-size:0.75rem;color:var(--subtle);margin-top:4px">45 listings × $3.00</div>
+      <div style="margin-top:10px"><span class="badge due">Due 1 Apr 2026</span></div>
+    </div>
+    <div class="card-panel" style="text-align:center;margin-bottom:0">
+      <div style="font-size:0.7rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Plan</div>
+      <div style="font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--cream)">Agency</div>
+      <div style="font-size:0.75rem;color:var(--subtle);margin-top:4px">$3.00/listing · Up to 2,000</div>
+      <div style="margin-top:10px"><span class="badge active">Active</span></div>
+    </div>
+    <div class="card-panel" style="text-align:center;margin-bottom:0">
+      <div style="font-size:0.7rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Total Paid (2026)</div>
+      <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--cream)">$393.00</div>
+      <div style="font-size:0.75rem;color:var(--subtle);margin-top:4px">3 months · Jan–Mar</div>
+      <div style="margin-top:10px"><span class="badge paid">All Paid</span></div>
+    </div>
+  </div>
+
+  <div class="card-panel">
+    <h3>🧾 Invoice History</h3>
+    <div class="tbl-wrap">
+      <table class="dtable">
+        <thead><tr><th>Month</th><th>Reference</th><th>Listings</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Invoice</th></tr></thead>
+        <tbody id="invoiceBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>💳 Payment Method</h3>
+      <div style="background:var(--hover);border:1px solid var(--border);border-radius:var(--r2);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="font-size:1.6rem">💳</div>
+        <div style="flex:1"><div style="font-size:0.85rem;font-weight:700;color:var(--cream)">Visa ending in 4242</div><div style="font-size:0.72rem;color:var(--subtle)">Expires 12/2027 · Default</div></div>
+        <button class="act-btn edit" onclick="showToast('Update card details...')">Edit</button>
+      </div>
+      <button class="tb-btn outline" onclick="showToast('Adding new payment method...')">➕ Add Payment Method</button>
+    </div>
+    <div class="card-panel">
+      <h3>📬 Billing Email</h3>
+      <div class="form-row"><label class="form-label">Send Invoices To</label><input class="form-input" type="email" value="billing@metro.co.za"></div>
+      <div class="form-row"><label class="form-label">CC (optional)</label><input class="form-input" type="email" placeholder="accounts@metro.co.za"></div>
+      <button class="tb-btn" onclick="showToast('✅ Billing email saved')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     AD WALLET
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-wallet">
+  <div class="sec-header"><h2>💰 Advertising Wallet</h2></div>
+  <div class="form-hint">💡 <strong>How advertising works:</strong> Top up your wallet and create ads that appear to buyers across PropertyFinder. You only pay when someone <strong>clicks</strong> your ad — not for views. Minimum top-up is $50. No contracts.</div>
+
+  <div class="wallet-card">
+    <div class="wc-bal-lbl">Available Balance</div>
+    <div class="wc-bal">$79.20</div>
+    <div class="wc-bal-sub">≈ 660 clicks remaining at current CPC</div>
+    <div class="wc-row">
+      <div class="wc-stat"><div class="wc-stat-val">1,840</div><div class="wc-stat-lbl">Clicks This Month</div></div>
+      <div class="wc-stat"><div class="wc-stat-val">$220.80</div><div class="wc-stat-lbl">Spent This Month</div></div>
+      <div class="wc-stat"><div class="wc-stat-val">$0.12</div><div class="wc-stat-lbl">Avg CPC</div></div>
+      <div class="wc-stat"><div class="wc-stat-val">3.8%</div><div class="wc-stat-lbl">Click Rate</div></div>
+    </div>
+  </div>
+
+  <div class="card-panel">
+    <h3>💳 Top Up Your Wallet</h3>
+    <div class="form-hint">💡 The more you top up, the more bonus credit you get. All amounts in USD. Processed instantly via Stripe or PayFast.</div>
+    <div class="topup-grid">
+      <div class="topup-btn" onclick="showToast('Opening payment for $50...')">
+        <div class="topup-amt">$50</div>
+        <div class="topup-cpc">≈ 416 clicks</div>
+      </div>
+      <div class="topup-btn popular" onclick="showToast('Opening payment for $100...')">
+        <div class="topup-amt">$100</div>
+        <div class="topup-bonus">⭐ Most Popular</div>
+        <div class="topup-cpc">≈ 833 clicks</div>
+      </div>
+      <div class="topup-btn" onclick="showToast('Opening payment for $250...')">
+        <div class="topup-amt">$250</div>
+        <div class="topup-bonus">+10% bonus = $275</div>
+        <div class="topup-cpc">≈ 2,083 clicks</div>
+      </div>
+      <div class="topup-btn" onclick="showToast('Opening payment for $500...')">
+        <div class="topup-amt">$500</div>
+        <div class="topup-bonus">+15% bonus = $575</div>
+        <div class="topup-cpc">≈ 4,166 clicks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-panel">
+    <h3>📢 My Active Ads</h3>
+    <div id="walletAds"></div>
+    <button class="tb-btn" style="margin-top:12px" onclick="showToast('Opening ad creation wizard...')">➕ Create New Ad</button>
+  </div>
+
+  <div class="card-panel">
+    <h3>📊 Ad Spend History</h3>
+    <div class="tbl-wrap">
+      <table class="dtable">
+        <thead><tr><th>Month</th><th>Ad Type</th><th>Clicks</th><th>Spend</th><th>Top-Ups</th><th>Balance</th></tr></thead>
+        <tbody>
+          <tr><td>Mar 2026</td><td>Medium Rectangle</td><td>1,840</td><td style="color:var(--gold);font-weight:800">$220.80</td><td style="color:var(--success)">+$200.00</td><td>$79.20</td></tr>
+          <tr><td>Feb 2026</td><td>Medium Rectangle</td><td>1,560</td><td style="color:var(--gold);font-weight:800">$187.20</td><td style="color:var(--success)">+$200.00</td><td>$100.00</td></tr>
+          <tr><td>Jan 2026</td><td>Medium Rectangle</td><td>1,200</td><td style="color:var(--gold);font-weight:800">$144.00</td><td style="color:var(--success)">+$150.00</td><td>$87.20</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     AUCTIONS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-auctions">
+  <div class="sec-header">
+    <h2>🔨 My Auctions</h2>
+    <button class="tb-btn" onclick="showToast('Opening auction listing form...')">➕ List Property for Auction</button>
+  </div>
+  <div class="form-hint">💡 <strong>How auctions work:</strong> PropertyFinder charges <strong>5% commission from the seller</strong> and <strong>5% from the buyer</strong> on the final sale price. There are no upfront costs — commission is only due after a successful sale. Auctions run for 7–30 days.</div>
+  <div class="stat-grid" id="auctionStats"></div>
+  <div id="auctionCards"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PROVAL
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-proval">
+  <div class="sec-header">
+    <h2>🏠 ProVal Valuation Reports</h2>
+    <button class="tb-btn" onclick="showToast('Opening ProVal order form...')">📊 Order New Report — $124</button>
+  </div>
+  <div class="form-hint">💡 <strong>What is ProVal?</strong> Our AI-powered property valuation tool analyses <strong>24 data points</strong> — recent sales in the area, property features, market trends, economic indicators and more — to give you an accurate market value in under 2 minutes. Delivered as a detailed PDF report to your email. One-time cost of <strong>$124 per property</strong>.</div>
+  <div id="provalCards"></div>
+  <div class="card-panel" style="text-align:center;padding:32px">
+    <div style="font-size:2.5rem;margin-bottom:12px">📊</div>
+    <div style="font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--cream);margin-bottom:6px">Order a ProVal Report</div>
+    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto">Get an AI-powered valuation of any property in 185 countries. Instant delivery, 24 data points, PDF report.</div>
+    <button class="tb-btn" onclick="showToast('Opening ProVal order — $124 one-time')">Order ProVal Report — $124 →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ANALYTICS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-analytics">
+  <div class="sec-header"><h2>📈 My Analytics</h2></div>
+  <div class="form-hint">💡 <strong>Understanding your stats:</strong> Views = people who saw your listing. Enquiries = people who contacted you. Saves = people who added it to favourites. A good listing gets 1 enquiry per 20–50 views.</div>
+  <div class="stat-grid" id="analyticsStats"></div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>📊 Views — Last 30 Days</h3>
+      <div class="bar-chart" id="analyticsChart"></div>
+      <div class="bar-axis"></div>
+    </div>
+    <div class="card-panel">
+      <h3>🌍 Where Are Buyers From?</h3>
+      <div id="buyerCountries"></div>
+    </div>
+  </div>
+  <div class="card-panel">
+    <h3>🏆 Your Top Performing Listings</h3>
+    <div class="tbl-wrap">
+      <table class="dtable">
+        <thead><tr><th>Listing</th><th>Views</th><th>Enquiries</th><th>Saves</th><th>View-to-Enquiry</th><th>Status</th></tr></thead>
+        <tbody id="topListingsBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>📱 How Buyers Found You</h3>
+      <div id="sourceChart"></div>
+    </div>
+    <div class="card-panel">
+      <h3>📅 Best Days for Enquiries</h3>
+      <div id="dayChart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     NOTIFICATIONS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-notifications">
+  <div class="sec-header">
+    <h2>🔔 Notifications</h2>
+    <button class="tb-btn outline" onclick="showToast('All notifications marked as read')">Mark All Read</button>
+  </div>
+  <div id="notifList"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PROFILE
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-profile">
+  <div class="sec-header"><h2>👤 My Profile</h2></div>
+  <div class="two-col">
+    <div>
+      <div class="form-section">
+        <div class="form-section-title">🏢 Agency / Personal Details</div>
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px">
+          <div class="profile-avatar-big">MR</div>
+          <button class="tb-btn outline" onclick="showToast('Change profile photo...')">Change Photo</button>
+        </div>
+        <div class="form-row two">
+          <div><label class="form-label">Agency / Name<span class="req">*</span></label><input class="form-input" type="text" value="Metro Realty"></div>
+          <div><label class="form-label">Contact Person</label><input class="form-input" type="text" value="John Smith"></div>
+        </div>
+        <div class="form-row two">
+          <div><label class="form-label">Email<span class="req">*</span></label><input class="form-input" type="email" value="info@metro.co.za"></div>
+          <div><label class="form-label">Phone</label><input class="form-input" type="tel" value="+27 11 000 0000"></div>
+        </div>
+        <div class="form-row two">
+          <div><label class="form-label">WhatsApp</label><input class="form-input" type="tel" value="+27 82 000 0000"></div>
+          <div><label class="form-label">Website</label><input class="form-input" type="url" value="https://metrorealty.co.za"></div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">About / Bio</label>
+          <textarea class="form-input">Metro Realty is a leading property agency based in Johannesburg, South Africa. We specialise in residential and commercial properties across Southern Africa.</textarea>
+          <div class="form-help">This appears on your public agent profile. Tell buyers about your experience and specialisation.</div>
+        </div>
+        <div class="form-row two">
+          <div><label class="form-label">Country</label><select class="form-input"><option>🇿🇦 South Africa</option><option>🇦🇪 UAE</option><option>🇬🇧 UK</option></select></div>
+          <div><label class="form-label">City</label><input class="form-input" type="text" value="Johannesburg"></div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Estate Agent License / PPRA Number</label>
+          <input class="form-input" type="text" placeholder="e.g. PPRA-12345678">
+          <div class="form-help">South African agents: enter your PPRA registration number for a verified badge.</div>
+        </div>
+        <button class="tb-btn" onclick="showToast('✅ Profile saved successfully')">Save Profile</button>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">🔑 Change Password</div>
+        <div class="form-row"><label class="form-label">Current Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+        <div class="form-row"><label class="form-label">New Password</label><input class="form-input" type="password" placeholder="Min 8 characters"></div>
+        <div class="form-row"><label class="form-label">Confirm New Password</label><input class="form-input" type="password" placeholder="Repeat new password"></div>
+        <button class="tb-btn" onclick="showToast('✅ Password updated')">Update Password</button>
+      </div>
+    </div>
+    <div>
+      <div class="plan-card">
+        <div class="plan-name">Agency Plan</div>
+        <div style="font-size:0.82rem;color:var(--mid);margin-bottom:12px">$3.00 per listing per month</div>
+        <div class="plan-features">
+          <div class="plan-feature ok">Up to 2,000 listings</div>
+          <div class="plan-feature ok">30 photos per listing</div>
+          <div class="plan-feature ok">Video tour support</div>
+          <div class="plan-feature ok">AI Voice Search visibility</div>
+          <div class="plan-feature ok">5 financial calculators</div>
+          <div class="plan-feature ok">185 country reach</div>
+          <div class="plan-feature ok">Real-time enquiry alerts</div>
+          <div class="plan-feature ok">Agency profile page</div>
+          <div class="plan-feature ok">ProVal access ($124/report)</div>
+          <div class="plan-feature ok">Advertising wallet</div>
+          <div class="plan-feature no">Dedicated account manager</div>
+          <div class="plan-feature no">Priority listing placement</div>
+          <div class="plan-feature no">API access</div>
+        </div>
+        <button class="tb-btn" style="width:100%;justify-content:center;margin-top:16px" onclick="showToast('Opening Enterprise plan details...')">Upgrade to Enterprise →</button>
+      </div>
+
+      <div class="card-panel" style="margin-top:14px">
+        <h3>🎁 Referral Programme</h3>
+        <div style="font-size:0.82rem;color:var(--mid);margin-bottom:12px">Share your referral code and earn <strong style="color:var(--gold)">$20 credit</strong> for every new agent that signs up and pays their first invoice.</div>
+        <div class="ref-box">
+          <div class="ref-code">METRO-REF-2026</div>
+          <button class="ref-copy" onclick="navigator.clipboard.writeText('METRO-REF-2026');showToast('✅ Referral code copied!')">Copy</button>
+        </div>
+        <div style="font-size:0.75rem;color:var(--subtle)">You've earned <strong style="color:var(--gold)">$40</strong> in referral credits (2 referrals)</div>
+      </div>
+
+      <div class="card-panel" style="margin-top:14px">
+        <h3>🔔 Notification Preferences</h3>
+        <div style="display:grid;gap:10px">
+          ${[['New enquiry received','Email + SMS'],['Listing approved','Email'],['Listing rejected','Email + SMS'],['Auction bid placed','Email + SMS'],['Monthly invoice ready','Email'],['Low wallet balance','Email + SMS'],['Buyer saved listing','Email'],['Weekly performance report','Email']].map(([l,d])=>`
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-size:0.82rem;color:var(--cream)">${l}</div><div style="font-size:0.68rem;color:var(--subtle)">${d}</div></div>
+            <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+          </div>`).join('')}
+        </div>
+        <button class="tb-btn" style="margin-top:14px" onclick="showToast('✅ Notifications saved')">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     HELP & SUPPORT
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-help">
+  <div class="sec-header"><h2>❓ Help & Support</h2></div>
+  <div class="two-col">
+    <div>
+      <div class="card-panel">
+        <h3>💬 Contact Support</h3>
+        <div class="form-row"><label class="form-label">Subject</label><select class="form-input"><option>Listing issue</option><option>Payment / billing</option><option>Ad wallet</option><option>Account problem</option><option>Technical issue</option><option>Other</option></select></div>
+        <div class="form-row"><label class="form-label">Message</label><textarea class="form-input" placeholder="Describe your issue in detail..." style="min-height:120px"></textarea></div>
+        <div style="display:flex;gap:10px">
+          <button class="tb-btn" onclick="showToast('✅ Support ticket submitted — we reply within 4 hours')">Send Message</button>
+          <button class="tb-btn outline" onclick="showToast('📞 +27 11 000 0000')">📞 Call Us</button>
+        </div>
+      </div>
+      <div class="card-panel">
+        <h3>📞 Contact Details</h3>
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:1.2rem">📧</span><div><div style="font-size:0.82rem;font-weight:700;color:var(--cream)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81f2f4f1f1eef3f5c1f1f3eef1e4f3f5f8ace7e8efe5e4f3afe2eeaffbe0">[email&#160;protected]</a></div><div style="font-size:0.7rem;color:var(--subtle)">Response within 4 hours</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:1.2rem">💬</span><div><div style="font-size:0.82rem;font-weight:700;color:var(--cream)">WhatsApp: +27 82 000 0000</div><div style="font-size:0.7rem;color:var(--subtle)">Mon–Fri 8am–6pm SAST</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><span style="font-size:1.2rem">🤖</span><div><div style="font-size:0.82rem;font-weight:700;color:var(--cream)">AI Chat Assistant</div><div style="font-size:0.7rem;color:var(--subtle)">Available 24/7 on every page (bottom right)</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card-panel">
+        <h3>📚 Quick Help Guide</h3>
+        <div style="display:grid;gap:8px">
+          ${[['How to add a listing','Step-by-step guide for submitting your first listing'],['Photo requirements','Size, format and quality requirements for listing photos'],['How billing works','Monthly invoices, payment methods and due dates'],['Understanding analytics','What views, enquiries and saves mean'],['How to top up ad wallet','Step-by-step: top up via Stripe or PayFast'],['Auction rules & commission','How auctions work and the 5%+5% commission structure'],['ProVal report guide','What ProVal analyses and how to read your report'],['Upgrading your plan','Difference between Private, Agency and Enterprise']].map(([t,d])=>`
+          <div style="background:var(--hover);border:1px solid var(--border);border-radius:var(--r3);padding:10px 14px;cursor:pointer;transition:border-color 0.2s" onclick="showToast('Opening guide: ${t}...')" onmouseover="this.style.borderColor='rgba(196,164,124,0.4)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--cream);margin-bottom:2px">📖 ${t}</div>
+            <div style="font-size:0.72rem;color:var(--subtle)">${d}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Reply to Enquiry</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot"><button class="modal-btn cancel" onclick="closeModal()">Cancel</button><button class="modal-btn primary" id="modalOk" onclick="closeModal();showToast('✅ Reply sent!')">Send Reply</button></div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══ PANEL SWITCH ══
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  const p=document.getElementById('p-'+id);if(p)p.classList.add('active');
+  if(el)el.classList.add('active');
+  const titles={
+    overview:'📊 Dashboard Overview',listings:'🏡 My Listings','add-listing':'➕ Add New Listing',
+    enquiries:'📩 Buyer Enquiries',saved:'❤️ Saved by Buyers',billing:'💳 Billing & Invoices',
+    wallet:'💰 Advertising Wallet',auctions:'🔨 My Auctions',proval:'🏠 ProVal Reports',
+    analytics:'📈 My Analytics',notifications:'🔔 Notifications',profile:'👤 My Profile',help:'❓ Help & Support'
+  };
+  document.getElementById('panelTitle').textContent=titles[id]||id;
+  document.querySelector('.sidebar').classList.remove('open');
+  window.scrollTo(0,0);
+}
+
+// ══ TOAST ══
+function showToast(m){const e=document.querySelector('.pf-toast');if(e)e.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+
+// ══ MODAL ══
+function openModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalOverlay').classList.add('open');}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+
+// ══ HELPERS ══
+function badge(cls,txt){return`<span class="badge ${cls}">${txt}</span>`}
+function fmt(n){return n>=1000000?'$'+(n/1000000).toFixed(2)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n}
+
+// ══ DATA ══
+const myListings=[
+  {id:'L01',title:'3 Bed Family Home with Pool',loc:'Constantia, Cape Town',price:'R 3,500,000',type:'For Sale',status:'active',views:128,enq:4,saves:12,beds:3,baths:2,size:'280m²',img:'🏠'},
+  {id:'L02',title:'Modern Office Space — 450m²',loc:'Sandton, Johannesburg',price:'R 28,000/month',type:'For Rent',status:'active',views:94,enq:2,saves:7,beds:null,baths:2,size:'450m²',img:'🏢'},
+  {id:'L03',title:'Luxury Penthouse, Clifton Beach',loc:'Clifton, Cape Town',price:'R 12,500,000',type:'For Sale',status:'active',views:312,enq:8,saves:28,beds:4,baths:3,size:'380m²',img:'🌊'},
+  {id:'L04',title:'Warehouse & Logistics Hub',loc:'Montague Gardens, Cape Town',price:'R 4,200,000',type:'For Sale',status:'active',views:42,enq:1,saves:3,beds:null,baths:1,size:'1200m²',img:'🏭'},
+  {id:'L05',title:'Smallholding 12ha with Irrigation',loc:'Paarl, Western Cape',price:'R 2,800,000',type:'For Sale',status:'pending',views:0,enq:0,saves:0,beds:3,baths:2,size:'12ha',img:'🌾'},
+  {id:'L06',title:'Studio Apartment, City Bowl',loc:'Cape Town CBD',price:'R 1,200,000',type:'For Sale',status:'draft',views:0,enq:0,saves:0,beds:0,baths:1,size:'45m²',img:'🏙️'},
+  {id:'L07',title:'3 Bed Townhouse, Woodstock',loc:'Woodstock, Cape Town',price:'R 2,100,000',type:'For Sale',status:'sold',views:180,enq:12,saves:15,beds:3,baths:2,size:'160m²',img:'🏡'},
+  {id:'L08',title:'Retail Shop, Waterfront',loc:'V&A Waterfront, Cape Town',price:'R 18,000/month',type:'For Rent',status:'active',views:67,enq:3,saves:5,beds:null,baths:1,size:'85m²',img:'🛍️'},
+];
+
+const myEnquiries=[
+  {id:'E01',from:'Priya Naidoo',email:'priya@email.com',phone:'+27 82 111 2222',prop:'Luxury Penthouse, Clifton Beach',msg:"Hello, I'm very interested in this property. Could we arrange a viewing this weekend? I'm a cash buyer looking to move within 3 months.",time:'2h ago',status:'unread',flag:'🇿🇦'},
+  {id:'E02',from:'David Chen',email:'david.chen@hk.com',phone:'+852 9000 1234',prop:'3 Bed Family Home with Pool',msg:"We are relocating from Hong Kong and are interested in this property. What is the levy? Is the area safe? Can you provide the electrical compliance certificate?",time:'4h ago',status:'unread',flag:'🇭🇰'},
+  {id:'E03',from:'Sarah Williams',email:'sarah@london.uk',phone:'+44 7700 000000',prop:'Modern Office Space — 450m²',msg:"We're looking for office space for our SA branch. Is this property still available? Are there parking bays included in the rental?",time:'6h ago',status:'unread',flag:'🇬🇧'},
+  {id:'E04',from:'Ahmed Al-Farsi',email:'ahmed@dubai.ae',phone:'+971 50 000 0000',prop:'Luxury Penthouse, Clifton Beach',msg:"Looking for investment properties in South Africa. What is the rental yield on this property? Is it pet friendly?",time:'Yesterday',status:'replied',flag:'🇦🇪'},
+  {id:'E05',from:'Lisa van Zyl',email:'lisa@capetown.za',phone:'+27 84 333 4444',prop:'3 Bed Family Home with Pool',msg:"Is this property still available? I saw it last week and would like to make an offer. When can we discuss?",time:'2 days ago',status:'replied',flag:'🇿🇦'},
+];
+
+// ══ OVERVIEW ══
+function buildOverview(){
+  document.getElementById('overviewStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🏡</div><span class="sc-trend up">+3</span></div><div class="sc-val">45</div><div class="sc-lbl">Active Listings</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">👁️</div><span class="sc-trend up">+18%</span></div><div class="sc-val">1,284</div><div class="sc-lbl">Views This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">📩</div><span class="sc-trend up">+5</span></div><div class="sc-val">18</div><div class="sc-lbl">Enquiries This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">❤️</div><span class="sc-trend up">+8</span></div><div class="sc-val">72</div><div class="sc-lbl">Times Saved</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">💰</div><span class="sc-trend flat">Due 1 Apr</span></div><div class="sc-val">$135</div><div class="sc-lbl">Monthly Fee</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">💳</div><span class="sc-trend down">Low</span></div><div class="sc-val">$79</div><div class="sc-lbl">Ad Wallet Balance</div></div>
+  `;
+
+  // Recent enquiries
+  document.getElementById('recentEnquiries').innerHTML=myEnquiries.slice(0,3).map(e=>`
+    <div class="enq-card ${e.status}" onclick="openReplyModal(${JSON.stringify(e).replace(/"/g,'&quot;')})">
+      <div class="enq-avatar">${e.flag}</div>
+      <div class="enq-info">
+        <div class="enq-name">${e.from} ${e.status==='unread'?badge('unread','NEW'):badge('replied','Replied')}</div>
+        <div class="enq-prop">Re: ${e.prop}</div>
+        <div class="enq-msg">${e.msg}</div>
+        <div class="enq-meta">${e.time} · ${e.phone}</div>
+      </div>
+    </div>`).join('');
+
+  // Activity
+  document.getElementById('overviewActivity').innerHTML=[
+    {dot:'b',text:'New enquiry from Priya Naidoo — Clifton Penthouse',time:'2h ago'},
+    {dot:'b',text:'New enquiry from David Chen — Constantia Home',time:'4h ago'},
+    {dot:'p',text:'Your listing "Clifton Penthouse" got 28 saves this month',time:'6h ago'},
+    {dot:'g',text:'Listing approved — Smallholding 12ha, Paarl',time:'8h ago'},
+    {dot:'a',text:'Ad wallet balance below $100 — consider topping up',time:'Yesterday'},
+    {dot:'g',text:'Woodstock Townhouse marked as SOLD — congratulations!',time:'3 days ago'},
+    {dot:'p',text:'Clifton Penthouse — 312 views this month (your top listing)',time:'4 days ago'},
+  ].map(a=>`<div class="act-item"><div class="act-dot ${a.dot}"></div><div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div></div>`).join('');
+
+  // Views chart
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals=[142,186,168,224,198,312,154];
+  const mx=Math.max(...vals);
+  document.getElementById('viewsChart').innerHTML=days.map((d,i)=>`
+    <div class="bar-group">
+      <div class="bar" style="height:${Math.max(vals[i]/mx*110,4)}px;background:var(--gold);opacity:0.85" title="${d}: ${vals[i]} views"></div>
+      <div class="bar-lbl">${d}</div>
+    </div>`).join('');
+
+  // Listing summary
+  document.getElementById('listingSummary').innerHTML=`
+    <div style="display:grid;gap:8px">
+      ${[['🟢','Active','38','Available to buyers now'],['🟡','Pending Approval','4','Under review by our team (1-2 hours)'],['⚪','Draft','2','Saved but not submitted yet'],['🔵','Sold','1','Completed — removed from market']].map(([ic,st,n,d])=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--hover);border:1px solid var(--border);border-radius:var(--r3)">
+          <span style="font-size:1.1rem">${ic}</span>
+          <div style="flex:1"><div style="font-size:0.82rem;font-weight:700;color:var(--cream)">${st}</div><div style="font-size:0.7rem;color:var(--subtle)">${d}</div></div>
+          <div style="font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--gold)">${n}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ══ LISTINGS ══
+function buildListings(){
+  document.getElementById('listingStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div></div><div class="sc-val">38</div><div class="sc-lbl">Active</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏳</div></div><div class="sc-val">4</div><div class="sc-lbl">Pending Approval</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📝</div></div><div class="sc-val">2</div><div class="sc-lbl">Draft</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">🏆</div></div><div class="sc-val">1</div><div class="sc-lbl">Sold</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div></div><div class="sc-val">$135</div><div class="sc-lbl">Monthly Cost</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">👁️</div></div><div class="sc-val">843</div><div class="sc-lbl">Views This Week</div></div>
+  `;
+  renderListingCards(myListings);
+}
+
+function renderListingCards(listings){
+  document.getElementById('listingCards').innerHTML=listings.map(l=>`
+    <div class="listing-card ${l.status}">
+      <div class="lc-thumb" style="font-size:2rem">${l.img}</div>
+      <div class="lc-info">
+        <div class="lc-title">${l.title}</div>
+        <div class="lc-loc">📍 ${l.loc}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="lc-price">${l.price}</div>
+          ${badge(l.status,l.status.charAt(0).toUpperCase()+l.status.slice(1))}
+        </div>
+        <div class="lc-meta">
+          ${l.beds!==null?`<span class="lc-meta-item">🛏 ${l.beds||'Studio'}</span>`:''}
+          <span class="lc-meta-item">🚿 ${l.baths}</span>
+          <span class="lc-meta-item">📐 ${l.size}</span>
+          <span class="lc-meta-item">${l.type}</span>
+        </div>
+        ${l.status==='active'||l.status==='sold'?`<div class="lc-stats">
+          <div class="lc-stat"><div class="lc-stat-val">${l.views}</div><div class="lc-stat-lbl">Views</div></div>
+          <div class="lc-stat"><div class="lc-stat-val">${l.enq}</div><div class="lc-stat-lbl">Enquiries</div></div>
+          <div class="lc-stat"><div class="lc-stat-val">${l.saves}</div><div class="lc-stat-lbl">Saves</div></div>
+          <div class="lc-stat"><div class="lc-stat-val">${l.views>0?(l.enq/l.views*100).toFixed(1)+'%':'—'}</div><div class="lc-stat-lbl">Conv. Rate</div></div>
+        </div>`:''}
+        ${l.status==='pending'?`<div style="margin-top:8px;font-size:0.72rem;color:var(--warn)">⏳ Under review — usually approved within 1–2 hours</div>`:''}
+        ${l.status==='draft'?`<div style="margin-top:8px;font-size:0.72rem;color:var(--subtle)">💾 Draft saved — complete and submit when ready</div>`:''}
+      </div>
+      <div class="lc-actions">
+        ${l.status!=='sold'?`<button class="act-btn edit" onclick="showToast('Editing ${l.id}...')">✏️ Edit</button>`:''}
+        ${l.status==='active'?`<button class="act-btn boost" onclick="showToast('Boosting ${l.id}...')">⚡ Boost</button>`:''}
+        ${l.status==='draft'?`<button class="act-btn primary" onclick="showToast('Submitting ${l.id}...')">🚀 Submit</button>`:''}
+        <button class="act-btn view" onclick="showToast('Viewing listing ${l.id} on site...')">👁️ View</button>
+        ${l.status!=='sold'?`<button class="act-btn del" onclick="if(confirm('Delete this listing?'))showToast('🗑️ Listing deleted')">🗑️</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function filterListings(type,el){
+  document.querySelectorAll('#p-listings .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  renderListingCards(type==='all'?myListings:myListings.filter(l=>l.status===type));
+}
+
+// ══ ENQUIRIES ══
+function buildEnquiries(){
+  document.getElementById('enqStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">📩</div><span class="sc-trend down">3 unread</span></div><div class="sc-val">3</div><div class="sc-lbl">Unread</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div></div><div class="sc-val">2</div><div class="sc-lbl">Replied</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📅</div><span class="sc-trend up">+5</span></div><div class="sc-val">18</div><div class="sc-lbl">Total This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏱️</div></div><div class="sc-val">2.4h</div><div class="sc-lbl">Your Avg Response</div></div>
+  `;
+  renderEnquiries(myEnquiries);
+}
+
+function renderEnquiries(enqs){
+  document.getElementById('enquiryCards').innerHTML=enqs.map(e=>`
+    <div class="enq-card ${e.status}" onclick="openReplyModal('${e.id}')">
+      <div class="enq-avatar" style="font-size:1.4rem">${e.flag}</div>
+      <div class="enq-info">
+        <div class="enq-name">${e.from} ${e.status==='unread'?badge('unread','NEW'):badge('replied','Replied')}</div>
+        <div class="enq-prop">📍 ${e.prop}</div>
+        <div class="enq-msg">${e.msg}</div>
+        <div class="enq-meta">📧 ${e.email} · 📞 ${e.phone} · ${e.time}</div>
+      </div>
+      <div class="enq-actions">
+        <button class="act-btn reply" onclick="event.stopPropagation();openReplyModal('${e.id}')">✉️ Reply</button>
+        <button class="act-btn view" onclick="event.stopPropagation();showToast('Calling ${e.from}...')">📞 Call</button>
+        <button class="act-btn view" onclick="event.stopPropagation();showToast('Opening WhatsApp...')">💬 WhatsApp</button>
+      </div>
+    </div>`).join('');
+}
+
+function openReplyModal(id){
+  const e=myEnquiries.find(x=>x.id===id)||myEnquiries[0];
+  openModal('Reply to '+e.from,`
+    <div style="background:var(--hover);border:1px solid var(--border);border-radius:var(--r2);padding:12px;margin-bottom:14px">
+      <div style="font-size:0.75rem;color:var(--subtle);margin-bottom:4px">Enquiry from ${e.from} · ${e.time}</div>
+      <div style="font-size:0.82rem;color:var(--cream)">${e.msg}</div>
+    </div>
+    <div class="form-row"><label class="form-label">Your Reply</label>
+    <textarea class="form-input" style="min-height:120px" placeholder="Thank you for your enquiry about ${e.prop}. I'd be happy to arrange a viewing...
+
+Kind regards,
+Metro Realty
++27 11 000 0000"></textarea></div>
+    <div class="form-row two">
+      <div><label class="form-label">Also Send Via</label>
+      <select class="form-input"><option>Email only</option><option>Email + WhatsApp</option><option>Email + SMS</option></select></div>
+      <div><label class="form-label">Schedule Viewing</label>
+      <input class="form-input" type="datetime-local"></div>
+    </div>`);
+}
+
+function filterEnq(type,el){
+  document.querySelectorAll('#p-enquiries .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  renderEnquiries(type==='all'?myEnquiries:myEnquiries.filter(e=>e.status===type||type==='viewing'));
+}
+
+// ══ SAVED ══
+function buildSaved(){
+  document.getElementById('savedStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">❤️</div><span class="sc-trend up">+8</span></div><div class="sc-val">72</div><div class="sc-lbl">Total Saves</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🏡</div></div><div class="sc-val">12</div><div class="sc-lbl">Listings Saved</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">📈</div><span class="sc-trend up">+15%</span></div><div class="sc-val">28</div><div class="sc-lbl">Top Listing Saves</div></div>
+  `;
+  document.getElementById('savedBody').innerHTML=[
+    {title:'Luxury Penthouse, Clifton Beach',saves:28,views:89,enq:8,last:'2h ago'},
+    {title:'3 Bed Family Home with Pool',saves:12,views:42,enq:4,last:'4h ago'},
+    {title:'Modern Office Space — 450m²',saves:7,views:28,enq:2,last:'Yesterday'},
+    {title:'Retail Shop, Waterfront',saves:5,views:14,enq:1,last:'2 days ago'},
+    {title:'Warehouse & Logistics Hub',saves:3,views:8,enq:1,last:'3 days ago'},
+  ].map(r=>`<tr>
+    <td><strong>${r.title}</strong></td>
+    <td><span style="color:var(--danger);font-weight:800">❤️ ${r.saves}</span></td>
+    <td>${r.views}</td>
+    <td>${r.enq}</td>
+    <td>${r.last}</td>
+    <td><button class="act-btn boost" onclick="showToast('Boosting this listing...')">⚡ Boost</button></td>
+  </tr>`).join('');
+}
+
+// ══ BILLING ══
+function buildBilling(){
+  document.getElementById('invoiceBody').innerHTML=[
+    {m:'Mar 2026',ref:'PF-INV-0089',listings:45,amount:'$135.00',due:'1 Apr 2026',status:'due'},
+    {m:'Feb 2026',ref:'PF-INV-0075',listings:41,amount:'$123.00',due:'1 Mar 2026',status:'paid'},
+    {m:'Jan 2026',ref:'PF-INV-0058',listings:35,amount:'$105.00',due:'1 Feb 2026',status:'paid'},
+    {m:'Dec 2025',ref:'PF-INV-0041',listings:28,amount:'$84.00',due:'1 Jan 2026',status:'paid'},
+    {m:'Nov 2025',ref:'PF-INV-0028',listings:22,amount:'$66.00',due:'1 Dec 2025',status:'paid'},
+  ].map(r=>`<tr>
+    <td>${r.m}</td>
+    <td style="font-family:monospace;font-size:0.72rem;color:var(--subtle)">${r.ref}</td>
+    <td>${r.listings}</td>
+    <td style="color:var(--gold);font-weight:800">${r.amount}</td>
+    <td>${r.due}</td>
+    <td>${r.status==='paid'?badge('paid','Paid'):badge('due','Due')}</td>
+    <td><button class="act-btn view" onclick="showToast('Downloading ${r.ref}.pdf...')">📄 Download</button></td>
+  </tr>`).join('');
+}
+
+// ══ WALLET ══
+function buildWallet(){
+  document.getElementById('walletAds').innerHTML=`
+    <div class="ad-card">
+      <div class="ad-card-head">
+        <div><div class="ad-title">Smith & Partners — Medium Rectangle</div><div class="ad-type">300×250px · $0.12 per click · Active</div></div>
+        <div style="display:flex;gap:6px">${badge('active','Active')}<button class="act-btn edit" onclick="showToast('Editing ad...')">Edit</button><button class="act-btn del" onclick="showToast('Pausing ad...')">Pause</button></div>
+      </div>
+      <div class="ad-metrics">
+        <div class="ad-metric"><div class="ad-metric-val">1,840</div><div class="ad-metric-lbl">Clicks</div></div>
+        <div class="ad-metric"><div class="ad-metric-val">$220.80</div><div class="ad-metric-lbl">Spent</div></div>
+        <div class="ad-metric"><div class="ad-metric-val">3.8%</div><div class="ad-metric-lbl">Click Rate</div></div>
+        <div class="ad-metric"><div class="ad-metric-val">48,421</div><div class="ad-metric-lbl">Impressions</div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--subtle);margin-bottom:3px"><span>Wallet usage this month</span><span>$220.80 / $300.00</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:73.6%"></div></div>
+      </div>
+    </div>`;
+}
+
+// ══ AUCTIONS ══
+function buildAuctions(){
+  document.getElementById('auctionStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🔴</div><span class="sc-trend live">LIVE</span></div><div class="sc-val">2</div><div class="sc-lbl">Live Auctions</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div></div><div class="sc-val">3</div><div class="sc-lbl">Completed</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">💰</div><span class="sc-trend down">PENDING</span></div><div class="sc-val">$135K</div><div class="sc-lbl">Commission Owing</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">💵</div></div><div class="sc-val">5%</div><div class="sc-lbl">Your Commission Rate</div></div>
+  `;
+  document.getElementById('auctionCards').innerHTML=`
+    <div class="auction-card live-now">
+      <div style="width:48px;height:48px;border-radius:var(--r2);background:rgba(220,38,38,0.1);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">🍷</div>
+      <div class="au-info">
+        <div class="au-title">Wine Farm 120ha, Stellenbosch</div>
+        <div class="au-meta">Farm · 14 bids · Reserve: $2,500,000 · Seller: Pieter Viljoen</div>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          ${badge('live','🔴 LIVE NOW')}
+          <div class="countdown">⏱ Ends 12 Apr 2026</div>
+        </div>
+      </div>
+      <div class="au-price">
+        <div class="au-current">$2,800,000</div>
+        <div class="au-label">Current Bid</div>
+        <div style="font-size:0.7rem;color:var(--success);margin-top:4px">Reserve met ✓</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        <button class="act-btn view" onclick="showToast('Viewing auction details...')">View</button>
+        <button class="act-btn edit" onclick="showToast('Managing auction...')">Manage</button>
+      </div>
+    </div>
+    <div class="auction-card live-now">
+      <div style="width:48px;height:48px;border-radius:var(--r2);background:rgba(220,38,38,0.1);display:flex;align-items:center;justify-content:circle;font-size:1.4rem;flex-shrink:0;align-items:center;justify-content:center">🏙️</div>
+      <div class="au-info">
+        <div class="au-title">Penthouse, V&A Waterfront, Cape Town</div>
+        <div class="au-meta">Residential · 8 bids · Reserve: $1,800,000 · Seller: Metro Realty</div>
+        <div style="display:flex;gap:8px;margin-top:6px">${badge('live','🔴 LIVE NOW')}<div class="countdown">⏱ Ends 14 Apr 2026</div></div>
+      </div>
+      <div class="au-price"><div class="au-current">$1,950,000</div><div class="au-label">Current Bid</div><div style="font-size:0.7rem;color:var(--success);margin-top:4px">Reserve met ✓</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        <button class="act-btn view" onclick="showToast('Viewing auction...')">View</button>
+        <button class="act-btn edit" onclick="showToast('Managing auction...')">Manage</button>
+      </div>
+    </div>
+    <div style="margin-top:14px"><div style="font-size:0.85rem;font-weight:800;color:var(--cream);margin-bottom:10px">✅ Completed Auctions</div>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Property</th><th>Sold Price</th><th>5% Commission Due</th><th>Date Sold</th><th>Payment Due</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Farm 80ha, Paarl</td><td>$1,850,000</td><td style="color:var(--warn);font-weight:800">$92,500</td><td>5 Mar 2026</td><td>5 Apr 2026</td><td>${badge('due','Payment Due')}</td></tr>
+      <tr><td>3 Bed House, Constantia</td><td>$3,200,000</td><td style="color:var(--warn);font-weight:800">$160,000</td><td>28 Feb 2026</td><td>28 Mar 2026</td><td>${badge('due','Overdue')}</td></tr>
+      <tr><td>Warehouse, Montague Gardens</td><td>$2,100,000</td><td style="color:var(--success);font-weight:800">$105,000</td><td>15 Feb 2026</td><td>15 Mar 2026</td><td>${badge('paid','Paid')}</td></tr>
+    </tbody></table></div></div>`;
+}
+
+// ══ PROVAL ══
+function buildProVal(){
+  document.getElementById('provalCards').innerHTML=`
+    <div class="proval-card">
+      <div class="proval-header">
+        <div>
+          <div class="proval-title">3 Bed Family Home with Pool</div>
+          <div class="proval-addr">📍 Constantia, Cape Town · Generated 15 Mar 2026</div>
+          <div style="margin-top:6px">${badge('active','Report Ready')} <button class="act-btn view" style="margin-left:6px" onclick="showToast('Downloading ProVal report...')">📄 Download PDF</button></div>
+        </div>
+        <div>
+          <div class="proval-val">R 3,650,000</div>
+          <div class="proval-val-lbl">AI Estimated Value</div>
+          <div style="font-size:0.68rem;color:var(--success);text-align:right;margin-top:4px">+4.3% vs listing price</div>
+        </div>
+      </div>
+      <div class="proval-metrics">
+        <div class="pv-metric"><div class="pv-metric-val">R 13,035</div><div class="pv-metric-lbl">Per m²</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">6.2%</div><div class="pv-metric-lbl">Rental Yield Est.</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">High</div><div class="pv-metric-lbl">Market Demand</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">94/100</div><div class="pv-metric-lbl">Confidence Score</div></div>
+      </div>
+    </div>
+    <div class="proval-card">
+      <div class="proval-header">
+        <div>
+          <div class="proval-title">Luxury Penthouse, Clifton Beach</div>
+          <div class="proval-addr">📍 Clifton, Cape Town · Generated 2 Mar 2026</div>
+          <div style="margin-top:6px">${badge('active','Report Ready')} <button class="act-btn view" style="margin-left:6px" onclick="showToast('Downloading ProVal report...')">📄 Download PDF</button></div>
+        </div>
+        <div>
+          <div class="proval-val">R 12,100,000</div>
+          <div class="proval-val-lbl">AI Estimated Value</div>
+          <div style="font-size:0.68rem;color:var(--danger);text-align:right;margin-top:4px">-3.2% vs listing price</div>
+        </div>
+      </div>
+      <div class="proval-metrics">
+        <div class="pv-metric"><div class="pv-metric-val">R 31,842</div><div class="pv-metric-lbl">Per m²</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">4.8%</div><div class="pv-metric-lbl">Rental Yield Est.</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">Very High</div><div class="pv-metric-lbl">Market Demand</div></div>
+        <div class="pv-metric"><div class="pv-metric-val">91/100</div><div class="pv-metric-lbl">Confidence Score</div></div>
+      </div>
+    </div>`;
+}
+
+// ══ ANALYTICS ══
+function buildAnalytics(){
+  document.getElementById('analyticsStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">👁️</div><span class="sc-trend up">+18%</span></div><div class="sc-val">1,284</div><div class="sc-lbl">Views This Month</div></div>
+    <div cp">+12</span></div><div class="sc-val">72</div><div class="sc-lbl">Total Saves</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📊</div></div><div class="sc-val">1.4%</div><div class="sc-lbl">Enquiry Rate</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏱️</div></div><div class="sc-val">3m 24s</div><div class="sc-lbl">Avg View Time</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(139,92,246,0.1)">🌍</div></div><div class="sc-val">14</div><div class="sc-lbl">Countries Reached</div></div>
+  `;
+
+  const days2=['1','5','10','15','20','22','25','28','30'];
+  const vals2=[28,45,62,38,84,128,72,56,92];
+  const mx2=Math.max(...vals2);
+  document.getElementById('analyticsChart').innerHTML=days2.map((d,i)=>`
+    <div class="bar-group">
+      <div class="bar" style="height:${Math.max(vals2[i]/mx2*110,4)}px;background:var(--gold)" title="Day ${d}: ${vals2[i]} views"></div>
+      <div class="bar-lbl">${d}</div>
+    </div>`).join('');
+
+  document.getElementById('buyerCountries').innerHTML=`<div style="display:grid;gap:6px">${[
+    ['🇿🇦','South Africa','42%'],['🇬🇧','United Kingdom','18%'],['🇦🇪','UAE','14%'],
+    ['🇺🇸','United States','10%'],['🇳🇱','Netherlands','7%'],['🇩🇪','Germany','5%'],['Other','Other','4%']
+  ].map(([f,n,p])=>`
+    <div style="display:flex;align-items:center;gap:8px"><span>${f}</span>
+    <div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:0.78rem;color:var(--cream)">${n}</span><span style="font-size:0.78rem;font-weight:800;color:var(--gold)">${p}</span></div>
+    <div style="height:4px;background:var(--hover);border-radius:2px"><div style="height:100%;width:${p};background:var(--gold);border-radius:2px"></div></div></div></div>`).join('')}</div>`;
+
+  document.getElementById('topListingsBody').innerHTML=[
+    {title:'Luxury Penthouse, Clifton',views:312,enq:8,saves:28,rate:'2.6%',status:'active'},
+    {title:'3 Bed Home, Constantia',views:128,enq:4,saves:12,rate:'3.1%',status:'active'},
+    {title:'Office Space, Sandton',views:94,enq:2,saves:7,rate:'2.1%',status:'active'},
+    {title:'Retail Shop, Waterfront',views:67,enq:3,saves:5,rate:'4.5%',status:'active'},
+    {title:'Warehouse, Montague Gdns',views:42,enq:1,saves:3,rate:'2.4%',status:'active'},
+  ].map(r=>`<tr>
+    <td><strong>${r.title}</strong></td>
+    <td>${r.views}</td><td>${r.enq}</td><td>${r.saves}</td>
+    <td><span style="color:var(--success);font-weight:800">${r.rate}</span></td>
+    <td>${badge('active','Active')}</td>
+  </tr>`).join('');
+
+  document.getElementById('sourceChart').innerHTML=`<div style="display:grid;gap:8px">${[
+    ['🔍','PropertyFinder Search','62%'],['🌐','Direct / URL','18%'],['📱','Social Media','12%'],['🤖','AI Voice Search','5%'],['📧','Email Campaign','3%']
+  ].map(([i,n,p])=>`
+    <div style="display:flex;align-items:center;gap:10px"><span>${i}</span>
+    <div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:0.78rem;color:var(--cream)">${n}</span><span style="font-size:0.78rem;font-weight:800;color:var(--gold)">${p}</span></div>
+    <div style="height:5px;background:var(--hover);border-radius:3px"><div style="height:100%;width:${p};background:var(--gold);border-radius:3px"></div></div></div></div>`).join('')}</div>`;
+
+  document.getElementById('dayChart').innerHTML=`<div style="display:grid;gap:6px">${[
+    ['Monday','High','42 avg enquiries'],['Tuesday','Very High','58 avg'],['Wednesday','Medium','34 avg'],
+    ['Thursday','High','46 avg'],['Friday','Very High','64 avg'],['Saturday','Medium','28 avg'],['Sunday','Low','18 avg']
+  ].map(([d,l,n])=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border)">
+      <div style="width:70px;font-size:0.78rem;color:var(--cream)">${d}</div>
+      <div style="flex:1;font-size:0.72rem;color:${l==='Very High'?'var(--success)':l==='High'?'var(--gold)':l==='Medium'?'var(--warn)':'var(--subtle)'};font-weight:800">${l}</div>
+      <div style="font-size:0.72rem;color:var(--subtle)">${n}</div>
+    </div>`).join('')}</div>`;
+}
+
+// ══ NOTIFICATIONS ══
+function buildNotifications(){
+  document.getElementById('notifList').innerHTML=[
+    {ico:'📩',bg:'rgba(37,99,235,0.1)',text:'<strong>New enquiry</strong> from Priya Naidoo about Luxury Penthouse, Clifton Beach — "I\'m very interested, can we arrange a viewing?"',time:'2 hours ago',read:false},
+    {ico:'📩',bg:'rgba(37,99,235,0.1)',text:'<strong>New enquiry</strong> from David Chen (Hong Kong) about 3 Bed Family Home, Constantia',time:'4 hours ago',read:false},
+    {ico:'📩',bg:'rgba(37,99,235,0.1)',text:'<strong>New enquiry</strong> from Sarah Williams (UK) about Modern Office Space, Sandton',time:'6 hours ago',read:false},
+    {ico:'✅',bg:'rgba(22,163,74,0.1)',text:'Your listing <strong>Smallholding 12ha, Paarl</strong> has been approved and is now live!',time:'8 hours ago',read:true},
+    {ico:'⚠️',bg:'rgba(217,119,6,0.1)',text:'Your ad wallet balance is <strong>$79.20</strong> — consider topping up to keep your ads running',time:'Yesterday',read:true},
+    {ico:'❤️',bg:'rgba(220,38,38,0.1)',text:'Your listing <strong>Clifton Penthouse</strong> was saved by 3 new buyers today',time:'Yesterday',read:true},
+    {ico:'🧾',bg:'rgba(196,164,124,0.1)',text:'Invoice <strong>PF-INV-0089</strong> for March 2026 is ready — $135.00 due 1 April 2026',time:'1 Mar 2026',read:true},
+    {ico:'🏆',bg:'rgba(22,163,74,0.1)',text:'<strong>Congratulations!</strong> Woodstock Townhouse has been marked as SOLD.',time:'3 days ago',read:true},
+  ].map(n=>`
+    <div class="notif-item ${n.read?'':'unread'}">
+      <div class="notif-ico" style="background:${n.bg}">${n.ico}</div>
+      <div><div class="notif-text">${n.text}</div><div class="notif-time">${n.time}${!n.read?' · <span style="color:var(--info);font-weight:700">Unread</span>':''}</div></div>
+    </div>`).join('');
+}
+
+// ══ INIT ══
+function initDashboard(){
+  buildOverview();buildListings();buildEnquiries();buildSaved();
+  buildBilling();buildWallet();buildAuctions();buildProVal();
+  buildAnalytics();buildNotifications();
+}
+initDashboard();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+<script src="pf-auth.js"></script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

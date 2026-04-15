@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Payment System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --nb-hero-grad:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      --nb-hero-overlay:linear-gradient(160deg,rgba(14,21,32,0.3) 0%,rgba(14,21,32,0.05) 100%);
+      --pf-danger:#DC2626;--pf-success:#16A34A;--pf-warn:#D97706;--pf-info:#2563EB;
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}a:hover{text-decoration:underline}
+
+    .hero{position:relative;background:var(--nb-hero-grad);padding:56px 24px 48px;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero h1{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;color:white;margin-bottom:12px}
+    .hero p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:640px;margin:0 auto 24px;line-height:1.6}
+    .pay-icons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .pay-icon{padding:8px 16px;border-radius:var(--radius3);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:700;color:white;transition:all 0.2s ease}
+    .pay-icon:hover{background:rgba(255,255,255,0.18)}
+
+    .section{padding:52px 24px;background:var(--nb-white)}.section.alt{background:var(--nb-offwhite)}
+    .section.dark{background:linear-gradient(135deg,#0e1520,#141c2b));color:white}
+    .inner{max-width:1220px;margin:0 auto}
+    .s-title{font-family:var(--font-display);font-size:clamp(1.15rem,2.5vw,1.5rem);font-weight:700;color:#e8dfc8;text-align:center;margin-bottom:6px}
+    .section.dark .s-title{color:white}
+    .s-sub{font-size:0.92rem;color:var(--nb-muted);text-align:center;max-width:620px;margin:0 auto 32px;line-height:1.6}
+    .section.dark .s-sub{color:rgba(255,255,255,0.65)}
+
+    /* ═══ PAYMENT MODAL (Stripe-style) ═══ */
+    .pm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);z-index:9000;justify-content:center;align-items:center;padding:20px}
+    .pm-overlay.open{display:flex}
+    .pm-modal{width:100%;max-width:480px;background:var(--nb-white);border-radius:var(--radius);box-shadow:0 24px 80px rgba(0,0,0,0.25);overflow:hidden;animation:pmSlide 0.3s ease}
+    @keyframes pmSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Modal header */
+    .pm-header{padding:20px 24px;background:linear-gradient(135deg,#0e1520,#141c2b));color:white;position:relative}
+    .pm-header h3{font-size:1.05rem;font-weight:800;margin-bottom:2px}
+    .pm-header .pm-desc{font-size:0.82rem;color:rgba(255,255,255,0.7)}
+    .pm-header .pm-amount{font-family:var(--font-display);font-size:1.8rem;font-weight:700;margin-top:8px}
+    .pm-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;color:white;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+    .pm-close:hover{background:rgba(255,255,255,0.25)}
+
+    /* Stripe badge */
+    .stripe-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.8);margin-top:10px}
+    .stripe-badge .s-logo{font-weight:900;font-size:0.85rem;letter-spacing:1px;color:white}
+
+    /* Modal body */
+    .pm-body{padding:24px}
+    .pm-method-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--nb-border);padding-bottom:0}
+    .pm-mtab{padding:10px 16px;font-size:0.82rem;font-weight:800;color:var(--nb-muted);cursor:pointer;border:none;background:none;font-family:var(--font);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s}
+    .pm-mtab:hover{color:#c4a47c}
+    .pm-mtab.active{color:#c4a47c;border-bottom-color:#c4a47c}
+    .pm-panel{display:none}.pm-panel.active{display:block}
+
+    /* Card form inside modal */
+    .cf-row{margin-bottom:14px}
+    .cf-row label{font-size:0.82rem;font-weight:700;display:block;margin-bottom:5px;color:#e8dfc8}
+    .cf-input{width:100%;padding:12px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.92rem;font-family:var(--font);outline:none;transition:border 0.2s,box-shadow 0.2s}
+    .cf-input:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .cf-input.error{border-color:var(--pf-danger);box-shadow:0 0 0 3px rgba(220,38,38,0.1)}
+    .cf-input.valid{border-color:var(--pf-success)}
+    .cf-error{font-size:0.75rem;color:var(--pf-danger);margin-top:4px;display:none}
+    .cf-error.show{display:block}
+    .cf-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .cf-save{display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer;margin:14px 0}
+    .cf-save input{accent-color:#c4a47c;width:18px;height:18px}
+
+    /* 3D card preview */
+    .card-preview{perspective:600px;margin:0 auto 18px;width:300px;height:180px}
+    .card-3d{width:100%;height:100%;border-radius:14px;background:linear-gradient(135deg,#0e1520,#141c2b) 50%,var(--nb-green-hover) 100%);box-shadow:0 12px 40px rgba(14,21,32,0.3);transform:rotateY(-4deg) rotateX(2deg);transition:transform 0.4s ease;position:relative;overflow:hidden;color:white;padding:20px;font-family:var(--font)}
+    .card-3d:hover{transform:rotateY(0deg) rotateX(0deg)}
+    .card-3d::before{content:'';position:absolute;top:-50%;right:-30%;width:80%;height:80%;background:radial-gradient(circle,rgba(255,255,255,0.06),transparent);pointer-events:none}
+    .card-3d .c-chip{width:36px;height:26px;border-radius:5px;background:linear-gradient(135deg,#e8d5a3,#c9a84c);opacity:0.85}
+    .card-3d .c-number{font-size:1.1rem;font-weight:700;letter-spacing:3px;margin:16px 0 14px;font-family:'DM Sans',monospace}
+    .card-3d .c-bottom{display:flex;justify-content:space-between;align-items:flex-end}
+    .card-3d .c-name{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:0.75}
+    .card-3d .c-exp{font-size:0.68rem;font-weight:700;opacity:0.75}
+    .card-3d .c-brand{position:absolute;bottom:18px;right:20px;font-size:0.82rem;font-weight:900;opacity:0.65}
+
+    /* Pay button */
+    .pm-pay-btn{width:100%;padding:15px;border-radius:var(--radius3);background:#c4a47c;color:#0e1520;font-size:1rem;font-weight:800;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:8px}
+    .pm-pay-btn:hover:not(:disabled){background:var(--nb-green-hover);transform:translateY(-1px)}
+    .pm-pay-btn:disabled{opacity:0.6;cursor:not-allowed}
+
+    /* Processing state */
+    .pm-processing{display:none;text-align:center;padding:40px 24px}
+    .pm-processing.active{display:block}
+    .pm-spinner{width:48px;height:48px;border:4px solid var(--nb-border);border-top-color:#c4a47c;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .pm-processing .pm-step{font-size:0.88rem;font-weight:700;color:var(--nb-muted);margin-bottom:4px}
+    .pm-processing .pm-substep{font-size:0.78rem;color:var(--nb-muted);opacity:0.7}
+
+    /* Success state */
+    .pm-success{display:none;text-align:center;padding:40px 24px}
+    .pm-success.active{display:block}
+    .pm-success .check{width:64px;height:64px;border-radius:50%;background:var(--pf-success);color:white;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;animation:popIn 0.4s ease}
+    @keyframes popIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+    .pm-success h3{font-size:1.1rem;font-weight:800;color:#e8dfc8;margin-bottom:6px}
+    .pm-success p{font-size:0.88rem;color:var(--nb-muted);line-height:1.6}
+    .pm-receipt{margin:16px auto;max-width:320px;padding:16px;border-radius:var(--radius2);background:var(--nb-snow);border:1px solid var(--nb-border);text-align:left;font-size:0.82rem}
+    .pm-receipt .r-row{display:flex;justify-content:space-between;padding:4px 0;color:var(--nb-muted)}
+    .pm-receipt .r-row.total{border-top:1.5px solid var(--nb-border);margin-top:6px;padding-top:8px;font-weight:800;color:#e8dfc8}
+    .pm-done-btn{margin-top:16px;padding:12px 32px;border-radius:var(--radius3);background:#c4a47c;color:#0e1520;font-size:0.92rem;font-weight:800;border:none;cursor:pointer;font-family:var(--font)}
+
+    /* Failed state */
+    .pm-failed{display:none;text-align:center;padding:40px 24px}
+    .pm-failed.active{display:block}
+    .pm-failed .x-mark{width:64px;height:64px;border-radius:50%;background:var(--pf-danger);color:white;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px}
+
+    /* ═══ PAYMENT BADGES ═══ */
+    .pay-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3px}
+    .pay-badge.paid{background:rgba(22,163,74,0.08);color:var(--pf-success)}
+    .pay-badge.pending{background:rgba(217,119,6,0.08);color:var(--pf-warn)}
+    .pay-badge.unpaid{background:rgba(220,38,38,0.08);color:var(--pf-danger)}
+    .pay-badge.trial{background:rgba(37,99,235,0.08);color:var(--pf-info)}
+
+    /* ═══ PRICING INTEGRATION (demo cards) ═══ */
+    .demo-pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1000px;margin:0 auto}
+    @media(max-width:760px){.demo-pricing{grid-template-columns:1fr}}
+    .dp-card{background:var(--nb-white);border-radius:var(--radius);border:2px solid var(--nb-border);padding:28px 22px;text-align:center;transition:all 0.3s ease;position:relative}
+    .dp-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+    .dp-card.popular{border-color:#c4a47c;box-shadow:0 8px 32px rgba(196,164,124,0.15)}
+    .dp-card.popular::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#c4a47c;color:#0e1520;padding:4px 16px;border-radius:4px;font-size:0.68rem;font-weight:800;text-transform:uppercase}
+    .dp-tier{font-size:0.78rem;font-weight:800;color:#c4a47c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .dp-amount{font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:#e8dfc8}
+    .dp-period{font-size:0.82rem;color:var(--nb-muted);margin-bottom:14px}
+    .dp-range{font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:14px;padding:8px;background:var(--nb-snow);border-radius:4px}
+    .dp-cta{display:block;width:100%;padding:14px;border-radius:var(--radius3);font-size:0.95rem;font-weight:800;cursor:pointer;font-family:var(--font);border:2px solid rgba(196,164,124,0.4);background:var(--nb-white);color:#c4a47c;transition:all 0.2s;text-align:center}
+    .dp-cta:hover{background:#c4a47c;color:#0e1520}
+    .dp-card.popular .dp-cta{background:#c4a47c;color:#0e1520}
+    .dp-card.popular .dp-cta:hover{background:var(--nb-green-hover)}
+
+    /* Listing count selector */
+    .listing-counter{display:flex;align-items:center;gap:12px;justify-content:center;margin:14px 0}
+    .lc-btn{width:36px;height:36px;border-radius:50%;background:var(--nb-snow);border:1.5px solid var(--nb-border);font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-family:var(--font);color:#e8dfc8}
+    .lc-btn:hover{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .lc-val{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#e8dfc8;min-width:50px;text-align:center}
+    .lc-total{font-size:0.92rem;font-weight:800;color:#c4a47c;margin-top:6px}
+
+    /* ═══ WALLET ═══ */
+    .wallet{max-width:500px;margin:0 auto;padding:28px;border-radius:var(--radius);background:linear-gradient(135deg,#0e1520,#141c2b));color:white;box-shadow:0 8px 32px rgba(14,21,32,0.2);position:relative;overflow:hidden}
+    .wallet::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(255,255,255,0.06),transparent);pointer-events:none}
+    .wallet h3{font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;position:relative}
+    .wallet .w-bal{font-family:var(--font-display);font-size:2.8rem;font-weight:700;position:relative}
+    .wallet .w-sub{font-size:0.82rem;color:rgba(255,255,255,0.5);position:relative;margin-bottom:18px}
+    .wallet .w-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;position:relative}
+    .wallet .w-stat{padding:10px;border-radius:var(--radius3);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);text-align:center}
+    .wallet .w-stat .wv{font-weight:800;font-size:0.95rem;color:white}
+    .wallet .w-stat .wl{font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:2px}
+    .wallet .w-btns{display:flex;gap:8px;margin-top:14px;position:relative}
+    .w-btn{flex:1;padding:10px;border-radius:var(--radius3);font-size:0.85rem;font-weight:800;cursor:pointer;font-family:var(--font);border:none;text-align:center;transition:all 0.2s}
+    .w-btn.primary{background:var(--nb-lime);color:#e8dfc8}
+    .w-btn.outline{background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.25)}
+    .w-btn.outline:hover{background:rgba(255,255,255,0.08)}
+
+    /* ═══ PAYMENT HISTORY ═══ */
+    .ph-table{width:100%;border-collapse:collapse;font-size:0.84rem}
+    .ph-table th{padding:12px 14px;text-align:left;font-size:0.72rem;font-weight:800;color:var(--nb-muted);text-transform:uppercase;letter-spacing:0.5px;background:var(--nb-snow);border-bottom:2px solid var(--nb-border)}
+    .ph-table td{padding:10px 14px;border-bottom:1px solid var(--nb-border)}
+    .ph-table tr:hover td{background:rgba(196,164,124,0.02)}
+
+    /* Trust grid */
+    .trust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+    .trust-card{padding:20px;border-radius:var(--radius2);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);text-align:center}
+    .trust-card .t-ico{font-size:2rem;margin-bottom:8px}
+    .trust-card h4{font-size:0.88rem;font-weight:800;color:white;margin-bottom:4px}
+    .trust-card p{font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.5}
+
+    /* Saved cards */
+    .saved-card{padding:16px 20px;border-radius:var(--radius2);background:var(--nb-white);border:1.5px solid var(--nb-border);box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;transition:all 0.2s}
+    .saved-card.default{border-color:#c4a47c}
+    .saved-card:hover{box-shadow:var(--shadow-hover)}
+    .sc-icon{width:48px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.55rem;font-weight:900;flex-shrink:0}
+    .sc-icon.visa{background:linear-gradient(135deg,#1a1f71,#2e49a4)}
+    .sc-icon.mc{background:linear-gradient(135deg,#eb001b,#ff5f00)}
+    .sc-icon.pp{background:#0070ba}
+
+    .faq{border:1px solid var(--nb-border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--nb-white)}
+    .faq summary{padding:16px 18px;cursor:pointer;font-weight:800;font-size:0.92rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+    .faq summary::-webkit-details-marker{display:none}
+    .faq summary::after{content:"▸";font-size:14px;color:var(--nb-muted);transition:transform 0.25s ease}
+    .faq[open] summary{background:var(--nb-offwhite);border-bottom:1px solid var(--nb-border)}
+    .faq[open] summary::after{transform:rotate(90deg)}
+    .faq .faq-body{padding:18px;font-size:0.88rem;color:var(--nb-muted);line-height:1.65}
+
+    .note{font-size:0.82rem;padding:14px 18px;border-radius:var(--radius3);line-height:1.6;margin:14px 0}
+    .note.info{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.12);color:#1E40AF}
+    .note.success{background:rgba(22,163,74,0.05);border:1px solid rgba(22,163,74,0.12);color:#166534}
+    .note.warn{background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.12);color:#92400E}
+
+    .cta-box{max-width:700px;margin:0 auto;padding:36px 32px;border-radius:var(--radius);background:linear-gradient(135deg,#0e1520,#141c2b));text-align:center;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(255,255,255,0.06),transparent);pointer-events:none}
+    .cta-box h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:white;margin-bottom:8px;position:relative}
+    .cta-box p{color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:20px;position:relative}
+    .cta-box .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+    .cta-btn{padding:13px 26px;border-radius:var(--radius3);font-size:0.92rem;font-weight:800;cursor:pointer;font-family:var(--font);border:none;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+    .cta-btn.primary{background:var(--nb-lime);color:#e8dfc8}
+    .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,164,124,0.3)}
+    .cta-btn.outline{background:transparent;color:white;border:2px solid rgba(255,255,255,0.3)}
+
+    .footer{max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAYMENT MODAL (Stripe-style checkout)      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="pm-overlay" id="pmOverlay" onclick="if(event.target===this)closePayModal()">
+  <div class="pm-modal">
+    <!-- HEADER -->
+    <div class="pm-header">
+      <button class="pm-close" onclick="closePayModal()">✕</button>
+      <h3 id="pmTitle">Property Listing</h3>
+      <div class="pm-desc" id="pmDesc">Agency Plan — 15 listings × $3.00/mo</div>
+      <div class="pm-amount" id="pmAmount">$45.00</div>
+      <div class="stripe-badge"><span class="s-logo">stripe</span> Secure checkout · 256-bit SSL</div>
+    </div>
+
+    <!-- FORM STATE -->
+    <div class="pm-body" id="pmForm">
+      <!-- Method tabs -->
+      <div class="pm-method-tabs">
+        <button class="pm-mtab active" onclick="switchModal('card',this)">💳 Card</button>
+        <button class="pm-mtab" onclick="switchModal('paypal',this)">🌐 PayPal</button>
+        <button class="pm-mtab" onclick="switchModal('eft',this)">🏦 EFT</button>
+      </div>
+
+      <!-- CARD PANEL -->
+      <div class="pm-panel active" id="mp-card">
+        <div class="card-preview"><div class="card-3d">
+          <div class="c-chip"></div>
+          <div class="c-number" id="cardPreviewNum">•••• •••• •••• ••••</div>
+          <div class="c-bottom"><div class="c-name" id="cardPreviewName">YOUR NAME</div><div class="c-exp" id="cardPreviewExp">MM/YY</div></div>
+          <div class="c-brand" id="cardPreviewBrand">VISA</div>
+        </div></div>
+
+        <div class="cf-row"><label>Card Number</label><input class="cf-input" id="cfNum" type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCardNum(this)" onblur="validateField('num')"><div class="cf-error" id="cfNumErr">Please enter a valid card number</div></div>
+        <div class="cf-row"><label>Cardholder Name</label><input class="cf-input" id="cfName" type="text" placeholder="Name on card" oninput="updateCardPreview()" onblur="validateField('name')"><div class="cf-error" id="cfNameErr">Name is required</div></div>
+        <div class="cf-split">
+          <div class="cf-row"><label>Expiry Date</label><input class="cf-input" id="cfExp" type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)" onblur="validateField('exp')"><div class="cf-error" id="cfExpErr">Invalid expiry date</div></div>
+          <div class="cf-row"><label>CVC</label><input class="cf-input" id="cfCvc" type="text" placeholder="123" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')" onblur="validateField('cvc')"><div class="cf-error" id="cfCvcErr">Invalid CVC</div></div>
+        </div>
+        <label class="cf-save"><input type="checkbox" id="cfSave" checked> Save card for future payments</label>
+        <button class="pm-pay-btn" id="payCardBtn" onclick="processPayment('card')">🔒 Pay <span id="payBtnAmount">$45.00</span></button>
+      </div>
+
+      <!-- PAYPAL PANEL -->
+      <div class="pm-panel" id="mp-paypal">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:2.5rem;margin-bottom:12px">🌐</div>
+          <p style="font-size:0.92rem;font-weight:700;margin-bottom:6px">Pay with PayPal</p>
+          <p style="font-size:0.82rem;color:var(--nb-muted);margin-bottom:20px;line-height:1.5">You'll be redirected to PayPal to complete your payment securely. No card details needed here.</p>
+          <button class="pm-pay-btn" onclick="processPayment('paypal')" style="background:#0070ba">🌐 Continue to PayPal — <span class="modal-amt">$45.00</span></button>
+          <div style="font-size:0.75rem;color:var(--nb-muted);margin-top:8px">PayPal Buyer Protection applies</div>
+        </div>
+      </div>
+
+      <!-- EFT PANEL -->
+      <div class="pm-panel" id="mp-eft">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:2.5rem;margin-bottom:12px">🏦</div>
+          <p style="font-size:0.92rem;font-weight:700;margin-bottom:6px">Instant EFT (South Africa)</p>
+          <p style="font-size:0.82rem;color:var(--nb-muted);margin-bottom:14px;line-height:1.5">Select your bank and pay directly. Processed by PayFast.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px">
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">FNB</div>
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">Standard</div>
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">ABSA</div>
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">Nedbank</div>
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">Capitec</div>
+            <div style="padding:10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);cursor:pointer;font-size:0.82rem;font-weight:700;text-align:center;transition:all 0.2s" onclick="this.style.borderColor='var(--nb-green)'">Investec</div>
+          </div>
+          <button class="pm-pay-btn" onclick="processPayment('eft')">🏦 Pay with EFT — <span class="modal-amt">$45.00</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSING STATE -->
+    <div class="pm-processing" id="pmProcessing">
+      <div class="pm-spinner"></div>
+      <div class="pm-step" id="pmProcStep">Connecting to Stripe...</div>
+      <div class="pm-substep" id="pmProcSub">Encrypting card data</div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="pm-success" id="pmSuccess">
+      <div class="check">✓</div>
+      <h3>Payment Successful!</h3>
+      <p>Your payment has been processed. A confirmation email and invoice have been sent to your registered email.</p>
+      <div class="pm-receipt" id="pmReceipt">
+        <div class="r-row"><span>Plan</span><span id="rcPlan">Agency</span></div>
+        <div class="r-row"><span>Listings</span><span id="rcQty">15</span></div>
+        <div class="r-row"><span>Rate</span><span id="rcRate">$3.00/mo</span></div>
+        <div class="r-row"><span>Method</span><span id="rcMethod">Visa •••• 4242</span></div>
+        <div class="r-row"><span>Reference</span><span id="rcRef">PF-PAY-2026-0000</span></div>
+        <div class="r-row total"><span>Total Paid</span><span id="rcTotal">$45.00</span></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button class="pm-done-btn" onclick="closePayModal()">Done</button>
+        <button class="pm-done-btn" style="background:var(--nb-snow);color:#c4a47c;border:1.5px solid var(--nb-border)" onclick="showToast('Invoice PF-INV-2026-'+payRef+' downloading...')">📄 Download Invoice</button>
+      </div>
+    </div>
+
+    <!-- FAILED STATE -->
+    <div class="pm-failed" id="pmFailed">
+      <div class="x-mark">✕</div>
+      <h3 style="color:var(--pf-danger);margin-bottom:6px">Payment Failed</h3>
+      <p style="font-size:0.88rem;color:var(--nb-muted);margin-bottom:16px" id="pmFailMsg">Your card was declined. Please check your card details and try again.</p>
+      <button class="pm-done-btn" onclick="resetPayModal()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero"><div class="hero-inner">
+  <h1>💳 Secure Payments</h1>
+  <p>Pay for listings, advertising, and partnerships securely online. Mock Stripe integration with real-time card validation, processing animation, and instant receipts.</p>
+  <div class="pay-icons">
+    <div class="pay-icon">💳 Visa</div>
+    <div class="pay-icon">💳 Mastercard</div>
+    <div class="pay-icon">💳 Amex</div>
+    <div class="pay-icon">🌐 PayPal</div>
+    <div class="pay-icon">🏦 Instant EFT</div>
+    <div class="pay-icon">🏛️ Bank Transfer</div>
+    <div class="pay-icon">📱 Apple Pay</div>
+    <div class="pay-icon">📱 Google Pay</div>
+  </div>
+</div></div>
+
+<!-- ═══ LIVE DEMO: PRICING → PAYMENT ═══ -->
+<div class="section" id="demo"><div class="inner">
+  <h2 class="s-title">Try It — Select a Plan &amp; Pay</h2>
+  <p class="s-sub">Click any pricing button below to open the Stripe-style payment modal. Enter test card <strong>4242 4242 4242 4242</strong> to simulate a successful payment.</p>
+
+  <!-- Listing count selector -->
+  <div style="text-align:center;margin-bottom:24px">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:8px">How many listings do you want to pay for?</div>
+    <div class="listing-counter">
+      <button class="lc-btn" onclick="adjustCount(-1)">−</button>
+      <div class="lc-val" id="listingCount">5</div>
+      <button class="lc-btn" onclick="adjustCount(1)">+</button>
+    </div>
+    <div class="lc-total" id="listingTotal">5 × $7.50 = $37.50/mo (Private tier)</div>
+  </div>
+
+  <div class="demo-pricing">
+    <div class="dp-card" id="dpPrivate">
+      <div class="dp-tier">Private</div>
+      <div class="dp-amount">$7.50</div>
+      <div class="dp-period">per listing / per month</div>
+      <div class="dp-range">1 – 10 listings</div>
+      <button class="dp-cta" onclick="openPayModal('Private','listing',getCurrentCount(),7.50)">💳 Pay Now — <span id="privTotal">$37.50</span></button>
+    </div>
+    <div class="dp-card popular" id="dpAgency">
+      <div class="dp-tier">Agency</div>
+      <div class="dp-amount">$3.00</div>
+      <div class="dp-period">per listing / per month</div>
+      <div class="dp-range">11 – 2,000 listings</div>
+      <button class="dp-cta" onclick="openPayModal('Agency','listing',getCurrentCount(),3.00)">💳 Pay Now — <span id="agencyTotal">$15.00</span></button>
+    </div>
+    <div class="dp-card" id="dpEnterprise">
+      <div class="dp-tier">Enterprise</div>
+      <div class="dp-amount">$2.00</div>
+      <div class="dp-period">per listing / per month</div>
+      <div class="dp-range">2,000+ listings</div>
+      <button class="dp-cta" onclick="openPayModal('Enterprise','listing',getCurrentCount(),2.00)">💳 Pay Now — <span id="entTotal">$10.00</span></button>
+    </div>
+  </div>
+
+  <!-- Ad top-up demo -->
+  <div style="max-width:600px;margin:32px auto 0;padding:24px;border-radius:var(--radius);background:var(--nb-snow);border:1px solid var(--nb-border);text-align:center">
+    <h3 style="font-size:0.95rem;font-weight:800;color:#e8dfc8;margin-bottom:6px">📢 Advertising CPC — Top Up</h3>
+    <p style="font-size:0.82rem;color:var(--nb-muted);margin-bottom:14px">Pre-load your ad click balance. Minimum $50.</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="dp-cta" style="width:auto;padding:10px 20px;font-size:0.85rem" onclick="openPayModal('Ad Credit','topup',1,50)">$50</button>
+      <button class="dp-cta" style="width:auto;padding:10px 20px;font-size:0.85rem;background:#c4a47c;color:#0e1520;border-color:#c4a47c" onclick="openPayModal('Ad Credit','topup',1,100)">$100</button>
+      <button class="dp-cta" style="width:auto;padding:10px 20px;font-size:0.85rem" onclick="openPayModal('Ad Credit','topup',1,200)">$200</button>
+      <button class="dp-cta" style="width:auto;padding:10px 20px;font-size:0.85rem" onclick="openPayModal('Ad Credit','topup',1,500)">$500</button>
+    </div>
+  </div>
+
+  <div class="note info" style="max-width:700px;margin:18px auto 0;text-align:center"><strong>🧪 Test Cards:</strong> <code>4242 4242 4242 4242</code> = Success · <code>4000 0000 0000 0002</code> = Declined · Any other valid-format card = Success. Expiry must be future. Any 3-digit CVC.</div>
+</div></div>
+
+<!-- ═══ PAYMENT BADGES DEMO ═══ -->
+<div class="section alt" id="badges"><div class="inner">
+  <h2 class="s-title">Payment Badges for Listings</h2>
+  <p class="s-sub">Every listing shows a payment badge so you always know its status. Badges update automatically when payment is processed.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;max-width:900px;margin:0 auto">
+    <div style="padding:18px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong style="font-size:0.9rem">3 Bed Villa, Cape Town</strong>
+        <span class="pay-badge paid">✓ Paid</span>
+      </div>
+      <div style="font-size:0.78rem;color:var(--nb-muted)">Listed: 1 Mar 2026 · Expires: 1 Apr 2026 · $7.50/mo</div>
+    </div>
+    <div style="padding:18px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong style="font-size:0.9rem">Office Space, Dubai</strong>
+        <span class="pay-badge pending">⏳ Pending</span>
+      </div>
+      <div style="font-size:0.78rem;color:var(--nb-muted)">Awaiting bank transfer confirmation · Ref: PF-PAY-2026-0078</div>
+    </div>
+    <div style="padding:18px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong style="font-size:0.9rem">Farm, Stellenbosch</strong>
+        <span class="pay-badge unpaid">✕ Unpaid</span>
+      </div>
+      <div style="font-size:0.78rem;color:var(--nb-muted)">Payment failed · <a href="#" onclick="openPayModal('Private','listing',1,7.50);return false">Retry payment →</a></div>
+    </div>
+    <div style="padding:18px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong style="font-size:0.9rem">New Listing Draft</strong>
+        <span class="pay-badge trial">🆓 Draft</span>
+      </div>
+      <div style="font-size:0.78rem;color:var(--nb-muted)">Not yet submitted · Payment required on publish</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ ADVERTISER WALLET ═══ -->
+<div class="section" id="wallet-section"><div class="inner">
+  <h2 class="s-title">💰 Advertiser Wallet</h2>
+  <p class="s-sub">Your CPC advertising balance. Pre-load funds and clicks deduct in real-time.</p>
+  <div class="wallet">
+    <h3>Available Balance</h3>
+    <div class="w-bal" id="walletBal">$<span id="walBal">127.40</span></div>
+    <div class="w-sub">~<span id="walClicks">1,062</span> clicks remaining (avg $0.12/click)</div>
+    <div class="w-stats">
+      <div class="w-stat"><div class="wv" id="walTotalClicks">2,341</div><div class="wl">Total Clicks</div></div>
+      <div class="w-stat"><div class="wv" id="walSpent">$280.92</div><div class="wl">Total Spent</div></div>
+      <div class="w-stat"><div class="wv">3.2%</div><div class="wl">Avg CTR</div></div>
+    </div>
+    <div class="w-btns">
+      <button class="w-btn primary" onclick="openPayModal('Ad Credit','topup',1,100)">💰 Top Up</button>
+      <button class="w-btn outline" onclick="showToast('Auto-top-up: When balance < $10, charge $100 to Visa •••• 4242')">⚙️ Auto Top-Up</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ PAYMENT HISTORY ═══ -->
+<div class="section alt" id="history"><div class="inner">
+  <h2 class="s-title">📋 Payment History</h2>
+  <p class="s-sub">All transactions, invoices, and receipts. Stored in localStorage for this demo.</p>
+  <div style="overflow-x:auto">
+    <table class="ph-table">
+      <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Method</th><th>Status</th><th>Invoice</th></tr></thead>
+      <tbody id="phBody">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:8px;font-size:0.78rem;color:var(--nb-muted)" id="phEmpty">Make a test payment above to see it appear here.</div>
+</div></div>
+
+<!-- ═══ SAVED PAYMENT METHODS ═══ -->
+<div class="section" id="saved"><div class="inner" style="max-width:700px">
+  <h2 class="s-title">💳 Saved Payment Methods</h2>
+  <p class="s-sub">Manage your saved cards. Cards are tokenized — we never store your full number.</p>
+  <div style="display:flex;flex-direction:column;gap:12px" id="savedCards">
+    <!-- Populated by JS -->
+  </div>
+  <button style="width:100%;margin-top:14px;padding:12px;border-radius:var(--radius3);background:var(--nb-snow);border:1.5px dashed var(--nb-border);font-size:0.88rem;font-weight:700;cursor:pointer;font-family:var(--font);color:var(--nb-muted)" onclick="openPayModal('Add Card','save_card',0,0)">+ Add Payment Method</button>
+</div></div>
+
+<!-- ═══ SECURITY ═══ -->
+<div class="section dark" id="security"><div class="inner">
+  <h2 class="s-title">🔒 Security &amp; Trust</h2>
+  <p class="s-sub">Industry-leading encryption and fraud protection on every transaction.</p>
+  <div class="trust-grid">
+    <div class="trust-card"><div class="t-ico">🔐</div><h4>256-bit SSL</h4><p>TLS 1.3 encryption on all payment data — same standard banks use.</p></div>
+    <div class="trust-card"><div class="t-ico">🛡️</div><h4>PCI DSS Level 1</h4><p>Stripe and PayFast are PCI DSS Level 1 — highest security certification.</p></div>
+    <div class="trust-card"><div class="t-ico">🚫</div><h4>No Card Storage</h4><p>Cards tokenized by Stripe. We only store last 4 digits for reference.</p></div>
+    <div class="trust-card"><div class="t-ico">🔍</div><h4>Fraud Detection</h4><p>Real-time fraud monitoring. Suspicious activity blocked automatically.</p></div>
+    <div class="trust-card"><div class="t-ico">💸</div><h4>Refund Protection</h4><p>Rejected ads refunded. Disputes resolved within 7 business days.</p></div>
+    <div class="trust-card"><div class="t-ico">📋</div><h4>Transparent Billing</h4><p>No hidden fees. Every charge itemized. Real-time balance tracking.</p></div>
+  </div>
+</div></div>
+
+<!-- ═══ FAQ ═══ -->
+<div class="section alt" id="faq"><div class="inner" style="max-width:800px">
+  <h2 class="s-title">Payment FAQ</h2>
+  <p class="s-sub">Common questions about payments, billing, and refunds.</p>
+  <details class="faq" open><summary>What currencies do you accept?</summary><div class="faq-body">All prices in <strong>USD</strong>. Your bank converts to local currency. PayPal handles conversion automatically. Bank transfers accepted in USD, EUR, GBP, and ZAR.</div></details>
+  <details class="faq"><summary>Is my card information secure?</summary><div class="faq-body">Cards processed by <strong>Stripe</strong> (PCI DSS Level 1). South African EFT by <strong>PayFast</strong>. We never store full card numbers — only tokenized references with last 4 digits.</div></details>
+  <details class="faq"><summary>How do refunds work?</summary><div class="faq-body"><strong>Ad rejections:</strong> Full refund if you don't resubmit. <strong>Listing cancellations:</strong> Prepaid balance usable within 12 months. <strong>Payment errors:</strong> Refunded within 7 business days. Email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbb9b2b7b7b2b5bc9baba9b4abbea9afa2bdb2b5bfbea9f5b8b4b6">[email&#160;protected]</a>.</div></details>
+  <details class="faq"><summary>What happens if payment fails?</summary><div class="faq-body">You get an email. Service pauses (not deleted). <strong>7 days</strong> to update payment and retry. After 7 days, listing is suspended. Reactivate anytime with successful payment.</div></details>
+  <details class="faq"><summary>How does auto-top-up work?</summary><div class="faq-body">When ad wallet drops below <strong>$10</strong>, we charge your default card for your chosen amount ($50/$100/$200). Ads never pause. Disable anytime in wallet settings.</div></details>
+  <details class="faq"><summary>Do you offer discounts?</summary><div class="faq-body">No. Our listing fees are already the lowest in the industry — <strong>Private Sellers: $7.50/listing/month</strong> (1–10 listings), <strong>Agency: $3.00/listing/month</strong> (11–2,000 listings), and <strong>Enterprise: $2.00/listing/month</strong> (2,000+ listings). Every listing gets the full feature set (30 photos, video, analytics, 185-country exposure) at a flat rate with no hidden charges. We keep pricing simple and transparent — the price you see is the price you pay.</div></details>
+</div></div>
+
+<!-- CTA -->
+<div class="section"><div class="inner">
+  <div class="cta-box">
+    <h2>Ready to Get Started?</h2>
+    <p>List a property, run an ad, or start a partnership. Pay securely online.</p>
+    <div class="btn-row">
+      <a class="cta-btn primary" href="list-property.html">🏠 List a Property</a>
+      <a class="cta-btn outline" href="15-advertise-with-us.html">📢 Advertise</a>
+      <a class="cta-btn outline" href="16-agency-partnership.html">🤝 Partnership</a>
+    </div>
+  </div>
+</div></div>
+
+<div class="footer">© <span id="y"></span> PropertyFinder. Billing: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e2c2722222720290e3e3c213e2b3c3a372827202a2b3c602d2123">[email&#160;protected]</a> | <a href="payment-terms.html">Payment Terms</a> | <a href="terms-of-use.html">Terms</a></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ═══════════════════════════════════════════════ */
+/*   PropertyFinder Payment System — Mock Stripe    */
+/* ═══════════════════════════════════════════════ */
+
+let currentPay = { plan:'', type:'', qty:0, rate:0, total:0 };
+let payRef = 0;
+
+// ── TOAST ──
+function showToast(msg){const ex=document.querySelector('.pf-toast');if(ex)ex.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+
+// ── PAYMENT DATA (localStorage) ──
+function getPayData(){
+  return JSON.parse(localStorage.getItem('pf_payments') || JSON.stringify({
+    methods:[{type:'visa',last4:'4242',exp:'12/28',name:'Demo User',default:true}],
+    history:[],
+    wallet:127.40,
+    totalSpent:280.92,
+    totalClicks:2341,
+    nextRef:1001
+  }));
+}
+function savePayData(d){ localStorage.setItem('pf_payments', JSON.stringify(d)); }
+
+// ── OPEN PAYMENT MODAL ──
+function openPayModal(plan, type, qty, rate){
+  currentPay = { plan, type, qty, rate, total: qty * rate };
+  if(type==='topup') currentPay.total = rate; // flat amount
+  if(type==='save_card') currentPay.total = 0;
+
+  const desc = type==='listing' ? plan+' Plan — '+qty+' listing'+(qty!==1?'s':'')+ ' × $'+rate.toFixed(2)+'/mo'
+    : type==='topup' ? 'Advertising wallet top-up'
+    : 'Save a new payment method';
+  
+  document.getElementById('pmTitle').textContent = type==='save_card' ? 'Add Payment Method' : (type==='topup'?'Ad Wallet Top-Up':'Property Listing');
+  document.getElementById('pmDesc').textContent = desc;
+  document.getElementById('pmAmount').textContent = currentPay.total > 0 ? '$'+currentPay.total.toFixed(2) : '';
+  document.getElementById('payBtnAmount').textContent = currentPay.total > 0 ? '$'+currentPay.total.toFixed(2) : 'Save Card';
+  document.querySelectorAll('.modal-amt').forEach(el => el.textContent = '$'+currentPay.total.toFixed(2));
+
+  if(type==='save_card'){
+    document.getElementById('payCardBtn').textContent = '💳 Save Card';
+  } else {
+    document.getElementById('payCardBtn').innerHTML = '🔒 Pay <span>$'+currentPay.total.toFixed(2)+'</span>';
+  }
+
+  // Reset states
+  resetPayModal();
+  document.getElementById('pmOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePayModal(){
+  document.getElementById('pmOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  renderHistory();
+  renderSavedCards();
+  updateWallet();
+}
+
+function resetPayModal(){
+  document.getElementById('pmForm').style.display = 'block';
+  document.getElementById('pmProcessing').classList.remove('active');
+  document.getElementById('pmSuccess').classList.remove('active');
+  document.getElementById('pmFailed').classList.remove('active');
+  // Clear errors
+  document.querySelectorAll('.cf-error').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.cf-input').forEach(i=>{i.classList.remove('error','valid')});
+}
+
+// ── MODAL TAB SWITCHING ──
+function switchModal(tab, el){
+  document.querySelectorAll('.pm-mtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pm-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mp-'+tab).classList.add('active');
+}
+
+// ── CARD NUMBER FORMATTING ──
+function formatCardNum(el){
+  let v = el.value.replace(/\D/g,'');
+  if(v.length>16) v = v.slice(0,16);
+  el.value = v.replace(/(\d{4})(?=\d)/g,'$1 ');
+  // Update preview
+  const display = v.padEnd(16,'•').replace(/(.{4})/g,'$1 ').trim();
+  document.getElementById('cardPreviewNum').textContent = display;
+  // Detect brand
+  const brand = v.startsWith('4')?'VISA':v.startsWith('5')?'MC':v.startsWith('3')?'AMEX':'CARD';
+  document.getElementById('cardPreviewBrand').textContent = brand;
+}
+
+function formatExpiry(el){
+  let v = el.value.replace(/\D/g,'');
+  if(v.length>4) v = v.slice(0,4);
+  if(v.length>=2) v = v.slice(0,2)+' / '+v.slice(2);
+  el.value = v;
+  document.getElementById('cardPreviewExp').textContent = v || 'MM/YY';
+}
+
+function updateCardPreview(){
+  const name = document.getElementById('cfName').value || 'YOUR NAME';
+  document.getElementById('cardPreviewName').textContent = name.toUpperCase();
+}
+
+// ── LUHN CHECK ──
+function luhnCheck(num){
+  const digits = num.replace(/\D/g,'');
+  if(digits.length<13||digits.length>19) return false;
+  let sum=0, alt=false;
+  for(let i=digits.length-1;i>=0;i--){
+    let n=parseInt(digits[i],10);
+    if(alt){n*=2;if(n>9)n-=9;}
+    sum+=n;alt=!alt;
+  }
+  return sum%10===0;
+}
+
+// ── FIELD VALIDATION ──
+function validateField(field){
+  const valid = {
+    num: ()=>{
+      const v=document.getElementById('cfNum').value.replace(/\s/g,'');
+      return v.length>=13 && luhnCheck(v);
+    },
+    name: ()=> document.getElementById('cfName').value.trim().length>=2,
+    exp: ()=>{
+      const v=document.getElementById('cfExp').value.replace(/\s/g,'').replace('/','');
+      if(v.length!==4) return false;
+      const m=parseInt(v.slice(0,2),10), y=parseInt('20'+v.slice(2),10);
+      const now=new Date();
+      return m>=1&&m<=12&&(y>now.getFullYear()||(y===now.getFullYear()&&m>=now.getMonth()+1));
+    },
+    cvc: ()=>{const v=document.getElementById('cfCvc').value;return v.length>=3&&v.length<=4;}
+  };
+
+  const el = document.getElementById('cf'+field.charAt(0).toUpperCase()+field.slice(1));
+  if(!el) return;
+  const errEl = document.getElementById('cf'+field.charAt(0).toUpperCase()+field.slice(1)+'Err');
+  const isValid = valid[field]();
+  el.classList.toggle('error', !isValid);
+  el.classList.toggle('valid', isValid);
+  if(errEl) errEl.classList.toggle('show', !isValid);
+  return isValid;
+}
+
+function validateAllCard(){
+  const n=validateField('num'), nm=validateField('name'), e=validateField('exp'), c=validateField('cvc');
+  return n&&nm&&e&&c;
+}
+
+// ── PROCESS PAYMENT ──
+function processPayment(method){
+  if(method==='card' && !validateAllCard()) return;
+
+  // Hide form, show processing
+  document.getElementById('pmForm').style.display = 'none';
+  document.getElementById('pmProcessing').classList.add('active');
+
+  const steps = method==='card'
+    ? [{t:'Connecting to Stripe...',s:'Encrypting card data'},{t:'Verifying card...',s:'Running fraud checks'},{t:'Processing payment...',s:'Authorizing $'+currentPay.total.toFixed(2)},{t:'Finalizing...',s:'Generating receipt'}]
+    : method==='paypal'
+    ? [{t:'Redirecting to PayPal...',s:'Opening secure session'},{t:'Awaiting PayPal confirmation...',s:'Processing authorization'},{t:'Payment confirmed...',s:'Returning to PropertyFinder'}]
+    : [{t:'Connecting to PayFast...',s:'Opening bank portal'},{t:'Awaiting bank confirmation...',s:'Processing EFT'},{t:'Payment received...',s:'Generating receipt'}];
+
+  let i = 0;
+  const interval = setInterval(()=>{
+    if(i<steps.length){
+      document.getElementById('pmProcStep').textContent = steps[i].t;
+      document.getElementById('pmProcSub').textContent = steps[i].s;
+      i++;
+    } else {
+      clearInterval(interval);
+      // Check if card is the "decline" test card
+      const cardNum = document.getElementById('cfNum').value.replace(/\s/g,'');
+      if(method==='card' && cardNum==='4000000000000002'){
+        showFailed('Your card was declined by the issuing bank. Please use a different card or payment method.');
+      } else {
+        showSuccess(method);
+      }
+    }
+  }, 800);
+}
+
+function showSuccess(method){
+  document.getElementById('pmProcessing').classList.remove('active');
+  document.getElementById('pmSuccess').classList.add('active');
+
+  const data = getPayData();
+  payRef = data.nextRef++;
+  const cardNum = document.getElementById('cfNum').value.replace(/\s/g,'');
+  const last4 = cardNum.slice(-4)||'****';
+  const brand = cardNum.startsWith('4')?'Visa':cardNum.startsWith('5')?'MC':'Card';
+  const methodStr = method==='card'?brand+' •••• '+last4 : method==='paypal'?'PayPal':'EFT';
+
+  document.getElementById('rcPlan').textContent = currentPay.plan;
+  document.getElementById('rcQty').textContent = currentPay.type==='topup'?'Wallet top-up':currentPay.qty+' listing'+(currentPay.qty!==1?'s':'');
+  document.getElementById('rcRate').textContent = currentPay.type==='topup'?'—':'$'+currentPay.rate.toFixed(2)+'/mo';
+  document.getElementById('rcMethod').textContent = methodStr;
+  document.getElementById('rcRef').textContent = 'PF-PAY-2026-'+String(payRef).padStart(4,'0');
+  document.getElementById('rcTotal').textContent = '$'+currentPay.total.toFixed(2);
+
+  // Save to history
+  data.history.unshift({
+    date: new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'}),
+    desc: currentPay.type==='topup'?'Ad wallet top-up':currentPay.plan+' listing fee — '+currentPay.qty+' listings',
+    amount: currentPay.total,
+    method: methodStr,
+    status: 'paid',
+    ref: 'PF-PAY-2026-'+String(payRef).padStart(4,'0')
+  });
+
+  // Update wallet if topup
+  if(currentPay.type==='topup'){
+    data.wallet += currentPay.total;
+  }
+
+  // Save card if checked
+  if(method==='card' && document.getElementById('cfSave').checked){
+    const exists = data.methods.find(m=>m.last4===last4);
+    if(!exists){
+      data.methods.push({type:brand.toLowerCase()==='visa'?'visa':'mc',last4,exp:document.getElementById('cfExp').value.replace(/\s/g,''),name:document.getElementById('cfName').value,default:data.methods.length===0});
+    }
+  }
+
+  savePayData(data);
+}
+
+function showFailed(msg){
+  document.getElementById('pmProcessing').classList.remove('active');
+  document.getElementById('pmFailed').classList.add('active');
+  document.getElementById('pmFailMsg').textContent = msg;
+}
+
+// ── LISTING COUNT SELECTOR ──
+let listingCount = 5;
+function getCurrentCount(){ return listingCount; }
+function adjustCount(delta){
+  listingCount = Math.max(1, Math.min(9999, listingCount + delta));
+  document.getElementById('listingCount').textContent = listingCount;
+  const tier = listingCount<=10?'Private':listingCount<=2000?'Agency':'Enterprise';
+  const rate = listingCount<=10?7.50:listingCount<=2000?3.00:2.00;
+  const total = (listingCount * rate).toFixed(2);
+  document.getElementById('listingTotal').textContent = listingCount+' × $'+rate.toFixed(2)+' = $'+total+'/mo ('+tier+' tier)';
+  document.getElementById('privTotal').textContent = '$'+(listingCount*7.50).toFixed(2);
+  document.getElementById('agencyTotal').textContent = '$'+(listingCount*3.00).toFixed(2);
+  document.getElementById('entTotal').textContent = '$'+(listingCount*2.00).toFixed(2);
+  // Highlight active tier
+  document.getElementById('dpPrivate').style.opacity = tier==='Private'?'1':'0.6';
+  document.getElementById('dpAgency').style.opacity = tier==='Agency'?'1':'0.6';
+  document.getElementById('dpEnterprise').style.opacity = tier==='Enterprise'?'1':'0.6';
+}
+
+// ── RENDER PAYMENT HISTORY ──
+function renderHistory(){
+  const data = getPayData();
+  const tbody = document.getElementById('phBody');
+  const empty = document.getElementById('phEmpty');
+  if(data.history.length===0){
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  tbody.innerHTML = data.history.slice(0,10).map(h=>`
+    <tr>
+      <td style="font-weight:700">${h.date}</td>
+      <td>${h.desc}</td>
+      <td style="font-weight:800;color:#e8dfc8">$${h.amount.toFixed(2)}</td>
+      <td>${h.method}</td>
+      <td><span class="pay-badge ${h.status}">${h.status==='paid'?'✓ Paid':h.status==='pending'?'⏳ Pending':'✕ Failed'}</span></td>
+      <td><a href="#" onclick="showToast('Downloading invoice ${h.ref}...');return false">📄 PDF</a></td>
+    </tr>
+  `).join('');
+}
+
+// ── RENDER SAVED CARDS ──
+function renderSavedCards(){
+  const data = getPayData();
+  const container = document.getElementById('savedCards');
+  if(data.methods.length===0){
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--nb-muted);font-size:0.88rem">No saved payment methods. Make a payment with "Save card" checked to add one.</div>';
+    return;
+  }
+  container.innerHTML = data.methods.map((m,i)=>`
+    <div class="saved-card ${m.default?'default':''}">
+      <div class="sc-icon ${m.type}">${m.type==='visa'?'VISA':m.type==='mc'?'MC':'PP'}</div>
+      <div style="flex:1"><div style="font-size:0.9rem;font-weight:800">${m.type==='visa'?'Visa':m.type==='mc'?'Mastercard':'PayPal'} •••• ${m.last4}</div><div style="font-size:0.75rem;color:var(--nb-muted)">Expires ${m.exp} · ${m.name}</div></div>
+      ${m.default?'<span style="padding:3px 8px;border-radius:4px;background:rgba(196,164,124,0.08);color:#c4a47c;font-size:0.7rem;font-weight:800;text-transform:uppercase">Default</span>':'<button style="padding:4px 10px;border-radius:4px;background:var(--nb-snow);border:1px solid var(--nb-border);font-size:0.72rem;font-weight:700;cursor:pointer;font-family:var(--font);color:var(--nb-muted)" onclick="setDefaultCard('+i+')">Set Default</button>'}
+      <button style="background:none;border:none;color:var(--nb-muted);cursor:pointer;font-size:0.85rem" onclick="removeCard(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function setDefaultCard(idx){
+  const data = getPayData();
+  data.methods.forEach((m,i)=>m.default=(i===idx));
+  savePayData(data);
+  renderSavedCards();
+  showToast('Default payment method updated');
+}
+
+function removeCard(idx){
+  const data = getPayData();
+  data.methods.splice(idx,1);
+  if(data.methods.length>0 && !data.methods.find(m=>m.default)) data.methods[0].default=true;
+  savePayData(data);
+  renderSavedCards();
+  showToast('Card removed');
+}
+
+// ── UPDATE WALLET DISPLAY ──
+function updateWallet(){
+  const data = getPayData();
+  document.getElementById('walBal').textContent = data.wallet.toFixed(2);
+  document.getElementById('walClicks').textContent = Math.floor(data.wallet/0.12).toLocaleString();
+  document.getElementById('walSpent').textContent = '$'+data.totalSpent.toFixed(2);
+}
+
+document.getElementById('y').textContent = new Date().getFullYear();
+console.log('%c PropertyFinder — Payment System loaded','color:#141c2b;font-weight:bold;font-size:12px');
+</script>
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:24px 20px;font-family:'DM Sans',system-ui,sans-serif;font-size:0.82rem;margin-top:40px;line-height:1.8">
+  <div style="max-width:1220px;margin:0 auto">
+    <div style="margin-bottom:10px">
+      <a href="index.html" style="color:#c4a47c;font-weight:700;font-size:0.95rem;text-decoration:none">Property<span style="color:#D4AF77">Finder</span></a>
+      <span style="color:rgba(255,255,255,0.4);margin:0 8px">|</span>
+      <span style="color:rgba(255,255,255,0.6)">Connecting Buyers, Sellers & Businesses Across 185 Countries</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:10px">
+      <a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Home</a>
+      <a href="buy.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Buy</a>
+      <a href="rent.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Rent</a>
+      <a href="auctions.html" style="color:#c4a47c;text-decoration:none">Auctions</a>
+      <a href="business.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Business for Sale</a>
+      <a href="countries.html" style="color:rgba(255,255,255,0.7);text-decoration:none">185 Countries</a>
+      <a href="valuation.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Valuation</a>
+      <a href="calculators.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Calculators</a>
+      <a href="advertise.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Advertise</a>
+      <a href="how-it-works.html" style="color:rgba(255,255,255,0.7);text-decoration:none">How It Works</a>
+      <a href="list-property.html" style="color:rgba(255,255,255,0.7);text-decoration:none">List Property</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:12px">
+      <a href="terms-of-use.html" style="color:#D4AF77;text-decoration:none">Terms of Use</a>
+      <a href="privacy-policy.html" style="color:#D4AF77;text-decoration:none">Privacy</a>
+      <a href="commission-fees.html" style="color:#D4AF77;text-decoration:none">Fees</a>
+      <a href="anti-fraud.html" style="color:#D4AF77;text-decoration:none">Anti-Fraud</a>
+      <a href="auction-terms.html" style="color:#D4AF77;text-decoration:none">Auction Terms</a>
+      <a href="dispute-resolution.html" style="color:#D4AF77;text-decoration:none">Disputes</a>
+      <a href="seller-agent-listing.html" style="color:#D4AF77;text-decoration:none">Seller Agreement</a>
+    </div>
+    <div style="color:rgba(255,255,255,0.4);font-size:0.75rem">
+      © <span id="pf-year"></span> PropertyFinder Global. All rights reserved. | 185 Countries · 10 Business Sectors · AI-Powered · Real-Time Auctions
+    </div>
+  </div>
+</footer>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

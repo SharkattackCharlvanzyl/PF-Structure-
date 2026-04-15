@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Payment Cancelled — PropertyFinder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#141c2b;--text:#e8dfc8;--gold:#c4a47c}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{background:#1a2535;border:1px solid rgba(196,164,124,0.25);border-radius:20px;padding:48px 40px;max-width:480px;width:100%;text-align:center}
+    .icon{font-size:3rem;margin-bottom:16px}
+    h1{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--gold);margin-bottom:12px}
+    p{color:rgba(232,223,200,0.75);line-height:1.6;margin-bottom:24px}
+    .btn{display:inline-block;background:var(--gold);color:#1a1408;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:0.95rem}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">↩️</div>
+    <h1>Payment Cancelled</h1>
+    <p>No payment was taken. You can try again whenever you're ready.</p>
+    <a href="list-property.html" class="btn">← Back to Listing</a>
+  </div>
+  <script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Auction Process Timeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --radius:14px;--radius2:10px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    header{
+      background:linear-gradient(135deg,#0e1520,#141c2b) 55%,var(--nb-green-hover) 100%);
+      padding:40px 24px 32px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto}
+    header h1{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;margin:0 0 8px}
+    header p{color:rgba(255,255,255,0.75);font-size:0.88rem;margin:0}
+    .nav-links{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+    .nav-links a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;font-size:0.8rem}
+    .nav-links a:hover{background:rgba(255,255,255,0.12);color:#fff;text-decoration:none}
+
+    main{max-width:980px;margin:0 auto;padding:24px 24px 60px}
+
+    .info-panel{padding:24px;border-radius:var(--radius);background:var(--nb-snow);border:1px solid var(--nb-border);margin-bottom:20px}
+    .info-panel h3{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#e8dfc8;margin-bottom:14px}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .info-item{padding:16px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+    .info-item .ii-ico{font-size:1.8rem;margin-bottom:10px}
+    .info-item .ii-title{font-weight:800;font-size:0.9rem;color:#c4a47c;margin-bottom:6px}
+    .info-item .ii-desc{font-size:0.84rem;color:var(--nb-muted);line-height:1.55}
+
+    .accord{border:1px solid var(--nb-border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--nb-white)}
+    .accord:last-child{margin-bottom:0}
+    .accord summary{padding:16px 18px;cursor:pointer;font-weight:800;font-size:0.92rem;background:var(--nb-white);border-bottom:1px solid transparent;list-style:none;display:flex;justify-content:space-between;align-items:center;transition:background 0.2s ease}
+    .accord summary::-webkit-details-marker{display:none}
+    .accord summary::after{content:"▸";font-size:14px;color:var(--nb-muted);transition:transform 0.25s ease}
+    .accord[open] summary{background:var(--nb-offwhite);border-bottom-color:var(--nb-border)}
+    .accord[open] summary::after{transform:rotate(90deg)}
+    .accord .acc-body{padding:18px}
+    .accord .acc-body p{font-size:0.9rem;color:var(--nb-muted);line-height:1.65;margin:0 0 10px}
+    .accord .acc-body p:last-child{margin:0}
+    .accord .acc-body ul{margin:8px 0 0 20px;font-size:0.88rem}
+    .accord .acc-body ul li{margin-bottom:6px;line-height:1.5;color:var(--nb-muted)}
+    .accord .acc-body strong{color:#e8dfc8}
+
+    .timeline{position:relative;padding-left:32px}
+    .timeline::before{content:'';position:absolute;left:13px;top:0;bottom:0;width:2px;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),var(--nb-lime))}
+    .tl-item{position:relative;margin-bottom:28px;padding-left:20px}
+    .tl-item:last-child{margin-bottom:0}
+    .tl-dot{position:absolute;left:-21px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--nb-green);border:2px solid var(--nb-white);box-shadow:0 0 0 2px var(--nb-green)}
+    .tl-day{font-size:0.72rem;font-weight:800;color:#c4a47c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .tl-title{font-weight:800;font-size:0.95rem;margin-bottom:6px;color:#e8dfc8}
+    .tl-desc{font-size:0.85rem;color:var(--nb-muted);line-height:1.55}
+
+    .field{margin-bottom:18px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+    @media(max-width:560px){.field-row{grid-template-columns:1fr}}
+    .field label{display:block;font-size:0.82rem;font-weight:700;color:#e8dfc8;margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--nb-border);border-radius:6px;font-size:0.92rem;font-family:var(--font);color:#e8dfc8;background:var(--nb-white);outline:none;transition:border-color 0.2s ease,box-shadow 0.2s ease}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .field textarea{resize:vertical;min-height:80px}
+    .check-label{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--nb-muted);cursor:pointer}
+    .check-label input[type="checkbox"]{width:16px;height:16px;accent-color:#c4a47c;cursor:pointer}
+    .form-submit{width:100%;padding:14px;border:none;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s ease}
+    .form-submit:hover{background:var(--nb-green-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,164,124,0.25)}
+
+    .note{font-size:0.82rem;color:var(--nb-muted);padding:12px;margin-top:14px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    footer{max-width:980px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+
+    @media print{header{background:var(--nb-green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Complete Auction Process</h1>
+    <p>From listing to completion — here's what happens at every stage</p>
+    <div class="nav-links">
+      <a href="auctions.html">← All Auctions</a>
+      <a href="auction-how-to-bid.html">How to Bid</a>
+      <a href="auction-faq.html">FAQ</a>
+      <a href="auction-process-timeline.html">Process Timeline</a>
+      <a href="auctions.html">Auction Types</a>
+      <a href="auction-registration-form.html">Register to Bid</a>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="info-panel" style="margin-bottom:24px">
+    <h3>Overview</h3>
+    <div class="info-grid">
+      <div class="info-item"><div class="ii-ico">📣</div><div class="ii-title">Days 1–3</div><div class="ii-desc">Auction announced &amp; marketed</div></div>
+      <div class="info-item"><div class="ii-ico">📋</div><div class="ii-title">Days 3–7</div><div class="ii-desc">Bidder registration opens</div></div>
+      <div class="info-item"><div class="ii-ico">🏠</div><div class="ii-title">Days 4–8</div><div class="ii-desc">Inspections &amp; legal review</div></div>
+      <div class="info-item"><div class="ii-ico">🔨</div><div class="ii-title">Day 10</div><div class="ii-desc">Live bidding</div></div>
+      <div class="info-item"><div class="ii-ico">✍️</div><div class="ii-title">Day 10+</div><div class="ii-desc">Sale agreement signed</div></div>
+      <div class="info-item"><div class="ii-ico">🏡</div><div class="ii-title">Day 14–42</div><div class="ii-desc">Transfer &amp; completion</div></div>
+    </div>
+  </div>
+
+  <h2 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin:0 0 18px;color:#e8dfc8">📅 Detailed Timeline — Day 1 to Completion</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 1–3</div>
+      <div class="tl-title">Auction Announced</div>
+      <div class="tl-desc">Property listed on PropertyFinder with full legal pack, professional photos, inspection dates, reserve status, and special conditions. Marketing begins across the platform, email alerts, and partner channels.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 3–7</div>
+      <div class="tl-title">Bidder Registration Opens</div>
+      <div class="tl-desc">Interested buyers submit their registration: government ID, proof of address, proof of funds or bank pre-approval, and registration deposit (if required). Approved bidders receive auction access credentials via email.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 4–8</div>
+      <div class="tl-title">Inspections &amp; Legal Review</div>
+      <div class="tl-desc">Scheduled open days for property viewing. Buyers review the legal pack: title deeds, survey reports, zoning certificates, compliance documents, and any encumbrances. Professional inspections and legal advice are strongly recommended.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 7–9</div>
+      <div class="tl-title">Pre-Auction Enquiries</div>
+      <div class="tl-desc">Q&amp;A period. Registered bidders submit questions via the platform. The auctioneer publishes answers visible to all registered bidders for transparency. Any addenda or changes to conditions are communicated here.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 10</div>
+      <div class="tl-title">🔴 Auction Day — Live Online Bidding</div>
+      <div class="tl-desc">Online bidding opens at the scheduled time. Place bids in real-time from any device. Minimum bid increments may apply. If a bid is placed in the final 2 minutes, the auction auto-extends to prevent sniping. The highest bidder when the clock stops wins (subject to reserve and seller acceptance).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 10 (post-auction)</div>
+      <div class="tl-title">Sale Agreement Signed</div>
+      <div class="tl-desc">The winning bidder signs the agreement of sale / memorandum of sale within 24 hours. A deposit of typically 10% of the hammer price is payable immediately into the designated trust account. The buyer's premium (5–10%) is invoiced separately.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 11–14</div>
+      <div class="tl-title">Legal &amp; Transfer Process Begins</div>
+      <div class="tl-desc">Conveyancing or closing attorneys are appointed. Due diligence is formalised, FICA/AML compliance checks are completed, and bond/mortgage applications are submitted (if applicable). The seller provides transfer documents.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-day">Day 14–42</div>
+      <div class="tl-title">Completion &amp; Transfer</div>
+      <div class="tl-desc">Balance of the purchase price is paid. Title is transferred at the deeds office (or local equivalent). Keys are handed over. Congratulations — you are the new owner! The exact timeline varies by country and complexity.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> Timelines are indicative and vary by country, property type, and complexity. Some jurisdictions may have mandatory cooling-off periods or additional regulatory steps. Always consult with the auctioneer and your legal advisor for the specific process in your country.
+  </div>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder. All rights reserved. | <a href="auctions.html">Back to Auctions</a> | <a href="terms-of-use.html">Terms</a>
+</footer>
+<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

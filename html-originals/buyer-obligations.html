@@ -1,0 +1,176 @@
+<!-- FILE: buyer-obligations.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Buyer Obligations &amp; Purchase Process</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);--accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;
+      --lime:#c4a47c;--warn:#D97706;--warn-bg:#FFFBEB;
+      --radius:14px;--radius2:10px;--max:980px;
+      --font:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    header{
+      background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%) 0%,var(--accent) 55%,var(--accent2) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header .wrap{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    h1{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;margin:0 0 10px}
+    .meta{color:rgba(255,255,255,0.75);font-size:0.82rem;margin-bottom:8px}
+    .meta .strong{color:#fff}
+    .links{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+    .links a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;font-size:0.8rem}
+    .links a:hover{background:rgba(255,255,255,0.12);color:#fff;text-decoration:none}
+
+    main{max-width:var(--max);margin:0 auto;padding:24px 24px 60px}
+    section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+    h2{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin:0 0 14px;color:var(--accent-dark)}
+    h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px;margin-right:10px;vertical-align:middle}
+    h3{margin:18px 0 8px;font-size:0.95rem;font-weight:800;color:var(--text)}
+    p{margin:10px 0;font-size:0.9rem;line-height:1.65}
+    ul{margin:10px 0 0 20px;font-size:0.9rem}
+    ul li{margin-bottom:6px;line-height:1.55}
+    .strong{font-weight:800;color:var(--text)}
+
+    .callout{border-left:4px solid var(--warn);background:var(--warn-bg);padding:14px 16px;border-radius:var(--radius2);margin:14px 0}
+    .callout p{margin:0;font-size:0.88rem;line-height:1.55}
+    .callout .strong{color:var(--warn)}
+    .note{font-size:0.82rem;color:var(--muted);padding:12px;margin-top:12px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    footer{max-width:var(--max);margin:0 auto;padding:20px 24px 40px;color:var(--muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--line)}
+
+    @media print{header{background:var(--accent)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}section{box-shadow:none!important;break-inside:avoid}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Buyer Obligations &amp; Purchase Process</h1>
+    <div class="meta">Version 1.0 | Effective: <span class="strong">[Insert Date]</span></div>
+    <div class="links">
+      <a href="terms-of-use.html">← Terms of Use</a>
+      <a href="auction-bidding-terms.html">Auction Terms</a>
+      <a href="commission-fees.html">Commission &amp; Fees</a>
+      <a href="payment-terms.html">Payment Terms</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>1) Overview</h2>
+    <p>
+      This page explains typical buyer responsibilities when purchasing a property or business listing through the PropertyFinder Platform ("Platform"),
+      including purchases that start via online auctions. This page is provided for transparency and does not replace the formal sale agreement,
+      auction conditions, or local legal requirements.
+    </p>
+    <div class="callout">
+      <p>
+        <span class="strong">You remain responsible for due diligence.</span> PropertyFinder is a technology platform and is not the seller, conveyancer,
+        or your legal/financial advisor unless explicitly stated in writing.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2) Buyer Due Diligence (Your Responsibility)</h2>
+    <p>You agree that before committing to a purchase (including bidding), you will conduct all due diligence reasonably required for the asset and jurisdiction, including:</p>
+    <ul>
+      <li>Physical inspection of the property/business and verification of condition, boundaries, and improvements.</li>
+      <li>Verification of ownership/authority to sell, mandates, and seller capacity through the relevant professionals.</li>
+      <li>Title/encumbrance checks (bonds, liens, restrictions, servitudes, zoning, permits, compliance certificates as applicable).</li>
+      <li>Financial and operational verification for businesses-for-sale (accounts, leases, staff, suppliers, licenses).</li>
+      <li>Independent legal, tax, and financing advice.</li>
+    </ul>
+    <div class="note">
+      Any distances, maps, schools, amenities, investment figures, yields, or estimates shown on the Platform are indicative and must be independently verified.
+    </div>
+  </section>
+
+  <section>
+    <h2>3) Identity &amp; Funding Readiness</h2>
+    <h3>3.1 Verification</h3>
+    <p>
+      You may be required to complete identity and payment verification (KYC/AML checks) before bidding, before acceptance, or prior to signing.
+      Failure to complete verification may limit access or result in cancellation of bids/transactions.
+    </p>
+
+    <h3>3.2 Proof of Funds / Pre-Approval</h3>
+    <p>
+      For certain listings, you may be required to provide proof of funds, finance pre-approval, deposit confirmations, or other affordability evidence
+      within a stated timeframe.
+    </p>
+  </section>
+
+  <section>
+    <h2>4) Auction Purchases: What Happens After an Accepted Bid</h2>
+    <p>
+      Where a seller accepts your bid online ("Accepted Bid"), the following process typically applies (subject to the auction page rules and local law):
+    </p>
+    <ul>
+      <li><span class="strong">Notification:</span> You receive in-app/email notice of acceptance and next steps.</li>
+      <li><span class="strong">Documentation:</span> You may need to sign an offer-to-purchase / memorandum of sale / sale agreement within a stated deadline.</li>
+      <li><span class="strong">Deposit (if applicable):</span> Pay any required deposit into the designated account/payment method shown in the transaction flow.</li>
+      <li><span class="strong">Conveyancing / Closing:</span> A conveyancer/closing attorney (or local equivalent) will manage transfer, compliance, and settlement.</li>
+      <li><span class="strong">Handover:</span> Possession/occupation occurs per the sale agreement.</li>
+    </ul>
+    <div class="note">
+      Specific deadlines and documents are set by the seller/agent and the jurisdiction. Always read the auction page's special conditions.
+    </div>
+  </section>
+
+  <section>
+    <h2>5) Buyer Default &amp; Non-Completion</h2>
+    <p>
+      If you fail to proceed after an Accepted Bid (or breach the post-acceptance steps), consequences may include:
+    </p>
+    <ul>
+      <li>Loss of deposit (if a deposit was required and forfeiture applies by law/contract).</li>
+      <li>Seller claims for damages and re-auction/relisting costs (where lawful).</li>
+      <li><span class="strong">PropertyFinder's 5% Platform Commission</span> payable within <span class="strong">48 hours</span> as set out in the <a href="auction-bidding-terms.html#commission">Auction Terms</a>.</li>
+      <li>Account suspension/ban for integrity protection.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>6) Communications &amp; Off-Platform Dealing</h2>
+    <p>
+      You agree not to use the Platform to identify a seller/agent and then circumvent the Platform process to avoid fees/commission.
+      PropertyFinder may enforce its commission/fees and apply integrity remedies where circumvention is detected, to the maximum extent permitted by law.
+    </p>
+  </section>
+
+  <section>
+    <h2>7) Buyer Support</h2>
+    <p><span class="strong">Support:</span> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="196a6c6969766b6d59696b76697c6b6d607f70777d7c6b376d757d">[email&#160;protected]</a>] | <span class="strong">Legal:</span> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f232a282e230f3f3d203f2a3d3b362926212b2a3d613b232b">[email&#160;protected]</a>]</p>
+    <div class="note">
+      This page is a general policy guide. It should be adapted per country for mandatory consumer dis  <script src="/social-share.js?v=2.1"></script>
+

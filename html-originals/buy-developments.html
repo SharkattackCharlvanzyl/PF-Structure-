@@ -1,0 +1,2037 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>04d Residential Developments — Property Detail (Standalone)</title>
+  <style>
+    :root{
+      --bg:#141c2b;
+      --panel:#1a2535;
+      --panel2:#F0F4F2;
+      --text:#e8dfc8;
+      --muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);
+      --accent:#141c2b;
+      --accent2:#1a2535;
+      --warn:#EA580C;
+      --danger:#D32F2F;
+      --chip:rgba(196,164,124,.06);
+      --shadow:0 1px 3px rgba(196,164,124,.04), 0 4px 16px rgba(196,164,124,.03);
+      --radius:16px;
+      --radius2:12px;
+      --max:1220px;
+      --stickyH:72px;
+      --font: 'DM Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:22px 18px 90px; }
+
+    /* Top bar */
+    .topbar{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:12px 14px; border:1px solid var(--line); background:var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:sticky; top:12px; z-index:50;
+    }
+    .topbar .left, .topbar .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border-radius:999px; background:var(--chip);
+      border:1px solid var(--line); color:var(--muted); font-size:13px;
+    }
+    .select, .input{
+      background:var(--panel); border:1px solid var(--line);
+      color:var(--text); border-radius:999px; padding:9px 12px;
+      font-size:13px; outline:none;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(196,164,124,.12), rgba(196,164,124,.06));
+      color:#c4a47c;
+      padding:10px 12px; border-radius:999px; font-weight:700; cursor:pointer;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .btn.secondary{ background:var(--panel); }
+    .btn.primary{
+      background:linear-gradient(180deg, var(--accent), var(--accent2));
+      border-color: var(--accent); color:#fff;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    /* Hero layout */
+    .hero{
+      margin-top:16px;
+      display:grid; grid-template-columns: 1.35fr .65fr; gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .hero{ grid-template-columns: 1fr; } }
+    .panel{
+      border:1px solid var(--line); background:var(--panel);
+      border-radius:var(--radius); box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    /* Carousel */
+    .carousel{ position:relative; background:var(--panel2); }
+    .carousel .stage{
+      aspect-ratio: 16/9;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg, rgba(196,164,124,.05), rgba(196,164,124,.03));
+      min-height: 280px;
+      position:relative;
+    }
+    .carousel img{ width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.05); }
+    .carousel .badgeRow{
+      position:absolute; left:14px; top:14px; display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .badge{
+      padding:7px 10px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(0,0,0,.55); backdrop-filter: blur(8px);
+      font-size:12px; color:#fff;
+    }
+    .badge.status{ background:rgba(196,164,124,.85); color:#fff; }
+    .badge.warn{ background:rgba(234,88,12,.85); color:#fff; }
+    .badge.danger{ background:rgba(211,47,47,.85); color:#fff; }
+    .carousel .nav{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 10px;
+      pointer-events:none;
+    }
+    .nav .navbtn{
+      pointer-events:auto;
+      width:44px; height:44px; border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; user-select:none;
+    }
+
+    /* Thumbs robust (buttons + delegation) */
+    .thumbs{
+      display:grid; grid-template-columns: repeat(6, 1fr);
+      gap:8px; padding:12px;
+      background:var(--panel2);
+      border-top:1px solid var(--line);
+    }
+    @media (max-width: 980px){ .thumbs{ grid-template-columns: repeat(4, 1fr); } }
+    .thumbBtn{
+      appearance:none;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:0;
+      background:var(--panel2);
+      cursor:pointer;
+      overflow:hidden;
+      position:relative;
+      aspect-ratio: 16/10;
+      display:block;
+    }
+    .thumbBtn img{ width:100%; height:100%; object-fit:cover; display:block; opacity:.92; pointer-events:none; }
+    .thumbBtn.active{ outline:2px solid var(--accent); }
+    .thumbBtn:focus{ outline:2px solid var(--accent2); outline-offset:2px; }
+
+    /* Overview card */
+    .overview{ padding:14px 14px 16px; }
+    .headline{ font-size:22px; font-weight:900; margin:2px 0 10px; letter-spacing:.2px; }
+    .subline{ color:var(--muted); font-size:13px; display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .kvRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+    .priceBox{
+      flex:1; min-width: 260px;
+      padding:12px; border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(196,164,124,.06), rgba(196,164,124,.02));
+    }
+    .priceTop{ display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+    .price{ font-size:26px; font-weight:900; }
+    .perUnit{ color:var(--muted); font-size:13px; }
+    .priceMeta{ margin-top:6px; color:var(--muted); font-size:13px; display:flex; gap:10px; flex-wrap:wrap; }
+    .hlBox{
+      flex:1; min-width: 260px;
+      padding:12px; border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:var(--panel2);
+    }
+    .hlTitle{ font-weight:900; margin:0 0 8px; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; }
+    .bullets{ margin:0; padding-left:18px; color:var(--text); font-size:14px; }
+
+    .stats{
+      display:grid; grid-template-columns: repeat(5, 1fr);
+      gap:10px; margin-top:12px;
+    }
+    @media (max-width: 980px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+    .stat{
+      padding:12px; border:1px solid var(--line); border-radius: var(--radius2);
+      background:var(--panel2);
+    }
+    .stat .k{ color:var(--muted); font-size:12px; }
+    .stat .v{ font-size:16px; font-weight:900; margin-top:4px; }
+
+    /* Main section */
+    .section{
+      margin-top:14px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      padding:12px; border-bottom:1px solid var(--line);
+      background:var(--panel2);
+    }
+    .tab{
+      padding:10px 12px; border-radius:999px; border:1px solid var(--line);
+      background:var(--panel);
+      color:var(--muted); cursor:pointer; font-weight:800; font-size:13px;
+    }
+    .tab.active{
+      background:var(--accent);
+      color:#fff;
+      border-color: var(--accent);
+    }
+    .tabPanel{ display:none; padding:14px; }
+    .tabPanel.active{ display:block; }
+
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+    .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; }
+    @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      background:var(--panel);
+      padding:12px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:13px; color:var(--muted);
+      text-transform:uppercase; letter-spacing:.6px;
+    }
+    .kv{ display:grid; grid-template-columns: 1fr; gap:8px; font-size:14px; }
+    .row{
+      display:flex; align-items:baseline; justify-content:space-between;
+      gap:14px; border-bottom:1px dashed var(--line);
+      padding-bottom:8px; margin-bottom:8px;
+    }
+    .row:last-child{ border-bottom:none; padding-bottom:0; margin-bottom:0; }
+    .row .label{ color:var(--muted); }
+    .row .value{ font-weight:900; text-align:right; }
+
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .tag{
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(196,164,124,.06);
+      font-size:13px; color:var(--text);
+    }
+    .note{
+      border:1px dashed rgba(196,164,124,.20);
+      border-radius:var(--radius2);
+      padding:10px; color:var(--muted); font-size:13px;
+      background:rgba(196,164,124,.03);
+    }
+    .muted{ color:var(--muted); }
+    .hr{ height:1px; background:var(--line); margin:12px 0; }
+
+    /* Units table */
+    table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px; }
+    thead th{
+      text-align:left; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px;
+      background:var(--panel2); border-bottom:1px solid var(--line);
+      padding:10px;
+    }
+    tbody td{
+      padding:10px; border-bottom:1px dashed var(--line); vertical-align:top;
+      font-size:14px;
+    }
+    tbody tr:last-child td{ border-bottom:none; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 9px; border:1px solid var(--line); border-radius:999px;
+      background:rgba(196,164,124,.06);
+      font-size:12px; color:#c4a47c;
+    }
+
+    /* Nearby */
+    .nearbyList{ display:grid; grid-template-columns: 1fr; gap:10px; }
+    .nearbyItem{
+      display:flex; gap:12px; justify-content:space-between; align-items:flex-start;
+      padding:10px; border:1px solid var(--line); border-radius:var(--radius2);
+      background:var(--panel);
+    }
+    .nearbyItem .left{ display:flex; flex-direction:column; gap:4px; }
+    .nearbyItem .title{ font-weight:900; }
+    .nearbyItem .sub{ color:var(--muted); font-size:13px; }
+    .nearbyItem .right{ text-align:right; }
+
+    /* Media */
+    .mediaGrid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:12px; }
+    @media (max-width: 980px){ .mediaGrid{ grid-template-columns: 1fr; } }
+    .mediaBox{
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      background:var(--panel2);
+      overflow:hidden;
+      aspect-ratio: 16/9;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--muted);
+    }
+    iframe{ width:100%; height:100%; border:0; }
+
+    /* Import panel */
+    .importWrap{ margin-top:12px; }
+    .importGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 980px){ .importGrid{ grid-template-columns: 1fr; } }
+    textarea{
+      width:100%; min-height:150px;
+      background:var(--panel); border:1px solid var(--line);
+      border-radius:12px; color:var(--text);
+      padding:10px; outline:none; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12.5px;
+    }
+    .miniRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .hint{ color:var(--muted); font-size:12px; }
+
+    /* Sticky actions */
+    .actionSticky{
+      position:fixed; left:0; right:0; bottom:0;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-top:1px solid var(--line);
+      z-index:60;
+    }
+    .actionInner{
+      max-width:var(--max); margin:0 auto;
+      padding:10px 18px;
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      min-height:var(--stickyH);
+    }
+    .agentMini{ display:flex; gap:10px; align-items:center; }
+    .avatar{
+      width:40px; height:40px; border-radius:50%;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; color:#fff;
+    }
+    .agentMini .name{ font-weight:900; font-size:14px; }
+    .agentMini .meta{ color:var(--muted); font-size:12px; }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
+    @media print{
+      .actionSticky, .topbar{ display:none !important; }
+      body{ background:#1a2535; color:#e8dfc8; }
+      .panel, .section, .card{ box-shadow:none !important; background:#fff !important; color:#111 !important; }
+      .muted{ color:#444 !important; }
+      .badge{ background:#eee !important; color:#111 !important; }
+      .tag, .pill, .chip{ background:#f5f5f5 !important; color:#111 !important; border-color:#ddd !important; }
+    }
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link  pf-active">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+  <div class="wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar" aria-label="Top utilities">
+      <div class="left">
+        <span class="chip">04d Residential Developments &bull; Detail</span>
+
+        <label class="chip">
+          Units
+          <select class="select" id="unitSelect" aria-label="Units">
+            <option value="metric">Metric (sqm)</option>
+            <option value="imperial">Imperial (sqft)</option>
+          </select>
+        </label>
+
+        <label class="chip">
+          Currency
+          <select class="select" id="currencySelect" aria-label="Currency">
+            <option value="CHF">CHF</option>
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="ZAR">ZAR</option>
+            <option value="AED">AED</option>
+          </select>
+        </label>
+
+        <label class="chip">
+          Country preset
+          <select class="select" id="countryPreset" aria-label="Country preset">
+            <option value="AUTO">Auto (from listing)</option>
+            <option value="CH">Switzerland (CH)</option>
+            <option value="EU">EU Generic</option>
+            <option value="US">United States (US)</option>
+            <option value="UK">United Kingdom (UK)</option>
+            <option value="AE">UAE (AE)</option>
+            <option value="ZA">South Africa (ZA)</option>
+            <option value="SG">Singapore (SG)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="right">
+        <button class="btn secondary" id="importToggleBtn" type="button">Import / Map</button>
+        <button class="btn secondary" id="enrichBtn" type="button">Enrich Location</button>
+        <button class="btn secondary" id="shareBtn" type="button">Share</button>
+        <button class="btn secondary" id="saveBtn" type="button">Save</button>
+        <button class="btn" id="printBtn" type="button">Print</button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+
+      <!-- LEFT: CAROUSEL -->
+      <div class="panel carousel" aria-label="Photo carousel">
+        <div class="stage">
+          <div class="badgeRow">
+            <span class="badge status" id="statusBadge">Launching</span>
+            <span class="badge" id="typeBadge">New Development</span>
+            <span class="badge" id="phaseBadge">Phase 1</span>
+            <span class="badge" id="handoverBadge">Handover 2027</span>
+            <span class="badge" id="salesBadge">Sales Open</span>
+          </div>
+
+          <img id="stageImg" alt="Development hero image"
+               src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80" />
+
+          <div class="nav">
+            <div class="navbtn" id="prevBtn" role="button" aria-label="Previous image">&#8249;</div>
+            <div class="navbtn" id="nextBtn" role="button" aria-label="Next image">&#8250;</div>
+          </div>
+        </div>
+
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+
+      <!-- RIGHT: OVERVIEW -->
+      <div class="panel overview" aria-label="Overview">
+        <div class="headline" id="headline">Lakeside Residences &#8212; Premium Waterfront Apartments (New Build)</div>
+        <div class="subline">
+          <span>&#128205; <span id="locationText">Z&#252;rich Region, Switzerland</span></span>
+          <span>&bull; <span class="muted" id="privacyNote">Exact address hidden (privacy mode)</span></span>
+        </div>
+
+        <div class="kvRow">
+          <div class="priceBox">
+            <div class="priceTop">
+              <div class="price" id="priceMain">From CHF 790,000</div>
+              <div class="perUnit" id="pricePerUnit">From CHF 11,800 / sqm</div>
+            </div>
+            <div class="priceMeta">
+              <span class="chip">Availability: <strong id="availability">2026&#8211;2028</strong></span>
+              <span class="chip">Unit Types: <strong id="unitTypes">Studios&#8211;4 Bed</strong></span>
+              <span class="chip">Delivery: <strong id="delivery">Handover 2027</strong></span>
+            </div>
+          </div>
+
+          <div class="hlBox">
+            <div class="hlTitle">Project highlights</div>
+            <ul class="bullets" id="highlights">
+              <li>Waterfront lifestyle + promenade</li>
+              <li>Gym, pool, co-working, concierge</li>
+              <li>Smart-home ready</li>
+              <li>Green building focus</li>
+              <li>Transit + schools nearby</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Development core stats -->
+        <div class="stats" aria-label="Core stats">
+          <div class="stat"><div class="k">Total Units</div><div class="v" id="totalUnits">220</div></div>
+          <div class="stat"><div class="k">Phases</div><div class="v" id="phases">3</div></div>
+          <div class="stat"><div class="k">Price Range</div><div class="v" id="priceRange">CHF 790k&#8211;2.9m</div></div>
+          <div class="stat"><div class="k">Sizes</div><div class="v" id="sizeRange">35&#8211;180 sqm</div></div>
+          <div class="stat"><div class="k">Status</div><div class="v" id="statusTop">Sales Open</div></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          Residential development focus: unit mix + availability, finishes/specs, amenities, parking/storage, HOA/levies, construction timeline, developer credibility, reservation process, and nearby transit/schools.
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORT / MAPPING PANEL -->
+    <div class="section importWrap" id="importSection" style="display:none;" aria-label="Import panel">
+      <div class="tabs">
+        <div class="tab active" data-tab="imp-a">Import</div>
+        <div class="tab" data-tab="imp-b">Map Fields</div>
+        <div class="tab" data-tab="imp-c">Apply</div>
+      </div>
+
+      <div class="tabPanel active" id="imp-a">
+        <div class="importGrid">
+          <div class="card">
+            <h3>Import from developer portal / agency feed (prototype)</h3>
+            <div class="miniRow">
+              <input class="input" id="sourceName" placeholder="Source name (e.g., 'DeveloperCRM')" style="flex:1; min-width:220px;">
+              <input class="input" id="listingUrl" placeholder="Project URL" style="flex:1; min-width:260px;">
+            </div>
+            <div class="miniRow" style="margin-top:10px;">
+              <input class="input" id="username" placeholder="Username" style="flex:1; min-width:200px;">
+              <input class="input" id="password" placeholder="Password" type="password" style="flex:1; min-width:200px;">
+              <button class="btn" id="mockImportBtn" type="button">Mock Import</button>
+            </div>
+            <div class="hint" style="margin-top:10px;">
+              Production note: do NOT handle passwords in-browser. Use a server-side import service and token-based auth. This is only a UI prototype.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Imported raw JSON (paste or mock)</h3>
+            <textarea id="rawJson" placeholder='Paste project JSON here (optional).'></textarea>
+            <div class="miniRow" style="margin-top:10px;">
+              <button class="btn secondary" id="validateJsonBtn" type="button">Validate JSON</button>
+              <span class="hint" id="jsonStatus">Waiting&#8230;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" id="imp-b">
+        <div class="card">
+          <h3>Field mapping (external &#8594; Property Finder development schema)</h3>
+          <div class="note">
+            Development pages often import at two levels:
+            <strong>Project</strong> (amenities, timeline, HOA) + <strong>Units</strong> (inventory, prices, floorplans).
+          </div>
+          <div class="hr"></div>
+          <div class="grid2">
+            <div class="card">
+              <h3>External keys (examples)</h3>
+              <div class="kv" id="extKeys"></div>
+            </div>
+            <div class="card">
+              <h3>Target keys (our schema)</h3>
+              <div class="kv">
+                <div class="row"><span class="label">projectName</span><span class="value">string</span></div>
+                <div class="row"><span class="label">headline</span><span class="value">string</span></div>
+                <div class="row"><span class="label">country</span><span class="value">ISO (e.g., CH)</span></div>
+                <div class="row"><span class="label">status</span><span class="value">Launching / Sales Open / Sold Out</span></div>
+                <div class="row"><span class="label">totalUnits</span><span class="value">integer</span></div>
+                <div class="row"><span class="label">phases</span><span class="value">array</span></div>
+                <div class="row"><span class="label">unitMix</span><span class="value">studios/1/2/3/4 bed counts</span></div>
+                <div class="row"><span class="label">priceFrom</span><span class="value">number</span></div>
+                <div class="row"><span class="label">priceTo</span><span class="value">number</span></div>
+                <div class="row"><span class="label">sizeFromSqm</span><span class="value">number</span></div>
+                <div class="row"><span class="label">sizeToSqm</span><span class="value">number</span></div>
+                <div class="row"><span class="label">amenities</span><span class="value">array</span></div>
+                <div class="row"><span class="label">finishesSpec</span><span class="value">object</span></div>
+                <div class="row"><span class="label">paymentPlan</span><span class="value">object (country-aware)</span></div>
+                <div class="row"><span class="label">inventoryUnits</span><span class="value">array of units</span></div>
+                <div class="row"><span class="label">geo</span><span class="value">lat/lng + privacy radius</span></div>
+                <div class="row"><span class="label">nearby</span><span class="value">auto-enriched distances</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" id="imp-c">
+        <div class="card">
+          <h3>Apply imported data to this page</h3>
+          <div class="miniRow">
+            <button class="btn primary" id="applyBtn" type="button">Apply to Project</button>
+            <button class="btn secondary" id="resetBtn" type="button">Reset to Default</button>
+            <span class="hint" id="applyStatus">After applying, click &#8220;Enrich Location&#8221; to auto-fill nearby transit/schools/medical/parks distances.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS TABS -->
+    <div class="section" aria-label="Development details">
+      <div class="tabs" role="tablist" aria-label="Detail tabs">
+        <div class="tab active" data-tab="tab-project" role="tab">Project</div>
+        <div class="tab" data-tab="tab-units" role="tab">Units &amp; Prices</div>
+        <div class="tab" data-tab="tab-amenities" role="tab">Amenities</div>
+        <div class="tab" data-tab="tab-finishes" role="tab">Finishes &amp; Specs</div>
+        <div class="tab" data-tab="tab-timeline" role="tab">Timeline</div>
+        <div class="tab" data-tab="tab-purchase" role="tab">Buying &amp; Payment</div>
+        <div class="tab" data-tab="tab-legal" role="tab">HOA &amp; Legal</div>
+        <div class="tab" data-tab="tab-location" role="tab">Location &amp; Nearby</div>
+        <div class="tab" data-tab="tab-media" role="tab">Media</div>
+        <div class="tab" data-tab="tab-desc" role="tab">Description</div>
+      </div>
+
+      <!-- PROJECT -->
+      <div class="tabPanel active" id="tab-project" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Project summary</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Developer</span><span class="value" id="developer">Alpine Living Group</span></div>
+              <div class="row"><span class="label">Project type</span><span class="value" id="projectType">Apartments / Condos</span></div>
+              <div class="row"><span class="label">Tenure</span><span class="value" id="tenure">Freehold (country-dependent)</span></div>
+              <div class="row"><span class="label">Total units</span><span class="value" id="totalUnitsLong">220</span></div>
+              <div class="row"><span class="label">Buildings / towers</span><span class="value" id="buildings">3</span></div>
+              <div class="row"><span class="label">Floors</span><span class="value" id="floors">Up to 18</span></div>
+              <div class="row"><span class="label">Parking</span><span class="value" id="parking">Basement + EV ready</span></div>
+              <div class="row"><span class="label">Storage</span><span class="value" id="storage">Private lockers (optional)</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Unit mix (high-level)</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Studios</span><span class="value" id="mixStudio">40</span></div>
+              <div class="row"><span class="label">1 Bedroom</span><span class="value" id="mix1">70</span></div>
+              <div class="row"><span class="label">2 Bedroom</span><span class="value" id="mix2">70</span></div>
+              <div class="row"><span class="label">3 Bedroom</span><span class="value" id="mix3">35</span></div>
+              <div class="row"><span class="label">4+ Bedroom</span><span class="value" id="mix4">5</span></div>
+            </div>
+            <div class="chips">
+              <span class="tag">Owner-occupier friendly</span>
+              <span class="tag">Investor options</span>
+              <span class="tag">Short-stay rules (country)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Sustainability &amp; efficiency</h3>
+            <div class="chips" id="sustainChips"></div>
+            <div class="note" style="margin-top:10px;">
+              Country-smart: EU/CH often needs energy certificates; US may emphasize Energy Star; UAE often highlights district cooling; ZA highlights backup power/water.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>What's included (development-level)</h3>
+            <div class="chips" id="includedChips"></div>
+            <div class="note" style="margin-top:10px;">
+              Keep &#8220;included vs upgrade options&#8221; clear so buyers don't get surprises.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNITS & PRICES -->
+      <div class="tabPanel" id="tab-units" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Availability snapshot</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Sales status</span><span class="value" id="salesStatus">Sales Open</span></div>
+              <div class="row"><span class="label">Units available</span><span class="value" id="unitsAvail">128</span></div>
+              <div class="row"><span class="label">Show units</span><span class="value" id="unitFilterHint">Filter by bed / price / size</span></div>
+            </div>
+            <div class="note" style="margin-top:10px;">
+              In final app: add filters + &#8220;Compare units&#8221; + live inventory feed from developer CRM.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Price guidance (range)</h3>
+            <div class="kv">
+              <div class="row"><span class="label">From</span><span class="value" id="priceFrom">CHF 790,000</span></div>
+              <div class="row"><span class="label">To</span><span class="value" id="priceTo">CHF 2,900,000</span></div>
+              <div class="row"><span class="label">Price / area</span><span class="value" id="ppsqm">CHF 11,800 / sqm</span></div>
+              <div class="row"><span class="label">Est. HOA</span><span class="value" id="hoaEst">Varies (unit)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Unit inventory (example)</h3>
+          <div class="note" style="margin-bottom:10px;">
+            This table represents individual &#8220;unit cards&#8221; you'd generate from imported inventory. Keep it lightweight for agents; most fields auto-imported.
+          </div>
+          <div style="overflow:auto;">
+            <table aria-label="Unit inventory">
+              <thead>
+                <tr>
+                  <th>Unit</th>
+                  <th>Type</th>
+                  <th>Beds</th>
+                  <th>Baths</th>
+                  <th>Size</th>
+                  <th>Outdoor</th>
+                  <th>Parking</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="unitTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- AMENITIES -->
+      <div class="tabPanel" id="tab-amenities" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Resident amenities</h3>
+            <div class="chips" id="amenityChips"></div>
+          </div>
+          <div class="card">
+            <h3>Family &amp; lifestyle</h3>
+            <div class="chips" id="lifestyleChips"></div>
+            <div class="note" style="margin-top:10px;">
+              International-friendly: use neutral terms (e.g., &#8220;kids play area&#8221;, &#8220;community garden&#8221;, &#8220;co-working&#8221;) and let country presets add local extras.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Security &amp; access</h3>
+            <div class="chips" id="securityChips"></div>
+          </div>
+          <div class="card">
+            <h3>Parking &amp; mobility</h3>
+            <div class="chips" id="mobilityChips"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINISHES -->
+      <div class="tabPanel" id="tab-finishes" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Interior finishes (baseline)</h3>
+            <div class="kv" id="finishKv"></div>
+            <div class="note" style="margin-top:10px;">
+              Make &#8220;upgrade packages&#8221; optional so markets like UAE/Singapore can show premium fit-out tiers.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Appliances &amp; systems</h3>
+            <div class="chips" id="systemsChips"></div>
+            <div class="note" style="margin-top:10px;">
+              Country-smart: CH/EU = heat pumps + underfloor; US = HVAC central; UAE = district cooling; ZA = inverter-ready.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Accessibility</h3>
+            <div class="chips" id="accessChips"></div>
+          </div>
+          <div class="card">
+            <h3>Optional upgrades</h3>
+            <div class="chips" id="upgradeChips"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="tabPanel" id="tab-timeline" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Construction timeline</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Start</span><span class="value" id="startDate">Q3 2025</span></div>
+              <div class="row"><span class="label">Structure complete</span><span class="value" id="structureDate">Q4 2026</span></div>
+              <div class="row"><span class="label">Handover</span><span class="value" id="handoverDate">2027</span></div>
+              <div class="row"><span class="label">Defects period</span><span class="value" id="defects">12&#8211;24 months (country)</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Phases</h3>
+            <div class="kv" id="phaseKv"></div>
+            <div class="note" style="margin-top:10px;">
+              Multi-phase projects: show which amenities open in each phase.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUYING & PAYMENT -->
+      <div class="tabPanel" id="tab-purchase" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Reservation &amp; purchase steps</h3>
+            <div class="kv" id="stepsKv"></div>
+            <div class="note" style="margin-top:10px;">
+              Keep steps country-agnostic; country preset can add local specifics (notary, escrow, cooling-off periods).
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Payment plan (example)</h3>
+            <div class="kv" id="paymentKv"></div>
+            <div class="note" style="margin-top:10px;">
+              UAE often uses staged payments; US/UK frequently use deposit + completion; EU/CH commonly notary/escrow structures.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Financing support</h3>
+            <div class="chips" id="financeChips"></div>
+          </div>
+          <div class="card">
+            <h3>Investor notes (optional)</h3>
+            <div class="kv" id="investKv"></div>
+            <div class="note" style="margin-top:10px;">
+              Keep investment fields optional: estimated rent ranges, vacancy assumptions, and local landlord rules vary widely.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOA & LEGAL -->
+      <div class="tabPanel" id="tab-legal" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>HOA / body corporate (country-aware)</h3>
+            <div class="kv" id="hoaKv"></div>
+            <div class="note" style="margin-top:10px;">
+              UK: service charge/ground rent (where applicable). US: HOA. ZA: levies. CH/EU: condo association fees.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Legal &amp; disclosures</h3>
+            <div class="kv" id="legalKv"></div>
+            <div class="note" style="margin-top:10px;">
+              Add document downloads: plans, specifications, rules, warranty, energy certificate, and buyer guide.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCATION & NEARBY -->
+      <div class="tabPanel" id="tab-location" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Interactive map (placeholder)</h3>
+            <div class="mediaBox">Map embed goes here (Google/Mapbox/Here)</div>
+            <div class="note" style="margin-top:10px;">Privacy mode: show approximate pin / blurred radius if needed.</div>
+          </div>
+          <div class="card">
+            <h3>Neighborhood snapshot</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Area vibe</span><span class="value" id="vibe">Waterfront &bull; Residential</span></div>
+              <div class="row"><span class="label">Views</span><span class="value" id="views">Lake &bull; City</span></div>
+              <div class="row"><span class="label">Noise</span><span class="value" id="noise">Low&#8211;Moderate</span></div>
+              <div class="row"><span class="label">Walkability</span><span class="value" id="walk">Optional (integration)</span></div>
+            </div>
+            <div class="chips">
+              <span class="tag">Parks nearby</span>
+              <span class="tag">Transit accessible</span>
+              <span class="tag">Schools nearby</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;" class="grid2">
+          <div class="card">
+            <h3>Nearby transport (country-smart)</h3>
+            <div class="nearbyList" id="nearbyTransport"></div>
+          </div>
+          <div class="card">
+            <h3>Nearby education &amp; family</h3>
+            <div class="nearbyList" id="nearbyEducation"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;" class="grid2">
+          <div class="card">
+            <h3>Nearby daily essentials</h3>
+            <div class="nearbyList" id="nearbyEssentials"></div>
+          </div>
+          <div class="card">
+            <h3>Nearby health, safety &amp; leisure</h3>
+            <div class="nearbyList" id="nearbyHealthLeisure"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIA -->
+      <div class="tabPanel" id="tab-media" role="tabpanel">
+        <div id="pfuMedia_buy_developments_wrap">
+          <div class="card">
+            <h3>Video / drone</h3>
+            <div class="mediaBox"><iframe title="Video placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px;">For developments, show lifestyle + amenities + neighborhood.</div>
+          </div>
+          <div class="card">
+            <h3>Virtual tour / show unit</h3>
+            <div class="mediaBox"><iframe title="Virtual tour placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px;">Add &#8220;show apartment&#8221; walkthrough per unit type.</div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Plans &amp; brochures (optional)</h3>
+            <div class="chips" id="docChips"></div>
+          </div>
+          <div class="card">
+            <h3>Gallery categories</h3>
+            <div class="chips">
+              <span class="tag">Exterior / aerial</span>
+              <span class="tag">Lobby / common areas</span>
+              <span class="tag">Amenities</span>
+              <span class="tag">Show units</span>
+              <span class="tag">Views</span>
+              <span class="tag">Neighborhood</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="tabPanel" id="tab-desc" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Public description</h3>
+            <div id="publicDesc" style="line-height:1.55; font-size:14.5px; white-space:pre-line;">
+A premium waterfront residential development offering a curated mix of studios to 4-bedroom homes. Residents enjoy thoughtfully designed amenities including a wellness center, pool, co-working lounges, and landscaped promenade access.
+
+Designed with sustainability and comfort in mind, Lakeside Residences features energy-efficient systems, smart-home readiness, and high-quality finishes. Flexible purchase options and clear construction milestones help buyers plan confidently.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Private remarks (agent-only)</h3>
+            <div class="muted" id="privateRemarks" style="line-height:1.55; font-size:14.5px; white-space:pre-line;">
+[Agent-only notes]
+&#8226; Offer upgrade packages for kitchen &amp; flooring (tiered)
+&#8226; Verify short-term rental rules with HOA / local council
+&#8226; Provide sample notary/escrow timeline for international buyers
+            </div>
+            <div class="note" style="margin-top:10px;">Hide this section in public mode.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /section -->
+
+  </div><!-- /wrap -->
+
+  <!-- STICKY ACTION / CONTACT -->
+  <div class="actionSticky" aria-label="Contact actions">
+    <div class="actionInner">
+      <div class="agentMini">
+        <div class="avatar" aria-hidden="true">PF</div>
+        <div>
+          <div class="name" id="agentName">Project Sales Team</div>
+          <div class="meta" id="agentMeta">Property Finder International &bull; +41 79 000 0000 &bull; WhatsApp</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" type="button" id="brochureBtn">Get Brochure</button>
+        <button class="btn secondary" type="button" id="availabilityBtn">Check Availability</button>
+        <button class="btn primary" type="button" id="visitBtn">Schedule Viewing</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 04d Residential Developments — Standalone Project Detail
+     * - Hero carousel (robust thumbs), tabs, import/mapping panel,
+     *   units/currency toggles, country-smart nearby sections.
+     * - Replace placeholder data with real project + inventory payload.
+     ********************************************************************/
+
+    // ---------- Data ----------
+    const listingDefault = {
+      country: "CH",
+      currency: "CHF",
+      privacyMode: true,
+
+      projectName: "Lakeside Residences",
+      headline: "Lakeside Residences \u2014 Premium Waterfront Apartments (New Build)",
+      status: "Sales Open",
+      phaseLabel: "Phase 1",
+      handoverLabel: "Handover 2027",
+
+      locationText: "Z\u00fcrich Region, Switzerland",
+
+      availability: "2026\u20132028",
+      unitTypes: "Studios\u20134 Bed",
+      delivery: "Handover 2027",
+
+      totalUnits: 220,
+      phasesCount: 3,
+      buildings: 3,
+      floors: "Up to 18",
+
+      priceFrom: 790000,
+      priceTo: 2900000,
+
+      sizeFromSqm: 35,
+      sizeToSqm: 180,
+
+      highlights: [
+        "Waterfront lifestyle + promenade",
+        "Gym, pool, co-working, concierge",
+        "Smart-home ready",
+        "Green building focus",
+        "Transit + schools nearby"
+      ],
+
+      unitMix: { studio:40, one:70, two:70, three:35, fourPlus:5 },
+
+      sustainability: [
+        "Heat pump / efficient HVAC (country)",
+        "High-performance glazing",
+        "LED lighting in common areas",
+        "EV charging ready",
+        "Low-flow water fixtures",
+        "Solar-ready (optional)"
+      ],
+
+      included: [
+        "Built-in wardrobes (select layouts)",
+        "Kitchen appliance package (baseline)",
+        "Smart access control (common areas)",
+        "Private storage (optional)",
+        "Parking options (optional)"
+      ],
+
+      amenities: [
+        "Concierge / reception",
+        "Gym / wellness studio",
+        "Pool (indoor/outdoor, if applicable)",
+        "Co-working lounge",
+        "Residents\u2019 lounge",
+        "Kids play area",
+        "Landscaped gardens",
+        "BBQ / social deck",
+        "Bicycle storage"
+      ],
+
+      lifestyle: [
+        "Waterfront promenade access",
+        "Pet-friendly areas (rules apply)",
+        "Community events space",
+        "Nearby parks & trails",
+        "Caf\u00e9s / restaurants nearby"
+      ],
+
+      security: [
+        "Controlled access",
+        "CCTV in common areas",
+        "Secure parcel lockers",
+        "Intercom / video entry",
+        "On-site management (optional)"
+      ],
+
+      mobility: [
+        "Basement parking",
+        "EV charging points (optional)",
+        "Visitor parking (limited)",
+        "Bike rooms",
+        "Car-share bay (optional)"
+      ],
+
+      finishes: {
+        flooring: "Engineered wood / tile (package)",
+        walls: "Painted + feature options",
+        kitchen: "Modern cabinetry + stone/quartz counters (package)",
+        bathroom: "Designer sanitaryware + walk-in shower (select)",
+        windows: "Double/Triple glazing (country)",
+        balcony: "Private balcony/terrace (select layouts)"
+      },
+
+      systems: [
+        "Smart-home ready (lighting/thermostat)",
+        "High-speed internet / fiber",
+        "Underfloor heating (country)",
+        "Air conditioning (market dependent)",
+        "Energy meter (individual / building)"
+      ],
+
+      accessibility: [
+        "Elevators",
+        "Step-free access (common areas)",
+        "Wheelchair-friendly routes (select)",
+        "Accessible parking (select)"
+      ],
+
+      upgrades: [
+        "Premium kitchen upgrade",
+        "Flooring upgrade",
+        "Feature lighting package",
+        "Built-in storage upgrade",
+        "AC upgrade (where optional)"
+      ],
+
+      timeline: {
+        start: "Q3 2025",
+        structure: "Q4 2026",
+        handover: "2027",
+        defects: "12\u201324 months (country)"
+      },
+
+      phases: [
+        { name:"Phase 1", delivery:"2027", units:"80", notes:"Amenities: lobby + co-working open" },
+        { name:"Phase 2", delivery:"2028", units:"90", notes:"Amenities: pool + gym opens" },
+        { name:"Phase 3", delivery:"2028", units:"50", notes:"Final landscaping + promenade complete" }
+      ],
+
+      purchaseSteps: [
+        { label:"1) Choose a unit", value:"Select layout, view, and floor" },
+        { label:"2) Reservation", value:"Pay reservation fee (refundable rules vary)" },
+        { label:"3) Contract / SPA", value:"Sign sale & purchase agreement (country/legal)" },
+        { label:"4) Staged payments", value:"Pay per plan / milestones (if applicable)" },
+        { label:"5) Handover", value:"Snag/inspection + keys + registration" }
+      ],
+
+      paymentPlan: [
+        { label:"Reservation", value:"2% (example)" },
+        { label:"Contract signing", value:"8% (example)" },
+        { label:"Construction milestones", value:"20% (example)" },
+        { label:"On completion", value:"70% (example)" }
+      ],
+
+      financeSupport: [
+        "Mortgage partner referrals (optional)",
+        "International buyer guidance (optional)",
+        "Currency guidance (optional)",
+        "Bank pre-approval checklist"
+      ],
+
+      investor: [
+        { label:"Est. rental band (optional)", value:"Varies by unit & market" },
+        { label:"Furnish options", value:"Optional (market dependent)" },
+        { label:"Short-stay rules", value:"HOA / local rules apply" },
+        { label:"Property management", value:"Optional referral" }
+      ],
+
+      hoa: [
+        { label:"HOA / levies", value:"Varies by unit (monthly/annual)" },
+        { label:"What HOA covers", value:"Common areas, security, amenities, insurance (varies)" },
+        { label:"Reserve fund", value:"Optional / country" },
+        { label:"Rules", value:"Pets, short-stays, noise, alterations (documents)" }
+      ],
+
+      legal: [
+        { label:"Tenure", value:"Freehold (country-dependent)" },
+        { label:"Title / registration", value:"Notary/escrow process varies" },
+        { label:"Warranties", value:"Developer warranty + statutory rights (country)" },
+        { label:"Disclosures", value:"Plans/specs, HOA rules, energy certificate (where required)" }
+      ],
+
+      docs: [
+        "Brochure PDF",
+        "Master plan",
+        "Typical floorplans",
+        "Specification sheet",
+        "HOA rules / community guidelines",
+        "Energy certificate (where applicable)",
+        "Buyer guide (country)"
+      ],
+
+      inventoryUnits: [
+        { unit:"A-302", type:"Apartment", beds:1, baths:1, sizeSqm:52, outdoorSqm:8, parking:"Optional", price:890000, status:"Available" },
+        { unit:"B-1405", type:"Apartment", beds:2, baths:2, sizeSqm:88, outdoorSqm:12, parking:"Included", price:1490000, status:"Available" },
+        { unit:"C-1701", type:"Penthouse", beds:3, baths:2, sizeSqm:145, outdoorSqm:40, parking:"Included", price:2750000, status:"Reserved" },
+        { unit:"A-1102", type:"Studio", beds:0, baths:1, sizeSqm:36, outdoorSqm:0, parking:"No", price:790000, status:"Available" }
+      ],
+
+      images: [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1600&q=80"
+      ]
+    };
+
+    let listing = structuredClone(listingDefault);
+
+    // ---------- Nearby templates (country-smart) ----------
+    const nearbyTemplates = {
+      CH: {
+        transport: [
+          { name:"Nearest Train Station", desc:"Regional rail connections", km:1.2, min:6, mode:"walk" },
+          { name:"Tram Stop", desc:"City connections", km:0.5, min:3, mode:"walk" },
+          { name:"Bus Stop", desc:"Local routes", km:0.25, min:2, mode:"walk" },
+          { name:"Airport", desc:"International flights", km:14.0, min:20, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Public/Private options", km:0.9, min:6, mode:"walk" },
+          { name:"Secondary School", desc:"Gymnasium / high school", km:2.6, min:10, mode:"tram" },
+          { name:"University", desc:"Campus access", km:6.5, min:22, mode:"tram" },
+          { name:"Daycare / Kindergarten", desc:"Nearby childcare", km:0.7, min:5, mode:"walk" }
+        ],
+        essentials: [
+          { name:"Supermarket", desc:"Groceries", km:0.6, min:4, mode:"walk" },
+          { name:"Pharmacy", desc:"Daily health needs", km:0.8, min:6, mode:"walk" },
+          { name:"Town Center", desc:"Shops & caf\u00e9s", km:2.1, min:9, mode:"tram" },
+          { name:"Waterfront / Park", desc:"Recreation", km:0.3, min:3, mode:"walk" }
+        ],
+        healthLeisure: [
+          { name:"Hospital / Clinic", desc:"Emergency & specialist care", km:4.8, min:15, mode:"drive" },
+          { name:"Gym / Fitness", desc:"Additional options", km:1.4, min:6, mode:"walk" },
+          { name:"Police / Safety", desc:"Local station (optional)", km:null, min:null, mode:"info" },
+          { name:"Ski / Outdoor (region)", desc:"Seasonal activities", km:null, min:null, mode:"info" }
+        ],
+        notes:["CH: emphasize train/tram convenience and school options; provide distance to lake/parks."]
+      },
+
+      EU: {
+        transport: [
+          { name:"Train Station", desc:"Regional rail access", km:1.5, min:8, mode:"walk" },
+          { name:"Metro / Tram", desc:"Urban transit", km:0.7, min:4, mode:"walk" },
+          { name:"Bus Stop", desc:"Local routes", km:0.3, min:2, mode:"walk" },
+          { name:"Airport", desc:"International hub", km:18.0, min:28, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Public/Private", km:1.1, min:7, mode:"walk" },
+          { name:"Secondary School", desc:"High school", km:2.9, min:12, mode:"bus" },
+          { name:"University", desc:"Campus / institute", km:7.0, min:25, mode:"metro" },
+          { name:"Childcare", desc:"Daycare options", km:0.8, min:6, mode:"walk" }
+        ],
+        essentials: [
+          { name:"Supermarket", desc:"Groceries", km:0.5, min:4, mode:"walk" },
+          { name:"Pharmacy", desc:"Health", km:0.9, min:6, mode:"walk" },
+          { name:"Parks", desc:"Green spaces", km:0.4, min:4, mode:"walk" },
+          { name:"City Center", desc:"Retail & dining", km:3.5, min:15, mode:"metro" }
+        ],
+        healthLeisure: [
+          { name:"Hospital", desc:"Medical care", km:5.8, min:18, mode:"drive" },
+          { name:"Sports Center", desc:"Leisure", km:2.2, min:10, mode:"bus" },
+          { name:"Library / Culture", desc:"Community facilities", km:null, min:null, mode:"info" }
+        ],
+        notes:["EU: show transit options clearly; add energy certificate fields and notary/escrow guidance."]
+      },
+
+      US: {
+        transport: [
+          { name:"Nearest Highway Access", desc:"Commute / regional access", km:3.2, min:8, mode:"drive" },
+          { name:"Transit Station", desc:"Metro/rail (if applicable)", km:null, min:null, mode:"info" },
+          { name:"Bus Stop", desc:"Local routes", km:0.6, min:5, mode:"walk" },
+          { name:"School Bus Pickup", desc:"Neighborhood pickup point", km:0.3, min:3, mode:"walk" }
+        ],
+        education: [
+          { name:"Elementary School", desc:"Assigned catchment", km:1.4, min:6, mode:"drive" },
+          { name:"Middle School", desc:"Assigned catchment", km:3.6, min:10, mode:"drive" },
+          { name:"High School", desc:"Assigned catchment", km:5.8, min:14, mode:"drive" },
+          { name:"College / University", desc:"Optional", km:12.0, min:20, mode:"drive" }
+        ],
+        essentials: [
+          { name:"Grocery Store", desc:"Daily needs", km:1.8, min:6, mode:"drive" },
+          { name:"Pharmacy", desc:"Health essentials", km:2.0, min:7, mode:"drive" },
+          { name:"Shopping / Dining", desc:"Retail area", km:3.4, min:10, mode:"drive" },
+          { name:"Park", desc:"Outdoor recreation", km:1.0, min:4, mode:"drive" }
+        ],
+        healthLeisure: [
+          { name:"Hospital", desc:"Emergency care", km:7.2, min:15, mode:"drive" },
+          { name:"Police / Fire", desc:"Safety services", km:null, min:null, mode:"info" },
+          { name:"Fitness Center", desc:"Optional", km:2.8, min:8, mode:"drive" }
+        ],
+        notes:["US: highlight school zones + school bus pickup; show HOA clearly and any community rules."]
+      },
+
+      UK: {
+        transport: [
+          { name:"Train Station", desc:"National rail access", km:1.6, min:8, mode:"walk" },
+          { name:"Bus Stop", desc:"Local routes", km:0.25, min:2, mode:"walk" },
+          { name:"Tram / Tube", desc:"Where applicable", km:null, min:null, mode:"info" },
+          { name:"Airport", desc:"Regional / international", km:22.0, min:30, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Ofsted-rated options", km:1.0, min:6, mode:"walk" },
+          { name:"Secondary School", desc:"Nearby options", km:3.0, min:14, mode:"bus" },
+          { name:"University", desc:"Optional", km:10.0, min:25, mode:"train" },
+          { name:"Nursery", desc:"Childcare", km:0.7, min:5, mode:"walk" }
+        ],
+        essentials: [
+          { name:"Supermarket", desc:"Groceries", km:0.9, min:6, mode:"walk" },
+          { name:"High Street", desc:"Retail & caf\u00e9s", km:2.2, min:10, mode:"bus" },
+          { name:"GP / Pharmacy", desc:"Primary care", km:1.4, min:7, mode:"walk" },
+          { name:"Parks", desc:"Green spaces", km:0.5, min:5, mode:"walk" }
+        ],
+        healthLeisure: [
+          { name:"Hospital", desc:"NHS / private", km:6.0, min:18, mode:"drive" },
+          { name:"Leisure Centre", desc:"Sports", km:2.4, min:11, mode:"bus" },
+          { name:"Police", desc:"Optional", km:null, min:null, mode:"info" }
+        ],
+        notes:["UK: show service charge/ground rent guidance where relevant; emphasize train station proximity."]
+      },
+
+      AE: {
+        transport: [
+          { name:"Metro Station", desc:"Where applicable", km:2.0, min:10, mode:"drive" },
+          { name:"Bus Stop", desc:"Local routes", km:0.6, min:6, mode:"walk" },
+          { name:"Main Road Access", desc:"Commute", km:1.5, min:6, mode:"drive" },
+          { name:"Airport", desc:"International hub", km:20.0, min:25, mode:"drive" }
+        ],
+        education: [
+          { name:"International School", desc:"IB/UK/US curriculum (optional)", km:4.0, min:12, mode:"drive" },
+          { name:"Nursery", desc:"Childcare", km:2.2, min:8, mode:"drive" },
+          { name:"University / College", desc:"Optional", km:12.0, min:20, mode:"drive" }
+        ],
+        essentials: [
+          { name:"Mall / Retail", desc:"Shopping & dining", km:3.5, min:10, mode:"drive" },
+          { name:"Supermarket", desc:"Groceries", km:1.5, min:6, mode:"drive" },
+          { name:"Pharmacy", desc:"Health essentials", km:1.8, min:7, mode:"drive" }
+        ],
+        healthLeisure: [
+          { name:"Clinic / Hospital", desc:"Medical care", km:5.5, min:14, mode:"drive" },
+          { name:"Beach / Marina", desc:"Lifestyle", km:null, min:null, mode:"info" },
+          { name:"Parks", desc:"Outdoor", km:2.8, min:9, mode:"drive" }
+        ],
+        notes:["UAE: payment plans are common; highlight metro proximity and international schools."]
+      },
+
+      ZA: {
+        transport: [
+          { name:"Main Road Access", desc:"Commute routes", km:1.8, min:7, mode:"drive" },
+          { name:"Bus / MyCiTi (city)", desc:"Where available", km:null, min:null, mode:"info" },
+          { name:"School Transport Pickup", desc:"Optional pickup point", km:0.5, min:5, mode:"walk" },
+          { name:"Airport", desc:"Regional access", km:18.0, min:25, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Public/Private", km:2.2, min:8, mode:"drive" },
+          { name:"High School", desc:"Nearby", km:4.5, min:12, mode:"drive" },
+          { name:"University / College", desc:"Optional", km:12.0, min:20, mode:"drive" }
+        ],
+        essentials: [
+          { name:"Shopping Centre", desc:"Retail", km:3.2, min:10, mode:"drive" },
+          { name:"Supermarket", desc:"Groceries", km:2.5, min:8, mode:"drive" },
+          { name:"Medical Centre", desc:"Clinics", km:4.0, min:12, mode:"drive" }
+        ],
+        healthLeisure: [
+          { name:"Hospital", desc:"Emergency care", km:9.0, min:18, mode:"drive" },
+          { name:"Parks / Nature", desc:"Outdoor", km:null, min:null, mode:"info" },
+          { name:"Security / Patrol", desc:"Optional services", km:null, min:null, mode:"info" }
+        ],
+        notes:["ZA: emphasize security, backup power readiness, and water features if applicable."]
+      },
+
+      SG: {
+        transport: [
+          { name:"MRT Station", desc:"Mass transit", km:1.1, min:8, mode:"walk" },
+          { name:"Bus Stop", desc:"Local routes", km:0.25, min:2, mode:"walk" },
+          { name:"Expressway Access", desc:"Commute", km:2.0, min:10, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Nearby options", km:1.0, min:7, mode:"walk" },
+          { name:"Secondary School", desc:"Nearby", km:2.5, min:12, mode:"bus" },
+          { name:"University", desc:"Optional", km:8.0, min:25, mode:"mrt" }
+        ],
+        essentials: [
+          { name:"Hawker / Dining", desc:"Food options", km:1.2, min:8, mode:"walk" },
+          { name:"Supermarket", desc:"Groceries", km:0.9, min:6, mode:"walk" },
+          { name:"Parks", desc:"Green spaces", km:0.6, min:5, mode:"walk" }
+        ],
+        healthLeisure: [
+          { name:"Polyclinic / Hospital", desc:"Healthcare", km:4.5, min:18, mode:"mrt" },
+          { name:"Community Club", desc:"Facilities", km:2.0, min:10, mode:"bus" }
+        ],
+        notes:["SG: MRT proximity is key; clarify leasehold/freehold tenure in project summary."]
+      }
+    };
+
+    // ---------- Helpers ----------
+    const SQM_TO_SQFT = 10.76391041671;
+    const currencySymbols = { CHF:"CHF", EUR:"\u20ac", USD:"$", GBP:"\u00a3", ZAR:"R", AED:"AED" };
+
+    function formatMoney(value, currency){
+      const sym = currencySymbols[currency] ?? currency;
+      const num = Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 });
+      if(currency === "USD" || currency === "GBP" || currency === "EUR") return `${sym}${num}`;
+      if(currency === "ZAR") return `${sym}${num}`;
+      return `${sym} ${num}`;
+    }
+
+    function areaText(sqm, unitMode){
+      if(sqm == null) return "\u2014";
+      if(unitMode === "imperial"){
+        const sqft = Math.round(sqm * SQM_TO_SQFT);
+        return `${sqft.toLocaleString()} sqft`;
+      }
+      return `${sqm.toLocaleString()} sqm`;
+    }
+
+    function pricePerAreaText(price, areaSqm, unitMode, currency){
+      if(!price || !areaSqm) return "\u2014";
+      const denom = unitMode === "imperial" ? (areaSqm * SQM_TO_SQFT) : areaSqm;
+      const p = Math.round(price / denom);
+      return `${formatMoney(p, currency)} / ${unitMode === "imperial" ? "sqft" : "sqm"}`;
+    }
+
+    function distanceText(km, unitMode){
+      if(km == null) return "\u2014";
+      if(unitMode === "imperial"){
+        const mi = km * 0.621371;
+        return `${mi.toFixed(mi < 1 ? 2 : 1)} mi`;
+      }
+      return `${km.toFixed(km < 1 ? 2 : 1)} km`;
+    }
+
+    function modeLabel(mode){
+      const map = { walk:"Walk", drive:"Drive", tram:"Tram", bus:"Bus", train:"Train", mrt:"MRT", metro:"Metro", info:"Info" };
+      return map[mode] || "\u2014";
+    }
+
+    // ---------- Carousel ----------
+    let imgIndex = 0;
+    const stageImg = document.getElementById("stageImg");
+    const thumbs = document.getElementById("thumbs");
+
+    function renderThumbs(){
+      thumbs.innerHTML = "";
+      (listing.images || []).forEach((src, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "thumbBtn" + (idx === imgIndex ? " active" : "");
+        btn.setAttribute("data-idx", String(idx));
+        btn.setAttribute("aria-label", `Thumbnail ${idx+1}`);
+        btn.innerHTML = `<img alt="Thumbnail ${idx+1}" src="${src}">`;
+        thumbs.appendChild(btn);
+      });
+    }
+
+    thumbs.addEventListener("click", (e) => {
+      const btn = e.target.closest(".thumbBtn");
+      if(!btn) return;
+      const idx = Number(btn.getAttribute("data-idx"));
+      if(Number.isFinite(idx)){
+        imgIndex = idx;
+        renderCarousel();
+      }
+    });
+
+    function renderCarousel(){
+      const imgs = listing.images || [];
+      if(!imgs.length) return;
+      if(imgIndex < 0) imgIndex = 0;
+      if(imgIndex >= imgs.length) imgIndex = imgs.length - 1;
+      stageImg.src = imgs[imgIndex];
+      renderThumbs();
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      const n = (listing.images || []).length || 1;
+      imgIndex = (imgIndex - 1 + n) % n;
+      renderCarousel();
+    });
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      const n = (listing.images || []).length || 1;
+      imgIndex = (imgIndex + 1) % n;
+      renderCarousel();
+    });
+
+    // ---------- Tabs ----------
+    function wireTabs(scopeEl){
+      const tabs = Array.from(scopeEl.querySelectorAll(".tab"));
+      const panels = Array.from(scopeEl.querySelectorAll(".tabPanel"));
+      tabs.forEach(t => {
+        t.addEventListener("click", () => {
+          tabs.forEach(x => x.classList.remove("active"));
+          panels.forEach(p => p.classList.remove("active"));
+          t.classList.add("active");
+          const id = t.dataset.tab;
+          const panel = scopeEl.querySelector("#" + CSS.escape(id));
+          if(panel) panel.classList.add("active");
+        });
+      });
+    }
+    wireTabs(document);
+
+    // ---------- Nearby render ----------
+    function buildNearbyItem(item, unitMode){
+      const dist = item.km == null ? "\u2014" : distanceText(item.km, unitMode);
+      const time = item.min == null ? "" : `${item.min} min`;
+      const rightTop = (dist !== "\u2014" && time) ? `${dist} \u2022 ${time}` : (dist !== "\u2014" ? dist : (time || "\u2014"));
+      return `
+        <div class="nearbyItem">
+          <div class="left">
+            <div class="title">${item.name}</div>
+            <div class="sub">${item.desc}</div>
+            <div class="pill">${modeLabel(item.mode)}</div>
+          </div>
+          <div class="right">
+            <div class="title">${rightTop}</div>
+            <div class="sub muted">${item.mode === "info" ? "Country-specific" : "Approx."}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNearby(country, unitMode){
+      const t = nearbyTemplates[country] || nearbyTemplates.EU;
+      document.getElementById("nearbyTransport").innerHTML = t.transport.map(i => buildNearbyItem(i, unitMode)).join("");
+      document.getElementById("nearbyEducation").innerHTML = t.education.map(i => buildNearbyItem(i, unitMode)).join("");
+      document.getElementById("nearbyEssentials").innerHTML = t.essentials.map(i => buildNearbyItem(i, unitMode)).join("");
+      document.getElementById("nearbyHealthLeisure").innerHTML = t.healthLeisure.map(i => buildNearbyItem(i, unitMode)).join("");
+
+      if(t.notes && t.notes.length){
+        const noteHtml = t.notes.map(n => `
+          <div class="nearbyItem">
+            <div class="left">
+              <div class="title">Country note</div>
+              <div class="sub">${n}</div>
+              <div class="pill">Guidance</div>
+            </div>
+            <div class="right">
+              <div class="title">\u2014</div>
+              <div class="sub muted">Auto rules</div>
+            </div>
+          </div>
+        `).join("");
+        document.getElementById("nearbyTransport").insertAdjacentHTML("beforeend", noteHtml);
+      }
+    }
+
+    // ---------- Render helpers for chips/kv ----------
+    function setChips(elId, arr){
+      const el = document.getElementById(elId);
+      el.innerHTML = "";
+      (arr || []).forEach(s => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = s;
+        el.appendChild(span);
+      });
+    }
+
+    function setKvFromObject(elId, obj){
+      const el = document.getElementById(elId);
+      el.innerHTML = "";
+      Object.entries(obj || {}).forEach(([k,v]) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span class="label">${k}</span><span class="value">${v}</span>`;
+        el.appendChild(row);
+      });
+    }
+
+    function setKvFromPairs(elId, pairs){
+      const el = document.getElementById(elId);
+      el.innerHTML = "";
+      (pairs || []).forEach(p => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span class="label">${p.label}</span><span class="value">${p.value}</span>`;
+        el.appendChild(row);
+      });
+    }
+
+    function renderUnitsTable(unitMode, currency){
+      const tbody = document.getElementById("unitTableBody");
+      tbody.innerHTML = "";
+      (listing.inventoryUnits || []).forEach(u => {
+        const tr = document.createElement("tr");
+        const outdoor = u.outdoorSqm ? areaText(u.outdoorSqm, unitMode) : "\u2014";
+        const size = areaText(u.sizeSqm, unitMode);
+        const price = u.price ? formatMoney(u.price, currency) : "Price on request";
+        tr.innerHTML = `
+          <td><strong>${u.unit}</strong></td>
+          <td>${u.type}</td>
+          <td>${u.beds}</td>
+          <td>${u.baths}</td>
+          <td>${size}</td>
+          <td>${outdoor}</td>
+          <td>${u.parking}</td>
+          <td><strong>${price}</strong></td>
+          <td>${u.status}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ---------- Render listing ----------
+    function renderListing(){
+      const unitMode = document.getElementById("unitSelect").value;
+      const currency = document.getElementById("currencySelect").value;
+
+      document.getElementById("headline").textContent = listing.headline;
+      document.getElementById("locationText").textContent = listing.locationText;
+      document.getElementById("privacyNote").textContent = listing.privacyMode ? "Exact address hidden (privacy mode)" : "Full address shown";
+
+      document.getElementById("statusBadge").textContent = listing.status;
+      document.getElementById("typeBadge").textContent = "New Development";
+      document.getElementById("phaseBadge").textContent = listing.phaseLabel;
+      document.getElementById("handoverBadge").textContent = listing.handoverLabel;
+      document.getElementById("salesBadge").textContent = listing.status;
+
+      const hl = document.getElementById("highlights");
+      hl.innerHTML = "";
+      (listing.highlights || []).forEach(h => { const li=document.createElement("li"); li.textContent=h; hl.appendChild(li); });
+
+      document.getElementById("priceMain").textContent =
+        listing.priceFrom ? `From ${formatMoney(listing.priceFrom, currency)}` : "Price on request";
+      document.getElementById("priceRange").textContent =
+        (listing.priceFrom && listing.priceTo) ? `${formatMoney(listing.priceFrom, currency)}\u2013${formatMoney(listing.priceTo, currency).replace(/^(\D+)\s?/, "")}` : "Varies";
+
+      const ppa = pricePerAreaText(listing.priceFrom, listing.sizeFromSqm, unitMode, currency);
+      document.getElementById("pricePerUnit").textContent = listing.priceFrom && listing.sizeFromSqm ? `From ${ppa}` : "\u2014";
+
+      document.getElementById("availability").textContent = listing.availability;
+      document.getElementById("unitTypes").textContent = listing.unitTypes;
+      document.getElementById("delivery").textContent = listing.delivery;
+
+      document.getElementById("totalUnits").textContent = listing.totalUnits;
+      document.getElementById("phases").textContent = listing.phasesCount;
+      document.getElementById("sizeRange").textContent = `${areaText(listing.sizeFromSqm, unitMode)}\u2013${areaText(listing.sizeToSqm, unitMode)}`;
+      document.getElementById("statusTop").textContent = listing.status;
+
+      document.getElementById("developer").textContent = "Alpine Living Group";
+      document.getElementById("projectType").textContent = "Apartments / Condos";
+      document.getElementById("tenure").textContent = "Freehold (country-dependent)";
+      document.getElementById("totalUnitsLong").textContent = listing.totalUnits;
+      document.getElementById("buildings").textContent = listing.buildings;
+      document.getElementById("floors").textContent = listing.floors;
+      document.getElementById("parking").textContent = "Basement + EV ready";
+      document.getElementById("storage").textContent = "Private lockers (optional)";
+
+      document.getElementById("mixStudio").textContent = listing.unitMix.studio;
+      document.getElementById("mix1").textContent = listing.unitMix.one;
+      document.getElementById("mix2").textContent = listing.unitMix.two;
+      document.getElementById("mix3").textContent = listing.unitMix.three;
+      document.getElementById("mix4").textContent = listing.unitMix.fourPlus;
+
+      setChips("sustainChips", listing.sustainability);
+      setChips("includedChips", listing.included);
+
+      document.getElementById("salesStatus").textContent = listing.status;
+      document.getElementById("unitsAvail").textContent = Math.max(0, (listing.inventoryUnits || []).filter(u => u.status === "Available").length);
+      document.getElementById("priceFrom").textContent = listing.priceFrom ? formatMoney(listing.priceFrom, currency) : "\u2014";
+      document.getElementById("priceTo").textContent = listing.priceTo ? formatMoney(listing.priceTo, currency) : "\u2014";
+      document.getElementById("ppsqm").textContent = listing.priceFrom && listing.sizeFromSqm ? pricePerAreaText(listing.priceFrom, listing.sizeFromSqm, unitMode, currency) : "\u2014";
+      document.getElementById("hoaEst").textContent = "Varies (unit)";
+
+      renderUnitsTable(unitMode, currency);
+
+      setChips("amenityChips", listing.amenities);
+      setChips("lifestyleChips", listing.lifestyle);
+      setChips("securityChips", listing.security);
+      setChips("mobilityChips", listing.mobility);
+
+      const finishKv = document.getElementById("finishKv");
+      finishKv.innerHTML = "";
+      const finishPairs = [
+        { label:"Flooring", value: listing.finishes.flooring },
+        { label:"Walls", value: listing.finishes.walls },
+        { label:"Kitchen", value: listing.finishes.kitchen },
+        { label:"Bathroom", value: listing.finishes.bathroom },
+        { label:"Windows", value: listing.finishes.windows },
+        { label:"Balcony/Terrace", value: listing.finishes.balcony }
+      ];
+      finishPairs.forEach(p => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span class="label">${p.label}</span><span class="value">${p.value}</span>`;
+        finishKv.appendChild(row);
+      });
+      setChips("systemsChips", listing.systems);
+      setChips("accessChips", listing.accessibility);
+      setChips("upgradeChips", listing.upgrades);
+
+      document.getElementById("startDate").textContent = listing.timeline.start;
+      document.getElementById("structureDate").textContent = listing.timeline.structure;
+      document.getElementById("handoverDate").textContent = listing.timeline.handover;
+      document.getElementById("defects").textContent = listing.timeline.defects;
+
+      setKvFromPairs("phaseKv", listing.phases.map(p => ({ label:`${p.name} (${p.units} units)`, value:`Delivery: ${p.delivery} \u2022 ${p.notes}` })));
+
+      setKvFromPairs("stepsKv", listing.purchaseSteps);
+      setKvFromPairs("paymentKv", listing.paymentPlan);
+      setChips("financeChips", listing.financeSupport);
+      setKvFromPairs("investKv", listing.investor);
+
+      setKvFromPairs("hoaKv", listing.hoa);
+      setKvFromPairs("legalKv", listing.legal);
+
+      setChips("docChips", listing.docs);
+
+      const preset = document.getElementById("countryPreset").value;
+      const country = (preset === "AUTO") ? listing.country : preset;
+      renderNearby(country, unitMode);
+
+      renderCarousel();
+    }
+
+    // ---------- Import prototype ----------
+    function setJsonStatus(ok, msg){
+      const el = document.getElementById("jsonStatus");
+      el.textContent = msg;
+      el.style.color = ok ? "var(--accent)" : "var(--danger)";
+    }
+
+    function populateExtKeys(obj){
+      const el = document.getElementById("extKeys");
+      el.innerHTML = "";
+      const keys = Object.keys(obj || {}).slice(0, 18);
+      if(!keys.length){
+        el.innerHTML = `<div class="note">No JSON loaded. Paste JSON on Import tab, then Validate.</div>`;
+        return;
+      }
+      keys.forEach(k => {
+        const v = obj[k];
+        const val = (typeof v === "string" || typeof v === "number" || typeof v === "boolean") ? String(v) : (Array.isArray(v) ? `[array:${v.length}]` : "{object}");
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span class="label">${k}</span><span class="value">${val}</span>`;
+        el.appendChild(row);
+      });
+    }
+
+    function tryParseRawJson(){
+      const raw = document.getElementById("rawJson").value.trim();
+      if(!raw){
+        setJsonStatus(false, "No JSON provided.");
+        populateExtKeys({});
+        return null;
+      }
+      try{
+        const obj = JSON.parse(raw);
+        setJsonStatus(true, "Valid JSON loaded.");
+        populateExtKeys(obj);
+        return obj;
+      }catch(e){
+        setJsonStatus(false, "Invalid JSON: " + e.message);
+        populateExtKeys({});
+        return null;
+      }
+    }
+
+    function applyFromExternal(ext){
+      const out = structuredClone(listingDefault);
+
+      out.country = ext.country || out.country;
+      out.currency = ext.currency || out.currency;
+      out.privacyMode = (typeof ext.privacyMode === "boolean") ? ext.privacyMode : out.privacyMode;
+
+      out.projectName = ext.projectName || ext.name || out.projectName;
+      out.headline = ext.headline || ext.title || out.headline;
+      out.status = ext.status || out.status;
+      out.phaseLabel = ext.phaseLabel || out.phaseLabel;
+      out.handoverLabel = ext.handoverLabel || out.handoverLabel;
+
+      out.locationText = ext.locationText || ext.location || out.locationText;
+
+      out.availability = ext.availability || out.availability;
+      out.unitTypes = ext.unitTypes || out.unitTypes;
+      out.delivery = ext.delivery || out.delivery;
+
+      out.totalUnits = ext.totalUnits ?? out.totalUnits;
+      out.phasesCount = ext.phasesCount ?? out.phasesCount;
+      out.buildings = ext.buildings ?? out.buildings;
+      out.floors = ext.floors ?? out.floors;
+
+      out.priceFrom = ext.priceFrom ?? out.priceFrom;
+      out.priceTo = ext.priceTo ?? out.priceTo;
+      out.sizeFromSqm = ext.sizeFromSqm ?? out.sizeFromSqm;
+      out.sizeToSqm = ext.sizeToSqm ?? out.sizeToSqm;
+
+      out.highlights = ext.highlights || out.highlights;
+      out.unitMix = ext.unitMix || out.unitMix;
+
+      out.sustainability = ext.sustainability || out.sustainability;
+      out.included = ext.included || out.included;
+
+      out.amenities = ext.amenities || out.amenities;
+      out.lifestyle = ext.lifestyle || out.lifestyle;
+      out.security = ext.security || out.security;
+      out.mobility = ext.mobility || out.mobility;
+
+      out.finishes = ext.finishes || out.finishes;
+      out.systems = ext.systems || out.systems;
+      out.accessibility = ext.accessibility || out.accessibility;
+      out.upgrades = ext.upgrades || out.upgrades;
+
+      out.timeline = ext.timeline || out.timeline;
+      out.phases = ext.phases || out.phases;
+
+      out.purchaseSteps = ext.purchaseSteps || out.purchaseSteps;
+      out.paymentPlan = ext.paymentPlan || out.paymentPlan;
+      out.financeSupport = ext.financeSupport || out.financeSupport;
+      out.investor = ext.investor || out.investor;
+
+      out.hoa = ext.hoa || out.hoa;
+      out.legal = ext.legal || out.legal;
+
+      out.docs = ext.docs || out.docs;
+      out.inventoryUnits = ext.inventoryUnits || out.inventoryUnits;
+
+      out.images = ext.images || out.images;
+
+      return out;
+    }
+
+    // ---------- Wire controls ----------
+    document.getElementById("unitSelect").addEventListener("change", renderListing);
+    document.getElementById("currencySelect").addEventListener("change", renderListing);
+    document.getElementById("countryPreset").addEventListener("change", renderListing);
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("shareBtn").addEventListener("click", () => alert("Share: hook this to your final share modal."));
+    document.getElementById("saveBtn").addEventListener("click", () => alert("Save: hook this to favorites/login."));
+    document.getElementById("brochureBtn").addEventListener("click", () => alert("Get brochure: open lead form / download brochure PDF."));
+    document.getElementById("availabilityBtn").addEventListener("click", () => alert("Check availability: open inventory filter / unit selector."));
+    document.getElementById("visitBtn").addEventListener("click", () => alert("Schedule viewing: open calendar booking modal."));
+
+    document.getElementById("importToggleBtn").addEventListener("click", () => {
+      const s = document.getElementById("importSection");
+      s.style.display = (s.style.display === "none") ? "block" : "none";
+      if(s.style.display === "block") window.scrollTo({ top: s.offsetTop - 10, behavior:"smooth" });
+    });
+
+    document.getElementById("validateJsonBtn").addEventListener("click", tryParseRawJson);
+
+    document.getElementById("mockImportBtn").addEventListener("click", () => {
+      const sampleExternal = {
+        country:"CH",
+        currency:"CHF",
+        projectName:"Harborview Living",
+        headline:"Harborview Living \u2014 New Waterfront Community (Phase 1)",
+        status:"Sales Open",
+        phaseLabel:"Phase 1",
+        handoverLabel:"Handover 2027",
+        locationText:"Z\u00fcrich Lakeside Corridor, Switzerland",
+        availability:"2026\u20132028",
+        unitTypes:"Studios\u20133 Bed",
+        delivery:"Handover 2027",
+        totalUnits:180,
+        phasesCount:2,
+        buildings:2,
+        floors:"Up to 14",
+        priceFrom:820000,
+        priceTo:2400000,
+        sizeFromSqm:34,
+        sizeToSqm:160,
+        highlights:["Waterfront promenade", "Pool + gym", "Co-working lounge", "Smart home", "Transit nearby"],
+        unitMix:{ studio:36, one:62, two:58, three:24, fourPlus:0 },
+        inventoryUnits: listingDefault.inventoryUnits,
+        images: listingDefault.images
+      };
+      document.getElementById("rawJson").value = JSON.stringify(sampleExternal, null, 2);
+      tryParseRawJson();
+    });
+
+    document.getElementById("applyBtn").addEventListener("click", () => {
+      const ext = tryParseRawJson();
+      if(!ext){
+        document.getElementById("applyStatus").textContent = "Cannot apply: JSON invalid or missing.";
+        return;
+      }
+      listing = applyFromExternal(ext);
+      document.getElementById("currencySelect").value = listing.currency || document.getElementById("currencySelect").value;
+      renderListing();
+      document.getElementById("applyStatus").textContent = "Applied imported data to page. Now click \u201cEnrich Location\u201d.";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      listing = structuredClone(listingDefault);
+      document.getElementById("rawJson").value = "";
+      setJsonStatus(false, "Reset. Waiting\u2026");
+      populateExtKeys({});
+      document.getElementById("currencySelect").value = listing.currency;
+      renderListing();
+      document.getElementById("applyStatus").textContent = "Reset to default.";
+    });
+
+    document.getElementById("enrichBtn").addEventListener("click", () => {
+      renderListing();
+      alert("Enrich Location (prototype): In production, geocode the project and fetch real nearby distances: rail/tram/bus, schools, universities, clinics, supermarkets, parks, plus country-specific items like US school-bus pickup.");
+    });
+
+    // ---------- Init ----------
+    document.getElementById("currencySelect").value = listing.currency;
+    populateExtKeys({});
+    renderListing();
+  </script>
+
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:20px;font-family:Inter,system-ui,sans-serif;font-size:0.85rem;margin-top:40px;">
+  <span id="yf"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#D4AF77;">Terms</a> |
+  <a href="privacy-policy.html" style="color:#D4AF77;">Privacy</a> |
+  <a href="anti-fraud.html" style="color:#D4AF77;">Anti-Fraud</a>
+</footer>
+<script>document.getElementById("yf").textContent = new Date().getFullYear();</script>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+
+    // pf-calc-widget adapter
+    window.pfListingData = {
+      price: listing.priceFrom || listing.askingPrice || 0,
+      country: (document.getElementById('countryPreset') && document.getElementById('countryPreset').value !== 'AUTO')
+        ? document.getElementById('countryPreset').value : (listing.country || 'CH'),
+      currency: (document.getElementById('currencySelect') ? document.getElementById('currencySelect').value : null) || listing.currency || 'CHF',
+      title: listing.name || listing.headline || document.title,
+      type: 'Development'
+    };
+<script src="pf-photo-upload.js"></script>
+<script src="pf-core.js"></script>
+<script>
+    // Auto-update calculators when country/currency changes
+    window.addEventListener('DOMContentLoaded', function(){
+      var cp = document.getElementById('countryPreset');
+      var cs = document.getElementById('currencySelect');
+      function _refresh(){
+        // Re-read country/currency into pfListingData
+        if(window.pfListingData){
+          var cPreset = document.getElementById('countryPreset');
+          var cSel = document.getElementById('currencySelect');
+          if(cPreset && cPreset.value !== 'AUTO') window.pfListingData.country = cPreset.value;
+          if(cSel) window.pfListingData.currency = cSel.value;
+        }
+        setTimeout(function(){
+          try{pfcwCalcMort();}catch(e){}
+          try{pfcwCalcTC();}catch(e){}
+          try{pfcwCalcSD();}catch(e){}
+          try{pfcwCalcYield();}catch(e){}
+          try{pfcwCalcBond();}catch(e){}
+          try{pfcwCalcAfford();}catch(e){}
+          try{applySymPadding();}catch(e){}
+        }, 100);
+      }
+      if(cp) cp.addEventListener('change', _refresh);
+      if(cs) cs.addEventListener('change', _refresh);
+    });
+    </script>
+    <script src="pf-calc-widget.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  if(document.getElementById("pfuMedia_buy_developments")){
+    PFUpload.init("pfuMedia_buy_developments", {
+      maxPhotos: 30,
+      showVideoUpload: true,
+      onPhotosChanged: function(photos){
+        console.log("[PFUpload] buy-developments: " + photos.length + " photos");
+      }
+    });
+  }
+});
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

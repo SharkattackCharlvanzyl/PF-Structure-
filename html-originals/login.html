@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — PropertyFinder Global</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0e1520;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #e8dfc8;
+    }
+
+    /* ── Background pattern ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(196,164,124,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(196,164,124,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ── Logo bar ── */
+    .login-header {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(196,164,124,0.1);
+    }
+    .login-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e8dfc8;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .login-logo span { color: #c4a47c; }
+    .back-link {
+      font-size: 0.82rem;
+      color: rgba(232,223,200,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #c4a47c; }
+
+    /* ── Main layout ── */
+    .login-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ── Card ── */
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #141c2b;
+      border: 1px solid rgba(196,164,124,0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    /* ── Tabs ── */
+    .login-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(196,164,124,0.12);
+    }
+    .login-tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: rgba(232,223,200,0.45);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .login-tab.active {
+      color: #c4a47c;
+      border-bottom: 2px solid #c4a47c;
+      background: rgba(196,164,124,0.04);
+    }
+
+    /* ── Form body ── */
+    .login-body { padding: 32px 28px; }
+
+    .login-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e8dfc8;
+      margin-bottom: 6px;
+    }
+    .login-sub {
+      font-size: 0.82rem;
+      color: rgba(232,223,200,0.45);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    /* ── Form fields ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(232,223,200,0.6);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: #1a2535;
+      border: 1px solid rgba(196,164,124,0.18);
+      border-radius: 8px;
+      color: #e8dfc8;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: rgba(196,164,124,0.5);
+      box-shadow: 0 0 0 3px rgba(196,164,124,0.08);
+    }
+    .form-input::placeholder { color: rgba(232,223,200,0.25); }
+
+    /* ── Password wrapper ── */
+    .pw-wrap { position: relative; }
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(232,223,200,0.4);
+      font-size: 16px;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .pw-toggle:hover { color: #c4a47c; }
+
+    /* ── Error message ── */
+    .login-error {
+      display: none;
+      background: rgba(220,38,38,0.1);
+      border: 1px solid rgba(220,38,38,0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #f87171;
+      margin-bottom: 16px;
+    }
+    .login-error.show { display: block; }
+
+    /* ── Success message ── */
+    .login-success {
+      display: none;
+      background: rgba(196,164,124,0.1);
+      border: 1px solid rgba(196,164,124,0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #c4a47c;
+      margin-bottom: 16px;
+    }
+    .login-success.show { display: block; }
+
+    /* ── Submit button ── */
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: #c4a47c;
+      color: #1a1408;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .login-btn:hover { background: #b8976a; transform: translateY(-1px); }
+    .login-btn:active { transform: translateY(0); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── Forgot password ── */
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.78rem;
+      color: rgba(196,164,124,0.6);
+      text-decoration: none;
+      margin-top: -8px;
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: #c4a47c; }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: rgba(232,223,200,0.2);
+      font-size: 0.75rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(196,164,124,0.12);
+    }
+
+    /* ── Footer note ── */
+    .login-note {
+      padding: 16px 28px;
+      background: rgba(196,164,124,0.03);
+      border-top: 1px solid rgba(196,164,124,0.08);
+      font-size: 0.75rem;
+      color: rgba(232,223,200,0.3);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Panel visibility ── */
+    .login-panel { display: none; }
+    .login-panel.active { display: block; }
+
+    /* ── Terms checkbox ── */
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .terms-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #c4a47c;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .terms-row label {
+      font-size: 0.78rem;
+      color: rgba(232,223,200,0.45);
+      line-height: 1.5;
+    }
+    .terms-row a { color: #c4a47c; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .login-body { padding: 24px 20px; }
+      .login-header { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="login-header">
+    <a href="index.html" class="login-logo">Property<span>Finder</span> <span style="font-size:0.7rem;opacity:0.5;font-family:'DM Sans',sans-serif;font-weight:400">GLOBAL</span></a>
+    <a href="index.html" class="back-link">← Back to site</a>
+  </header>
+
+  <!-- Main -->
+  <main class="login-main">
+    <div class="login-card">
+
+      <!-- Tabs -->
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchTab('login')">Log In</button>
+        <button class="login-tab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN PANEL -->
+      <div class="login-panel active" id="panel-login">
+        <div class="login-body">
+          <div class="login-title">Welcome back</div>
+          <div class="login-sub">Log in to your agent dashboard to manage your listings.</div>
+
+          <div class="login-error" id="login-error"></div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="login-email" placeholder="you@example.com" autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="pw-wrap">
+              <input type="password" class="form-input" id="login-password" placeholder="Enter your password" autocomplete="current-password" style="padding-right:40px">
+              <button type="button" class="pw-toggle" onclick="togglePw('login-password', this)">👁</button>
+            </div>
+          </div>
+
+          <a href="#" class="forgot-link" onclick="showForgot(event)">Forgot password?</a>
+
+          <button class="login-btn" id="login-btn" onclick="doLogin()">Log In</button>
+
+          <div class="divider">or</div>
+
+          <div style="text-align:center;font-size:0.8rem;color:rgba(232,223,200,0.35)">
+            Don't have an account? <a href="#" onclick="switchTab('signup')" style="color:#c4a47c;text-decoration:none">Sign Up</a>
+          </div>
+        </div>
+        <div class="login-note">
+          🔒 Your session is stored locally on your device and never shared.
+        </div>
+      </div>
+
+      <!-- SIGNUP PANEL -->
+      <div class="login-panel" id="panel-signup">
+        <div class="login-body">
+          <div class="login-title">Create account</div>
+          <div class="login-sub">Register as an agent or private seller to list properties globally.</div>
+
+          <div class="login-success" id="signup-success"></div>
+          <div class="login-error" id="signup-error"></div>
+
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="signup-name" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="signup-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Agency / Company Name</label>
+            <input type="text" class="form-input" id="signup-agency" placeholder="Your agency or 'Private Seller'">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="pw-wrap">
+              <input type="password" class="form-input" id="signup-password" placeholder="Min 8 characters" style="padding-right:40px">
+              <button type="button" class="pw-toggle" onclick="togglePw('signup-password', this)">👁</button>
+            </div>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="signup-terms">
+            <label for="signup-terms">I agree to the <a href="terms-of-use.html">Terms of Use</a> and <a href="privacy-policy.html">Privacy Policy</a></label>
+          </div>
+
+          <button class="login-btn" id="signup-btn" onclick="doSignup()">Create Account</button>
+
+          <div class="divider">or</div>
+          <div style="text-align:center;font-size:0.8rem;color:rgba(232,223,200,0.35)">
+            Already have an account? <a href="#" onclick="switchTab('login')" style="color:#c4a47c;text-decoration:none">Log In</a>
+          </div>
+        </div>
+        <div class="login-note">
+          📧 After signing up, our team will review and activate your account within 24 hours.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Auth JS -->
+  <script src="pf-auth.js"></script>
+  <script>
+    // Check URL for tab param
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'signup') switchTab('signup');
+
+    function switchTab(tab) {
+      document.querySelectorAll('.login-tab').forEach(function(t, i) {
+        t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
+      });
+      document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+      document.getElementById('panel-signup').classList.toggle('active', tab === 'signup');
+    }
+
+    function togglePw(id, btn) {
+      var inp = document.getElementById(id);
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        btn.textContent = '🔒';
+      } else {
+        inp.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+
+    function doLogin() {
+      var email    = document.getElementById('login-email').value;
+      var password = document.getElementById('login-password').value;
+      var errEl    = document.getElementById('login-error');
+      var btn      = document.getElementById('login-btn');
+
+      errEl.classList.remove('show');
+
+      if (!email || !password) {
+        errEl.textContent = 'Please enter your email and password.';
+        errEl.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      setTimeout(function() {
+        var result = pfLogin(email, password);
+        if (result.success) {
+          btn.textContent = '✓ Success! Redirecting...';
+          var redirect = urlParams.get('redirect') || (result.agent.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html');
+          setTimeout(function() { window.location.href = redirect; }, 600);
+        } else {
+          errEl.textContent = result.error;
+          errEl.classList.add('show');
+          btn.disabled = false;
+          btn.textContent = 'Log In';
+        }
+      }, 400);
+    }
+
+    function doSignup() {
+      var name     = document.getElementById('signup-name').value.trim();
+      var email    = document.getElementById('signup-email').value.trim();
+      var agency   = document.getElementById('signup-agency').value.trim();
+      var password = document.getElementById('signup-password').value;
+      var terms    = document.getElementById('signup-terms').checked;
+      var errEl    = document.getElementById('signup-error');
+      var sucEl    = document.getElementById('signup-success');
+      var btn      = document.getElementById('signup-btn');
+
+      errEl.classList.remove('show');
+      sucEl.classList.remove('show');
+
+      if (!name || !email || !agency || !password) {
+        errEl.textContent = 'Please fill in all fields.';
+        errEl.classList.add('show');
+        return;
+      }
+      if (password.length < 8) {
+        errEl.textContent = 'Password must be at least 8 characters.';
+        errEl.classList.add('show');
+        return;
+      }
+      if (!terms) {
+        errEl.textContent = 'Please accept the Terms of Use to continue.';
+        errEl.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      // Store signup request locally
+      try {
+        var requests = JSON.parse(localStorage.getItem('pf_signup_requests') || '[]');
+        requests.push({ name: name, email: email, agency: agency, time: new Date().toISOString() });
+        localStorage.setItem('pf_signup_requests', JSON.stringify(requests));
+      } catch(e) {}
+
+      setTimeout(function() {
+        sucEl.textContent = '✓ Request received! Our team will review and activate your account within 24 hours. You will receive an email at ' + email;
+        sucEl.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        document.getElementById('signup-name').value = '';
+        document.getElementById('signup-email').value = '';
+        document.getElementById('signup-agency').value = '';
+        document.getElementById('signup-password').value = '';
+        document.getElementById('signup-terms').checked = false;
+      }, 600);
+    }
+
+    function showForgot(e) {
+      e.preventDefault();
+      alert('Please contact us at admin@property-finder.co.za to reset your password.');
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        var activePanel = document.querySelector('.login-panel.active').id;
+        if (activePanel === 'panel-login') doLogin();
+        else doSignup();
+      }
+    });
+  </script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

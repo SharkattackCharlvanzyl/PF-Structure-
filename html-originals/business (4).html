@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — List Your Business for Sale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#006341;--nb-green-dark:#004B2B;--nb-green-hover:#00A651;
+      --nb-lime:#7AC143;--nb-white:#FFFFFF;--nb-offwhite:#F6F8F7;
+      --nb-snow:#EDF2EF;--nb-border:#E3E8E5;--nb-text:#1A1A1A;--nb-muted:#5B6B64;
+      --nb-hero-grad:linear-gradient(135deg,#006341 0%,#00A651 55%,#7AC143 100%);
+      --nb-hero-overlay:linear-gradient(135deg,rgba(0,75,43,.92) 0%,rgba(0,99,65,.55) 55%,rgba(0,166,81,.35) 100%);
+      --pf-danger:#DC2626;--pf-success:#16A34A;--pf-warn:#D97706;--pf-info:#2563EB;
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;--transition:0.3s ease;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:var(--nb-text);-webkit-font-smoothing:antialiased}
+    a{color:var(--nb-green);text-decoration:none;font-weight:700}a:hover{text-decoration:underline}
+
+    .hero{position:relative;background:var(--nb-hero-grad);padding:56px 24px 48px;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero h1{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;color:white;margin-bottom:12px}
+    .hero p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:640px;margin:0 auto 20px;line-height:1.6}
+    /* Language dropdown fix */
+    .pf-lang{position:relative;cursor:pointer;user-select:none}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);left:0;
+      background:#fff;border:1px solid #E3E8E5;border-radius:8px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:9999;min-width:160px;overflow:hidden}
+    .pf-lang-drop.open{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:8px;padding:10px 14px;
+      font-size:0.85rem;font-weight:600;color:#1A1A1A;cursor:pointer;transition:background 0.15s}
+    .pf-lang-opt:hover,.pf-lang-opt.pf-lang-active{background:#f0faf5;color:#006341}
+    .pf-lang-opt img{width:22px;height:15px;object-fit:cover;border-radius:2px}
+    /* Hero pills */
+    .hero-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    .hero-pill{padding:8px 16px;border-radius:20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);font-size:0.82rem;font-weight:700;color:white;text-decoration:none;transition:all 0.2s;cursor:pointer}
+    .hero-pill:hover{background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.5);transform:translateY(-2px)}
+    .hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+    .hero-stat{padding:14px 22px;border-radius:var(--radius2);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);text-align:center;min-width:120px}
+    .hero-stat .val{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:white}
+    .hero-stat .lbl{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:4px;font-weight:600}
+
+    .section{padding:48px 24px;background:var(--nb-white)}.section.alt{background:var(--nb-offwhite)}
+    .section.dark{background:linear-gradient(135deg,var(--nb-green-dark),var(--nb-green));color:white}
+    .section-inner{max-width:1220px;margin:0 auto}
+    .section-title{font-family:var(--font-display);font-size:clamp(1.15rem,2.5vw,1.5rem);font-weight:700;color:var(--nb-text);text-align:center;margin-bottom:6px}
+    .section.dark .section-title{color:white}
+    .section-sub{font-size:0.92rem;color:var(--nb-muted);text-align:center;max-width:600px;margin:0 auto 32px;line-height:1.6}
+    .section.dark .section-sub{color:rgba(255,255,255,0.65)}
+
+    /* Category grid */
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:800px;margin:0 auto}
+    .cat-card{padding:18px 12px;border-radius:var(--radius2);background:var(--nb-white);border:1.5px solid var(--nb-border);text-align:center;cursor:pointer;transition:all var(--transition);box-shadow:var(--shadow)}
+    .cat-card:hover{border-color:var(--nb-green);transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+    .cat-card .cc-ico{font-size:1.8rem;margin-bottom:6px}
+    .cat-card h4{font-size:0.78rem;font-weight:800;color:var(--nb-green-dark)}
+
+    /* Flow steps */
+    .flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:1000px;margin:0 auto}
+    .step-card{padding:22px 16px;border-radius:var(--radius);border:1px solid var(--nb-border);background:var(--nb-white);text-align:center;box-shadow:var(--shadow);transition:all var(--transition);position:relative}
+    .step-card:hover{border-color:var(--nb-green);transform:translateY(-2px)}
+    .step-num{width:40px;height:40px;border-radius:50%;background:var(--nb-green);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;margin:0 auto 10px;box-shadow:0 4px 12px rgba(0,99,65,0.2)}
+    .step-card h3{font-size:0.88rem;font-weight:800;color:var(--nb-green-dark);margin-bottom:4px}
+    .step-card p{font-size:0.78rem;color:var(--nb-muted);line-height:1.5}
+    .section.dark .step-card{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12)}
+    .section.dark .step-num{background:var(--nb-lime);color:var(--nb-green-dark)}
+    .section.dark .step-card h3{color:white}
+    .section.dark .step-card p{color:rgba(255,255,255,0.6)}
+
+    /* System logos */
+    .sys-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;max-width:1000px;margin:0 auto}
+    .sys-card{padding:16px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);text-align:center;box-shadow:var(--shadow);transition:all var(--transition)}
+    .sys-card:hover{border-color:var(--nb-green);transform:translateY(-2px)}
+    .sys-card .sy-ico{font-size:1.5rem;margin-bottom:6px}
+    .sys-card h4{font-size:0.82rem;font-weight:800;color:var(--nb-green-dark);margin-bottom:2px}
+    .sys-card p{font-size:0.68rem;color:var(--nb-muted)}
+
+    /* Benefit cards */
+    .ben-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .ben-card{padding:20px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow);transition:all var(--transition)}
+    .ben-card:hover{border-color:var(--nb-green);transform:translateY(-2px)}
+    .ben-card .b-ico{font-size:1.5rem;margin-bottom:8px}
+    .ben-card h4{font-size:0.88rem;font-weight:800;color:var(--nb-green-dark);margin-bottom:4px}
+    .ben-card p{font-size:0.82rem;color:var(--nb-muted);line-height:1.5}
+
+    /* Pricing */
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+    @media(max-width:800px){.pricing-grid{grid-template-columns:1fr}}
+    .price-card{background:white;border-radius:var(--radius);border:2px solid var(--nb-border);padding:32px 28px;text-align:center;transition:all var(--transition);position:relative}
+    .price-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+    .price-card.popular{border-color:var(--nb-green);box-shadow:0 8px 32px rgba(0,99,65,0.15)}
+    .price-card.popular::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--nb-green);color:white;padding:4px 16px;border-radius:4px;font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
+    .price-tier{font-size:0.78rem;font-weight:800;color:var(--nb-green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .price-amount{font-family:var(--font-display);font-size:2.4rem;font-weight:700;color:var(--nb-green-dark)}
+    .price-period{font-size:0.82rem;color:var(--nb-muted);margin-bottom:16px}
+    .price-features{text-align:left;margin-bottom:24px}
+    .price-feat{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:0.84rem}
+    .price-feat .ico{color:var(--nb-green);font-weight:900;flex-shrink:0}
+    .price-cta{display:block;width:100%;padding:14px;border-radius:var(--radius3);background:var(--nb-white);border:2px solid var(--nb-green);color:var(--nb-green);font-size:0.95rem;font-weight:800;cursor:pointer;font-family:var(--font);transition:all 0.2s;text-align:center}
+    .price-cta:hover{background:var(--nb-green);color:white;text-decoration:none}
+    .price-card.popular .price-cta{background:var(--nb-green);color:white}
+    .price-card.popular .price-cta:hover{background:var(--nb-green-hover)}
+    .price-fine{font-size:0.75rem;color:var(--nb-muted);margin-top:10px}
+
+    /* Listing form */
+    .form-wrap{max-width:800px;margin:0 auto;background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:var(--shadow);overflow:hidden}
+    .form-steps{display:flex;background:var(--nb-snow);border-bottom:1px solid var(--nb-border)}
+    .form-step{flex:1;padding:12px;text-align:center;font-size:0.78rem;font-weight:800;color:var(--nb-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s}
+    .form-step.active{color:var(--nb-green);border-bottom-color:var(--nb-green)}
+    .form-body{padding:24px}
+    .f-section{display:none}.f-section.active{display:block}
+    .f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+    @media(max-width:600px){.f-row{grid-template-columns:1fr}}
+    .f-group{display:flex;flex-direction:column;gap:5px}
+    .f-group label{font-size:0.82rem;font-weight:700}
+    .f-group label .req{color:var(--pf-danger)}
+    .f-group input,.f-group select,.f-group textarea{width:100%;padding:11px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.9rem;font-family:var(--font);outline:none}
+    .f-group input:focus,.f-group select:focus,.f-group textarea:focus{border-color:var(--nb-green)}
+    .f-group textarea{resize:vertical;min-height:80px}
+    .f-divider{font-size:0.72rem;font-weight:800;color:var(--nb-green);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--nb-border)}
+    .f-btn{padding:14px 28px;border-radius:var(--radius3);font-size:0.92rem;font-weight:800;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+    .f-btn.primary{background:var(--nb-green);color:white}
+    .f-btn.primary:hover{background:var(--nb-green-hover)}
+    .f-btn.outline{background:var(--nb-snow);border:1.5px solid var(--nb-border);color:var(--nb-muted)}
+
+    /* FAQ */
+    .faq{border:1px solid var(--nb-border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--nb-white)}
+    .faq summary{padding:16px 18px;cursor:pointer;font-weight:800;font-size:0.92rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+    .faq summary::-webkit-details-marker{display:none}
+    .faq summary::after{content:"▸";font-size:14px;color:var(--nb-muted);transition:transform 0.25s}
+    .faq[open] summary{background:var(--nb-offwhite);border-bottom:1px solid var(--nb-border)}
+    .faq[open] summary::after{transform:rotate(90deg)}
+    .faq .faq-body{padding:18px;font-size:0.88rem;color:var(--nb-muted);line-height:1.65}
+
+    .note{font-size:0.82rem;padding:14px 18px;border-radius:var(--radius3);line-height:1.6;margin:14px 0}
+    .note.info{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.12);color:#1E40AF}
+    .note.success{background:rgba(22,163,74,0.05);border:1px solid rgba(22,163,74,0.12);color:#166534}
+
+    .cta-box{max-width:700px;margin:0 auto;padding:36px 32px;border-radius:var(--radius);background:linear-gradient(135deg,var(--nb-green-dark),var(--nb-green));text-align:center;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(255,255,255,0.06),transparent);pointer-events:none}
+    .cta-box h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:white;margin-bottom:8px;position:relative}
+    .cta-box p{color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:20px;position:relative}
+    .cta-box .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+    .cta-btn{padding:13px 26px;border-radius:var(--radius3);font-size:0.92rem;font-weight:800;cursor:pointer;font-family:var(--font);border:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+    .cta-btn.primary{background:var(--nb-lime);color:var(--nb-green-dark)}
+    .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(122,193,67,0.3)}
+    .cta-btn.outline{background:transparent;color:white;border:2px solid rgba(255,255,255,0.3)}
+
+    .footer{max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link  pf-active">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero"><div class="hero-inner">
+    <h1>List Your Business for Sale</h1>
+    <p>Whether you're a business broker, M&A advisor, or private seller — reach millions of verified buyers across 185 countries. Same platform, same features, same pricing as property listings.</p>
+    <div class="hero-pills">
+      <a class="hero-pill" href="business-restaurants.html">🍽️ Restaurants</a>
+      <a class="hero-pill" href="business-retail.html">🛒 Retail</a>
+      <a class="hero-pill" href="business-tech.html">💻 Technology</a>
+      <a class="hero-pill" href="business-hospitality.html">🏨 Hospitality</a>
+      <a class="hero-pill" href="business-healthcare.html">🏥 Healthcare</a>
+      <a class="hero-pill" href="business-automotive.html">🔧 Automotive</a>
+      <a class="hero-pill" href="business-franchise.html">🏭 Franchises</a>
+      <a class="hero-pill" href="business-agriculture.html">🌾 Agriculture</a>
+      <a class="hero-pill" href="business-manufacturing.html">⚙️ Manufacturing</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">185</div><div class="lbl">Countries</div></div>
+      <div class="hero-stat"><div class="val">$2</div><div class="lbl">From / Listing / Mo</div></div>
+      <div class="hero-stat"><div class="val">0%</div><div class="lbl">Commission</div></div>
+      <div class="hero-stat"><div class="val">30</div><div class="lbl">Photos per Listing</div></div>
+    </div>
+  </div></div>
+
+  <!-- ═══ 1. BUSINESS CATEGORIES ═══ -->
+  <style>
+    .sector-card{border:1.5px solid var(--nb-border);border-radius:var(--radius);background:var(--nb-white);box-shadow:var(--shadow);overflow:hidden;transition:all 0.3s}
+    .sector-card:hover{box-shadow:var(--shadow-hover)}
+    .sector-card.open{border-color:var(--nb-green)}
+    .sector-head{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;transition:background 0.2s;user-select:none}
+    .sector-head:hover{background:rgba(0,99,65,0.02)}
+    .sector-head .sh-ico{font-size:1.6rem;flex-shrink:0}
+    .sector-head .sh-info{flex:1;min-width:0}
+    .sector-head .sh-title{font-size:0.92rem;font-weight:800;color:var(--nb-green-dark)}
+    .sector-head .sh-count{font-size:0.72rem;color:var(--nb-muted);font-weight:600}
+    .sector-head .sh-arrow{font-size:0.8rem;color:var(--nb-muted);transition:transform 0.25s;flex-shrink:0}
+    .sector-card.open .sh-arrow{transform:rotate(90deg);color:var(--nb-green)}
+    .sector-body{display:none;padding:0 18px 16px}
+    .sector-card.open .sector-body{display:block}
+    .sub-grid{display:flex;flex-wrap:wrap;gap:6px}
+    .sub-tag{padding:5px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;background:var(--nb-snow);border:1px solid var(--nb-border);color:var(--nb-muted);transition:all 0.2s;cursor:pointer}
+    .sub-tag:hover{border-color:var(--nb-green);color:var(--nb-green);background:rgba(0,99,65,0.04)}
+    .sector-link{display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:800;color:var(--nb-green);margin-top:10px;cursor:pointer}
+    .sector-link:hover{text-decoration:underline}
+    /* Sector button grid */
+    .sector-btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;max-width:800px;margin:0 auto 32px}
+    .sector-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px;border-radius:12px;background:#fff;border:2px solid var(--nb-border);cursor:pointer;transition:all 0.25s;text-decoration:none;color:var(--nb-green-dark)}
+    .sector-btn:hover{border-color:var(--nb-green);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,99,65,0.12);background:#f0faf5}
+    .sector-btn .sb-ico{font-size:2rem}
+    .sector-btn .sb-name{font-size:0.82rem;font-weight:800;text-align:center;line-height:1.3}
+    .sector-btn .sb-count{font-size:0.7rem;color:var(--nb-muted);font-weight:600}
+    @media(max-width:480px){.sector-btn-grid{grid-template-columns:repeat(3,1fr);gap:8px}.sector-btn{padding:14px 8px}.sector-btn .sb-ico{font-size:1.6rem}.sector-btn .sb-name{font-size:0.72rem}}
+  </style>
+  <div class="section" id="categories"><div class="section-inner">
+    <h2 class="section-title">10 Business Sectors · 85+ Sub-Categories</h2>
+    <p class="section-sub">Click any sector to see all sub-categories. Every type of business listing — from fine dining to dairy farming, SaaS to car dealerships.</p>
+
+    <!-- SUMMARY BAR -->
+    <div style="max-width:800px;margin:0 auto 24px;padding:18px 22px;border-radius:var(--radius);background:linear-gradient(135deg,var(--nb-green-dark),var(--nb-green));color:white;text-align:center;box-shadow:0 8px 32px rgba(0,75,43,0.15);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(255,255,255,0.06),transparent);pointer-events:none"></div>
+      <div style="position:relative">
+        <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;margin-bottom:6px">We Handle Every Business Type</div>
+        <div style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin-bottom:14px">10 sectors · 85+ sub-categories · Same pricing across all · 185 countries</div>
+        <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap" id="summaryPills"></div>
+      </div>
+    </div>
+
+    <!-- EXPANDABLE SECTOR CARDS -->
+    <div class="sector-btn-grid" id="sectorBtnGrid"></div>
+    <div style="max-width:800px;margin:0 auto;display:grid;gap:10px" id="sectorGrid"></div>
+
+    <div class="note info" style="max-width:700px;margin:20px auto 0;text-align:center"><strong>Same system as real estate.</strong> Business listings and property listings share the same platform, pricing, payment system, analytics, notifications, and buyer exposure across 185 countries. The only difference is the listing form — customised with sector-specific fields for your business type.</div>
+  </div></div>
+
+  <!-- ═══ 2. AUTO-SYNC — BROKER CRM IMPORT ═══ -->
+  <div class="section alt" id="autoSync"><div class="section-inner">
+    <h2 class="section-title">Auto-Sync — Zero Effort Listing</h2>
+    <p class="section-sub">Already have listings on BizBuySell, BusinessesForSale.com, or your own CRM? We import everything automatically. No manual uploads. No double work.</p>
+    <div class="flow-grid">
+      <div class="step-card"><div class="step-num">1</div><h3>Connect Your System</h3><p>Give us read-only access to your CRM, portal, or website. Username + password or API key — we never modify your data.</p></div>
+      <div class="step-card"><div class="step-num">2</div><h3>We Import Everything</h3><p>Our system reads all your active listings — photos, financials, descriptions, asking price, sector, employee count, and contact info.</p></div>
+      <div class="step-card"><div class="step-num">3</div><h3>Preview &amp; Approve</h3><p>Review every listing on your PropertyFinder dashboard. Edit anything. Nothing publishes without your explicit approval.</p></div>
+      <div class="step-card"><div class="step-num">4</div><h3>Auto-Update Daily</h3><p>Change a listing on your CRM? PropertyFinder mirrors it within 24 hours. Remove a listing? It disappears from PropertyFinder too.</p></div>
+      <div class="step-card"><div class="step-num">5</div><h3>One-Click Approval</h3><p>Approve listings individually or in bulk. Your listings go live across 185 countries instantly.</p></div>
+    </div>
+    <div class="note success" style="max-width:700px;margin:20px auto 0;text-align:center"><strong>🔒 Read-only access.</strong> We never modify, delete, or change anything on your existing system. We simply read and clone. You can revoke access at any time.</div>
+  </div></div>
+
+  <!-- ═══ 3. COMPATIBLE SYSTEMS ═══ -->
+  <div class="section" id="systems"><div class="section-inner">
+    <h2 class="section-title">Compatible Systems — We Sync With Everything</h2>
+    <p class="section-sub">PropertyFinder imports listings from all major business broker CRMs, portals, and websites. Don't see yours? We can likely connect to it.</p>
+    <div class="sys-grid">
+      <div class="sys-card"><div class="sy-ico">🏢</div><h4>BizBuySell</h4><p>World's largest business marketplace — direct API sync</p></div>
+      <div class="sys-card"><div class="sy-ico">🌍</div><h4>BusinessesForSale.com</h4><p>Global marketplace — 130+ countries, feed import</p></div>
+      <div class="sys-card"><div class="sy-ico">📊</div><h4>Tupelo CRM</h4><p>Business broker CRM — direct API integration</p></div>
+      <div class="sys-card"><div class="sy-ico">🤝</div><h4>DealRelations CRM</h4><p>M&A advisor CRM — automated listing sync</p></div>
+      <div class="sys-card"><div class="sy-ico">💼</div><h4>Deal Studio CRM</h4><p>Deal pipeline CRM — export/import sync</p></div>
+      <div class="sys-card"><div class="sy-ico">📋</div><h4>Business Brokers CRM</h4><p>Specialised broker CRM — API + feed sync</p></div>
+      <div class="sys-card"><div class="sy-ico">🔶</div><h4>BusinessBroker.net</h4><p>US broker network — XML feed import</p></div>
+      <div class="sys-card"><div class="sy-ico">🌐</div><h4>Transworld</h4><p>Global broker network — franchise & SME sync</p></div>
+      <div class="sys-card"><div class="sy-ico">📈</div><h4>Kumo</h4><p>Deal sourcing platform — aggregated listings</p></div>
+      <div class="sys-card"><div class="sy-ico">🔗</div><h4>Flippa</h4><p>Online businesses & apps — API feed sync</p></div>
+      <div class="sys-card"><div class="sy-ico">💻</div><h4>Zoho CRM</h4><p>Custom broker setups — API integration</p></div>
+      <div class="sys-card"><div class="sy-ico">📂</div><h4>Your Own Website</h4><p>Any broker website — we scrape with permission</p></div>
+    </div>
+    <div class="note info" style="max-width:700px;margin:20px auto 0;text-align:center"><strong>Don't see your system?</strong> Enter your website URL or CRM name during setup — our team will build a custom connector for free. If your system has an API or export function, we can sync it.</div>
+  </div></div>
+
+  <!-- ═══ 4. PRIVATE SELLERS & BROKERS ═══ -->
+  <div class="section alt"><div class="section-inner">
+    <h2 class="section-title">Private Sellers — Same System, Same Benefits</h2>
+    <p class="section-sub">Selling your own business? You get every feature a broker gets — no exceptions. No licence needed. List today, get enquiries today.</p>
+    <div class="ben-grid">
+      <div class="ben-card"><div class="b-ico">📸</div><h4>Professional Listing</h4><p>30 photos, video upload, full business detail page with financials, employee info, and sector-specific fields.</p></div>
+      <div class="ben-card"><div class="b-ico">🌍</div><h4>185-Country Exposure</h4><p>Your business is visible to buyers in 185 countries. International buyers actively searching PropertyFinder.</p></div>
+      <div class="ben-card"><div class="b-ico">📊</div><h4>Full Analytics</h4><p>Track views, enquiries, buyer countries, saves, and click-through rates. Know exactly who's interested.</p></div>
+      <div class="ben-card"><div class="b-ico">📅</div><h4>Viewing Appointments</h4><p>Buyers request viewings directly. You get notified via email, WhatsApp, and SMS. Confirm or reschedule.</p></div>
+      <div class="ben-card"><div class="b-ico">🔔</div><h4>Instant Notifications</h4><p>Enquiry, viewing request, buyer saved, new message, milestone, weekly summary — all pushed to you in real-time.</p></div>
+      <div class="ben-card"><div class="b-ico">💰</div><h4>Zero Commission</h4><p>PropertyFinder charges zero commission on any sale. The flat listing fee is all you pay.</p></div>
+      <div class="ben-card"><div class="b-ico">🔨</div><h4>Auction Eligible</h4><p>List your business for online auction. Set your reserve price, choose duration, and let buyers bid competitively.</p></div>
+      <div class="ben-card"><div class="b-ico">📱</div><h4>WhatsApp, Email &amp; Phone</h4><p>Buyers contact you directly via WhatsApp, email, or phone. No middleman. No lead fees.</p></div>
+    </div>
+  </div></div>
+
+  <!-- ═══ 5. WHY BROKERS SWITCH ═══ -->
+  <div class="section" id="whyBrokers"><div class="section-inner">
+    <h2 class="section-title">Why Business Brokers Switch to PropertyFinder</h2>
+    <p class="section-sub">Auto-sync your CRM, get international exposure, same analytics and notification system as property agents.</p>
+    <div class="ben-grid">
+      <div class="ben-card"><div class="b-ico">🔄</div><h4>Auto-Sync Your CRM</h4><p>Connect BizBuySell, Tupelo, DealRelations, or any broker CRM. Listings import automatically. Changes sync daily.</p></div>
+      <div class="ben-card"><div class="b-ico">🌍</div><h4>International Buyers</h4><p>Your listings reach verified buyers in 185 countries. Most broker platforms are regional — PropertyFinder is global.</p></div>
+      <div class="ben-card"><div class="b-ico">💲</div><h4>From $3/Listing</h4><p>Agency pricing: $3/listing/month for 11–2,000 listings. Enterprise: $2/listing for 2,000+. No commission. No contracts.</p></div>
+      <div class="ben-card"><div class="b-ico">📊</div><h4>Per-Listing Analytics</h4><p>Every listing gets its own analytics: views, enquiries, buyer countries, search impressions, CTR, and saves.</p></div>
+      <div class="ben-card"><div class="b-ico">📧</div><h4>NDA-Ready Enquiries</h4><p>Buyers can sign NDAs before receiving confidential business details. Integrated NDA workflow for sensitive listings.</p></div>
+      <div class="ben-card"><div class="b-ico">⚡</div><h4>No Double Work</h4><p>List once on your CRM — it appears on PropertyFinder automatically. Update your CRM — PropertyFinder updates too.</p></div>
+    </div>
+  </div></div>
+
+  <!-- ═══ 6. PRICING — IDENTICAL TO REAL ESTATE ═══ -->
+  <div class="section alt" id="pricing"><div class="section-inner">
+    <h2 class="section-title">Simple Pricing — Same as Property Listings</h2>
+    <p class="section-sub">No hidden fees. No lock-in contracts. Pay per listing, cancel anytime. ALL business listings get the same features — the only difference is volume pricing.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Private Seller</div>
+        <div class="price-amount">$7.50</div>
+        <div class="price-period">per listing / per month</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">1 – 10 listings</div>
+        <div class="price-features">
+          <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full business detail page with financials</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>📅 Viewing appointments</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant notifications</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>NDA workflow for confidential listings</span></div>
+        </div>
+        <button class="price-cta" onclick="showToast('Opening listing form...')">List Now — $7.50/mo</button>
+        <div class="price-fine">Private sellers. Cancel anytime. Zero commission.</div>
+      </div>
+      <div class="price-card popular">
+        <div class="price-tier">Business Broker</div>
+        <div class="price-amount">$3</div>
+        <div class="price-period">per listing / per month</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">11 – 2,000 listings</div>
+        <div class="price-features">
+          <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full business detail page with financials</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>📅 Viewing appointments</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant notifications</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>NDA workflow for confidential listings</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>🔄 Auto-sync from CRM / portal</strong></span></div>
+        </div>
+        <button class="price-cta" onclick="showToast('Opening listing form...')">List Now — $3/mo per listing</button>
+        <div class="price-fine">Brokers &amp; M&A advisors. Cancel anytime. Zero commission.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amount">$2</div>
+        <div class="price-period">per listing / per month</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">2,000+ listings</div>
+        <div class="price-features">
+          <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full business detail page with financials</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>📅 Viewing appointments</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant notifications</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span>NDA workflow for confidential listings</span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>🔄 Auto-sync from CRM / portal</strong></span></div>
+          <div class="price-feat"><div class="ico">✓</div><span><strong>Dedicated account manager</strong></span></div>
+        </div>
+        <button class="price-cta" onclick="showToast('Opening listing form...')">List Now — $2/mo per listing</button>
+        <div class="price-fine">Large broker networks &amp; portals. Cancel anytime.</div>
+      </div>
+    </div>
+    <div style="max-width:1000px;margin:24px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center;font-size:0.82rem">
+      <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>5 listings</strong> = $37.50/mo</div>
+      <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>100 listings</strong> = $300/mo</div>
+      <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>3,000 listings</strong> = $6,000/mo</div>
+    </div>
+    <div class="note" style="max-width:700px;margin:16px auto 0;text-align:center;background:var(--nb-snow);border:1px solid var(--nb-border);color:var(--nb-muted)">All prices in USD. Zero commission on sales. No setup fees. No contracts. Identical features across all tiers. Business and property listings share the same pricing structure.</div>
+    <div class="note success" style="max-width:700px;margin:12px auto 0;text-align:center"><strong>🤝 Business Brokers:</strong> Sign our <a href="06-business-partnership-sign.html"><strong>Business Broker Partnership Agreement</strong></a> online — same terms and conditions as the real estate agency partnership, customised for business brokers and M&A advisors.</div>
+  </div></div>
+
+  <!-- ═══ 7. UNIVERSAL LISTING FORM ═══ -->
+  <div class="section" id="listingForm"><div class="section-inner">
+    <h2 class="section-title">📝 List Your Business Online</h2>
+    <p class="section-sub">Fill in the form below. Your listing goes live after payment and approval. Or auto-sync from your CRM instead.</p>
+    <div class="form-wrap">
+      <div class="form-steps">
+        <div class="form-step active" onclick="showFormStep(0,this)">1. Business Details</div>
+        <div class="form-step" onclick="showFormStep(1,this)">2. Financials</div>
+        <div class="form-step" onclick="showFormStep(2,this)">3. Photos &amp; Description</div>
+        <div class="form-step" onclick="showFormStep(3,this)">4. Review &amp; Pay</div>
+      </div>
+      <div class="form-body">
+        <!-- STEP 1: Business Details -->
+        <div class="f-section active" id="fs-0">
+          <div class="f-divider" style="border-top:none;margin-top:0;padding-top:0">Business Information</div>
+          <div class="f-row">
+            <div class="f-group"><label>Business Name <span class="req">*</span></label><input type="text" placeholder="e.g. Blue Ocean Restaurant"></div>
+            <div class="f-group"><label>Business Sector <span class="req">*</span></label><select><option value="">Select sector</option><option>Restaurant & Food Service</option><option>Retail & Commerce</option><option>Technology & Services</option><option>Professional Services</option><option>Hospitality & Tourism</option><option>Franchise</option><option>Healthcare & Medical</option><option>Automotive</option><option>Agriculture & Farming</option><option>Manufacturing</option><option>Other</option></select></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Sub-Sector</label><select><option value="">Select sub-sector</option><option>Fine Dining</option><option>Casual Dining</option><option>Fast Food / QSR</option><option>Café / Coffee Shop</option><option>Bar / Lounge</option><option>Cloud Kitchen</option><option>Catering</option><option>Other</option></select></div>
+            <div class="f-group"><label>Asking Price <span class="req">*</span></label><input type="text" placeholder="e.g. $450,000"></div>
+          </div>
+          <div class="f-divider">Location</div>
+          <div class="f-row">
+            <div class="f-group"><label>Country <span class="req">*</span></label><select><option>South Africa</option><option>United Kingdom</option><option>UAE</option><option>Portugal</option><option>Spain</option><option>Australia</option><option>USA</option><option>France</option><option>Switzerland</option><option>Singapore</option><option>Other</option></select></div>
+            <div class="f-group"><label>City / Region <span class="req">*</span></label><input type="text" placeholder="e.g. Cape Town, Western Cape"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Address (optional — hidden until NDA)</label><input type="text" placeholder="Will not show publicly"></div>
+            <div class="f-group"><label>Year Established <span class="req">*</span></label><input type="number" placeholder="e.g. 2015"></div>
+          </div>
+          <div class="f-divider">Operations</div>
+          <div class="f-row">
+            <div class="f-group"><label>Number of Employees <span class="req">*</span></label><input type="number" placeholder="e.g. 25"></div>
+            <div class="f-group"><label>Operating Hours</label><input type="text" placeholder="e.g. Mon-Sat 7am-10pm"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Lease / Ownership</label><select><option>Leasehold</option><option>Owner-Operated</option><option>Management Run</option></select></div>
+            <div class="f-group"><label>Lease Remaining</label><input type="text" placeholder="e.g. 5 years + renewal option"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Monthly Rent (if leased)</label><input type="text" placeholder="e.g. $4,500/mo"></div>
+            <div class="f-group"><label>Premises Size</label><input type="text" placeholder="e.g. 350 m²"></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="f-btn primary" onclick="showFormStep(1)">Next: Financials →</button></div>
+        </div>
+
+        <!-- STEP 2: Financials -->
+        <div class="f-section" id="fs-1">
+          <div class="f-divider" style="border-top:none;margin-top:0;padding-top:0">Financial Overview</div>
+          <div class="f-row">
+            <div class="f-group"><label>Annual Revenue / Turnover <span class="req">*</span></label><input type="text" placeholder="e.g. $1,200,000"></div>
+            <div class="f-group"><label>Net Profit (Annual) <span class="req">*</span></label><input type="text" placeholder="e.g. $280,000"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>EBITDA (if available)</label><input type="text" placeholder="e.g. $320,000"></div>
+            <div class="f-group"><label>Gross Profit Margin</label><input type="text" placeholder="e.g. 62%"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label>Stock / Inventory Value</label><input type="text" placeholder="e.g. $45,000 (included in price)"></div>
+            <div class="f-group"><label>Fixtures &amp; Equipment Value</label><input type="text" placeholder="e.g. $120,000 (included)"></div>
+          </div>
+          <div class="f-divider">Reason for Sale</div>
+          <div class="f-row" style="grid-template-columns:1fr">
+            <div class="f-group"><label>Reason for Sale <span class="req">*</span></label><select><option>Retirement</option><option>Relocation</option><option>Other Business Interests</option><option>Health Reasons</option><option>Partnership Dissolution</option><option>Growth — Need Investment</option><option>Other</option></select></div>
+          </div>
+          <div class="note info"><strong>💡 Confidentiality:</strong> Financial details can be set to <strong>"Available after NDA"</strong> — buyers must sign a non-disclosure agreement before viewing sensitive financials. Toggle this per field in your dashboard after listing.</div>
+          <div style="display:flex;justify-content:space-between;margin-top:16px">
+            <button class="f-btn outline" onclick="showFormStep(0)">← Back</button>
+            <button class="f-btn primary" onclick="showFormStep(2)">Next: Photos →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Photos & Description -->
+        <div class="f-section" id="fs-2">
+          <div class="f-divider" style="border-top:none;margin-top:0;padding-top:0">Photos &amp; Video</div>
+          <div style="border:2px dashed var(--nb-border);border-radius:var(--radius2);padding:32px;text-align:center;cursor:pointer;background:var(--nb-snow);margin-bottom:14px" onclick="showToast('File picker — select up to 30 photos')">
+            <div style="font-size:2rem;margin-bottom:8px">📸</div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--nb-muted)">Click or drag up to 30 photos</div>
+            <div style="font-size:0.75rem;color:var(--nb-muted);margin-top:4px">JPG, PNG, WebP — max 5 MB each</div>
+          </div>
+          <div style="border:2px dashed var(--nb-border);border-radius:var(--radius2);padding:20px;text-align:center;cursor:pointer;background:var(--nb-snow);margin-bottom:14px" onclick="showToast('Video upload — 1 video allowed')">
+            <div style="font-size:1.5rem;margin-bottom:4px">🎬</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted)">Upload 1 video (optional) — MP4, max 100 MB</div>
+          </div>
+          <div class="f-divider">Business Description</div>
+          <div class="f-group" style="margin-bottom:14px"><label>Headline / Title <span class="req">*</span></label><input type="text" placeholder="e.g. Award-Winning Restaurant in Cape Town's Premier Dining District"></div>
+          <div class="f-group" style="margin-bottom:14px"><label>Full Description <span class="req">*</span></label><textarea rows="6" placeholder="Describe the business, its history, competitive advantages, growth potential, and what makes it attractive to buyers..."></textarea></div>
+          <div class="f-group" style="margin-bottom:14px"><label>Key Highlights (comma-separated)</label><input type="text" placeholder="e.g. Fully licensed, Experienced staff, 5-star reviews, Prime location"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:16px">
+            <button class="f-btn outline" onclick="showFormStep(1)">← Back</button>
+            <button class="f-btn primary" onclick="showFormStep(3)">Next: Review →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Review & Pay -->
+        <div class="f-section" id="fs-3">
+          <div style="text-align:center;padding:20px 0">
+            <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
+            <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:6px">Review Your Listing</h3>
+            <p style="font-size:0.88rem;color:var(--nb-muted);margin-bottom:20px;line-height:1.6">Your business listing is ready to submit. After payment, our team reviews it within 24 hours. Once approved, it goes live across 185 countries.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto 20px;text-align:left;font-size:0.85rem">
+              <div style="padding:10px;background:var(--nb-snow);border-radius:var(--radius3);border:1px solid var(--nb-border)"><strong>Plan:</strong> Private Seller</div>
+              <div style="padding:10px;background:var(--nb-snow);border-radius:var(--radius3);border:1px solid var(--nb-border)"><strong>Fee:</strong> $7.50/mo</div>
+              <div style="padding:10px;background:var(--nb-snow);border-radius:var(--radius3);border:1px solid var(--nb-border)"><strong>Photos:</strong> Up to 30</div>
+              <div style="padding:10px;background:var(--nb-snow);border-radius:var(--radius3);border:1px solid var(--nb-border)"><strong>Commission:</strong> 0%</div>
+            </div>
+            <button class="f-btn primary" style="width:100%;max-width:400px;margin:0 auto;display:block" onclick="showToast('Redirecting to payment... Listing submitted!')">💳 Pay &amp; Submit for Review</button>
+            <div style="font-size:0.75rem;color:var(--nb-muted);margin-top:8px">Listing goes live within 24 hours of payment and approval.</div>
+          </div>
+          <div style="display:flex;justify-content:flex-start;margin-top:16px"><button class="f-btn outline" onclick="showFormStep(2)">← Back</button></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- ═══ 8. WHAT HAPPENS AFTER PAYMENT ═══ -->
+  <div class="section dark" id="afterPayment"><div class="section-inner">
+    <h2 class="section-title">What Happens After Payment</h2>
+    <p class="section-sub">Your listing goes through a quick review and then goes live across 185 countries.</p>
+    <div class="flow-grid">
+      <div class="step-card"><div class="step-num">1</div><h3>Payment Confirmed</h3><p>You receive a confirmation email with your invoice and listing reference number.</p></div>
+      <div class="step-card"><div class="step-num">2</div><h3>Team Reviews</h3><p>Our team reviews your listing within 24 hours for quality and completeness.</p></div>
+      <div class="step-card"><div class="step-num">3</div><h3>Goes Live</h3><p>Your listing is published across 185 countries. Buyers can view, enquire, and request viewings.</p></div>
+      <div class="step-card"><div class="step-num">4</div><h3>You Get Notified</h3><p>Enquiries, viewing requests, and milestones pushed to you via email, WhatsApp, and dashboard.</p></div>
+      <div class="step-card"><div class="step-num">5</div><h3>Track Performance</h3><p>Full analytics — views, enquiries, buyer countries, CTR, and saves. See what's working.</p></div>
+    </div>
+  </div></div>
+
+  <!-- ═══ 9. FAQ ═══ -->
+  <div class="section alt" id="faq"><div class="section-inner" style="max-width:800px">
+    <h2 class="section-title">Business Listing FAQ</h2>
+    <p class="section-sub">Common questions about listing a business for sale on PropertyFinder.</p>
+    <details class="faq" open><summary>Is this the same system as property listings?</summary><div class="faq-body">Yes — business listings and property listings share the same platform, same pricing ($7.50 / $3.00 / $2.00 per listing), same payment system, same analytics, same notifications, and same 185-country buyer exposure. The only difference is the listing form — it has specialised fields for business financials (turnover, EBITDA, employees, etc.) instead of property fields (bedrooms, bathrooms, etc.).</div></details>
+    <details class="faq"><summary>Can I auto-sync from my existing CRM?</summary><div class="faq-body">Yes. We support direct API sync with BizBuySell, BusinessesForSale.com, Tupelo CRM, DealRelations, Deal Studio, Business Brokers CRM, and many more. We can also scrape your own broker website with your permission. If your system has an export function or API, we can connect it — usually within 48 hours.</div></details>
+    <details class="faq"><summary>How do I protect confidential financials?</summary><div class="faq-body">You can set any financial field to <strong>"Available after NDA"</strong> in your dashboard. Buyers must digitally sign a non-disclosure agreement before they can view sensitive data like revenue, profit, customer lists, or exact address. The NDA workflow is built into PropertyFinder — no external tools needed.</div></details>
+    <details class="faq"><summary>What business sectors do you support?</summary><div class="faq-body">All major sectors: Restaurants &amp; Food, Retail &amp; Commerce, Technology, Professional Services, Hospitality &amp; Tourism, Franchises, Healthcare &amp; Medical, Automotive, Agriculture &amp; Farming, and Manufacturing. Each sector has specialised listing fields and badges. If your sector isn't listed, choose "Other" and describe it in the form.</div></details>
+    <details class="faq"><summary>Do you charge commission on sales?</summary><div class="faq-body">No. PropertyFinder charges zero commission on any sale. You pay only the flat listing fee ($7.50, $3.00, or $2.00 per listing per month depending on volume). Your buyer-broker relationship and fee structure remain entirely your own.</div></details>
+    <details class="faq"><summary>Can I list a business for auction?</summary><div class="faq-body">Yes. Any business listing can also be listed for online auction. Set your reserve price, choose the auction duration (3, 5, 7, or 14 days), and let verified buyers bid competitively. Same auction system as property — real-time bidding, anti-sniping, auto-bid, and instant notifications.</div></details>
+    <details class="faq"><summary>What payment methods do you accept?</summary><div class="faq-body">Visa, Mastercard, American Express, PayPal, Instant EFT (South Africa via PayFast), bank transfer (SWIFT/SEPA), Apple Pay, and Google Pay. All payments are processed securely via Stripe (PCI DSS Level 1). See our <a href="20-payment-system.html">Payment System</a> page for details.</div></details>
+    <details class="faq"><summary>How quickly does my listing go live?</summary><div class="faq-body">After payment, our team reviews your listing within <strong>24 hours</strong>. Once approved, it goes live instantly across 185 countries. Auto-synced listings from CRMs can be bulk-approved — all your listings can be live within minutes of approval.</div></details>
+  </div></div>
+
+  <!-- CTA -->
+  <div class="section"><div class="section-inner">
+    <div class="cta-box">
+      <h2>Ready to List Your Business?</h2>
+      <p>Fill in the online form, auto-sync from your CRM, or contact our team. Same features and pricing as property listings — reach buyers in 185 countries.</p>
+      <div class="btn-row">
+        <a class="cta-btn primary" href="#listingForm">📝 List Online Now</a>
+        <a class="cta-btn outline" href="06-business-partnership-sign.html">✍️ Sign Partnership Agreement</a>
+        <a class="cta-btn outline" href="#autoSync">🔄 Auto-Sync My CRM</a>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="footer">© <span id="y"></span> PropertyFinder. Business listings: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a786f6973747f69695a6a68756a7f686e637c73747e7f6834797577">[email&#160;protected]</a> | <a href="20-payment-system.html">Payments</a> | <a href="terms-of-use.html">Terms</a> | <a href="privacy-policy.html">Privacy</a></div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    function showToast(m){const e=document.querySelector('.pf-toast');if(e)e.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+
+    function showFormStep(idx, el){
+      document.querySelectorAll('.f-section').forEach(s=>s.classList.remove('active'));
+      document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+      document.getElementById('fs-'+idx).classList.add('active');
+      document.querySelectorAll('.form-step')[idx].classList.add('active');
+    }
+
+    // ═══ SECTOR DATA — all 10 sectors with sub-categories ═══
+    const SECTORS = [
+      {ico:'🍽️',name:'Restaurants & Food Service',link:'business-restaurants.html',
+        subs:['Fine Dining','Casual Dining','Fast Food / QSR','Café / Coffee Shop','Bar & Lounge','Bakery & Patisserie','Catering Company','Cloud Kitchen / Ghost Kitchen','Food Truck / Mobile','Butchery / Deli']},
+      {ico:'🛒',name:'Retail & Commerce',link:'business-retail.html',
+        subs:['Fashion & Apparel','Electronics & Tech','Grocery & Supermarket','Convenience Store','E-Commerce / Online','Home & Garden','Beauty & Cosmetics','Sporting Goods','Bookstore & Stationery','Pet Store','Florist','Wholesale / Distribution']},
+      {ico:'💻',name:'Technology & Services',link:'business-tech.html',
+        subs:['SaaS / Software','Web Agency / Digital','IT Support & Managed Services','App Development','Digital Marketing Agency','Cybersecurity','Cloud Services','AI & Data Analytics','Telecoms / ISP','E-Learning / EdTech']},
+      {ico:'💼',name:'Professional Services',link:'business-tech.html',
+        subs:['Accounting & Tax','Legal Practice','Consulting Firm','Recruitment Agency','Insurance Brokerage','Financial Advisory','Architecture / Engineering','Marketing Agency']},
+      {ico:'🏨',name:'Hospitality & Tourism',link:'business-hospitality.html',
+        subs:['Hotel / Boutique Hotel','Lodge / Safari Lodge','Guest House / B&B','Resort / Spa','Backpackers / Hostel','Tour Operator','Travel Agency','Conference & Event Venue','Wedding Venue','Eco Lodge / Glamping']},
+      {ico:'🏭',name:'Franchises',link:'business-franchise.html',
+        subs:['Food & Beverage Franchise','Retail Franchise','Service Franchise','Fitness & Gym','Cleaning & Maintenance','Automotive Franchise','Education & Tutoring','Pet Care & Grooming','Beauty & Wellness','Home Services']},
+      {ico:'🏥',name:'Healthcare & Medical',link:'business-healthcare.html',
+        subs:['Pharmacy / Dispensary','Dental Practice','Medical Clinic','Optometry','Veterinary Practice','Physiotherapy','Wellness Centre / Spa','Pathology Lab','Home Care / Aged Care','Dermatology / Aesthetics']},
+      {ico:'🔧',name:'Automotive',link:'business-automotive.html',
+        subs:['Car Dealership','Workshop / Mechanic','Panel Beating & Spray','Tyre & Fitment','Auto Parts & Accessories','Car Wash / Detailing','Vehicle Rental','Fleet Management']},
+      {ico:'🌾',name:'Agriculture & Farming',link:'business-agriculture.html',
+        subs:['Dairy Farm','Wine / Vineyard','Livestock Farm','Crop / Grain Farm','Poultry Farm','Fruit & Vegetable','Aquaculture / Fish Farm','Game Farm / Hunting','Abattoir / Processing']},
+      {ico:'⚙️',name:'Manufacturing & Industrial',link:'business-manufacturing.html',
+        subs:['Food & Beverage Manufacturing','Textile & Garment','Plastics & Packaging','Metal & Fabrication','Wood & Furniture','Chemical / Pharmaceutical','Printing & Signage','Construction Materials']}
+    ];
+
+    // Render summary pills
+    document.getElementById('summaryPills').innerHTML = SECTORS.map(s =>
+      '<span style="padding:4px 10px;border-radius:4px;background:rgba(255,255,255,0.12);font-size:0.7rem;font-weight:700">'+s.ico+' '+s.subs.length+' types</span>'
+    ).join('');
+
+    // Render expandable sector cards
+    // Render big sector buttons
+    document.getElementById('sectorBtnGrid').innerHTML = SECTORS.map(function(s){
+      return '<a class="sector-btn" href="'+s.link+'">' +
+        '<span class="sb-ico">'+s.ico+'</span>' +
+        '<span class="sb-name">'+s.name+'</span>' +
+        '<span class="sb-count">Browse listings →</span>' +
+        '</a>';
+    }).join('');
+
+    // Render sector button grid (big clickable buttons)
+    document.getElementById('sectorBtnGrid').innerHTML = SECTORS.map(function(s){
+      return '<a class="sector-btn" href="'+s.link+'">' +
+        '<span class="sb-ico">'+s.ico+'</span>' +
+        '<span class="sb-name">'+s.name+'</span>' +
+        '<span class="sb-count">'+s.subs.length+' categories →</span>' +
+        '</a>';
+    }).join('');
+
+    // Render expandable accordion below
+    document.getElementById('sectorGrid').innerHTML = SECTORS.map(function(s,i){
+      return '<div class="sector-card" id="sec-'+i+'">' +
+        '<div class="sector-head" onclick="toggleSector('+i+')">' +
+          '<div class="sh-ico">'+s.ico+'</div>' +
+          '<div class="sh-info"><div class="sh-title">'+s.name+'</div><div class="sh-count">'+s.subs.length+' sub-categories</div></div>' +
+          '<div class="sh-arrow">▸</div>' +
+        '</div>' +
+        '<div class="sector-body">' +
+          '<div class="sub-grid">'+s.subs.map(function(sub){return '<span class="sub-tag">'+sub+'</span>';}).join('')+'</div>' +
+          '<a class="sector-link" href="'+s.link+'">Browse '+s.name+' listings →</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    function toggleSector(i){
+      var card = document.getElementById('sec-'+i);
+      var wasOpen = card.classList.contains('open');
+      document.querySelectorAll('.sector-card').forEach(function(c){c.classList.remove('open');});
+      if(!wasOpen) card.classList.add('open');
+    }
+
+    // ── Language dropdown ──
+    function pfToggleLang(e){
+      e.stopPropagation();
+      document.getElementById('pfLangDrop').classList.toggle('open');
+    }
+    function pfSetLang(code,flag,name,el){
+      document.getElementById('pfLangDrop').classList.remove('open');
+      var cur = document.getElementById('pfLangCurrent');
+      if(cur){
+        cur.querySelector('img').src = 'https://flagcdn.com/w40/'+flag+'.png';
+        cur.querySelector('span').textContent = name;
+      }
+      document.querySelectorAll('.pf-lang-opt').forEach(function(o){o.classList.remove('pf-lang-active');});
+      el.classList.add('pf-lang-active');
+    }
+    document.addEventListener('click', function(e){
+      var drop = document.getElementById('pfLangDrop');
+      var lang = document.getElementById('pfLang');
+      if(drop && lang && !lang.contains(e.target)){
+        drop.classList.remove('open');
+      }
+    });
+
+    function showToast(m){
+      var e=document.querySelector('.pf-toast');
+      if(e)e.remove();
+      var t=document.createElement('div');
+      t.className='pf-toast';
+      t.textContent=m;
+      document.body.appendChild(t);
+      setTimeout(function(){t.remove();},3200);
+    }
+
+    function showFormStep(idx){
+      document.querySelectorAll('.f-section').forEach(function(s){s.classList.remove('active');});
+      var sections = document.querySelectorAll('.f-section');
+      if(sections[idx]) sections[idx].classList.add('active');
+      document.querySelectorAll('.form-step').forEach(function(s,i){
+        s.classList.toggle('active', i===idx);
+      });
+    }
+
+</script>
+
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:20px;font-family:Inter,system-ui,sans-serif;font-size:0.85rem;margin-top:40px;">
+  <span id="y"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#D4AF77;">Terms</a> |
+  <a href="privacy-policy.html" style="color:#D4AF77;">Privacy</a> |
+  <a href="anti-fraud.html" style="color:#D4AF77;">Anti-Fraud</a>
+</footer>
+<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+  <script src="/social-share.js" defer></script>
+  <script src="/search-filter.js" defer></script>
+</body>
+</html>

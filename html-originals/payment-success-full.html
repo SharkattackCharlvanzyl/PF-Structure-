@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Payment Successful — PropertyFinder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#141c2b;--card:#1a2535;--gold:#c4a47c;--gold2:#b8976a;--cream:#e8dfc8;--muted:rgba(232,223,200,0.5);--border:rgba(196,164,124,0.2);--font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--cream);-webkit-font-smoothing:antialiased}
+    .hero{background:linear-gradient(160deg,#0e1520 0%,#141c2b 60%,#111828 100%);padding:56px 24px 44px;text-align:center}
+    .check-wrap{width:86px;height:86px;border-radius:50%;background:rgba(100,180,60,0.15);border:3px solid rgba(100,180,60,0.5);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;animation:popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+    @keyframes popIn{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+    .check-icon{font-size:2.4rem;color:#7dc455}
+    .hero h1{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,2.6rem);color:var(--gold);margin-bottom:12px}
+    .hero-sub{font-size:0.95rem;color:var(--muted);max-width:500px;margin:0 auto 16px;line-height:1.6}
+    .hero-sub strong{color:var(--gold)}
+    .ref-badge{display:inline-block;background:rgba(196,164,124,0.08);border:1px solid var(--border);border-radius:20px;padding:5px 16px;font-size:0.75rem;color:rgba(232,223,200,0.4);font-family:monospace}
+    main{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+    .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+    .sec-title{font-family:var(--font-d);font-size:1rem;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .rcols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+    @media(max-width:560px){.rcols{grid-template-columns:1fr}}
+    .rcol{padding:0 20px}
+    .rcol:first-child{padding-left:0;border-right:1px solid var(--border);padding-right:20px}
+    .rcol:last-child{padding-left:20px;padding-right:0}
+    @media(max-width:560px){.rcol{padding:0;border-right:none}}
+    .rrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(196,164,124,0.07)}
+    .rrow:last-child{border-bottom:none}
+    .rlbl{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em}
+    .rval{font-size:0.9rem;color:var(--cream);font-weight:600;text-align:right}
+    .rval.big{font-family:var(--font-d);font-size:1.2rem;color:var(--gold)}
+    .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .abtn{flex:1;min-width:150px;padding:13px 16px;border-radius:10px;font-weight:700;font-size:0.85rem;cursor:pointer;border:none;font-family:var(--font);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}
+    .abtn.primary{background:var(--gold);color:#1a1408}.abtn.primary:hover{background:var(--gold2)}
+    .abtn.secondary{background:rgba(196,164,124,0.08);color:var(--cream);border:1px solid var(--border)}.abtn.secondary:hover{background:rgba(196,164,124,0.15)}
+    .share-grid{display:flex;gap:10px;flex-wrap:wrap}
+    .sbtn{flex:1;min-width:72px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 8px;border-radius:10px;border:1px solid var(--border);background:rgba(196,164,124,0.04);cursor:pointer;font-family:var(--font);transition:all 0.18s}
+    .sbtn:hover{background:rgba(196,164,124,0.12);border-color:rgba(196,164,124,0.4);transform:translateY(-2px)}
+    .sbtn-ico{font-size:1.3rem}
+    .sbtn-lbl{font-size:0.68rem;color:var(--muted);font-weight:600}
+    .steps{display:flex;flex-direction:column}
+    .step{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-bottom:1px solid rgba(196,164,124,0.07)}
+    .step:last-child{border-bottom:none}
+    .snum{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0}
+    .snum.done{background:rgba(100,180,60,0.12);border:1px solid rgba(100,180,60,0.4);color:#7dc455}
+    .snum.todo{background:rgba(196,164,124,0.08);border:1px solid var(--border);color:var(--gold)}
+    .stxt strong{display:block;font-size:0.88rem;color:var(--cream);margin-bottom:2px}
+    .stxt span{font-size:0.78rem;color:var(--muted);line-height:1.4}
+    .cta-sec{text-align:center;padding:28px 0 0}
+    .cbtn{display:inline-block;background:var(--gold);color:#1a1408;padding:15px 40px;border-radius:10px;font-weight:800;font-size:0.95rem;text-decoration:none;font-family:var(--font);border:none;cursor:pointer}
+    .cbtn:hover{background:var(--gold2)}
+    .ctxt{font-size:0.78rem;color:rgba(232,223,200,0.3);margin-top:10px}
+    .ctxt strong{color:var(--gold)}
+    .email-status{background:rgba(100,180,60,0.08);border:1px solid rgba(100,180,60,0.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;font-size:0.82rem;color:#7dc455;text-align:center;display:none}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 22px;font-size:0.85rem;color:var(--cream);transition:transform 0.3s;z-index:9999;white-space:nowrap;pointer-events:none}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    footer{background:#0e1520;padding:20px;text-align:center;color:rgba(232,223,200,0.35);font-size:0.75rem}
+    footer a{color:var(--gold);text-decoration:none}
+  </style>
+</head>
+<body>
+<nav class="pf-nav" id="pfNav"></nav>
+
+<div class="hero">
+  <div class="check-wrap"><div class="check-icon">✓</div></div>
+  <h1>Payment Successful!</h1>
+  <p class="hero-sub" id="heroSub">Your listing subscription is now active.</p>
+  <div class="ref-badge" id="heroBadge">Processing...</div>
+</div>
+
+<main>
+
+  <div class="email-status" id="emailStatus"></div>
+
+  <div class="sec">
+    <div class="sec-title">🧾 Payment Receipt</div>
+    <div class="rcols">
+      <div class="rcol">
+        <div class="rrow"><span class="rlbl">Plan</span><span class="rval" id="rPlan">—</span></div>
+        <div class="rrow"><span class="rlbl">Listings</span><span class="rval" id="rListings">—</span></div>
+        <div class="rrow"><span class="rlbl">Price Per Listing</span><span class="rval" id="rPPL">—</span></div>
+        <div class="rrow"><span class="rlbl">Total Monthly</span><span class="rval big" id="rTotal">—</span></div>
+      </div>
+      <div class="rcol">
+        <div class="rrow"><span class="rlbl">Customer</span><span class="rval" id="rName">—</span></div>
+        <div class="rrow"><span class="rlbl">Email</span><span class="rval" id="rEmail">—</span></div>
+        <div class="rrow"><span class="rlbl">Date & Time</span><span class="rval" id="rDate">—</span></div>
+        <div class="rrow"><span class="rlbl">Currency</span><span class="rval" id="rCur">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button id="btnInvoice" onclick="openInvoice()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 16px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:150px;font-family:inherit">View &amp; Download Invoice</button>
+    <button id="btnAgreement" onclick="openAgreement()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 16px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:150px;font-family:inherit" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 16px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:150px;font-family:inherit;display:none">View Signed Agreement</button>
+    <button onclick="resendEmail()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 16px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:150px;font-family:inherit">Email Invoice Again</button>
+    <button onclick="window.print()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 16px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:150px;font-family:inherit">Print</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">📢 Share Your Success</div>
+    <div class="share-grid">
+      <button onclick="shareWA()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">WA</span><span>WhatsApp</span></button>
+      <button onclick="shareEm()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">@</span><span>Email</span></button>
+      <button onclick="shareLI()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">in</span><span>LinkedIn</span></button>
+      <button onclick="shareTW()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">X</span><span>Twitter/X</span></button>
+      <button onclick="shareFB()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">f</span><span>Facebook</span></button>
+      <button onclick="copyInv()" style="background:#c4a47c;color:#1a1408;font-weight:700;border:none;border-radius:10px;padding:13px 8px;font-size:0.68rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:72px;font-family:inherit"><span style="font-size:1.3rem">#</span><span>Copy Link</span></button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">🚀 What Happens Next?</div>
+    <div class="steps">
+      <div class="step"><div class="snum done">✓</div><div class="stxt"><strong>Payment Confirmed</strong><span>Your payment has been processed and your account is now active.</span></div></div>
+      <div class="step"><div class="snum done">✓</div><div class="stxt"><strong>Invoice Emailed</strong><span id="emailStepTxt">Invoice sent to your registered email address.</span></div></div>
+      <div class="step"><div class="snum done">✓</div><div class="stxt"><strong>SMS Confirmation</strong><span>Payment confirmation sent to your phone number.</span></div></div>
+      <div class="step"><div class="snum todo">4</div><div class="stxt"><strong>Dashboard Activated</strong><span>Your PropertyFinder dashboard is being activated. Welcome email within 1 hour.</span></div></div>
+      <div class="step"><div class="snum todo">5</div><div class="stxt"><strong>Upload Listings</strong><span>Log in, complete your profile, add properties visible in 185 countries.</span></div></div>
+      <div class="step"><div class="snum todo">6</div><div class="stxt"><strong>Go Live Globally</strong><span>Listings appear on PropertyFinder and 185 partner portals within 24 hours.</span></div></div>
+    </div>
+  </div>
+
+  <div class="cta-sec">
+    <a href="index.html" class="cbtn">Go to My Dashboard →</a>
+    <p class="ctxt">Auto-redirecting in <strong><span id="cdNum">60</span> seconds</strong></p>
+  </div>
+
+</main>
+
+<footer>
+  © <span id="yr"></span> Property Finder Pty Ltd |
+  <a href="terms-of-use.html">Terms</a> |
+  <a href="privacy-policy.html">Privacy</a> |
+  <a href="/cdn-cgi/l/email-protection#c4a5a0a9adaa84b4b6abb4a1b6b0bde9a2adaaa0a1b6eaa7abeabea5">Support</a>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ═══════════════════════════════════════
+   READ DATA INSTANTLY FROM URL PARAMS
+   No API calls needed for display
+═══════════════════════════════════════ */
+var p   = new URLSearchParams(window.location.search);
+var sid = p.get('session_id') || '';
+var D   = {
+  plan     : p.get('plan') || 'Listing Plan',
+  listings : parseInt(p.get('lst')  || '0'),
+  ppl      : parseFloat(p.get('ppl') || '0'),
+  total    : parseFloat(p.get('tot') || '0'),
+  currency : p.get('cur') || 'USD',
+  symbol   : (p.get('sym')==='USD'?'$':p.get('sym')==='ZAR'?'R':p.get('sym')||'$'),
+  name     : p.get('nm')  || 'Customer',
+  email    : p.get('em')  || '',
+  phone    : p.get('ph')  || '',
+  sessionId: sid,
+  date     : new Date().toISOString()
+};
+
+var invoiceNum = null;
+var invoiceUrl = null;
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ── Populate receipt IMMEDIATELY ── */
+(function() {
+  var sym = D.symbol;
+  set('rPlan',     D.plan);
+  set('rListings', D.listings > 0 ? D.listings.toLocaleString() + ' listings' : '—');
+  set('rPPL',      D.ppl > 0 ? sym + D.ppl.toFixed(2) + ' / listing / month' : '—');
+  set('rTotal',    D.total > 0 ? sym + D.total.toFixed(2) + ' / month' : '—');
+  set('rName',     D.name);
+  set('rEmail',    D.email || '—');
+  set('rDate',     new Date().toLocaleString('en-ZA', {dateStyle:'medium',timeStyle:'short'}));
+  set('rCur',      D.currency);
+
+  if (D.email) {
+    document.getElementById('heroSub').innerHTML = 'Your listing subscription is now active. Invoice sent to <strong>' + D.email + '</strong>.';
+    document.getElementById('emailStepTxt').textContent = 'Invoice sent to ' + D.email;
+  }
+  if (sid) {
+    document.getElementById('heroBadge').textContent = 'Ref: ' + sid.substring(0,32) + '...';
+  }
+})();
+
+/* ── Fire background processing (email + SMS + save) ── */
+/* Use sendBeacon for reliability — doesn't block page */
+if (sid) {
+  var processed = sessionStorage.getItem('pf_done_' + sid);
+  if (!processed) {
+    sessionStorage.setItem('pf_done_' + sid, '1');
+
+    /* Build form data for background post */
+    var fd = new FormData();
+    fd.append('session_id', sid);
+
+    /* Build URL with ALL data so payment-complete never needs Stripe API */
+    var pcUrl = '/api/payment-complete.php?session_id=' + encodeURIComponent(sid)
+      + '&em='  + encodeURIComponent(D.email)
+      + '&nm='  + encodeURIComponent(D.name)
+      + '&ph='  + encodeURIComponent(D.phone)
+      + '&plan='+ encodeURIComponent(D.plan)
+      + '&lst=' + D.listings
+      + '&ppl=' + D.ppl
+      + '&tot=' + D.total
+      + '&cur=' + encodeURIComponent(D.currency)
+      + '&sym=' + encodeURIComponent(D.symbol);
+
+    /* Single fetch call only — no sendBeacon to avoid duplicate SMS/email */
+    fetch(pcUrl)
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        if (d.invoiceNum) {
+          invoiceNum = d.invoiceNum;
+          invoiceUrl = '/invoice-pdf.php?inv=' + invoiceNum;
+          document.getElementById('heroBadge').textContent = 'Invoice #' + invoiceNum;
+          showEmailStatus('✅ Invoice #' + invoiceNum + ' emailed to ' + (d.email || D.email));
+        }
+      })
+      .catch(function(){
+        /* Silent fail — page already shows correct data */
+      });
+  }
+}
+
+/* ═══════════════════════════════════════
+   INVOICE OPEN
+═══════════════════════════════════════ */
+function openInvoice() {
+  /* Pass all data so PDF works immediately even before JSON is saved */
+  var url = '/invoice-pdf.php?';
+  if (invoiceNum) url += 'inv=' + invoiceNum + '&';
+  if (sid) url += 'session_id=' + encodeURIComponent(sid) + '&';
+  url += 'em=' + encodeURIComponent(D.email)
+      + '&nm=' + encodeURIComponent(D.name)
+      + '&plan=' + encodeURIComponent(D.plan)
+      + '&lst=' + D.listings
+      + '&ppl=' + D.ppl
+      + '&tot=' + D.total
+      + '&cur=' + encodeURIComponent(D.currency)
+      + '&sym=' + encodeURIComponent(D.symbol);
+  window.open(url, '_blank');
+}
+
+function resendEmail() {
+  var email = D.email;
+  if (!email) { toast('❌ No email address found. Contact admin@property-finder.co.za'); return; }
+  toast('Resending to ' + email + '...');
+  fetch('/api/send-receipt.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(D)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){ toast(d.success ? '✅ Resent to ' + email : '❌ ' + (d.error||'Failed')); })
+  .catch(function(){ toast('❌ Error. Please contact admin@property-finder.co.za'); });
+}
+
+/* ═══════════════════════════════════════
+   SHARE — invoice PDF link
+═══════════════════════════════════════ */
+function getUrl() {
+  return invoiceUrl ? 'https://property-finder.co.za' + invoiceUrl
+       : invoiceNum ? 'https://property-finder.co.za/invoice-pdf.php?inv=' + invoiceNum
+       : sid        ? 'https://property-finder.co.za/invoice-pdf.php?session_id=' + encodeURIComponent(sid)
+       : 'https://property-finder.co.za';
+}
+function getMsg() {
+  return 'Property Finder Invoice — ' + D.plan + ' Plan — ' + D.symbol + D.total.toFixed(2) + '/month\nView & Download: ' + getUrl();
+}
+function shareWA() { window.open('https://wa.me/?text='+encodeURIComponent(getMsg()),'_blank'); }
+function shareEm() { window.open('mailto:?subject='+encodeURIComponent('Property Finder Invoice')+'&body='+encodeURIComponent(getMsg()),'_blank'); }
+function shareLI() { window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(getUrl()),'_blank'); }
+function shareTW() { window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(getMsg()),'_blank'); }
+function shareFB() { window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(getUrl()),'_blank'); }
+function copyInv() { navigator.clipboard.writeText(getUrl()).then(function(){ toast('🔗 Invoice link copied!'); }); }
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function set(id, val) { var el=document.getElementById(id); if(el) el.textContent=val; }
+function showEmailStatus(msg) {
+  var el = document.getElementById('emailStatus');
+  el.textContent = msg; el.style.display = 'block';
+}
+function toast(msg) {
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },3500);
+}
+
+function getAgreementRef(){var keys=["pf_agreement_agency","pf_agreement_enterprise","pf_agreement_private_seller","pf_agreement_rental","pf_agreement_auction","pf_agreement_proval"];for(var i=0;i<keys.length;i++){try{var d=JSON.parse(localStorage.getItem(keys[i])||"{}");if(d.ref)return d.ref;}catch(e){}}return null;}
+function openAgreement(){var ref=getAgreementRef();if(ref){window.open("/agreement-pdf.php?ref="+ref,"_blank");}else{toast("No signed agreement found.");}}
+/* Countdown */
+var cd=300, cdEl=document.getElementById('cdNum');
+setInterval(function(){
+  cd--; if(cdEl) 

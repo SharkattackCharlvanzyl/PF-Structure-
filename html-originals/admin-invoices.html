@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Invoice Manager — Property Finder Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#141c2b;--card:#1a2535;--gold:#c4a47c;--gold2:#b8976a;--cream:#e8dfc8;--muted:rgba(232,223,200,0.5);--border:rgba(196,164,124,0.2);--font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+    .nav{background:#0e1520;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:var(--font-d);color:var(--gold);font-size:1rem}
+    .nav-links{display:flex;gap:10px}
+    .nav-btn{padding:7px 16px;border-radius:6px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:var(--font);border:1px solid var(--border);background:transparent;color:var(--cream);text-decoration:none;display:inline-block;transition:background 0.2s}
+    .nav-btn:hover{background:rgba(196,164,124,0.1)}
+    .nav-btn.gold{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+
+    /* PASSWORD GATE */
+    .pw-gate{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .pw-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px;max-width:400px;width:100%;text-align:center}
+    .pw-icon{font-size:2.5rem;margin-bottom:16px}
+    .pw-box h2{font-family:var(--font-d);color:var(--gold);font-size:1.3rem;margin-bottom:8px}
+    .pw-box p{color:var(--muted);font-size:0.85rem;margin-bottom:28px;line-height:1.5}
+    .pw-box input{width:100%;padding:13px 16px;background:rgba(20,28,43,0.8);border:1.5px solid var(--border);border-radius:10px;color:var(--cream);font-family:var(--font);font-size:1rem;outline:none;margin-bottom:12px;text-align:center;letter-spacing:3px;transition:border-color 0.2s}
+    .pw-box input:focus{border-color:var(--gold)}
+    .pw-box button{width:100%;padding:14px;background:var(--gold);color:#1a1408;border:none;border-radius:10px;font-weight:800;font-size:0.95rem;cursor:pointer;font-family:var(--font);transition:background 0.2s}
+    .pw-box button:hover{background:var(--gold2)}
+    .pw-error{color:#f87171;font-size:0.82rem;margin-top:10px;min-height:20px}
+
+    /* HERO */
+    .hero{background:linear-gradient(160deg,#0e1520,#141c2b);padding:36px 32px 28px;border-bottom:1px solid var(--border)}
+    .hero h1{font-family:var(--font-d);font-size:1.6rem;color:var(--gold);margin-bottom:6px}
+    .hero p{color:var(--muted);font-size:0.88rem}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 32px;border-bottom:1px solid var(--border)}
+    @media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+    .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+    .stat-lbl{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+    .stat-val{font-family:var(--font-d);font-size:1.5rem;color:var(--gold)}
+    .stat-sub{font-size:0.75rem;color:var(--muted);margin-top:3px}
+
+    /* CONTROLS */
+    .controls{display:flex;gap:12px;padding:20px 32px;flex-wrap:wrap;border-bottom:1px solid var(--border);align-items:center}
+    .search-box{flex:1;min-width:220px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-family:var(--font);font-size:0.88rem;outline:none;transition:border-color 0.2s}
+    .search-box:focus{border-color:var(--gold)}
+    .search-box::placeholder{color:var(--muted)}
+    .ctrl-select{padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-family:var(--font);font-size:0.85rem;outline:none;cursor:pointer}
+    .ctrl-btn{padding:10px 18px;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:var(--font);border:none;transition:all 0.2s;white-space:nowrap}
+    .ctrl-btn.primary{background:var(--gold);color:#1a1408}
+    .ctrl-btn.primary:hover{background:var(--gold2)}
+    .ctrl-btn.sec{background:rgba(196,164,124,0.08);color:var(--cream);border:1px solid var(--border)}
+    .ctrl-btn.sec:hover{background:rgba(196,164,124,0.15)}
+
+    /* TABLE */
+    .tbl-wrap{padding:0 32px 40px;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;margin-top:16px;min-width:900px}
+    thead tr{border-bottom:2px solid var(--border)}
+    th{padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap}
+    tbody tr{border-bottom:1px solid rgba(196,164,124,0.06);transition:background 0.15s;cursor:pointer}
+    tbody tr:hover{background:rgba(196,164,124,0.05)}
+    td{padding:13px 12px;font-size:0.84rem;color:var(--cream);vertical-align:middle}
+    .td-gold{color:var(--gold);font-weight:700;font-size:0.82rem}
+    .td-muted{color:var(--muted);font-size:0.78rem}
+    .badge-paid{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;background:rgba(100,180,60,0.12);color:#7dc455;border:1px solid rgba(100,180,60,0.3)}
+    .tbl-actions{display:flex;gap:6px;flex-wrap:nowrap}
+    .tbl-btn{padding:5px 10px;border-radius:5px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:var(--font);border:1px solid var(--border);background:transparent;color:var(--cream);white-space:nowrap;transition:all 0.15s}
+    .tbl-btn:hover{background:rgba(196,164,124,0.1)}
+    .tbl-btn.g{background:var(--gold);color:#1a1408;border-color:var(--gold)}
+    .tbl-btn.g:hover{background:var(--gold2)}
+
+    /* STATES */
+    .state-box{text-align:center;padding:56px 24px;color:var(--muted)}
+    .spin{display:inline-block;width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* MODAL */
+    .overlay{position:fixed;inset:0;background:rgba(8,12,20,0.88);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+    .overlay.on{display:flex}
+    .modal{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;position:relative;animation:slideUp 0.25s ease}
+    @keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-x{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1;transition:color 0.2s}
+    .modal-x:hover{color:var(--cream)}
+    .modal h2{font-family:var(--font-d);color:var(--gold);font-size:1.1rem;margin-bottom:6px}
+    .modal-sub{font-size:0.8rem;color:var(--muted);margin-bottom:20px}
+    .modal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(196,164,124,0.07)}
+    .modal-row:last-child{border-bottom:none}
+    .modal-k{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;margin-right:12px}
+    .modal-v{font-size:0.88rem;color:var(--cream);font-weight:600;text-align:right;word-break:break-all;max-width:65%}
+    .modal-v.big{font-family:var(--font-d);font-size:1.1rem;color:var(--gold)}
+    .modal-v.paid{color:#7dc455}
+    .modal-divider{height:1px;background:var(--border);margin:12px 0}
+    .modal-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+    .m-btn{flex:1;min-width:110px;padding:12px;border-radius:9px;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:var(--font);border:none;transition:all 0.2s;text-align:center;text-decoration:none;display:inline-block}
+    .m-btn.p{background:var(--gold);color:#1a1408}.m-btn.p:hover{background:var(--gold2)}
+    .m-btn.s{background:rgba(196,164,124,0.1);color:var(--cream);border:1px solid var(--border)}.m-btn.s:hover{background:rgba(196,164,124,0.18)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 22px;font-size:0.85rem;color:var(--cream);transition:transform 0.3s;z-index:9999;white-space:nowrap;pointer-events:none}
+    .toast.on{transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Property Finder — Invoice Manager</div>
+  <div class="nav-links">
+    <a href="admin-dashboard.html" class="nav-btn">← Dashboard</a>
+    <a href="index.html" class="nav-btn gold">Live Site</a>
+  </div>
+</nav>
+
+<!-- PASSWORD GATE -->
+<div id="pwGate" class="pw-gate">
+  <div class="pw-box">
+    <div class="pw-icon">🔐</div>
+    <h2>Invoice Manager</h2>
+    <p>Enter your admin password to access all customer invoices, download PDFs and manage payments.</p>
+    <input type="password" id="pwInput" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkPW()">
+    <button onclick="checkPW()">Access Invoices →</button>
+    <div class="pw-error" id="pwErr"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none">
+
+  <div class="hero">
+    <h1>Invoice Manager</h1>
+    <p>All customer payment invoices — view, download PDF, resend, export to CSV</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Total Invoices</div><div class="stat-val" id="sCount">—</div><div class="stat-sub">All time</div></div>
+    <div class="stat"><div class="stat-lbl">Total Revenue</div><div class="stat-val" id="sRev">—</div><div class="stat-sub">USD / month</div></div>
+    <div class="stat"><div class="stat-lbl">This Month</div><div class="stat-val" id="sMonth">—</div><div class="stat-sub">Invoices issued</div></div>
+    <div class="stat"><div class="stat-lbl">Latest Invoice</div><div class="stat-val" id="sLatest" style="font-size:0.9rem">—</div><div class="stat-sub" id="sLatestName">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" class="search-box" id="searchBox" placeholder="Search by name, email, invoice # or plan..." oninput="filter()">
+    <select class="ctrl-select" id="curFilter" onchange="filter()">
+      <option value="">All Currencies</option>
+      <option value="USD">USD</option>
+      <option value="ZAR">ZAR</option>
+    </select>
+    <button class="ctrl-btn primary" onclick="exportCSV()">📥 Export CSV</button>
+    <button class="ctrl-btn sec" onclick="load()">🔄 Refresh</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <div id="stateBox" class="state-box"><div class="spin"></div><br>Loading invoices...</div>
+    <table id="tbl" style="display:none">
+      <thead>
+        <tr>
+          <th>Invoice #</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Plan</th>
+          <th>Listings</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">×</button>
+    <h2 id="mTitle">Invoice</h2>
+    <div class="modal-sub" id="mSub"></div>
+    <div id="mBody"></div>
+    <div class="modal-actions">
+      <a class="m-btn p" id="mViewBtn" href="#" target="_blank">📄 View / Print PDF</a>
+      <button class="m-btn s" onclick="resend()">📧 Resend to Customer</button>
+      <button class="m-btn s" onclick="copyRef()">🔗 Copy Ref</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var PW = '';
+var all = [];
+var sel = null;
+
+/* ── AUTH ── */
+function checkPW() {
+  var v = document.getElementById('pwInput').value;
+  if (v === 'Texas@450') {
+    PW = v;
+    document.getElementById('pwGate').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    load();
+  } else {
+    document.getElementById('pwErr').textContent = 'Incorrect password. Please try again.';
+  }
+}
+
+/* ── LOAD ── */
+function load() {
+  showState('<div class="spin"></div><br>Loading invoices...');
+  document.getElementById('tbl').style.display = 'none';
+  fetch('/api/get-invoices.php?pw=' + encodeURIComponent(PW))
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d.success) { showState('Error loading invoices. Please refresh.'); return; }
+      all = d.invoices || [];
+      updateStats(d);
+      render(all);
+    })
+    .catch(function(){ showState('Connection error. Please refresh.'); });
+}
+
+/* ── STATS ── */
+function updateStats(d) {
+  document.getElementById('sCount').textContent = d.count || 0;
+  document.getElementById('sRev').textContent = '$' + parseFloat(d.totalUSD||0).toFixed(2);
+  var now = new Date();
+  var mo = all.filter(function(i){
+    var dt = new Date(i.createdAt||'');
+    return dt.getMonth()===now.getMonth() && dt.getFullYear()===now.getFullYear();
+  }).length;
+  document.getElementById('sMonth').textContent = mo;
+  if (all.length) {
+    document.getElementById('sLatest').textContent = '#'+all[0].invoiceNum;
+    document.getElementById('sLatestName').textContent = all[0].customerName||'—';
+  }
+}
+
+/* ── RENDER ── */
+function render(list) {
+  if (!list.length) { showState('No invoices found. Invoices appear here after customers complete payment.'); document.getElementById('tbl').style.display='none'; return; }
+  document.getElementById('stateBox').style.display = 'none';
+  document.getElementById('tbl').style.display = 'table';
+  var html = '';
+  list.forEach(function(inv) {
+    var sym  = inv.symbol||'$';
+    var tot  = parseFloat(inv.totalAmount||0).toFixed(2);
+    var lst  = inv.listings>0 ? Number(inv.listings).toLocaleString() : '—';
+    var date = inv.dateFmt || (inv.createdAt ? inv.createdAt.substring(0,10) : '—');
+    html += '<tr onclick="openModal(\''+esc(inv.invoiceNum)+'\')">';
+    html += '<td class="td-gold">'+esc(inv.invoiceNum)+'</td>';
+    html += '<td class="td-muted">'+esc(date)+'</td>';
+    html += '<td>'+esc(inv.customerName||'—')+'</td>';
+    html += '<td class="td-muted">'+esc(inv.customerEmail||'—')+'</td>';
+    html += '<td>'+esc(inv.plan||'—')+'</td>';
+    html += '<td>'+lst+'</td>';
+    html += '<td class="td-gold">'+sym+tot+'/mo</td>';
+    html += '<td>'+esc(inv.currency||'USD')+'</td>';
+    html += '<td><span class="badge-paid">✓ Paid</span></td>';
+    html += '<td><div class="tbl-actions">';
+    html += '<button class="tbl-btn g" onclick="event.stopPropagation();viewInv(\''+esc(inv.invoiceNum)+'\')">View PDF</button>';
+    html += '<button class="tbl-btn" onclick="event.stopPropagation();quickResend(\''+esc(inv.invoiceNum)+'\')">Resend</button>';
+    html += '</div></td>';
+    html += '</tr>';
+  });
+  document.getElementById('tbody').innerHTML = html;
+}
+
+/* ── FILTER ── */
+function filter() {
+  var q = document.getElementById('searchBox').value.toLowerCase();
+  var c = document.getElementById('curFilter').value;
+  render(all.filter(function(inv){
+    var mq = !q || [inv.invoiceNum,inv.customerName,inv.customerEmail,inv.plan].join(' ').toLowerCase().includes(q);
+    var mc = !c || inv.currency===c;
+    return mq && mc;
+  }));
+}
+
+/* ── OPEN MODAL ── */
+function openModal(num) {
+  sel = all.find(function(i){ return i.invoiceNum===num; });
+  if (!sel) return;
+  var sym = sel.symbol||'$';
+  document.getElementById('mTitle').textContent = 'Invoice #'+sel.invoiceNum;
+  document.getElementById('mSub').textContent = sel.customerName + ' · ' + sel.customerEmail;
+
+  var rows = [
+    ['Invoice #',       sel.invoiceNum],
+    ['Date',            sel.dateFmt||sel.createdAt||'—'],
+    ['Customer',        sel.customerName||'—'],
+    ['Email',           sel.customerEmail||'—'],
+    ['Company',         sel.customerCompany||sel.customerName||'—'],
+    ['Address',         sel.customerAddress||'—'],
+    ['Customer VAT',    sel.customerVAT||'—'],
+    ['__divider__',     ''],
+    ['Plan',            sel.plan||'—'],
+    ['Listings',        sel.listings>0 ? Number(sel.listings).toLocaleString()+' listings' : '—'],
+    ['Price/Listing',   sel.pricePerListing>0 ? sym+parseFloat(sel.pricePerListing).toFixed(4)+'/listing/mo' : '—'],
+    ['Total Monthly',   sym+parseFloat(sel.totalAmount||0).toFixed(2)+'/month', 'big'],
+    ['Currency',        sel.currency||'USD'],
+    ['Status',          '✓ PAID', 'paid'],
+    ['__divider__',     ''],
+    ['Payment Ref',     (sel.sessionId||'N/A').substring(0,40)+'...'],
+  ];
+
+  var html = '';
+  rows.forEach(function(r) {
+    if (r[0]==='__divider__') { html+='<div class="modal-divider"></div>'; return; }
+    html += '<div class="modal-row"><span class="modal-k">'+esc(r[0])+'</span>';
+    html += '<span class="modal-v'+(r[2]?' '+r[2]:'')+'">' + esc(String(r[1])) + '</span></div>';
+  });
+  document.getElementById('mBody').innerHTML = html;
+
+  /* Set PDF link */
+  var pdfLink = '/invoice-pdf.php?inv='+encodeURIComponent(sel.invoiceNum);
+  document.getElementById('mViewBtn').href = pdfLink;
+
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('on');
+  document.body.style.overflow = '';
+  sel = null;
+}
+
+/* ── VIEW PDF ── */
+function viewInv(num) {
+  window.open('/invoice-pdf.php?inv='+encodeURIComponent(num), '_blank');
+}
+
+/* ── QUICK RESEND ── */
+function quickResend(num) {
+  var inv = all.find(function(i){ return i.invoiceNum===num; });
+  if (!inv) return;
+  sel = inv;
+  resend();
+}
+
+/* ── RESEND ── */
+function resend() {
+  if (!sel || !sel.customerEmail) { toast('No email on this invoice'); return; }
+  toast('Sending invoice to '+sel.customerEmail+'...');
+  fetch('/api/send-receipt.php', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(sel)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){ toast(d.success ? '✅ Sent to '+sel.customerEmail : '❌ '+(d.error||'Failed')); })
+  .catch(function(){ toast('❌ Connection error'); });
+}
+
+/* ── COPY REF ── */
+function copyRef() {
+  if (!sel||!sel.sessionId) return;
+  navigator.clipboard.writeText(sel.sessionId)
+    .then(function(){ toast('🔗 Reference copied!'); });
+}
+
+/* ── EXPORT CSV ── */
+function exportCSV() {
+  if (!all.length) { toast('No invoices to export'); return; }
+  var rows = [['Invoice #','Date','Customer Name','Customer Email','Company','Address','Customer VAT','Plan','Listings','Price/Listing','Total/Month','Currency','Status','Payment Reference']];
+  all.forEach(function(i) {
+    rows.push([i.invoiceNum,i.dateFmt||'',i.customerName||'',i.customerEmail||'',i.customerCompany||'',i.customerAddress||'',i.customerVAT||'',i.plan||'',i.listings||0,i.pricePerListing||0,i.totalAmount||0,i.currency||'','PAID',i.sessionId||'']);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'PropertyFinder-Invoices-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('✅ CSV exported!');
+}
+
+/* ── UTILS ── */
+function showState(html) {
+  var b = document.getElementById('stateBox');
+  b.innerHTML = html;
+  b.style.display = 'block';
+  document.getElementById('tbl').style.display = 'none';
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 3500);
+}
+
+/* Close modal on overlay click */
+document.getElementById('overlay').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
+</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

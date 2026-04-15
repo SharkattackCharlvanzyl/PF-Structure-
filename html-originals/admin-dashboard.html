@@ -1,0 +1,1656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PropertyFinder — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1520;--panel:#141c2b;--card:#1a2535;--hover:#1f2d3d;
+  --gold:#c4a47c;--gold-mid:#a8845a;--gold-dim:#b8976a;
+  --cream:#e8dfc8;--mid:#c8b98a;--subtle:#8a7d5a;
+  --border:rgba(196,164,124,0.18);--border-s:rgba(196,164,124,0.4);
+  --success:#16A34A;--danger:#DC2626;--warn:#D97706;--info:#2563EB;--purple:#7C3AED;
+  --font:'DM Sans',sans-serif;--serif:'Cinzel',serif;
+  --r:12px;--r2:8px;--r3:6px;
+  --sw:260px;
+  --sh:0 2px 12px rgba(0,0,0,0.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{font-family:var(--font);background:var(--bg);color:var(--cream);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--gold);text-decoration:none}a:hover{color:var(--gold-dim)}
+input,select,textarea,button{font-family:var(--font)}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sw);background:linear-gradient(180deg,#0a1018 0%,#0e1520 100%);position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow-y:auto;border-right:1px solid var(--border);transition:transform 0.3s}
+.main{margin-left:var(--sw);flex:1;min-width:0;display:flex;flex-direction:column}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}}
+
+/* ── SIDEBAR ── */
+.sb-brand{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
+.sb-logo{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--cream);letter-spacing:0.04em}
+.sb-logo span{color:var(--gold)}
+.sb-tagline{font-size:0.65rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:0.12em;margin-top:3px}
+.sb-nav{flex:1;padding:14px 12px;overflow-y:auto}
+.sb-section-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:var(--subtle);padding:12px 10px 6px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r3);color:rgba(232,223,200,0.55);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.18s;margin-bottom:2px;position:relative;border:none;background:none;width:100%;text-align:left}
+.sb-item:hover{background:rgba(196,164,124,0.08);color:var(--cream)}
+.sb-item.active{background:var(--gold);color:#1a1408;font-weight:800}
+.sb-item.active .sb-ico{filter:none}
+.sb-ico{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--danger);color:white;padding:2px 6px;border-radius:10px;font-size:0.62rem;font-weight:800}
+.sb-badge.gold{background:var(--gold);color:#1a1408}
+.sb-badge.green{background:var(--success)}
+.sb-divider{height:1px;background:var(--border);margin:8px 12px}
+.sb-user{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold-mid),var(--gold));display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;color:#1a1408;flex-shrink:0}
+.sb-uname{font-size:0.82rem;font-weight:700;color:var(--cream)}
+.sb-urole{font-size:0.65rem;color:var(--subtle);margin-top:1px}
+.sb-toggle{display:none;position:fixed;top:14px;left:14px;z-index:300;width:40px;height:40px;border-radius:var(--r2);background:var(--card);border:1px solid var(--border);color:var(--cream);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:900px){.sb-toggle{display:flex}}
+
+/* ── TOP BAR ── */
+.top-bar{padding:14px 24px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2)}
+.tb-title{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--cream)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-search{padding:8px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);font-size:0.82rem;color:var(--cream);outline:none;width:200px;transition:border-color 0.2s}
+.tb-search:focus{border-color:var(--gold)}
+.tb-search::placeholder{color:var(--subtle)}
+.tb-btn{padding:8px 14px;border-radius:var(--r2);background:var(--gold);color:#1a1408;font-size:0.8rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s;white-space:nowrap}
+.tb-btn:hover{background:var(--gold-dim)}
+.tb-btn.outline{background:transparent;color:var(--gold);border:1.5px solid var(--border)}
+.tb-btn.outline:hover{background:rgba(196,164,124,0.1)}
+.live-clock{display:flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:700;color:var(--subtle);background:var(--card);padding:6px 12px;border-radius:var(--r2);border:1px solid var(--border);white-space:nowrap}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:blink 1.2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* ── CONTENT ── */
+.content{padding:22px 24px;flex:1}
+@media(max-width:900px){.content{padding:14px 16px}.top-bar{padding:12px 16px 12px 56px}}
+.panel{display:none}.panel.active{display:block}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{padding:16px;border-radius:var(--r2);background:var(--card);border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0.5}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sc-ico{width:36px;height:36px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.sc-trend{font-size:0.68rem;font-weight:800;padding:3px 7px;border-radius:4px}
+.sc-trend.up{background:rgba(22,163,74,0.12);color:var(--success)}
+.sc-trend.down{background:rgba(220,38,38,0.12);color:var(--danger)}
+.sc-trend.flat{background:rgba(196,164,124,0.1);color:var(--subtle)}
+.sc-val{font-family:var(--serif);font-size:1.55rem;font-weight:700;color:var(--cream);line-height:1}
+.sc-lbl{font-size:0.7rem;color:var(--subtle);font-weight:600;margin-top:4px}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r2);border:1px solid var(--border)}
+.dtable{width:100%;border-collapse:collapse;font-size:0.8rem;background:var(--card);min-width:600px}
+.dtable th{padding:10px 14px;text-align:left;font-size:0.65rem;font-weight:800;color:var(--subtle);text-transform:uppercase;letter-spacing:0.5px;background:var(--hover);border-bottom:2px solid var(--border);white-space:nowrap}
+.dtable td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--cream)}
+.dtable tr:last-child td{border-bottom:none}
+.dtable tr:hover td{background:rgba(196,164,124,0.03)}
+.dtable .total-row td{font-weight:800;background:var(--hover);border-top:2px solid var(--border);color:var(--cream)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:4px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap}
+.badge.active{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.pending{background:rgba(217,119,6,0.12);color:var(--warn)}
+.badge.rejected{background:rgba(220,38,38,0.12);color:var(--danger)}
+.badge.private{background:rgba(37,99,235,0.1);color:var(--info)}
+.badge.agent{background:rgba(196,164,124,0.12);color:var(--gold)}
+.badge.enterprise{background:rgba(139,92,246,0.1);color:var(--purple)}
+.badge.sold{background:rgba(22,163,74,0.12);color:var(--success)}
+.badge.live{background:rgba(220,38,38,0.12);color:var(--danger);animation:badgePulse 1.5s infinite}
+@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.badge.suspended{background:rgba(220,38,38,0.08);color:var(--danger)}
+.badge.resolved{background:rgba(22,163,74,0.08);color:var(--success)}
+.badge.open{background:rgba(220,38,38,0.1);color:var(--danger)}
+
+/* ── ACTION BUTTONS ── */
+.act-btn{padding:4px 10px;border-radius:4px;font-size:0.72rem;font-weight:800;border:none;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.act-btn.approve{background:rgba(22,163,74,0.1);color:var(--success)}.act-btn.approve:hover{background:var(--success);color:white}
+.act-btn.reject{background:rgba(220,38,38,0.1);color:var(--danger)}.act-btn.reject:hover{background:var(--danger);color:white}
+.act-btn.view{background:rgba(37,99,235,0.1);color:var(--info)}.act-btn.view:hover{background:var(--info);color:white}
+.act-btn.edit{background:rgba(217,119,6,0.1);color:var(--warn)}.act-btn.edit:hover{background:var(--warn);color:white}
+.act-btn.suspend{background:rgba(220,38,38,0.08);color:var(--danger)}.act-btn.suspend:hover{background:var(--danger);color:white}
+.act-btn.contact{background:rgba(196,164,124,0.1);color:var(--gold)}.act-btn.contact:hover{background:var(--gold);color:#1a1408}
+
+/* ── CARDS & SECTIONS ── */
+.card-panel{background:var(--card);border-radius:var(--r2);border:1px solid var(--border);padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+.card-panel h3{font-size:0.88rem;font-weight:800;color:var(--cream);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.sec-header h2{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--cream)}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-chip{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--subtle);transition:all 0.18s}
+.filter-chip:hover{border-color:var(--gold);color:var(--gold)}
+.filter-chip.active{background:var(--gold);border-color:var(--gold);color:#1a1408}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ── ACTIVITY FEED ── */
+.act-feed{max-height:380px;overflow-y:auto}
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.act-dot.g{background:var(--success)}.act-dot.a{background:var(--warn)}.act-dot.r{background:var(--danger)}.act-dot.b{background:var(--info)}.act-dot.p{background:var(--gold)}
+.act-text{font-size:0.8rem;color:var(--cream);line-height:1.5}
+.act-time{font-size:0.68rem;color:var(--subtle);margin-top:2px}
+
+/* ── BAR CHARTS ── */
+.bar-chart{display:flex;gap:8px;align-items:flex-end;height:140px;padding:4px 0 0}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height 0.5s ease;position:relative;min-height:3px;cursor:pointer}
+.bar:hover{opacity:0.8}
+.bar-val{font-size:0.6rem;font-weight:800;color:var(--cream);position:absolute;top:-16px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.bar-lbl{font-size:0.65rem;font-weight:700;color:var(--subtle);text-align:center}
+.bar-axis{height:1px;background:var(--border);margin-bottom:4px}
+
+/* ── PERCENT BAR ── */
+.pct-bar{height:22px;border-radius:4px;background:var(--hover);overflow:hidden;display:flex}
+.pct-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:white;min-width:0;transition:width 0.5s ease}
+
+/* ── REVENUE MEGA CARDS ── */
+.mega-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:700px){.mega-row{grid-template-columns:repeat(2,1fr)}}
+.mega-card{padding:18px 16px;border-radius:var(--r2);border:1px solid var(--border);background:var(--card);position:relative;overflow:hidden}
+.mega-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.mega-card.gold::after{background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.mega-card.green::after{background:linear-gradient(to right,transparent,var(--success),transparent)}
+.mega-card.blue::after{background:linear-gradient(to right,transparent,var(--info),transparent)}
+.mega-card.purple::after{background:linear-gradient(to right,transparent,var(--purple),transparent)}
+.mega-val{font-family:var(--serif);font-size:1.7rem;font-weight:700;color:var(--cream);line-height:1;margin-bottom:4px}
+.mega-lbl{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--subtle)}
+.mega-sub{font-size:0.7rem;color:var(--subtle);margin-top:4px}
+.mega-trend{font-size:0.72rem;font-weight:800;margin-top:8px}
+.mega-trend.up{color:var(--success)}.mega-trend.down{color:var(--danger)}
+
+/* ── APPROVAL CARDS ── */
+.appr-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px}
+.appr-card.urgent{border-color:rgba(220,38,38,0.4)}
+.appr-ico{width:44px;height:44px;border-radius:var(--r2);background:var(--hover);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.appr-info{flex:1;min-width:0}
+.appr-title{font-size:0.88rem;font-weight:800;color:var(--cream);margin-bottom:3px}
+.appr-sub{font-size:0.75rem;color:var(--subtle)}
+.appr-tag{display:inline-block;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(217,119,6,0.1);color:var(--warn);margin-top:4px}
+.appr-actions{display:flex;gap:6px;flex-shrink:0;align-items:center;flex-wrap:wrap}
+
+/* ── SUPPORT TICKETS ── */
+.ticket-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s}
+.ticket-card:hover{border-color:var(--border-s)}
+.ticket-card.urgent{border-left:3px solid var(--danger)}
+.ticket-card.normal{border-left:3px solid var(--info)}
+.ticket-card.closed{border-left:3px solid var(--success);opacity:0.7}
+.ticket-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.ticket-id{font-size:0.68rem;font-weight:800;color:var(--subtle);font-family:monospace}
+.ticket-subj{font-size:0.85rem;font-weight:700;color:var(--cream);flex:1}
+.ticket-meta{font-size:0.72rem;color:var(--subtle)}
+
+/* ── COUNTRIES GRID ── */
+.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.country-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px;transition:border-color 0.2s;cursor:pointer}
+.country-card:hover{border-color:var(--border-s)}
+.country-flag{font-size:1.6rem;margin-bottom:6px}
+.country-name{font-size:0.85rem;font-weight:800;color:var(--cream);margin-bottom:4px}
+.country-stats{font-size:0.72rem;color:var(--subtle)}
+.country-status{margin-top:6px}
+
+/* ── KPI SPARKLINES (pure CSS) ── */
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px}
+.spark-bar{flex:1;border-radius:2px 2px 0 0;background:rgba(196,164,124,0.3);min-height:3px;transition:height 0.3s}
+.spark-bar.peak{background:var(--gold)}
+
+/* ── COMMISSION CARD ── */
+.comm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:14px}
+.cc-prop{flex:1;min-width:0}
+.cc-prop h4{font-size:0.85rem;font-weight:800;color:var(--cream);margin-bottom:2px}
+.cc-prop p{font-size:0.72rem;color:var(--subtle)}
+.cc-amount{text-align:right;flex-shrink:0}
+.ca-val{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--gold)}
+.ca-date{font-size:0.68rem;color:var(--subtle);margin-top:2px}
+
+/* ── FORMS ── */
+.form-label{font-size:0.72rem;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px}
+.form-input{width:100%;padding:10px 14px;background:var(--hover);border:1.5px solid var(--border);border-radius:var(--r2);color:var(--cream);font-size:0.85rem;outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--subtle)}
+.form-row{margin-bottom:14px}
+select.form-input option{background:var(--card)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{width:100%;max-width:520px;background:var(--card);border-radius:var(--r);border:1px solid var(--border-s);box-shadow:0 24px 80px rgba(0,0,0,0.5);animation:mIn 0.3s ease}
+@keyframes mIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:18px 22px;background:var(--hover);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:1rem;font-weight:800;color:var(--cream)}
+.modal-close{width:32px;height:32px;border-radius:50%;background:rgba(196,164,124,0.1);border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--subtle)}
+.modal-body{padding:22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.modal-btn{padding:10px 20px;border-radius:var(--r2);font-size:0.85rem;font-weight:800;border:none;cursor:pointer}
+.modal-btn.cancel{background:var(--hover);color:var(--subtle)}
+.modal-btn.primary{background:var(--gold);color:#1a1408}
+.modal-btn.danger{background:var(--danger);color:white}
+.modal-btn.success{background:var(--success);color:white}
+
+/* ── TOAST ── */
+.pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--r2);color:var(--cream);font-size:0.85rem;font-weight:700;z-index:9999;background:var(--card);border:1px solid var(--border-s);box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.7s forwards;white-space:nowrap}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes toastOut{to{opacity:0}}
+
+/* ── PASSWORD GATE ── */
+.pw-gate{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#060c14 0%,#0e1520 60%,#08101a 100%);display:flex;align-items:center;justify-content:center}
+.pw-gate.unlocked{display:none}
+.pw-box{background:rgba(196,164,124,0.05);border:1px solid rgba(196,164,124,0.2);border-radius:20px;padding:48px 44px;width:100%;max-width:400px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.6)}
+.pw-lock{font-size:3rem;margin-bottom:12px;animation:lockPulse 2.5s infinite}
+@keyframes lockPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.pw-logo{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--cream);margin-bottom:3px}
+.pw-logo span{color:var(--gold)}
+.pw-sub{font-size:0.68rem;color:var(--subtle);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:32px}
+.pw-lbl{font-size:0.68rem;font-weight:800;color:var(--subtle);text-transform:uppercase;letter-spacing:0.1em;text-align:left;margin-bottom:8px}
+.pw-input{width:100%;padding:14px 18px;border-radius:10px;border:1.5px solid rgba(196,164,124,0.2);background:rgba(196,164,124,0.05);color:var(--cream);font-size:1rem;letter-spacing:0.15em;outline:none;transition:border-color 0.2s;margin-bottom:14px}
+.pw-input:focus{border-color:var(--gold)}
+.pw-input.shake{animation:shake 0.35s ease;border-color:var(--danger)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pw-btn{width:100%;padding:14px;border-radius:10px;background:var(--gold);color:#1a1408;font-size:0.95rem;font-weight:800;border:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.03em}
+.pw-btn:hover{background:var(--gold-dim);transform:translateY(-1px)}
+.pw-err{font-size:0.78rem;color:#f87171;font-weight:700;min-height:18px;margin-top:10px}
+.pw-note{margin-top:24px;font-size:0.65rem;color:rgba(232,223,200,0.2);line-height:1.7}
+
+/* ── LIVE TICKER ── */
+.live-ticker{background:var(--hover);border-radius:var(--r2);padding:10px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px;overflow:hidden;border:1px solid var(--border)}
+.lt-label{font-size:0.62rem;font-weight:800;color:var(--subtle);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.lt-track{flex:1;overflow:hidden}
+.lt-inner{display:inline-block;animation:scrollT 35s linear infinite;font-size:0.78rem;font-weight:700;color:var(--gold);white-space:nowrap}
+@keyframes scrollT{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
+
+/* ── PROVAL WEEK GRID ── */
+.pv-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:16px}
+@media(max-width:700px){.pv-week{grid-template-columns:repeat(4,1fr)}}
+.pvd{padding:12px 6px;border-radius:var(--r2);border:1px solid var(--border);background:var(--card);text-align:center}
+.pvd.today{border-color:var(--gold);background:rgba(196,164,124,0.06)}
+.pvd-day{font-size:0.6rem;font-weight:800;color:var(--subtle);text-transform:uppercase;margin-bottom:4px}
+.pvd-n{font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--cream);line-height:1}
+.pvd.today .pvd-n{color:var(--gold)}
+.pvd-r{font-size:0.68rem;font-weight:700;color:var(--success);margin-top:2px}
+
+/* ── EXPANDABLE ROWS ── */
+.expand-row{cursor:pointer}
+.expand-row td:first-child::before{content:'▸';margin-right:6px;font-size:0.68rem;color:var(--subtle);transition:transform 0.2s;display:inline-block}
+.expand-row.open td:first-child::before{transform:rotate(90deg);color:var(--gold)}
+.expand-detail{display:none;background:var(--hover)}
+.expand-detail.open{display:table-row}
+.expand-detail td{padding:0!important}
+.expand-inner{padding:12px 16px 12px 36px}
+
+/* ── ANALYTICS ── */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px 12px;text-align:center}
+.kpi-val{font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:3px}
+.kpi-lbl{font-size:0.68rem;color:var(--subtle);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold-mid);border-radius:3px}
+</style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div class="pw-gate" id="pwGate">
+  <div class="pw-box">
+    <div class="pw-lock">🔐</div>
+    <div class="pw-logo">Property<span>Finder</span></div>
+    <div class="pw-sub">Head Office · Restricted Access Only</div>
+    <div class="pw-lbl">Admin Password</div>
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••••••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Unlock Dashboard →</button>
+    <div class="pw-err" id="pwErr"></div>
+    <div class="pw-note">🔒 Restricted to PropertyFinder head office only.<br>Unauthorised access is strictly prohibited.<br>All access attempts are logged.</div>
+  </div>
+</div>
+
+<button class="sb-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">Property<span>Finder</span></div>
+    <div class="sb-tagline">Admin · Head Office</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section-label">Main</div>
+    <button class="sb-item active" onclick="showPanel('overview',this)"><span class="sb-ico">📊</span>Overview</button>
+    <button class="sb-item" onclick="showPanel('analytics',this)"><span class="sb-ico">📈</span>Analytics</button>
+    <button class="sb-item" onclick="showPanel('liverevenue',this)"><span class="sb-ico">⚡</span>Live Revenue<span class="sb-badge green">LIVE</span></button>
+
+    <div class="sb-section-label">Operations</div>
+    <button class="sb-item" onclick="showPanel('listings',this)"><span class="sb-ico">🏡</span>Listings<span class="sb-badge" id="sbPending">4</span></button>
+    <button class="sb-item" onclick="showPanel('auctions',this)"><span class="sb-ico">🔨</span>Auctions<span class="sb-badge" style="background:var(--warn)" id="sbAuctions">3</span></button>
+    <button class="sb-item" onclick="showPanel('approvals',this)"><span class="sb-ico">✅</span>Approvals<span class="sb-badge" id="sbApprovals">4</span></button>
+    <button class="sb-item" onclick="showPanel('proval',this)"><span class="sb-ico">🏠</span>ProVal</button>
+
+    <div class="sb-section-label">Finance</div>
+    <button class="sb-item" onclick="showPanel('revenue',this)"><span class="sb-ico">💰</span>Revenue</button>
+    <button class="sb-item" onclick="showPanel('payments',this)"><span class="sb-ico">💳</span>Payments</button>
+    <button class="sb-item" onclick="showPanel('ads',this)"><span class="sb-ico">📢</span>Advertising</button>
+
+    <div class="sb-section-label">People</div>
+    <button class="sb-item" onclick="showPanel('users',this)"><span class="sb-ico">👥</span>Users</button>
+    <button class="sb-item" onclick="showPanel('partnerships',this)"><span class="sb-ico">🤝</span>Partnerships</button>
+    <button class="sb-item" onclick="showPanel('support',this)"><span class="sb-ico">🎧</span>Support<span class="sb-badge" id="sbSupport">3</span></button>
+
+    <div class="sb-section-label">Platform</div>
+    <button class="sb-item" onclick="showPanel('countries',this)"><span class="sb-ico">🌍</span>Countries</button>
+    <button class="sb-item" onclick="showPanel('moderation',this)"><span class="sb-ico">🚨</span>Moderation</button>
+    <button class="sb-item" onclick="showPanel('settings',this)"><span class="sb-ico">⚙️</span>Settings</button>
+
+    <div class="sb-divider"></div>
+    <a class="sb-item" href="index.html" target="_blank"><span class="sb-ico">🌐</span>View Live Site</a>
+  </nav>
+  <div class="sb-user">
+    <div class="sb-avatar">CA</div>
+    <div><div class="sb-uname">Charl Admin</div><div class="sb-urole">Super Administrator</div></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="top-bar">
+    <div class="tb-title" id="panelTitle">📊 Overview</div>
+    <div class="tb-right">
+      <div class="live-clock"><span class="live-dot"></span><span id="liveClock">--:--:--</span></div>
+      <input class="tb-search" type="text" id="globalSearch" placeholder="🔍 Search..." oninput="handleSearch(this.value)">
+      <button class="tb-btn outline" onclick="exportCSV()">📥 Export</button>
+      <button class="tb-btn" onclick="showToast('✅ Data refreshed');initDashboard()">🔄 Refresh</button>
+    </div>
+  </div>
+  <div class="content">
+
+<!-- ══════════════════════════════════════════════════════
+     OVERVIEW
+══════════════════════════════════════════════════════ -->
+<div class="panel active" id="p-overview">
+  <div class="live-ticker">
+    <div class="lt-label"><span class="live-dot"></span>LIVE</div>
+    <div class="lt-track"><div class="lt-inner" id="tickerText">Loading live data...</div></div>
+  </div>
+  <div class="stat-grid" id="overviewStats"></div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>⏳ Pending Approvals</h3>
+      <div id="overviewPending"></div>
+      <button class="tb-btn" style="margin-top:12px;width:100%;justify-content:center" onclick="showPanel('approvals',document.querySelector('[onclick*=approvals]'))">View All Approvals →</button>
+    </div>
+    <div class="card-panel">
+      <h3>⚡ Live Activity Feed</h3>
+      <div class="act-feed" id="activityFeed"></div>
+    </div>
+  </div>
+  <div class="card-panel" style="margin-top:14px">
+    <h3>📊 Revenue — Last 6 Months</h3>
+    <div class="bar-chart" id="revenueChart"></div>
+    <div class="bar-axis"></div>
+    <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+      <span style="font-size:0.7rem;color:var(--subtle);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--gold);border-radius:2px;display:inline-block"></span>Listing Fees</span>
+      <span style="font-size:0.7rem;color:var(--subtle);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--info);border-radius:2px;display:inline-block"></span>Ad Revenue</span>
+      <span style="font-size:0.7rem;color:var(--subtle);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--success);border-radius:2px;display:inline-block"></span>Auction Commission</span>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>🗂️ Listing Type Split — This Month</h3>
+      <div id="categoryBar" style="margin-top:6px"></div>
+    </div>
+    <div class="card-panel">
+      <h3>🌍 Top Markets This Month</h3>
+      <div id="topMarkets"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ANALYTICS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-analytics">
+  <div class="kpi-row" id="analyticsKPIs"></div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>📱 Traffic by Device</h3>
+      <div id="deviceChart"></div>
+    </div>
+    <div class="card-panel">
+      <h3>🌍 Top 5 Countries by Searches</h3>
+      <div id="searchCountries"></div>
+    </div>
+  </div>
+  <div class="card-panel">
+    <h3>🔍 Most Searched Property Types — This Month</h3>
+    <div id="searchTypes"></div>
+  </div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>⏱️ Avg. Time on Platform</h3>
+      <div id="timeChart"></div>
+    </div>
+    <div class="card-panel">
+      <h3>📧 Lead Conversion Funnel</h3>
+      <div id="funnelChart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LIVE REVENUE
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-liverevenue">
+  <div class="mega-row" id="liveRevMega"></div>
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>⚡ Revenue by Hour — Today</h3>
+      <div id="hourChart"></div>
+    </div>
+    <div class="card-panel">
+      <h3>📅 vs Yesterday</h3>
+      <div id="vsYesterday"></div>
+    </div>
+  </div>
+  <div class="card-panel">
+    <h3>💰 Today's Transactions</h3>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Time</th><th>Customer</th><th>Product</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody id="todayTxBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LISTINGS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-listings">
+  <div class="stat-grid" id="listingStats"></div>
+  <div class="card-panel">
+    <h3>📈 Category Distribution — This Month</h3>
+    <div id="catPctMonth"></div>
+  </div>
+  <div class="card-panel">
+    <div class="sec-header" style="margin-bottom:12px">
+      <h3 style="margin-bottom:0">👤 Customer Listing Breakdown <span style="font-size:0.72rem;color:var(--subtle);font-weight:600">(click row to expand)</span></h3>
+      <div class="filter-bar" style="margin-bottom:0">
+        <span class="filter-chip active" onclick="filterListings('all',this)">All</span>
+        <span class="filter-chip" onclick="filterListings('private',this)">Private</span>
+        <span class="filter-chip" onclick="filterListings('agent',this)">Agency</span>
+        <span class="filter-chip" onclick="filterListings('enterprise',this)">Enterprise</span>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="dtable" id="custTable">
+      <thead><tr><th>Customer</th><th>Package</th><th>Residential</th><th>Commercial</th><th>Industrial</th><th>Farm</th><th>Business</th><th>Auction</th><th>Total</th><th>Monthly Fee</th><th>Actions</th></tr></thead>
+      <tbody id="custBody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     AUCTIONS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-auctions">
+  <div class="stat-grid" id="auctionStats"></div>
+  <div class="card-panel">
+    <h3>🔴 Active Live Auctions</h3>
+    <div id="liveAuctions"></div>
+  </div>
+  <div class="card-panel">
+    <h3>💰 Pending Commission — Awaiting Payment</h3>
+    <div id="pendingComm"></div>
+  </div>
+  <div class="card-panel">
+    <h3>✅ Completed Auctions</h3>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Property</th><th>Sold Price</th><th>Seller Commission (5%)</th><th>Buyer Commission (5%)</th><th>Total (10%)</th><th>Buyer</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="auctionHistBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     APPROVALS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-approvals">
+  <div class="sec-header">
+    <h2>✅ Approval Queue</h2>
+    <div class="filter-bar" style="margin-bottom:0">
+      <span class="filter-chip active" onclick="filterApprovals('all',this)">All</span>
+      <span class="filter-chip" onclick="filterApprovals('listing',this)">Listings</span>
+      <span class="filter-chip" onclick="filterApprovals('ad',this)">Ads</span>
+      <span class="filter-chip" onclick="filterApprovals('user',this)">Users</span>
+    </div>
+  </div>
+  <div id="approvalCards"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PROVAL
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-proval">
+  <div class="stat-grid" id="provalStats"></div>
+  <div class="card-panel">
+    <h3>📅 ProVal Reports — This Week</h3>
+    <div class="pv-week" id="provalWeek"></div>
+  </div>
+  <div class="card-panel">
+    <h3>📋 Recent ProVal Requests</h3>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Customer</th><th>Property</th><th>Country</th><th>Amount</th><th>Status</th><th>Report</th></tr></thead><tbody id="provalBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     REVENUE
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-revenue">
+  <div class="stat-grid" id="revStats"></div>
+  <div class="card-panel">
+    <h3>📊 Monthly Revenue History</h3>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Month</th><th>Listing Fees</th><th>Ad Revenue</th><th>Partnerships</th><th>Auction Commission</th><th>ProVal</th><th>Total</th><th>Growth</th></tr></thead><tbody id="revHistBody"></tbody></table></div>
+  </div>
+  <div class="card-panel">
+    <h3>📈 Revenue Trend</h3>
+    <div class="bar-chart" id="revTrendChart"></div>
+    <div class="bar-axis"></div>
+  </div>
+  <div class="three-col">
+    <div class="card-panel"><h3>💳 Payment Methods Split</h3><div id="payMethodChart"></div></div>
+    <div class="card-panel"><h3>🗓️ Revenue by Quarter</h3><div id="quarterChart"></div></div>
+    <div class="card-panel"><h3>🎯 Revenue Targets</h3><div id="targetsChart"></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAYMENTS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-payments">
+  <div class="sec-header">
+    <h2>💳 Payment Ledger</h2>
+    <div style="display:flex;gap:8px">
+      <button class="tb-btn outline" onclick="showToast('📥 Exporting payment CSV...')">📥 Export CSV</button>
+      <button class="tb-btn" onclick="showToast('📧 Invoice emails sent')">📧 Send Invoices</button>
+    </div>
+  </div>
+  <div class="stat-grid" id="payStats"></div>
+  <div class="filter-bar">
+    <span class="filter-chip active" onclick="filterPayments('all',this)">All</span>
+    <span class="filter-chip" onclick="filterPayments('stripe',this)">Stripe</span>
+    <span class="filter-chip" onclick="filterPayments('payfast',this)">PayFast</span>
+    <span class="filter-chip" onclick="filterPayments('eft',this)">EFT</span>
+    <span class="filter-chip" onclick="filterPayments('pending',this)">Pending</span>
+  </div>
+  <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Reference</th><th>Customer</th><th>Description</th><th>Amount</th><th>Method</th><th>Status</th><th>Actions</th></tr></thead><tbody id="paymentsBody"></tbody></table></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADVERTISING
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-ads">
+  <div class="stat-grid" id="adStats"></div>
+  <div class="card-panel">
+    <div class="sec-header" style="margin-bottom:12px">
+      <h3 style="margin-bottom:0">📢 Advertiser Wallets <span style="font-size:0.72rem;color:var(--subtle);font-weight:600">(click row to expand history)</span></h3>
+      <div class="filter-bar" style="margin-bottom:0">
+        <span class="filter-chip active" onclick="filterAds('all',this)">All</span>
+        <span class="filter-chip" onclick="filterAds('active',this)">Active</span>
+        <span class="filter-chip" onclick="filterAds('pending',this)">Pending Approval</span>
+        <span class="filter-chip" onclick="filterAds('low',this)">Low Balance</span>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Advertiser</th><th>Ad Type</th><th>CPC</th><th>Clicks (Month)</th><th>Spend (Month)</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody id="adsBody"></tbody></table></div>
+  </div>
+  <div class="two-col">
+    <div class="card-panel"><h3>📊 Ad Format Performance</h3><div id="adFormatChart"></div></div>
+    <div class="card-panel"><h3>💵 CPC by Format</h3><div id="cpcChart"></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     USERS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-users">
+  <div class="stat-grid" id="userStats"></div>
+  <div class="filter-bar" id="userFilters">
+    <span class="filter-chip active" onclick="filterUsers('all',this)">All Users</span>
+    <span class="filter-chip" onclick="filterUsers('admin',this)">Admin</span>
+    <span class="filter-chip" onclick="filterUsers('agent',this)">Agents</span>
+    <span class="filter-chip" onclick="filterUsers('private',this)">Private Sellers</span>
+    <span class="filter-chip" onclick="filterUsers('suspended',this)">Suspended</span>
+  </div>
+  <div class="tbl-wrap"><table class="dtable"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Listings</th><th>Joined</th><th>Last Active</th><th>Status</th><th>Actions</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PARTNERSHIPS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-partnerships">
+  <div class="stat-grid" id="partnerStats"></div>
+  <div class="card-panel">
+    <div class="sec-header" style="margin-bottom:12px">
+      <h3 style="margin-bottom:0">🤝 Agency Partners</h3>
+      <button class="tb-btn" onclick="showToast('📧 Renewal reminders sent')">📧 Send Renewals</button>
+    </div>
+    <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Agency</th><th>Country</th><th>Plan</th><th>Listings</th><th>Monthly Fee</th><th>Since</th><th>Renewal</th><th>Status</th><th>Actions</th></tr></thead><tbody id="partnersBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SUPPORT
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-support">
+  <div class="stat-grid" id="supportStats"></div>
+  <div class="filter-bar">
+    <span class="filter-chip active" onclick="filterSupport('all',this)">All Tickets</span>
+    <span class="filter-chip" onclick="filterSupport('open',this)">Open</span>
+    <span class="filter-chip" onclick="filterSupport('urgent',this)">Urgent</span>
+    <span class="filter-chip" onclick="filterSupport('closed',this)">Closed</span>
+  </div>
+  <div id="supportTickets"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     COUNTRIES
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-countries">
+  <div class="stat-grid" id="countryStats"></div>
+  <div class="filter-bar">
+    <span class="filter-chip active" onclick="filterCountries('all',this)">All 185</span>
+    <span class="filter-chip" onclick="filterCountries('active',this)">Active (62)</span>
+    <span class="filter-chip" onclick="filterCountries('coming',this)">Coming Soon (123)</span>
+    <span class="filter-chip" onclick="filterCountries('africa',this)">Africa</span>
+    <span class="filter-chip" onclick="filterCountries('europe',this)">Europe</span>
+    <span class="filter-chip" onclick="filterCountries('asia',this)">Asia</span>
+  </div>
+  <div class="country-grid" id="countryGrid"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MODERATION
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-moderation">
+  <div class="stat-grid" id="modStats"></div>
+  <div id="moderationCards"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SETTINGS
+══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-settings">
+  <div class="two-col">
+    <div class="card-panel">
+      <h3>💰 Pricing Configuration</h3>
+      <div class="form-row"><label class="form-label">Private Seller ($/listing/mo)</label><input class="form-input" type="number" value="7.50" step="0.50" id="pricePrivate"></div>
+      <div class="form-row"><label class="form-label">Agency ($/listing/mo)</label><input class="form-input" type="number" value="3.00" step="0.50" id="priceAgency"></div>
+      <div class="form-row"><label class="form-label">Enterprise ($/listing/mo)</label><input class="form-input" type="number" value="2.00" step="0.50" id="priceEnterprise"></div>
+      <div class="form-row"><label class="form-label">Auction Commission (% total)</label><input class="form-input" type="number" value="10" step="0.5" id="priceAuction"></div>
+      <div class="form-row"><label class="form-label">ProVal Report ($ one-time)</label><input class="form-input" type="number" value="124" step="1" id="priceProVal"></div>
+      <button class="tb-btn" onclick="showToast('✅ Pricing saved successfully')">Save Pricing</button>
+    </div>
+    <div class="card-panel">
+      <h3>🌐 Platform Settings</h3>
+      <div class="form-row"><label class="form-label">Platform Name</label><input class="form-input" type="text" value="PropertyFinder Global"></div>
+      <div class="form-row"><label class="form-label">Support Email</label><input class="form-input" type="email" value="support@property-finder.co.za"></div>
+      <div class="form-row"><label class="form-label">Default Currency</label><select class="form-input"><option>USD ($)</option><option>ZAR (R)</option><option>EUR (€)</option><option>GBP (£)</option></select></div>
+      <div class="form-row"><label class="form-label">Listing Approval Mode</label><select class="form-input"><option>Manual Review</option><option>Auto-Approve</option><option>AI Moderation</option></select></div>
+      <button class="tb-btn" onclick="showToast('✅ Settings saved successfully')">Save Settings</button>
+    </div>
+    <div class="card-panel">
+      <h3>🔑 API Keys</h3>
+      <div class="form-row"><label class="form-label">Stripe Publishable Key</label><input class="form-input" type="password" placeholder="pk_live_..." value="pk_test_demo"></div>
+      <div class="form-row"><label class="form-label">Stripe Secret Key</label><input class="form-input" type="password" placeholder="sk_live_..." value="sk_test_demo"></div>
+      <div class="form-row"><label class="form-label">PayFast Merchant ID</label><input class="form-input" type="text" value="10000100"></div>
+      <div class="form-row"><label class="form-label">PayFast Merchant Key</label><input class="form-input" type="password" value="46f0cd694581a"></div>
+      <div class="form-row"><label class="form-label">Claude AI Key</label><input class="form-input" type="password" placeholder="sk-ant-api03-..." value="sk-ant-demo"></div>
+      <button class="tb-btn" onclick="showToast('✅ API keys updated')">Update Keys</button>
+    </div>
+    <div class="card-panel">
+      <h3>📥 Data Management</h3>
+      <div style="display:grid;gap:8px">
+        <button class="tb-btn outline" onclick="showToast('📥 Exporting listings...')">📥 Export Listings CSV</button>
+        <button class="tb-btn outline" onclick="showToast('📥 Exporting users...')">📥 Export Users CSV</button>
+        <button class="tb-btn outline" onclick="showToast('📥 Exporting payments...')">📥 Export Payments CSV</button>
+        <button class="tb-btn outline" onclick="showToast('📥 Exporting ad data...')">📥 Export Ad Revenue CSV</button>
+        <button class="tb-btn outline" onclick="showToast('📥 Full backup started...')">💾 Full Platform Backup</button>
+        <button style="padding:10px 14px;border-radius:var(--r2);background:rgba(220,38,38,0.08);border:1.5px solid rgba(220,38,38,0.2);font-size:0.82rem;font-weight:800;cursor:pointer;color:var(--danger);text-align:left" onclick="if(confirm('Reset all demo data? This cannot be undone.')){localStorage.removeItem('pf_admin');location.reload();}">🗑️ Reset Demo Data</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-panel">
+    <h3>🔔 Notification Settings</h3>
+    <div class="two-col">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">New listing submitted</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">New payment received</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">Auction bid placed</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+          <span style="font-size:0.82rem;color:var(--cream)">Ad wallet low balance</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">New user registered</span>
+          <input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">Fraud report submitted</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:0.82rem;color:var(--cream)">Support ticket opened</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+          <span style="font-size:0.82rem;color:var(--cream)">Daily revenue summary</span>
+          <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px">
+        </div>
+      </div>
+    </div>
+    <button class="tb-btn" style="margin-top:14px" onclick="showToast('✅ Notification settings saved')">Save Notifications</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Action</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn danger" id="modalRejectBtn" onclick="doAction('reject')" style="display:none">❌ Reject</button>
+      <button class="modal-btn success" id="modalApproveBtn" onclick="doAction('approve')" style="display:none">✅ Approve</button>
+      <button class="modal-btn primary" id="modalPrimaryBtn" onclick="closeModal()" style="display:none">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ PASSWORD ══
+const PW='Texas@450';
+function checkPw(){
+  const v=document.getElementById('pwInput').value;
+  if(v===PW){document.getElementById('pwGate').classList.add('unlocked');sessionStorage.setItem('pf_auth','1');}
+  else{
+    document.getElementById('pwErr').textContent='❌ Incorrect password. Please try again.';
+    const i=document.getElementById('pwInput');i.classList.add('shake');i.value='';
+    setTimeout(()=>i.classList.remove('shake'),400);
+  }
+}
+// Auto-unlock if already logged in via pf-auth.js OR sessionStorage
+(function(){
+  var pfSession = null;
+  try { pfSession = JSON.parse(localStorage.getItem('pf_session')); } catch(e){}
+  var authOk = sessionStorage.getItem('pf_auth')==='1' || 
+               (pfSession && pfSession.loggedIn && pfSession.role==='admin');
+  if(authOk) document.getElementById('pwGate').classList.add('unlocked');
+})();
+
+// ══ CLOCK ══
+setInterval(()=>{document.getElementById('liveClock').textContent=new Date().toLocaleTimeString('en-GB')},1000);
+
+// ══ PANEL SWITCH ══
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  const p=document.getElementById('p-'+id);
+  if(p)p.classList.add('active');
+  if(el){el.classList.add('active');}
+  const titles={
+    overview:'📊 Overview',analytics:'📈 Analytics',liverevenue:'⚡ Live Revenue',
+    listings:'🏡 Listings',auctions:'🔨 Auctions',approvals:'✅ Approvals',proval:'🏠 ProVal',
+    revenue:'💰 Revenue',payments:'💳 Payments',ads:'📢 Advertising',
+    users:'👥 Users',partnerships:'🤝 Partnerships',support:'🎧 Support',
+    countries:'🌍 Countries',moderation:'🚨 Moderation',settings:'⚙️ Settings'
+  };
+  document.getElementById('panelTitle').textContent=titles[id]||id;
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+// ══ TOAST ══
+function showToast(m){const e=document.querySelector('.pf-toast');if(e)e.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+
+// ══ MODAL ══
+let modalAction=null,modalData=null;
+function openModal(title,body,actions){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalBody').innerHTML=body;
+  document.getElementById('modalApproveBtn').style.display=actions.includes('approve')?'':'none';
+  document.getElementById('modalRejectBtn').style.display=actions.includes('reject')?'':'none';
+  document.getElementById('modalPrimaryBtn').style.display=actions.includes('primary')?'':'none';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+function doAction(a){
+  if(a==='approve')showToast('✅ Approved successfully');
+  else showToast('❌ Rejected');
+  closeModal();
+}
+
+// ══ DATA ══
+function D(){return JSON.parse(localStorage.getItem('pf_admin')||JSON.stringify(defaultData()))}
+function S(d){localStorage.setItem('pf_admin',JSON.stringify(d))}
+
+function defaultData(){return{
+  customers:[
+    {id:'C01',name:'Sarah Mitchell',email:'sarah@gmail.com',pkg:'private',rate:7.50,res:2,com:0,ind:0,farm:0,biz:0,auc:0,history:[{m:'Feb 2026',total:1,fee:7.50},{m:'Mar 2026',total:2,fee:15}]},
+    {id:'C02',name:'Metro Realty',email:'info@metro.co.za',pkg:'agent',rate:3.00,res:28,com:12,ind:3,farm:0,biz:2,auc:0,history:[{m:'Jan 2026',total:35,fee:105},{m:'Feb 2026',total:41,fee:123},{m:'Mar 2026',total:45,fee:135}]},
+    {id:'C03',name:'Dubai Homes LLC',email:'list@dubai.ae',pkg:'enterprise',rate:2.00,res:85,com:28,ind:0,farm:0,biz:15,auc:0,history:[{m:'Dec 2025',total:102,fee:204},{m:'Jan 2026',total:112,fee:224},{m:'Feb 2026',total:121,fee:242},{m:'Mar 2026',total:128,fee:256}]},
+    {id:'C04',name:'Pieter Viljoen',email:'pieter@farm.za',pkg:'private',rate:7.50,res:0,com:0,ind:0,farm:1,biz:0,auc:1,history:[{m:'Mar 2026',total:2,fee:15}]},
+    {id:'C05',name:'London Properties',email:'team@london.uk',pkg:'agent',rate:3.00,res:42,com:18,ind:0,farm:0,biz:7,auc:0,history:[{m:'Jan 2026',total:55,fee:165},{m:'Feb 2026',total:60,fee:180},{m:'Mar 2026',total:67,fee:201}]},
+    {id:'C06',name:'Cape Eats PTY',email:'info@capeeats.za',pkg:'private',rate:7.50,res:0,com:0,ind:0,farm:0,biz:1,auc:0,history:[{m:'Mar 2026',total:1,fee:7.50}]},
+    {id:'C07',name:'Algarve Prop',email:'info@algarve.pt',pkg:'agent',rate:3.00,res:24,com:6,ind:0,farm:4,biz:0,auc:0,history:[{m:'Feb 2026',total:28,fee:84},{m:'Mar 2026',total:34,fee:102}]},
+    {id:'C08',name:'J. van Wyk',email:'j.vanwyk@email.co.za',pkg:'private',rate:7.50,res:0,com:0,ind:1,farm:0,biz:0,auc:0,history:[{m:'Mar 2026',total:1,fee:7.50}]},
+    {id:'C09',name:'Singapore Luxury',email:'sg@luxprop.sg',pkg:'enterprise',rate:2.00,res:120,com:45,ind:0,farm:0,biz:8,auc:2,history:[{m:'Feb 2026',total:160,fee:320},{m:'Mar 2026',total:175,fee:350}]},
+    {id:'C10',name:'Kenya Properties',email:'info@kenyaprop.ke',pkg:'agent',rate:3.00,res:18,com:4,ind:2,farm:6,biz:1,auc:0,history:[{m:'Mar 2026',total:31,fee:93}]},
+  ],
+  auctions:[
+    {id:'AU01',prop:'Wine Farm 120ha, Stellenbosch',type:'Farm',seller:'Pieter Viljoen',status:'live',current:'$2,800,000',reserve:'$2,500,000',bids:14,ends:'12 Apr 2026'},
+    {id:'AU02',prop:'Penthouse, V&A Waterfront',type:'Residential',seller:'Metro Realty',status:'live',current:'$1,950,000',reserve:'$1,800,000',bids:8,ends:'14 Apr 2026'},
+    {id:'AU03',prop:'Office Block, Sandton',type:'Commercial',seller:'Metro Realty',status:'live',current:'$4,200,000',reserve:'$3,800,000',bids:6,ends:'15 Apr 2026'},
+    {id:'AU04',prop:'Farm 80ha, Paarl',type:'Farm',seller:'Pieter Viljoen',status:'sold',soldPrice:1850000,sellerComm:92500,buyerComm:92500,totalComm:185000,buyer:'Van der Berg Trust',dateSold:'5 Mar 2026',payDue:'5 Apr 2026',payStatus:'pending'},
+    {id:'AU05',prop:'3 Bed House, Constantia',type:'Residential',seller:'Sarah Mitchell',status:'sold',soldPrice:3200000,sellerComm:160000,buyerComm:160000,totalComm:320000,buyer:'K. Naidoo',dateSold:'28 Feb 2026',payDue:'28 Mar 2026',payStatus:'pending'},
+    {id:'AU06',prop:'Warehouse, Montague Gardens',type:'Industrial',seller:'J. van Wyk',status:'sold',soldPrice:2100000,sellerComm:105000,buyerComm:105000,totalComm:210000,buyer:'Logistics Corp',dateSold:'15 Feb 2026',payDue:'15 Mar 2026',payStatus:'received'},
+    {id:'AU07',prop:'Restaurant, Camps Bay',type:'Business',seller:'Cape Eats PTY',status:'sold',soldPrice:890000,sellerComm:44500,buyerComm:44500,totalComm:89000,buyer:'Food Holdings',dateSold:'1 Feb 2026',payDue:'1 Mar 2026',payStatus:'received'}
+  ],
+  ads:[
+    {id:'A01',name:'Smith & Partners',type:'Med Rectangle',cpc:0.12,clicks:1840,spend:220.80,bal:79.20,status:'active',history:[{m:'Jan',clicks:1200,spend:144},{m:'Feb',clicks:1560,spend:187.20},{m:'Mar',clicks:1840,spend:220.80}]},
+    {id:'A02',name:'BetterBond',type:'Leaderboard',cpc:0.10,clicks:3200,spend:320,bal:180,status:'active',history:[{m:'Jan',clicks:2100,spend:210},{m:'Feb',clicks:2800,spend:280},{m:'Mar',clicks:3200,spend:320}]},
+    {id:'A03',name:'SolarPower SA',type:'Skyscraper',cpc:0.10,clicks:890,spend:89,bal:111,status:'active',history:[{m:'Feb',clicks:650,spend:65},{m:'Mar',clicks:890,spend:89}]},
+    {id:'A04',name:'SafeHome Inspect',type:'Mobile Lead',cpc:0.08,clicks:0,spend:0,bal:50,status:'pending',history:[]},
+    {id:'A05',name:'ADT Security',type:'Mobile Lead',cpc:0.08,clicks:0,spend:0,bal:50,status:'pending',history:[]},
+    {id:'A06',name:'RE/MAX Africa',type:'Half Page',cpc:0.15,clicks:2100,spend:315,bal:185,status:'active',history:[{m:'Feb',clicks:1600,spend:240},{m:'Mar',clicks:2100,spend:315}]},
+  ],
+  revenue:[
+    {m:'Oct 2025',listings:4200,ads:1800,partners:900,auction:0,proval:248,total:7148},
+    {m:'Nov 2025',listings:5100,ads:2100,partners:1200,auction:89000,proval:372,total:97772},
+    {m:'Dec 2025',listings:6200,ads:2400,partners:1400,auction:0,proval:496,total:10496},
+    {m:'Jan 2026',listings:7100,ads:2700,partners:1500,auction:210000,proval:620,total:221920},
+    {m:'Feb 2026',listings:7800,ads:2900,partners:1650,auction:89000,proval:744,total:102094},
+    {m:'Mar 2026',listings:8420,ads:3140,partners:1800,auction:185000,proval:868,total:199228}
+  ],
+  users:[
+    {id:'U01',name:'Charl Admin',email:'charl@property-finder.co.za',role:'admin',listings:0,joined:'Jun 2025',last:'Today',status:'active'},
+    {id:'U02',name:'Sarah Mitchell',email:'sarah@gmail.com',role:'private',listings:2,joined:'Jan 2026',last:'2 days ago',status:'active'},
+    {id:'U03',name:'Metro Realty',email:'info@metro.co.za',role:'agent',listings:45,joined:'Sep 2025',last:'Today',status:'active'},
+    {id:'U04',name:'Dubai Homes LLC',email:'list@dubai.ae',role:'enterprise',listings:128,joined:'Nov 2025',last:'Today',status:'active'},
+    {id:'U05',name:'Pieter Viljoen',email:'pieter@farm.za',role:'private',listings:2,joined:'Feb 2026',last:'3 days ago',status:'active'},
+    {id:'U06',name:'London Properties',email:'team@london.uk',role:'agent',listings:67,joined:'Aug 2025',last:'Yesterday',status:'active'},
+    {id:'U07',name:'Mike Theron',email:'mike@temp.com',role:'private',listings:0,joined:'Mar 2026',last:'5 days ago',status:'suspended'},
+    {id:'U08',name:'Algarve Prop',email:'info@algarve.pt',role:'agent',listings:34,joined:'Dec 2025',last:'Today',status:'active'},
+    {id:'U09',name:'Singapore Luxury',email:'sg@luxprop.sg',role:'enterprise',listings:175,joined:'Jan 2026',last:'Today',status:'active'},
+    {id:'U10',name:'Kenya Properties',email:'info@kenyaprop.ke',role:'agent',listings:31,joined:'Mar 2026',last:'Yesterday',status:'active'},
+  ],
+  payments:[
+    {date:'22 Mar',ref:'PF-0108',user:'Singapore Luxury',desc:'Enterprise listing fee — 175 listings',amount:350,method:'Stripe',status:'paid'},
+    {date:'21 Mar',ref:'PF-0107',user:'BetterBond',desc:'Ad wallet top-up',amount:200,method:'PayFast',status:'paid'},
+    {date:'20 Mar',ref:'PF-0106',user:'RE/MAX Africa',desc:'Ad wallet top-up',amount:300,method:'Stripe',status:'paid'},
+    {date:'19 Mar',ref:'PF-0105',user:'Sarah Mitchell',desc:'ProVal report',amount:124,method:'Stripe',status:'paid'},
+    {date:'18 Mar',ref:'PF-0104',user:'Metro Realty',desc:'Agency listing fee — 45 listings',amount:135,method:'PayFast',status:'paid'},
+    {date:'16 Mar',ref:'PF-0103',user:'London Properties',desc:'Agency listing fee — 67 listings',amount:201,method:'EFT',status:'paid'},
+    {date:'15 Mar',ref:'PF-0102',user:'Dubai Homes',desc:'Enterprise listing fee — 128 listings',amount:256,method:'Stripe',status:'paid'},
+    {date:'14 Mar',ref:'PF-0101',user:'SolarPower SA',desc:'Ad wallet top-up',amount:100,method:'EFT',status:'paid'},
+    {date:'12 Mar',ref:'PF-0100',user:'SafeHome Inspect',desc:'Ad wallet top-up',amount:50,method:'Stripe',status:'pending'},
+    {date:'10 Mar',ref:'PF-0099',user:'Pieter Viljoen',desc:'ProVal report',amount:124,method:'PayFast',status:'paid'},
+  ],
+  partners:[
+    {agency:'Metro Realty',country:'South Africa',plan:'Agency',listings:45,fee:135,since:'Sep 2025',renewal:'Sep 2026',status:'active'},
+    {agency:'London Properties',country:'United Kingdom',plan:'Agency',listings:67,fee:201,since:'Aug 2025',renewal:'Aug 2026',status:'active'},
+    {agency:'Dubai Homes LLC',country:'UAE',plan:'Enterprise',listings:128,fee:256,since:'Nov 2025',renewal:'Nov 2026',status:'active'},
+    {agency:'Singapore Luxury',country:'Singapore',plan:'Enterprise',listings:175,fee:350,since:'Jan 2026',renewal:'Jan 2027',status:'active'},
+    {agency:'Algarve Prop',country:'Portugal',plan:'Agency',listings:34,fee:102,since:'Dec 2025',renewal:'Dec 2026',status:'active'},
+    {agency:'Kenya Properties',country:'Kenya',plan:'Agency',listings:31,fee:93,since:'Mar 2026',renewal:'Mar 2027',status:'active'},
+  ],
+  tickets:[
+    {id:'TK-001',subject:'Payment not processed — listing still inactive',user:'Metro Realty',priority:'urgent',status:'open',time:'2h ago',desc:'Paid via PayFast but listing is not live after 24 hours.'},
+    {id:'TK-002',subject:'Cannot upload more than 20 photos',user:'Sarah Mitchell',priority:'normal',status:'open',time:'4h ago',desc:'System allows only 20 photos but plan says 30.'},
+    {id:'TK-003',subject:'Auction bid not showing in real-time',user:'London Properties',priority:'urgent',status:'open',time:'6h ago',desc:'Placed a bid 30 minutes ago but the counter has not updated.'},
+    {id:'TK-004',subject:'Currency not converting correctly for ZAR',user:'Pieter Viljoen',priority:'normal',status:'closed',time:'Yesterday',desc:'ZAR prices were showing wrong exchange rate.'},
+    {id:'TK-005',subject:'ProVal report email not received',user:'Dubai Homes LLC',priority:'normal',status:'closed',time:'2 days ago',desc:'Payment confirmed but report email never arrived.'},
+  ],
+  countries:[
+    {flag:'🇿🇦',name:'South Africa',listings:12400,agents:480,status:'active',region:'Africa'},
+    {flag:'🇰🇪',name:'Kenya',listings:3200,agents:120,status:'active',region:'Africa'},
+    {flag:'🇳🇬',name:'Nigeria',listings:3200,agents:145,status:'active',region:'Africa'},
+    {flag:'🇬🇧',name:'United Kingdom',listings:8900,agents:340,status:'active',region:'Europe'},
+    {flag:'🇦🇪',name:'United Arab Emirates',listings:9200,agents:280,status:'active',region:'Asia'},
+    {flag:'🇸🇬',name:'Singapore',listings:4200,agents:190,status:'active',region:'Asia'},
+    {flag:'🇵🇹',name:'Portugal',listings:2800,agents:95,status:'active',region:'Europe'},
+    {flag:'🇦🇺',name:'Australia',listings:5400,agents:210,status:'active',region:'Oceania'},
+    {flag:'🇺🇸',name:'United States',listings:7200,agents:320,status:'active',region:'Americas'},
+    {flag:'🇫🇷',name:'France',listings:3800,agents:155,status:'active',region:'Europe'},
+    {flag:'🇵🇭',name:'Philippines',listings:0,agents:0,status:'coming',region:'Asia'},
+    {flag:'🇧🇷',name:'Brazil',listings:0,agents:0,status:'coming',region:'Americas'},
+    {flag:'🇮🇳',name:'India',listings:0,agents:0,status:'coming',region:'Asia'},
+    {flag:'🇲🇽',name:'Mexico',listings:0,agents:0,status:'coming',region:'Americas'},
+    {flag:'🇩🇪',name:'Germany',listings:0,agents:0,status:'coming',region:'Europe'},
+  ],
+  moderation:[
+    {id:'M01',type:'listing',title:'Suspicious listing — unusually low price',user:'Unknown',urgency:'high',detail:'3-bed house in Sandton listed at $12,000 — likely fraud or error.'},
+    {id:'M02',type:'listing',title:'Duplicate listing detected',user:'Metro Realty',urgency:'medium',detail:'Same property listed 3 times with different prices.'},
+    {id:'M03',type:'user',title:'Multiple failed login attempts',user:'unknown@test.com',urgency:'high',detail:'47 failed login attempts from IP 196.45.12.88.'},
+    {id:'M04',type:'ad',title:'Ad creative contains misleading claims',user:'ADT Security',urgency:'medium',detail:'"Guaranteed lowest price" claim in ad copy.'},
+    {id:'M05',type:'listing',title:'Inappropriate content in listing description',user:'mike@temp.com',urgency:'low',detail:'Listing contains contact information in description field.'},
+  ]
+}}
+
+// ══ HELPERS ══
+function fmt(n){return n>=1000000?'$'+(n/1000000).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(1)+'K':'$'+n.toFixed(2)}
+function fmtNum(n){return n>=1000?(n/1000).toFixed(1)+'K':n.toString()}
+function badge(cls,txt){return`<span class="badge ${cls}">${txt}</span>`}
+function pkgBadge(p){return badge(p,p.charAt(0).toUpperCase()+p.slice(1))}
+function statusBadge(s){const m={active:'active',pending:'pending',suspended:'suspended',rejected:'rejected',sold:'sold',live:'live',received:'active',open:'open',closed:'resolved',urgent:'live'};return badge(m[s]||s,s)}
+
+// ══ OVERVIEW ══
+function buildOverview(){
+  const d=D();
+  const totalListings=d.customers.reduce((a,c)=>a+c.res+c.com+c.ind+c.farm+c.biz+c.auc,0);
+  const monthlyFees=d.customers.reduce((a,c)=>a+(c.res+c.com+c.ind+c.farm+c.biz+c.auc)*c.rate,0);
+  const latestRev=d.revenue[d.revenue.length-1];
+  const prevRev=d.revenue[d.revenue.length-2];
+  const growth=((latestRev.total-prevRev.total)/prevRev.total*100).toFixed(1);
+
+  document.getElementById('overviewStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🏡</div><span class="sc-trend up">+${growth}%</span></div><div class="sc-val">${fmtNum(totalListings)}</div><div class="sc-lbl">Total Active Listings</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+8.2%</span></div><div class="sc-val">${fmt(latestRev.total)}</div><div class="sc-lbl">Revenue This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">👥</div><span class="sc-trend up">+3</span></div><div class="sc-val">${d.users.length}</div><div class="sc-lbl">Registered Users</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">✅</div><span class="sc-trend flat">4 pending</span></div><div class="sc-val">4</div><div class="sc-lbl">Awaiting Approval</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">🔨</div><span class="sc-trend up">$2.8M</span></div><div class="sc-val">3</div><div class="sc-lbl">Live Auctions</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📢</div><span class="sc-trend up">+1</span></div><div class="sc-val">${d.ads.filter(a=>a.status==='active').length}</div><div class="sc-lbl">Active Advertisers</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">🌍</div><span class="sc-trend flat">185</span></div><div class="sc-val">62</div><div class="sc-lbl">Active Markets</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">🏠</div><span class="sc-trend up">+12%</span></div><div class="sc-val">7</div><div class="sc-lbl">ProVal Reports Today</div></div>
+  `;
+
+  // Ticker
+  document.getElementById('tickerText').textContent=
+    '🏠 New listing — Penthouse, Cape Town R8.5M  ·  💳 Payment received — Metro Realty $135  ·  🔨 New bid — Wine Farm Stellenbosch $2.8M (14 bids)  ·  👤 New user — Kenya Properties registered  ·  📊 ProVal request — 4-bed, Sandton  ·  🔴 Live auction — Office Block Sandton $4.2M  ·  🌍 New market — Morocco launching next week  ·  💰 Monthly revenue target 80% achieved';
+
+  // Pending approvals
+  document.getElementById('overviewPending').innerHTML=`
+    <div class="appr-card urgent" style="margin-bottom:8px"><div class="appr-ico">🏡</div><div class="appr-info"><div class="appr-title">3 Bed House, Constantia — R2.8M</div><div class="appr-sub">Submitted by Sarah Mitchell · 2h ago</div><div class="appr-tag">LISTING</div></div><div class="appr-actions"><button class="act-btn approve" onclick="showToast('✅ Listing approved')">✅</button><button class="act-btn reject" onclick="showToast('❌ Listing rejected')">❌</button></div></div>
+    <div class="appr-card" style="margin-bottom:8px"><div class="appr-ico">📢</div><div class="appr-info"><div class="appr-title">SafeHome Inspect — Mobile Ad Creative</div><div class="appr-sub">Ad creative submitted · 4h ago</div><div class="appr-tag">AD</div></div><div class="appr-actions"><button class="act-btn approve" onclick="showToast('✅ Ad approved')">✅</button><button class="act-btn reject" onclick="showToast('❌ Ad rejected')">❌</button></div></div>
+    <div class="appr-card" style="margin-bottom:8px"><div class="appr-ico">👤</div><div class="appr-info"><div class="appr-title">Kenya Properties — Agent Account</div><div class="appr-sub">Verification documents submitted · 1 day ago</div><div class="appr-tag">USER</div></div><div class="appr-actions"><button class="act-btn approve" onclick="showToast('✅ Account approved')">✅</button><button class="act-btn reject" onclick="showToast('❌ Account rejected')">❌</button></div></div>
+  `;
+
+  // Activity feed
+  const activities=[
+    {dot:'g',text:'Payment received — Singapore Luxury $350 (Enterprise fee)',time:'8 min ago'},
+    {dot:'b',text:'New user registered — Kenya Properties (Agent)',time:'23 min ago'},
+    {dot:'p',text:'ProVal report requested — 4-bed house, Sandton',time:'41 min ago'},
+    {dot:'a',text:'Low balance alert — Smith & Partners ad wallet ($79)',time:'1h ago'},
+    {dot:'g',text:'Auction bid placed — Wine Farm Stellenbosch $2.8M',time:'1h 12m ago'},
+    {dot:'r',text:'Fraud report — Duplicate listing detected (Metro Realty)',time:'2h ago'},
+    {dot:'g',text:'Payment received — BetterBond ad top-up $200',time:'3h ago'},
+    {dot:'b',text:'New listing submitted — Office, Dubai Marina',time:'4h ago'},
+    {dot:'g',text:'Auction completed — Farm 80ha Paarl ($1.85M)',time:'Yesterday'},
+    {dot:'r',text:'Support ticket opened — Metro Realty (payment issue)',time:'Yesterday'},
+  ];
+  document.getElementById('activityFeed').innerHTML=activities.map(a=>`
+    <div class="act-item"><div class="act-dot ${a.dot}"></div><div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div></div>
+  `).join('');
+
+  // Revenue chart
+  const maxRev=Math.max(...d.revenue.map(r=>r.total));
+  document.getElementById('revenueChart').innerHTML=d.revenue.map(r=>`
+    <div class="bar-group">
+      <div class="bar" style="height:${Math.max(r.listings/maxRev*120,4)}px;background:var(--gold);opacity:0.9" title="Listings: ${fmt(r.listings)}"></div>
+      <div class="bar-lbl">${r.m.split(' ')[0]}</div>
+    </div>
+  `).join('');
+
+  // Category bar
+  const cats=[{name:'Residential',val:65,col:'var(--gold)'},{name:'Commercial',val:16,col:'var(--info)'},{name:'Industrial',val:5,col:'var(--warn)'},{name:'Farm',val:6,col:'var(--success)'},{name:'Business',val:6,col:'var(--purple)'},{name:'Auction',val:2,col:'var(--danger)'}];
+  document.getElementById('categoryBar').innerHTML=`
+    <div class="pct-bar">${cats.map(c=>`<div class="pct-seg" style="width:${c.val}%;background:${c.col}" title="${c.name}: ${c.val}%">${c.val>5?c.val+'%':''}</div>`).join('')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px">${cats.map(c=>`<span style="font-size:0.72rem;color:var(--subtle);display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;background:${c.col};border-radius:2px;display:inline-block"></span>${c.name} ${c.val}%</span>`).join('')}</div>
+  `;
+
+  // Top markets
+  document.getElementById('topMarkets').innerHTML=`
+    <div style="display:grid;gap:8px">
+      ${[['🇿🇦','South Africa','12,400 listings','$8,420/mo'],['🇦🇪','UAE','9,200 listings','$6,200/mo'],['🇬🇧','UK','8,900 listings','$5,900/mo'],['🇸🇬','Singapore','4,200 listings','$3,800/mo'],['🇳🇬','Nigeria','3,200 listings','$2,100/mo']].map(([f,n,l,r])=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:1.4rem">${f}</span>
+          <div style="flex:1"><div style="font-size:0.82rem;font-weight:700;color:var(--cream)">${n}</div><div style="font-size:0.7rem;color:var(--subtle)">${l}</div></div>
+          <div style="font-size:0.8rem;font-weight:800;color:var(--gold)">${r}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ══ ANALYTICS ══
+function buildAnalytics(){
+  document.getElementById('analyticsKPIs').innerHTML=`
+    <div class="kpi-card"><div class="kpi-val">2.4M</div><div class="kpi-lbl">Monthly Visitors</div></div>
+    <div class="kpi-card"><div class="kpi-val">4m 32s</div><div class="kpi-lbl">Avg Session</div></div>
+    <div class="kpi-card"><div class="kpi-val">6.8</div><div class="kpi-lbl">Pages / Visit</div></div>
+    <div class="kpi-card"><div class="kpi-val">18.4%</div><div class="kpi-lbl">Bounce Rate</div></div>
+    <div class="kpi-card"><div class="kpi-val">3.2%</div><div class="kpi-lbl">Lead Conversion</div></div>
+    <div class="kpi-card"><div class="kpi-val">76K</div><div class="kpi-lbl">Enquiries / Month</div></div>
+    <div class="kpi-card"><div class="kpi-val">92%</div><div class="kpi-lbl">Satisfaction Score</div></div>
+    <div class="kpi-card"><div class="kpi-val">185</div><div class="kpi-lbl">Countries Reached</div></div>
+  `;
+
+  document.getElementById('deviceChart').innerHTML=`
+    <div style="display:grid;gap:8px;margin-top:4px">
+      ${[['📱','Mobile','68%','var(--gold)'],['💻','Desktop','24%','var(--info)'],['📱','Tablet','8%','var(--success)']].map(([ic,n,pct,col])=>`
+        <div style="display:flex;align-items:center;gap:10px">
+          <span>${ic}</span>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.8rem;font-weight:700;color:var(--cream)">${n}</span><span style="font-size:0.8rem;font-weight:800;color:${col}">${pct}</span></div>
+            <div style="height:6px;background:var(--hover);border-radius:3px"><div style="height:100%;width:${pct};background:${col};border-radius:3px;transition:width 0.5s"></div></div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  document.getElementById('searchCountries').innerHTML=`<div style="display:grid;gap:6px">${[
+    ['🇿🇦','South Africa','340K searches'],['🇦🇪','UAE','280K searches'],['🇬🇧','UK','210K searches'],
+    ['🇳🇬','Nigeria','185K searches'],['🇸🇬','Singapore','142K searches']
+  ].map(([f,n,s],i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:0.72rem;font-weight:800;color:var(--subtle);width:16px">${i+1}</span>
+      <span style="font-size:1.2rem">${f}</span>
+      <div style="flex:1;font-size:0.8rem;font-weight:700;color:var(--cream)">${n}</div>
+      <div style="font-size:0.78rem;color:var(--gold)">${s}</div>
+    </div>`).join('')}</div>`;
+
+  document.getElementById('searchTypes').innerHTML=`
+    <div style="display:grid;gap:6px">${[
+      ['🏠','Residential for Sale','38%','var(--gold)'],['🔑','Residential for Rent','22%','var(--info)'],
+      ['🏢','Commercial','15%','var(--warn)'],['🔨','Auctions','12%','var(--danger)'],
+      ['💼','Business for Sale','8%','var(--purple)'],['🌾','Farm & Agriculture','5%','var(--success)']
+    ].map(([ic,n,pct,col])=>`
+      <div style="display:flex;align-items:center;gap:10px">
+        <span>${ic}</span>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:0.8rem;font-weight:700;color:var(--cream)">${n}</span><span style="font-size:0.78rem;font-weight:800;color:${col}">${pct}</span></div>
+          <div style="height:5px;background:var(--hover);border-radius:3px"><div style="height:100%;width:${pct};background:${col};border-radius:3px"></div></div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+
+  document.getElementById('funnelChart').innerHTML=`<div style="display:grid;gap:6px">${[
+    ['Views','2,400,000','100%','var(--gold)'],['Search','1,680,000','70%','var(--gold)'],
+    ['Listing View','960,000','40%','var(--gold)'],['Contact','168,000','7%','var(--gold)'],['Deal','76,800','3.2%','var(--success)']
+  ].map(([l,v,p,c])=>`
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:100px;font-size:0.75rem;font-weight:700;color:var(--subtle);text-align:right">${l}</div>
+      <div style="flex:1;height:28px;background:var(--hover);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${p};background:${c};border-radius:4px;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:0.7rem;font-weight:800;color:#1a1408;white-space:nowrap">${v}</span>
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+// ══ LIVE REVENUE ══
+function buildLiveRevenue(){
+  document.getElementById('liveRevMega').innerHTML=`
+    <div class="mega-card gold"><div class="mega-lbl">Today's Revenue</div><div class="mega-val">$1,248</div><div class="mega-sub">7 transactions</div><div class="mega-trend up">▲ 18% vs yesterday</div></div>
+    <div class="mega-card green"><div class="mega-lbl">Month To Date</div><div class="mega-val">$199K</div><div class="mega-sub">Mar 2026</div><div class="mega-trend up">▲ 95% vs Feb</div></div>
+    <div class="mega-card blue"><div class="mega-lbl">Pending</div><div class="mega-val">$174</div><div class="mega-sub">2 transactions</div><div class="mega-trend flat">— awaiting</div></div>
+    <div class="mega-card purple"><div class="mega-lbl">Annual Run Rate</div><div class="mega-val">$2.4M</div><div class="mega-sub">Projected</div><div class="mega-trend up">▲ 340% YoY</div></div>
+  `;
+
+  // Hour chart
+  const hours=['6am','7','8','9','10','11','12','1pm','2','3','4','5','6','7','8','9'];
+  const vals=[0,45,120,280,420,380,510,640,820,760,580,490,410,320,180,90];
+  const maxH=Math.max(...vals);
+  document.getElementById('hourChart').innerHTML=`
+    <div class="bar-chart" style="height:100px">${hours.map((h,i)=>`
+      <div class="bar-group">
+        <div class="bar" style="height:${Math.max(vals[i]/maxH*90,2)}px;background:${i<10?'var(--gold)':'var(--hover)'};opacity:${i<10?0.9:0.4}" title="${h}: $${vals[i]}"></div>
+        <div class="bar-lbl" style="font-size:0.55rem">${i%2===0?h:''}</div>
+      </div>`).join('')}
+    </div><div class="bar-axis"></div>`;
+
+  // vs yesterday
+  document.getElementById('vsYesterday').innerHTML=`<table style="width:100%;font-size:0.8rem">
+    <tr><th style="text-align:left;padding:6px 0;color:var(--subtle);font-size:0.7rem;border-bottom:1px solid var(--border)">Metric</th><th style="text-align:right;padding:6px 0;color:var(--subtle);font-size:0.7rem;border-bottom:1px solid var(--border)">Yesterday</th><th style="text-align:right;padding:6px 0;color:var(--subtle);font-size:0.7rem;border-bottom:1px solid var(--border)">Today</th><th style="text-align:right;padding:6px 0;color:var(--subtle);font-size:0.7rem;border-bottom:1px solid var(--border)">Δ</th></tr>
+    ${[['Revenue','$1,058','$1,248','+18%','g'],['Transactions','5','7','+2','g'],['New Users','2','3','+1','g'],['Listings Added','12','18','+6','g'],['ProVal Reports','3','7','+4','g'],['Ad Clicks','1,840','2,120','+15%','g']].map(([m,y,t,d,c])=>`
+      <tr><td style="padding:7px 0;color:var(--cream);border-bottom:1px solid var(--border)">${m}</td><td style="padding:7px 0;text-align:right;color:var(--subtle);border-bottom:1px solid var(--border)">${y}</td><td style="padding:7px 0;text-align:right;color:var(--cream);font-weight:800;border-bottom:1px solid var(--border)">${t}</td><td style="padding:7px 0;text-align:right;color:var(--${c==='g'?'success':'danger'});font-weight:800;border-bottom:1px solid var(--border)">${d}</td></tr>`).join('')}
+    </table>`;
+
+  document.getElementById('todayTxBody').innerHTML=`
+    <tr><td>09:12</td><td>Singapore Luxury</td><td>Enterprise listing fee</td><td style="color:var(--gold);font-weight:800">$350</td><td>Stripe</td><td>${badge('active','Paid')}</td></tr>
+    <tr><td>10:24</td><td>BetterBond</td><td>Ad wallet top-up</td><td style="color:var(--gold);font-weight:800">$200</td><td>PayFast</td><td>${badge('active','Paid')}</td></tr>
+    <tr><td>11:08</td><td>RE/MAX Africa</td><td>Ad wallet top-up</td><td style="color:var(--gold);font-weight:800">$300</td><td>Stripe</td><td>${badge('active','Paid')}</td></tr>
+    <tr><td>11:45</td><td>Sarah Mitchell</td><td>ProVal report</td><td style="color:var(--gold);font-weight:800">$124</td><td>Stripe</td><td>${badge('active','Paid')}</td></tr>
+    <tr><td>13:30</td><td>SafeHome Inspect</td><td>Ad wallet top-up</td><td style="color:var(--gold);font-weight:800">$50</td><td>Stripe</td><td>${badge('pending','Pending')}</td></tr>
+    <tr><td>14:52</td><td>Pieter Viljoen</td><td>ProVal report</td><td style="color:var(--gold);font-weight:800">$124</td><td>PayFast</td><td>${badge('pending','Pending')}</td></tr>
+    <tr><td>15:18</td><td>Kenya Properties</td><td>Agency listing fee</td><td style="color:var(--gold);font-weight:800">$93</td><td>EFT</td><td>${badge('active','Paid')}</td></tr>
+  `;
+}
+
+// ══ LISTINGS ══
+function buildListings(){
+  const d=D();
+  const total=d.customers.reduce((a,c)=>a+c.res+c.com+c.ind+c.farm+c.biz+c.auc,0);
+  const fees=d.customers.reduce((a,c)=>a+(c.res+c.com+c.ind+c.farm+c.biz+c.auc)*c.rate,0);
+  document.getElementById('listingStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🏡</div><span class="sc-trend up">+12%</span></div><div class="sc-val">${total}</div><div class="sc-lbl">Total Listings</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+8%</span></div><div class="sc-val">${fmt(fees)}</div><div class="sc-lbl">Monthly Fees</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">👤</div><span class="sc-trend up">+3</span></div><div class="sc-val">${d.customers.length}</div><div class="sc-lbl">Active Customers</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏳</div><span class="sc-trend flat">4</span></div><div class="sc-val">4</div><div class="sc-lbl">Pending Approval</div></div>
+  `;
+
+  document.getElementById('catPctMonth').innerHTML=`
+    <div class="pct-bar">${[['Residential',65,'var(--gold)'],['Commercial',16,'var(--info)'],['Industrial',5,'var(--warn)'],['Farm',6,'var(--success)'],['Business',6,'var(--purple)'],['Auction',2,'var(--danger)']].map(([n,v,c])=>`<div class="pct-seg" style="width:${v}%;background:${c}" title="${n}: ${v}%">${v>5?v+'%':''}</div>`).join('')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px">${[['Residential',65,'var(--gold)'],['Commercial',16,'var(--info)'],['Industrial',5,'var(--warn)'],['Farm',6,'var(--success)'],['Business',6,'var(--purple)'],['Auction',2,'var(--danger)']].map(([n,v,c])=>`<span style="font-size:0.72rem;color:var(--subtle);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:${c};border-radius:2px;display:inline-block"></span>${n} ${v}%</span>`).join('')}</div>
+  `;
+
+  buildCustTable(d.customers);
+}
+
+function buildCustTable(custs){
+  document.getElementById('custBody').innerHTML=custs.map(c=>{
+    const total=c.res+c.com+c.ind+c.farm+c.biz+c.auc;
+    const fee=total*c.rate;
+    return`<tr class="expand-row" onclick="toggleExpand(this,'exp-${c.id}')">
+      <td><strong>${c.name}</strong><div style="font-size:0.7rem;color:var(--subtle)">${c.email}</div></td>
+      <td>${pkgBadge(c.pkg)}</td>
+      <td>${c.res||'—'}</td><td>${c.com||'—'}</td><td>${c.ind||'—'}</td><td>${c.farm||'—'}</td><td>${c.biz||'—'}</td><td>${c.auc||'—'}</td>
+      <td><strong>${total}</strong></td>
+      <td style="color:var(--gold);font-weight:800">${fmt(fee)}</td>
+      <td><button class="act-btn contact" onclick="event.stopPropagation();showToast('📧 Email sent to ${c.name}')">📧</button> <button class="act-btn edit" onclick="event.stopPropagation();showToast('Opening ${c.name} profile...')">Edit</button></td>
+    </tr>
+    <tr class="expand-detail" id="exp-${c.id}"><td colspan="11"><div class="expand-inner">
+      <table style="width:100%;font-size:0.78rem;border-collapse:collapse">
+        <thead><tr><th style="text-align:left;padding:5px 8px;color:var(--subtle);font-size:0.65rem;text-transform:uppercase;border-bottom:1px solid var(--border)">Month</th><th style="text-align:right;padding:5px 8px;color:var(--subtle);font-size:0.65rem;text-transform:uppercase;border-bottom:1px solid var(--border)">Total Listings</th><th style="text-align:right;padding:5px 8px;color:var(--subtle);font-size:0.65rem;text-transform:uppercase;border-bottom:1px solid var(--border)">Fee Charged</th></tr></thead>
+        <tbody>${c.history.map(h=>`<tr><td style="padding:5px 8px;color:var(--cream)">${h.m}</td><td style="padding:5px 8px;text-align:right;color:var(--cream)">${h.total}</td><td style="padding:5px 8px;text-align:right;color:var(--gold);font-weight:800">${fmt(h.fee)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div></td></tr>`;
+  }).join('');
+}
+
+function filterListings(type,el){
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const d=D();
+  const filtered=type==='all'?d.customers:d.customers.filter(c=>c.pkg===type);
+  buildCustTable(filtered);
+}
+
+function toggleExpand(row,id){
+  row.classList.toggle('open');
+  const det=document.getElementById(id);
+  if(det)det.classList.toggle('open');
+}
+
+// ══ AUCTIONS ══
+function buildAuctions(){
+  const d=D();
+  const live=d.auctions.filter(a=>a.status==='live');
+  const sold=d.auctions.filter(a=>a.status==='sold');
+  const pendingComm=sold.filter(a=>a.payStatus==='pending').reduce((s,a)=>s+a.totalComm,0);
+
+  document.getElementById('auctionStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🔴</div><span class="sc-trend live">LIVE</span></div><div class="sc-val">${live.length}</div><div class="sc-lbl">Live Auctions</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">💰</div><span class="sc-trend down">PENDING</span></div><div class="sc-val">${fmt(pendingComm)}</div><div class="sc-lbl">Commission Owing</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div><span class="sc-trend up">+2</span></div><div class="sc-val">${sold.length}</div><div class="sc-lbl">Completed Auctions</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">💵</div><span class="sc-trend up">10%</span></div><div class="sc-val">${fmt(sold.reduce((s,a)=>s+a.totalComm,0))}</div><div class="sc-lbl">Total Commission</div></div>
+  `;
+
+  document.getElementById('liveAuctions').innerHTML=live.map(a=>`
+    <div class="comm-card">
+      <div style="width:44px;height:44px;border-radius:var(--r2);background:rgba(220,38,38,0.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🔴</div>
+      <div class="cc-prop"><h4>${a.prop}</h4><p>${a.type} · Seller: ${a.seller} · ${a.bids} bids · Ends ${a.ends}</p></div>
+      <div class="cc-amount"><div class="ca-val">${a.current}</div><div class="ca-date">Reserve: ${a.reserve}</div></div>
+      <button class="act-btn view" onclick="showToast('Opening auction ${a.id}...')">View</button>
+    </div>`).join('');
+
+  document.getElementById('pendingComm').innerHTML=sold.filter(a=>a.payStatus==='pending').map(a=>`
+    <div class="comm-card">
+      <div class="cc-prop"><h4>${a.prop}</h4><p>Sold to ${a.buyer} · Due ${a.payDue}</p></div>
+      <div class="cc-amount"><div class="ca-val">${fmt(a.totalComm)}</div><div class="ca-date">5%+5% of ${fmt(a.soldPrice)}</div></div>
+      <button class="act-btn approve" onclick="showToast('✅ Commission marked as received')">Mark Received</button>
+    </div>`).join('');
+
+  document.getElementById('auctionHistBody').innerHTML=sold.map(a=>`
+    <tr>
+      <td><strong>${a.prop}</strong><div style="font-size:0.7rem;color:var(--subtle)">${a.type}</div></td>
+      <td style="font-weight:800;color:var(--cream)">${fmt(a.soldPrice)}</td>
+      <td style="color:var(--gold)">${fmt(a.sellerComm)}</td>
+      <td style="color:var(--gold)">${fmt(a.buyerComm)}</td>
+      <td style="color:var(--gold);font-weight:800">${fmt(a.totalComm)}</td>
+      <td>${a.buyer}</td>
+      <td>${a.dateSold}</td>
+      <td>${a.payStatus==='received'?badge('active','Received'):badge('pending','Pending')}</td>
+      <td>${a.payStatus==='pending'?`<button class="act-btn approve" onclick="showToast('✅ Commission received')">✅ Received</button>`:`<button class="act-btn view" onclick="showToast('Viewing invoice...')">Invoice</button>`}</td>
+    </tr>`).join('');
+}
+
+// ══ APPROVALS ══
+function buildApprovals(){
+  const approvals=[
+    {type:'listing',ico:'🏡',title:'3 Bed House, Constantia — R2.8M',sub:'Sarah Mitchell · Cape Town, SA · 2h ago',urgency:'high',detail:'4 photos uploaded · Good description · Price matches market'},
+    {type:'ad',ico:'📢',title:'SafeHome Home Inspection — Mobile Ad',sub:'SafeHome Inspect · $50 deposit paid · 4h ago',urgency:'medium',detail:'300×250px PNG · Landing page verified · No misleading claims'},
+    {type:'user',ico:'👤',title:'Kenya Properties — Agent Verification',sub:'Kenya Properties · Nairobi, KE · 1 day ago',urgency:'medium',detail:'Business registration submitted · 31 listings ready to import'},
+    {type:'listing',ico:'🏢',title:'Office Space, Dubai Marina — $2.1M',sub:'Dubai Homes LLC · 2 days ago',urgency:'low',detail:'Commercial listing · 28 photos · Video tour included'},
+  ];
+  document.getElementById('approvalCards').innerHTML=approvals.map((a,i)=>`
+    <div class="appr-card ${a.urgency==='high'?'urgent':''}">
+      <div class="appr-ico">${a.ico}</div>
+      <div class="appr-info">
+        <div class="appr-title">${a.title}</div>
+        <div class="appr-sub">${a.sub}</div>
+        <div class="appr-tag">${a.type.toUpperCase()}</div>
+        <div style="font-size:0.75rem;color:var(--mid);margin-top:6px">📋 ${a.detail}</div>
+      </div>
+      <div class="appr-actions">
+        <button class="act-btn view" onclick="showToast('Viewing details...')">👁 View</button>
+        <button class="act-btn approve" onclick="this.closest('.appr-card').style.opacity='0.4';showToast('✅ Approved')">✅ Approve</button>
+        <button class="act-btn reject" onclick="this.closest('.appr-card').style.opacity='0.4';showToast('❌ Rejected')">❌ Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+// ══ PROVAL ══
+function buildProVal(){
+  document.getElementById('provalStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🏠</div><span class="sc-trend up">+23%</span></div><div class="sc-val">7</div><div class="sc-lbl">Reports Today</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+18%</span></div><div class="sc-val">$868</div><div class="sc-lbl">Revenue This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">📊</div><span class="sc-trend up">+12%</span></div><div class="sc-val">42</div><div class="sc-lbl">Reports This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏱️</div><span class="sc-trend up">-30s</span></div><div class="sc-val">1m 42s</div><div class="sc-lbl">Avg Generation Time</div></div>
+  `;
+
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const counts=[4,7,5,9,6,3,7];
+  const rev=[496,868,620,1116,744,372,868];
+  document.getElementById('provalWeek').innerHTML=days.map((d,i)=>`
+    <div class="pvd ${d==='Sun'?'today':''}">
+      <div class="pvd-day">${d}</div>
+      <div class="pvd-n">${counts[i]}</div>
+      <div class="pvd-r">$${rev[i]}</div>
+    </div>`).join('');
+
+  document.getElementById('provalBody').innerHTML=`
+    <tr><td>22 Mar 09:12</td><td>Sarah Mitchell</td><td>4-bed house, Constantia</td><td>🇿🇦 South Africa</td><td style="color:var(--gold);font-weight:800">$124</td><td>${badge('active','Delivered')}</td><td><button class="act-btn view">📄 View</button></td></tr>
+    <tr><td>22 Mar 11:45</td><td>Dubai Homes LLC</td><td>Villa, Palm Jumeirah</td><td>🇦🇪 UAE</td><td style="color:var(--gold);font-weight:800">$124</td><td>${badge('active','Delivered')}</td><td><button class="act-btn view">📄 View</button></td></tr>
+    <tr><td>22 Mar 14:22</td><td>Pieter Viljoen</td><td>Wine farm 120ha, Stellenbosch</td><td>🇿🇦 South Africa</td><td style="color:var(--gold);font-weight:800">$124</td><td>${badge('pending','Generating')}</td><td><button class="act-btn view">📄 View</button></td></tr>
+    <tr><td>21 Mar 16:08</td><td>Singapore Luxury</td><td>Penthouse, Marina Bay Sands</td><td>🇸🇬 Singapore</td><td style="color:var(--gold);font-weight:800">$124</td><td>${badge('active','Delivered')}</td><td><button class="act-btn view">📄 View</button></td></tr>
+    <tr><td>21 Mar 10:34</td><td>London Properties</td><td>3-bed flat, Mayfair</td><td>🇬🇧 UK</td><td style="color:var(--gold);font-weight:800">$124</td><td>${badge('active','Delivered')}</td><td><button class="act-btn view">📄 View</button></td></tr>
+  `;
+}
+
+// ══ REVENUE ══
+function buildRevenue(){
+  const d=D();
+  const latest=d.revenue[d.revenue.length-1];
+  const prev=d.revenue[d.revenue.length-2];
+  const ytd=d.revenue.reduce((s,r)=>s+r.total,0);
+  document.getElementById('revStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+95%</span></div><div class="sc-val">${fmt(latest.total)}</div><div class="sc-lbl">This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📅</div><span class="sc-trend up">+${((ytd/12)*2.4).toFixed(0)}K</span></div><div class="sc-val">${fmt(ytd)}</div><div class="sc-lbl">YTD Revenue</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">📢</div><span class="sc-trend up">+8%</span></div><div class="sc-val">${fmt(latest.ads)}</div><div class="sc-lbl">Ad Revenue</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🔨</div><span class="sc-trend up">+108%</span></div><div class="sc-val">${fmt(latest.auction)}</div><div class="sc-lbl">Auction Commission</div></div>
+  `;
+
+  document.getElementById('revHistBody').innerHTML=d.revenue.map((r,i)=>{
+    const prev=i>0?d.revenue[i-1]:null;
+    const growth=prev?((r.total-prev.total)/prev.total*100).toFixed(1):null;
+    return`<tr ${i===d.revenue.length-1?'class="total-row"':''}>
+      <td><strong>${r.m}</strong></td>
+      <td>${fmt(r.listings)}</td><td>${fmt(r.ads)}</td><td>${fmt(r.partners)}</td><td>${fmt(r.auction)}</td><td>${fmt(r.proval)}</td>
+      <td style="color:var(--gold);font-weight:800">${fmt(r.total)}</td>
+      <td>${growth?`<span style="color:${growth>0?'var(--success)':'var(--danger)'};font-weight:800">${growth>0?'▲':'▼'} ${Math.abs(growth)}%</span>`:'—'}</td>
+    </tr>`;
+  }).join('');
+
+  const maxR=Math.max(...d.revenue.map(r=>r.total));
+  document.getElementById('revTrendChart').innerHTML=d.revenue.map(r=>`
+    <div class="bar-group">
+      <div class="bar" style="height:${Math.max(r.total/maxR*120,3)}px;background:var(--gold)" title="${r.m}: ${fmt(r.total)}"><span class="bar-val">${fmt(r.total)}</span></div>
+      <div class="bar-lbl">${r.m.split(' ')[0]}</div>
+    </div>`).join('');
+
+  document.getElementById('payMethodChart').innerHTML=`<div style="display:grid;gap:8px;margin-top:4px">${[['💳','Stripe','42%','var(--info)'],['🏦','PayFast','31%','var(--gold)'],['🏧','EFT','18%','var(--success)'],['💰','Other','9%','var(--subtle)']].map(([i,n,p,c])=>`
+    <div style="display:flex;align-items:center;gap:10px"><span>${i}</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:0.8rem;font-weight:700;color:var(--cream)">${n}</span><span style="font-size:0.78rem;color:${c};font-weight:800">${p}</span></div><div style="height:6px;background:var(--hover);border-radius:3px"><div style="height:100%;width:${p};background:${c};border-radius:3px"></div></div></div></div>`).join('')}</div>`;
+
+  document.getElementById('quarterChart').innerHTML=`<div style="display:grid;gap:8px;margin-top:4px">${[['Q3 2025','$14,048','var(--subtle)'],['Q4 2025','$121,268','var(--mid)'],['Q1 2026','$524,242','var(--gold)']].map(([q,v,c])=>`
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:0.82rem;color:var(--cream)">${q}</span><span style="font-size:0.85rem;font-weight:800;color:${c}">${v}</span></div>`).join('')}</div>`;
+
+  document.getElementById('targetsChart').innerHTML=`<div style="display:grid;gap:10px;margin-top:4px">${[['Mar Revenue','$199K','$150K','var(--success)'],['Monthly Users','242','200','var(--success)'],['New Markets','0','2','var(--danger)'],['ProVal Reports','42','30','var(--success)']].map(([l,a,t,c])=>`
+    <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.75rem;color:var(--subtle)">${l}</span><span style="font-size:0.75rem;font-weight:800;color:${c}">${a} / ${t}</span></div><div style="height:5px;background:var(--hover);border-radius:3px"><div style="height:100%;width:${Math.min(parseInt(a.replace(/[^0-9]/g,''))/parseInt(t.replace(/[^0-9]/g,''))*100,100)}%;background:${c};border-radius:3px"></div></div></div>`).join('')}</div>`;
+}
+
+// ══ PAYMENTS ══
+function buildPayments(){
+  const d=D();
+  document.getElementById('payStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+18%</span></div><div class="sc-val">$1,248</div><div class="sc-lbl">Collected Today</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏳</div><span class="sc-trend flat">2</span></div><div class="sc-val">$174</div><div class="sc-lbl">Pending</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">📅</div><span class="sc-trend up">+95%</span></div><div class="sc-val">$199K</div><div class="sc-lbl">Month Total</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🧾</div><span class="sc-trend up">+8</span></div><div class="sc-val">${d.payments.length}</div><div class="sc-lbl">Transactions</div></div>
+  `;
+  buildPaymentsTable(d.payments);
+}
+
+function buildPaymentsTable(pays){
+  document.getElementById('paymentsBody').innerHTML=pays.map(p=>`<tr>
+    <td>${p.date}</td>
+    <td style="font-family:monospace;font-size:0.72rem;color:var(--subtle)">${p.ref}</td>
+    <td><strong>${p.user}</strong></td>
+    <td>${p.desc}</td>
+    <td style="color:var(--gold);font-weight:800">$${p.amount.toFixed(2)}</td>
+    <td>${p.method}</td>
+    <td>${p.status==='paid'?badge('active','Paid'):badge('pending','Pending')}</td>
+    <td><button class="act-btn view" onclick="showToast('Opening invoice ${p.ref}...')">🧾 Invoice</button></td>
+  </tr>`).join('');
+}
+
+function filterPayments(type,el){
+  document.querySelectorAll('#p-payments .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const d=D();
+  let f=d.payments;
+  if(type==='stripe')f=f.filter(p=>p.method==='Stripe');
+  else if(type==='payfast')f=f.filter(p=>p.method==='PayFast');
+  else if(type==='eft')f=f.filter(p=>p.method==='EFT');
+  else if(type==='pending')f=f.filter(p=>p.status==='pending');
+  buildPaymentsTable(f);
+}
+
+// ══ ADS ══
+function buildAds(){
+  const d=D();
+  const totalClicks=d.ads.reduce((s,a)=>s+a.clicks,0);
+  const totalSpend=d.ads.reduce((s,a)=>s+a.spend,0);
+  const totalBal=d.ads.reduce((s,a)=>s+a.bal,0);
+  document.getElementById('adStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">📢</div><span class="sc-trend up">+1</span></div><div class="sc-val">${d.ads.filter(a=>a.status==='active').length}</div><div class="sc-lbl">Active Advertisers</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">👆</div><span class="sc-trend up">+15%</span></div><div class="sc-val">${fmtNum(totalClicks)}</div><div class="sc-lbl">Clicks This Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+12%</span></div><div class="sc-val">$${totalSpend.toFixed(0)}</div><div class="sc-lbl">Ad Revenue Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">💳</div><span class="sc-trend flat">6</span></div><div class="sc-val">$${totalBal.toFixed(0)}</div><div class="sc-lbl">Total Wallet Balance</div></div>
+  `;
+  buildAdsTable(d.ads);
+
+  document.getElementById('adFormatChart').innerHTML=`<div style="display:grid;gap:8px;margin-top:4px">${[['Medium Rectangle','1,840 clicks','$0.12/click'],['Leaderboard','3,200 clicks','$0.10/click'],['Skyscraper','890 clicks','$0.10/click'],['Half Page','2,100 clicks','$0.15/click'],['Mobile Lead','0 clicks','$0.08/click']].map(([f,c,cpc])=>`
+    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:0.8rem;color:var(--cream)">${f}</span><div style="text-align:right"><div style="font-size:0.8rem;font-weight:800;color:var(--gold)">${c}</div><div style="font-size:0.68rem;color:var(--subtle)">${cpc}</div></div></div>`).join('')}</div>`;
+
+  document.getElementById('cpcChart').innerHTML=`<div style="display:grid;gap:8px;margin-top:4px">${[['Half Page','$0.15','var(--gold)'],['Wide Skyscraper','$0.18','var(--gold)'],['Medium Rect','$0.12','var(--mid)'],['Leaderboard','$0.10','var(--mid)'],['Mobile','$0.08','var(--subtle)']].map(([f,c,cl])=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 0"><div style="flex:1;font-size:0.78rem;color:var(--cream)">${f}</div><div style="font-size:0.85rem;font-weight:800;color:${cl}">${c}</div></div>`).join('')}</div>`;
+}
+
+function buildAdsTable(ads){
+  document.getElementById('adsBody').innerHTML=ads.map(a=>`
+    <tr class="expand-row" onclick="toggleExpand(this,'ade-${a.id}')">
+      <td><strong>${a.name}</strong></td><td>${a.type}</td>
+      <td>$${a.cpc.toFixed(2)}</td>
+      <td>${fmtNum(a.clicks)}</td>
+      <td style="color:var(--gold);font-weight:800">$${a.spend.toFixed(2)}</td>
+      <td><span style="color:${a.bal<80?'var(--danger)':'var(--success)'};font-weight:800">$${a.bal.toFixed(2)}</span></td>
+      <td>${statusBadge(a.status)}</td>
+      <td>
+        ${a.status==='pending'?`<button class="act-btn approve" onclick="event.stopPropagation();showToast('✅ Ad approved')">✅ Approve</button>`:
+        `<button class="act-btn contact" onclick="event.stopPropagation();showToast('📧 Email sent')">📧</button>`}
+        <button class="act-btn edit" onclick="event.stopPropagation();showToast('Opening ${a.name}...')">Edit</button>
+      </td>
+    </tr>
+    <tr class="expand-detail" id="ade-${a.id}"><td colspan="8"><div class="expand-inner">
+      ${a.history.length?`<table style="width:100%;font-size:0.78rem;border-collapse:collapse"><thead><tr>${['Month','Clicks','Spend'].map(h=>`<th style="text-align:left;padding:5px 8px;color:var(--subtle);font-size:0.65rem;text-transform:uppercase;border-bottom:1px solid var(--border)">${h}</th>`).join('')}</tr></thead><tbody>${a.history.map(h=>`<tr><td style="padding:5px 8px;color:var(--cream)">${h.m}</td><td style="padding:5px 8px;color:var(--cream)">${fmtNum(h.clicks)}</td><td style="padding:5px 8px;color:var(--gold);font-weight:800">$${h.spend.toFixed(2)}</td></tr>`).join('')}</tbody></table>`:'<div style="color:var(--subtle);font-size:0.78rem">No history yet — ad pending approval.</div>'}
+    </div></td></tr>`).join('');
+}
+
+// ══ USERS ══
+function buildUsers(){
+  const d=D();
+  document.getElementById('userStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">👥</div><span class="sc-trend up">+3</span></div><div class="sc-val">${d.users.length}</div><div class="sc-lbl">Total Users</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">🏢</div><span class="sc-trend up">+2</span></div><div class="sc-val">${d.users.filter(u=>u.role==='agent'||u.role==='enterprise').length}</div><div class="sc-lbl">Agents & Enterprise</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div><span class="sc-trend up">+1</span></div><div class="sc-val">${d.users.filter(u=>u.status==='active').length}</div><div class="sc-lbl">Active</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🚫</div><span class="sc-trend flat">1</span></div><div class="sc-val">${d.users.filter(u=>u.status==='suspended').length}</div><div class="sc-lbl">Suspended</div></div>
+  `;
+  buildUsersTable(d.users);
+}
+
+function buildUsersTable(users){
+  document.getElementById('usersBody').innerHTML=users.map(u=>`<tr>
+    <td><div style="font-weight:700;color:var(--cream)">${u.name}</div></td>
+    <td>${u.email}</td>
+    <td>${badge(u.role,u.role.charAt(0).toUpperCase()+u.role.slice(1))}</td>
+    <td>${u.listings}</td>
+    <td>${u.joined}</td>
+    <td style="color:${u.last==='Today'?'var(--success)':u.last==='Yesterday'?'var(--mid)':'var(--subtle)'}">${u.last}</td>
+    <td>${statusBadge(u.status)}</td>
+    <td>
+      <button class="act-btn view" onclick="showToast('Viewing ${u.name}...')">View</button>
+      ${u.status==='active'?`<button class="act-btn suspend" onclick="showToast('⚠️ ${u.name} suspended')">Suspend</button>`:`<button class="act-btn approve" onclick="showToast('✅ ${u.name} reinstated')">Reinstate</button>`}
+      <button class="act-btn contact" onclick="showToast('📧 Email sent to ${u.name}')">📧</button>
+    </td>
+  </tr>`).join('');
+}
+
+function filterUsers(role,el){
+  document.querySelectorAll('#p-users .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const d=D();
+  buildUsersTable(role==='all'?d.users:d.users.filter(u=>u.role===role||u.status===role));
+}
+
+// ══ PARTNERSHIPS ══
+function buildPartnerships(){
+  const d=D();
+  document.getElementById('partnerStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🤝</div><span class="sc-trend up">+2</span></div><div class="sc-val">${d.partners.length}</div><div class="sc-lbl">Agency Partners</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">💰</div><span class="sc-trend up">+8%</span></div><div class="sc-val">$1,137</div><div class="sc-lbl">Partner Fees/Month</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">🌍</div><span class="sc-trend up">+1</span></div><div class="sc-val">6</div><div class="sc-lbl">Countries</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">🏡</div><span class="sc-trend up">+44</span></div><div class="sc-val">480</div><div class="sc-lbl">Partner Listings</div></div>
+  `;
+  document.getElementById('partnersBody').innerHTML=d.partners.map(p=>`<tr>
+    <td><strong>${p.agency}</strong></td>
+    <td>${p.country}</td>
+    <td>${pkgBadge(p.plan.toLowerCase())}</td>
+    <td>${p.listings}</td>
+    <td style="color:var(--gold);font-weight:800">$${p.fee}/mo</td>
+    <td>${p.since}</td>
+    <td>${p.renewal}</td>
+    <td>${badge('active','Active')}</td>
+    <td>
+      <button class="act-btn view" onclick="showToast('Viewing ${p.agency}...')">View</button>
+      <button class="act-btn contact" onclick="showToast('📧 Email sent to ${p.agency}')">📧</button>
+      <button class="act-btn edit" onclick="showToast('Editing ${p.agency}...')">Edit</button>
+    </td>
+  </tr>`).join('');
+}
+
+// ══ SUPPORT ══
+function buildSupport(){
+  const d=D();
+  const open=d.tickets.filter(t=>t.status==='open').length;
+  const urgent=d.tickets.filter(t=>t.priority==='urgent').length;
+  document.getElementById('supportStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🎧</div><span class="sc-trend down">${open} open</span></div><div class="sc-val">${open}</div><div class="sc-lbl">Open Tickets</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">🚨</div><span class="sc-trend down">${urgent}</span></div><div class="sc-val">${urgent}</div><div class="sc-lbl">Urgent</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div><span class="sc-trend up">+5</span></div><div class="sc-val">${d.tickets.filter(t=>t.status==='closed').length}</div><div class="sc-lbl">Resolved</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">⏱️</div><span class="sc-trend up">-1h</span></div><div class="sc-val">4.2h</div><div class="sc-lbl">Avg Resolution</div></div>
+  `;
+  buildSupportTickets(d.tickets);
+}
+
+function buildSupportTickets(tickets){
+  document.getElementById('supportTickets').innerHTML=tickets.map(t=>`
+    <div class="ticket-card ${t.priority==='urgent'?'urgent':'normal'} ${t.status==='closed'?'closed':''}">
+      <div class="ticket-head">
+        <span class="ticket-id">${t.id}</span>
+        <span class="ticket-subj">${t.subject}</span>
+        <span>${statusBadge(t.status)}</span>
+        ${t.priority==='urgent'?badge('live','URGENT'):''}
+      </div>
+      <div class="ticket-meta">${t.user} · ${t.time}</div>
+      <div style="font-size:0.78rem;color:var(--mid);margin-top:6px">${t.desc}</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        ${t.status==='open'?`<button class="act-btn approve" onclick="showToast('✅ Ticket ${t.id} resolved')">✅ Resolve</button>`:``}
+        <button class="act-btn contact" onclick="showToast('📧 Reply sent to ${t.user}')">📧 Reply</button>
+        <button class="act-btn view" onclick="showToast('Opening ticket ${t.id}...')">View Full</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterSupport(type,el){
+  document.querySelectorAll('#p-support .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const d=D();
+  buildSupportTickets(type==='all'?d.tickets:d.tickets.filter(t=>type==='open'?t.status==='open':type==='urgent'?t.priority==='urgent':t.status==='closed'));
+}
+
+// ══ COUNTRIES ══
+function buildCountries(){
+  const d=D();
+  document.getElementById('countryStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(196,164,124,0.12)">🌍</div></div><div class="sc-val">185</div><div class="sc-lbl">Total Countries</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">✅</div><span class="sc-trend up">+2</span></div><div class="sc-val">62</div><div class="sc-lbl">Active Markets</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⏳</div></div><div class="sc-val">123</div><div class="sc-lbl">Coming Soon</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">🌐</div></div><div class="sc-val">5</div><div class="sc-lbl">Continents</div></div>
+  `;
+  buildCountryGrid(d.countries);
+}
+
+function buildCountryGrid(countries){
+  document.getElementById('countryGrid').innerHTML=countries.map(c=>`
+    <div class="country-card" onclick="showToast('${c.flag} ${c.name} — ${c.listings} listings')">
+      <div class="country-flag">${c.flag}</div>
+      <div class="country-name">${c.name}</div>
+      <div class="country-stats">${c.status==='active'?`${fmtNum(c.listings)} listings · ${c.agents} agents`:'Launching soon'}</div>
+      <div class="country-status">${c.status==='active'?badge('active','Active'):badge('pending','Coming Soon')}</div>
+    </div>`).join('');
+}
+
+function filterCountries(type,el){
+  document.querySelectorAll('#p-countries .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const d=D();
+  let f=d.countries;
+  if(type==='active')f=f.filter(c=>c.status==='active');
+  else if(type==='coming')f=f.filter(c=>c.status!=='active');
+  else if(type!=='all')f=f.filter(c=>c.region.toLowerCase().includes(type));
+  buildCountryGrid(f);
+}
+
+// ══ MODERATION ══
+function buildModeration(){
+  const d=D();
+  document.getElementById('modStats').innerHTML=`
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(220,38,38,0.1)">🚨</div><span class="sc-trend down">2 urgent</span></div><div class="sc-val">${d.moderation.length}</div><div class="sc-lbl">Active Reports</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(217,119,6,0.1)">⚠️</div></div><div class="sc-val">2</div><div class="sc-lbl">Fraud Flags</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(37,99,235,0.1)">📋</div><span class="sc-trend up">+3</span></div><div class="sc-val">14</div><div class="sc-lbl">Resolved This Week</div></div>
+    <div class="stat-card"><div class="sc-top"><div class="sc-ico" style="background:rgba(22,163,74,0.1)">⏱️</div></div><div class="sc-val">2.1h</div><div class="sc-lbl">Avg Resolution</div></div>
+  `;
+  document.getElementById('moderationCards').innerHTML=d.moderation.map(m=>`
+    <div class="appr-card ${m.urgency==='high'?'urgent':''}">
+      <div class="appr-ico">${m.type==='listing'?'🏡':m.type==='user'?'👤':m.type==='ad'?'📢':'⚠️'}</div>
+      <div class="appr-info">
+        <div class="appr-title">${m.title}</div>
+        <div class="appr-sub">By: ${m.user} · ${badge(m.urgency==='high'?'live':m.urgency==='medium'?'pending':'agent',m.urgency.toUpperCase()+' PRIORITY')}</div>
+        <div style="font-size:0.75rem;color:var(--mid);margin-top:6px">📋 ${m.detail}</div>
+      </div>
+      <div class="appr-actions">
+        <button class="act-btn view" onclick="showToast('Viewing ${m.id}...')">View</button>
+        <button class="act-btn approve" onclick="this.closest('.appr-card').style.opacity='0.4';showToast('✅ ${m.id} resolved')">Resolve</button>
+        <button class="act-btn reject" onclick="this.closest('.appr-card').style.opacity='0.4';showToast('🚫 ${m.id} escalated')">Escalate</button>
+      </div>
+    </div>`).join('');
+}
+
+// ══ SEARCH ══
+function handleSearch(q){
+  if(!q){return;}
+  showToast(`🔍 Searching for "${q}"...`);
+}
+
+// ══ EXPORT ══
+function exportCSV(){
+  const panel=document.querySelector('.panel.active');
+  const id=panel?panel.id:'p-overview';
+  showToast('📥 Exporting '+id.replace('p-','').toUpperCase()+' data as CSV...');
+}
+
+// ══ FILTERS ══
+function filterApprovals(type,el){document.querySelectorAll('#p-approvals .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');showToast('Filter: '+type);}
+function filterAds(type,el){document.querySelectorAll('#p-ads .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');buildAds();}
+
+// ══ INIT ══
+function initDashboard(){
+  buildOverview();buildAnalytics();buildLiveRevenue();buildListings();
+  buildAuctions();buildApprovals();buildProVal();buildRevenue();
+  buildPayments();buildAds();buildUsers();buildPartnerships();
+  buildSupport();buildCountries();buildModeration();
+}
+initDashboard();
+</script>
+<script src="pf-auth.js"></script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

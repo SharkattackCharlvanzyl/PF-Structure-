@@ -1,0 +1,145 @@
+<!-- FILE: commission-fees.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Commission &amp; Fees</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);--accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;
+      --lime:#c4a47c;--snow:#EDF2EF;
+      --radius:14px;--radius2:10px;--max:980px;
+      --font:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    header{
+      background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%) 0%,var(--accent) 55%,var(--accent2) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header .wrap{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    h1{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;margin:0 0 10px}
+    .meta{color:rgba(255,255,255,0.75);font-size:0.82rem;margin-bottom:8px}
+    .meta strong{color:#fff}
+    .meta a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;font-size:0.8rem}
+    .meta a:hover{background:rgba(255,255,255,0.12);color:#fff;text-decoration:none}
+
+    main{max-width:var(--max);margin:0 auto;padding:24px 24px 60px}
+    section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+    h2{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin:0 0 14px;color:var(--accent-dark)}
+    h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px;margin-right:10px;vertical-align:middle}
+    h3{margin:18px 0 8px;font-size:0.95rem;font-weight:800;color:var(--text)}
+    p{margin:10px 0;font-size:0.9rem;line-height:1.65}
+    ul{margin:10px 0 0 20px;font-size:0.9rem}
+    ul li{margin-bottom:6px;line-height:1.55}
+
+    .callout{border-left:4px solid var(--accent);background:rgba(196,164,124,0.04);padding:14px 16px;border-radius:var(--radius2);margin:14px 0}
+    .callout p{margin:0;font-size:0.88rem;line-height:1.55}
+    .note{font-size:0.82rem;color:var(--muted);padding:12px;margin-top:12px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    footer{max-width:var(--max);margin:0 auto;padding:20px 24px 40px;color:var(--muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--line)}
+
+    @media print{header{background:var(--accent)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}section{box-shadow:none!important;break-inside:avoid}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Commission &amp; Fees Policy</h1>
+    <div class="meta">Version 1.0 | Effective: <strong>[Insert Date]</strong></div>
+    <div class="meta" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="terms-of-use.html">← Terms of Use</a>
+      <a href="auction-bidding-terms.html">Auction Terms</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>1) General</h2>
+    <p>
+      This page explains fees and commissions that may apply when you use PropertyFinder ("Platform"). Fees may vary by country,
+      category (residential/commercial/business-for-sale), and plan, and will be displayed before you commit.
+    </p>
+    <div class="note">
+      If there is a conflict between this Policy and a specific invoice or written agreement, the invoice/agreement prevails.
+    </div>
+  </section>
+
+  <section>
+    <h2>2) Auction Platform Commission (Buyer Default)</h2>
+    <div class="callout">
+      <p>
+        If your bid is accepted online and you do not proceed to complete the transaction (buyer default),
+        you must pay PropertyFinder <strong>5% of the Accepted Bid amount</strong> within <strong>48 hours</strong>, as set out in the
+        <a href="auction-bidding-terms.html#commission">Auction Terms</a>.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3) Listing / Advertising Fees (If Applicable)</h2>
+    <h3>3.1 Pay-Per-Listing / Subscription</h3>
+    <p>
+      PropertyFinder may offer pay-per-listing and/or subscription options. The applicable cost is shown in-app at checkout.
+    </p>
+    <h3>3.2 Featured Upgrades</h3>
+    <ul>
+      <li>Featured / Boosted listings</li>
+      <li>Homepage or category spotlight</li>
+      <li>Premium branding / agency profile enhancements</li>
+      <li>Priority leads routing</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4) Taxes, Currency, and Invoicing</h2>
+    <ul>
+      <li>Fees may be exclusive of VAT/GST/sales tax unless stated otherwise.</li>
+      <li>Currency is shown at checkout; exchange rates may apply for cross-border payments.</li>
+      <li>Invoices are issued by PropertyFinder Head Office or its regional contracting entity as shown on the invoice.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5) Refunds</h2>
+    <p>
+      Unless required by law, fees for services delivered (e.g., listing publication, featured placement) are generally non-refundable.
+      Refund rules for payment processing errors or duplicate charges are handled in <a href="payment-terms.html">Payment Terms</a>.
+    </p>
+  </section>
+
+  <section>
+    <h2>6) Contact</h2>
+    <p><strong>Billing Support:</strong> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91f3f8fdfdf8fff6d1e1e3fee1f4e3e5e8f7f8fff5f4e3bfe5fdf5">[email&#160;protected]</a>] | <strong>Head Office:</strong> [Entity + Address]</p>
+  </section>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder. All   <script src="/social-share.js?v=2.1"></script>
+

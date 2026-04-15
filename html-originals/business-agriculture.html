@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — 06j Agriculture &amp; Farming for Sale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nb-green: #141c2b;
+      --nb-green-dark: #0e1520;
+      --nb-green-hover: #1a2535;
+      --nb-white: #1a2535;
+      --nb-offwhite: #F6F8F7;
+      --nb-snow: #1f2d3d;
+      --nb-border: #E3E8E5;
+      --nb-text: #1A1A1A;
+      --nb-muted: #5B6B64;
+      --font-display: 'Cinzel', 'Playfair Display', Georgia, serif;
+      --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-card: 0 1px 3px rgba(196,164,124,0.04), 0 4px 16px rgba(196,164,124,0.03);
+      --shadow-card-hover: 0 4px 12px rgba(196,164,124,0.06), 0 12px 36px rgba(196,164,124,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--nb-white); color: var(--nb-text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      display: flex; gap: 10px; align-items: center; justify-content: space-between;
+      padding: 12px 16px; max-width: 1260px; margin: 14px auto 0;
+      border: 1px solid var(--nb-border); background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px); border-radius: var(--radius-lg);
+      box-shadow: 0 4px 24px rgba(196,164,124,0.06);
+      position: sticky; top: 12px; z-index: 50;
+    }
+    .topbar .left, .topbar .right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; gap: 6px; align-items: center;
+      padding: 7px 12px; border-radius: 999px;
+      background: rgba(196,164,124,0.06); border: 1px solid var(--nb-border);
+      color: var(--nb-muted); font-size: 12.5px; font-weight: 500;
+    }
+    .chip strong { color: #c4a47c; }
+    .select {
+      background: var(--nb-white); border: 1px solid var(--nb-border);
+      color: var(--nb-text); border-radius: 999px; padding: 7px 10px;
+      font-size: 12.5px; outline: none; font-family: var(--font);
+    }
+    .select:focus { border-color: #c4a47c; box-shadow: 0 0 0 3px rgba(196,164,124,0.1); }
+    .btn {
+      border: 1px solid var(--nb-green); background: var(--nb-green); color: white;
+      padding: 9px 16px; border-radius: 999px; font-weight: 600; cursor: pointer;
+      display: inline-flex; gap: 6px; align-items: center; font-size: 13px;
+      font-family: var(--font); transition: all 0.25s ease;
+    }
+    .btn:hover { background: var(--nb-green-hover); border-color: var(--nb-green-hover); transform: translateY(-1px); }
+    .btn.secondary { background: var(--nb-white); color: #c4a47c; border-color: var(--nb-border); }
+    .btn.secondary:hover { border-color: #c4a47c; }
+
+    /* ===== HERO BANNER ===== */
+    .hero-banner {
+      position: relative;
+      background: linear-gradient(135deg,#0e1520,#141c2b) 45%, #007A4D 100%);
+      padding: 64px 24px 52px; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(196,164,124,0.15), transparent),
+        radial-gradient(ellipse 60% 50% at 85% 20%, rgba(255,255,255,0.06), transparent);
+      pointer-events: none;
+    }
+    .hero-banner::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    }
+    .hero-inner {
+      max-width: 1220px; margin: 0 auto; position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
+    }
+    .hero-text { max-width: 620px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.85); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--nb-green-hover); }
+    .hero-title {
+      font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700; color: white; line-height: 1.2; margin-bottom: 14px;
+    }
+    .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.75); line-height: 1.6; max-width: 520px; }
+    .hero-stats { display: flex; gap: 18px; flex-wrap: wrap; }
+    .hero-stat {
+      padding: 16px 22px; border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px); text-align: center; min-width: 115px;
+    }
+    .hero-stat .val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: white; }
+    .hero-stat .lbl { font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-top: 4px; font-weight: 500; }
+    @media (max-width: 768px) {
+      .hero-banner { padding: 48px 18px 40px; }
+      .hero-stats { gap: 10px; }
+      .hero-stat { min-width: 90px; padding: 12px 14px; }
+    }
+
+    /* ===== SECTION ===== */
+    .section { padding: 48px 24px; background: var(--nb-white); }
+    .section.alt { background: var(--nb-offwhite); }
+    .section-inner { max-width: 1220px; margin: 0 auto; }
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      font-weight: 600; color: var(--nb-text);
+    }
+    .section-sub { font-size: 0.95rem; color: var(--nb-muted); margin-top: 6px; max-width: 560px; }
+    .result-count {
+      font-size: 0.88rem; font-weight: 600; color: #c4a47c; white-space: nowrap;
+    }
+
+    /* ===== FILTER BAR ===== */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 18px; margin-bottom: 24px;
+      background: var(--nb-offwhite); border-radius: var(--radius-md);
+      border: 1px solid var(--nb-border);
+    }
+    .filter-chip {
+      padding: 8px 16px; border-radius: 999px; border: 1px solid var(--nb-border);
+      background: var(--nb-white); font-size: 0.82rem; font-weight: 600;
+      color: var(--nb-muted); cursor: pointer; transition: all var(--transition);
+      font-family: var(--font);
+    }
+    .filter-chip:hover { border-color: #c4a47c; color: #c4a47c; }
+    .filter-chip.active { background: var(--nb-green); color: white; border-color: #c4a47c; }
+
+    /* ===== BUSINESS GRID ===== */
+    .biz-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 640px) { .biz-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .biz-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    /* ===== BUSINESS CARD ===== */
+    .biz-card {
+      border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--nb-border);
+      box-shadow: var(--shadow-card); transition: all var(--transition);
+      background: var(--nb-white); cursor: pointer; display: flex; flex-direction: column;
+    }
+    .biz-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: rgba(196,164,124,0.15); }
+    .biz-card:hover .biz-img img { transform: scale(1.03); }
+
+    .biz-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--nb-snow); }
+    .biz-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+
+    .badge-row { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 2; }
+    .biz-badge {
+      padding: 5px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.03em; text-transform: uppercase; backdrop-filter: blur(6px);
+    }
+    /* Type badges */
+    .biz-badge.dairy { background: #0EA5E9; color: white; }
+    .biz-badge.poultry { background: #D97706; color: white; }
+    .biz-badge.abattoir { background: #DC2626; color: white; }
+    .biz-badge.feed-mill { background: #92400E; color: white; }
+    .biz-badge.grain-milling { background: #CA8A04; color: white; }
+    .biz-badge.fruit-packing { background: #059669; color: white; }
+    .biz-badge.fish-processing { background: #1D4ED8; color: white; }
+    .biz-badge.sugar-processing { background: #B45309; color: white; }
+    .biz-badge.olive-oil { background: #16A34A; color: white; }
+    .biz-badge.seed-fertiliser { background: #4F46E5; color: white; }
+    .biz-badge.vineyard { background: #7C3AED; color: white; }
+    .biz-badge.agri-processing { background: #DB2777; color: white; }
+    /* Status badges */
+    .biz-badge.established { background: var(--nb-green); color: white; }
+    .biz-badge.profitable { background: var(--nb-green-hover); color: white; }
+    .biz-badge.growing { background: #16A34A; color: white; }
+    .biz-badge.turnkey { background: #1D4ED8; color: white; }
+    .biz-badge.licensed { background: #7C3AED; color: white; }
+    .biz-badge.freehold { background: #6D28D9; color: white; }
+    .biz-badge.franchise { background: #DB2777; color: white; }
+    .biz-badge.leasehold { background: rgba(255,255,255,0.9); color: #c4a47c; border: 1px solid rgba(196,164,124,0.15); }
+
+    .price-tag {
+      position: absolute; bottom: 12px; right: 12px;
+      padding: 8px 14px; border-radius: var(--radius-sm);
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+      color: white; font-weight: 700; font-size: 0.95rem;
+      font-family: var(--font-display);
+    }
+
+    .biz-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+    .biz-title {
+      font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+      color: var(--nb-text); margin-bottom: 6px; line-height: 1.3;
+    }
+    .biz-location {
+      font-size: 0.82rem; color: var(--nb-muted); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .biz-location .flag { font-size: 1rem; }
+
+    /* ===== METRICS GRID (4 common + 4 restaurant-specific) ===== */
+    .metrics-common {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;
+    }
+    .metrics-sector {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+    }
+    .m-box {
+      padding: 9px 10px; border-radius: var(--radius-sm);
+      background: var(--nb-snow); border: 1px solid var(--nb-border);
+    }
+    .m-box .m-label {
+      font-size: 0.66rem; font-weight: 600; color: var(--nb-muted);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .m-box .m-value { font-size: 0.85rem; font-weight: 700; color: var(--nb-text); margin-top: 2px; }
+    .m-box.sector { background: linear-gradient(135deg, rgba(196,164,124,0.04), rgba(196,164,124,0.02)); border-color: rgba(196,164,124,0.1); }
+    .m-box.sector .m-label { color: #c4a47c; }
+
+    .biz-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .btag {
+      padding: 4px 10px; border-radius: 999px; border: 1px solid var(--nb-border);
+      background: var(--nb-white); font-size: 0.72rem; font-weight: 500; color: #c4a47c;
+    }
+
+    .biz-footer {
+      margin-top: auto; padding-top: 12px; border-top: 1px solid var(--nb-border);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .agent-mini { display: flex; align-items: center; gap: 8px; }
+    .agent-mini .av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(196,164,124,0.15), rgba(196,164,124,0.08));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #c4a47c; font-size: 0.6rem;
+    }
+    .agent-mini .aname { font-size: 0.78rem; font-weight: 600; color: var(--nb-text); }
+    .agent-mini .aorg { font-size: 0.68rem; color: var(--nb-muted); }
+    .view-btn {
+      padding: 8px 16px; border-radius: 999px; border: 1px solid var(--nb-green);
+      background: var(--nb-green); color: white; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: all var(--transition); font-family: var(--font);
+    }
+    .view-btn:hover { background: var(--nb-green-hover); border-color: var(--nb-green-hover); }
+
+    /* ===== SECTOR INFO PANEL ===== */
+    .info-panel {
+      margin-top: 32px; padding: 24px; border-radius: var(--radius-lg);
+      background: var(--nb-snow); border: 1px solid var(--nb-border);
+    }
+    .info-panel h3 {
+      font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+      color: var(--nb-text); margin-bottom: 12px;
+    }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .info-item {
+      padding: 14px; border-radius: var(--radius-md); background: var(--nb-white);
+      border: 1px solid var(--nb-border);
+    }
+    .info-item .ii-title { font-weight: 700; font-size: 0.85rem; color: #c4a47c; margin-bottom: 4px; }
+    .info-item .ii-desc { font-size: 0.8rem; color: var(--nb-muted); line-height: 1.5; }
+
+    /* ===== INVEST CTA ===== */
+    .invest-cta {
+      position: relative; padding: 52px 24px;
+      background: linear-gradient(135deg,#0e1520,#141c2b));
+      overflow: hidden;
+    }
+    .invest-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 70% at 80% 50%, rgba(255,255,255,0.05), transparent);
+      pointer-events: none;
+    }
+    .invest-inner {
+      max-width: 1220px; margin: 0 auto; position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    @media (max-width: 768px) { .invest-inner { grid-template-columns: 1fr; } }
+    .invest-text h2 {
+      font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700; color: white; margin-bottom: 14px; line-height: 1.2;
+    }
+    .invest-text p { color: rgba(255,255,255,0.7); line-height: 1.7; font-size: 0.92rem; }
+    .invest-steps { display: flex; flex-direction: column; gap: 14px; }
+    .invest-step {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px; border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+    }
+    .invest-step .num {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,0.15); display: flex; align-items: center;
+      justify-content: center; font-weight: 800; color: white; font-size: 0.78rem;
+    }
+    .invest-step .step-title { font-weight: 700; color: white; font-size: 0.88rem; }
+    .invest-step .step-desc { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 4px; }
+
+    /* ===== DISCLAIMER ===== */
+    .disclaimer-bar {
+      padding: 16px 24px; background: var(--nb-snow); border-top: 1px solid var(--nb-border);
+    }
+    .disclaimer-inner {
+      max-width: 1220px; margin: 0 auto;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.78rem; color: var(--nb-muted); line-height: 1.5;
+    }
+    .disclaimer-inner .icon {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(196,164,124,0.08); display: flex; align-items: center;
+      justify-content: center; font-size: 0.85rem;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--nb-muted); }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .empty-state h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--nb-text); margin-bottom: 8px; }
+
+    /* ===== TOAST ===== */
+    .pf-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      padding: 12px 24px; border-radius: var(--radius-sm); color: white;
+      font-size: 0.85rem; font-weight: 500; z-index: 10000;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15); background: var(--nb-green);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.6s forwards;
+    }
+    @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(12px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+    @keyframes toastOut { to { opacity:0; transform: translateX(-50%) translateY(12px); } }
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link  pf-active">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar" aria-label="Top utilities">
+    <div class="left">
+      <span class="chip"><strong>06j</strong> Agriculture &amp; Farming</span>
+
+      <label class="chip">Country
+        <select class="select" id="countrySelect" aria-label="Country">
+          <option value="ALL">All Countries</option>
+          <option value="ZA">South Africa (ZA)</option>
+          <option value="UK">United Kingdom (UK)</option>
+          <option value="CH">Switzerland (CH)</option>
+          <option value="AE">UAE (AE)</option>
+          <option value="DE">Germany (DE)</option>
+          <option value="SG">Singapore (SG)</option>
+          <option value="US">United States (US)</option>
+        </select>
+      </label>
+
+      <label class="chip">Currency
+        <select class="select" id="currencySelect" aria-label="Currency">
+          <option value="NATIVE">Native (as listed)</option>
+          <option value="ZAR">ZAR</option><option value="GBP">GBP</option>
+          <option value="CHF">CHF</option><option value="EUR">EUR</option>
+          <option value="USD">USD</option><option value="AED">AED</option>
+          <option value="SGD">SGD</option>
+        </select>
+      </label>
+
+      <label class="chip">Units
+        <select class="select" id="unitSelect" aria-label="Units">
+          <option value="metric">Metric (sqm)</option>
+          <option value="imperial">Imperial (sqft)</option>
+        </select>
+      </label>
+
+      <span class="chip">Source: <strong id="sourceText">Demo</strong></span>
+    </div>
+    <div class="right">
+      <button class="btn secondary" id="backBtn" type="button">← Back to 06 Hub</button>
+      <button class="btn secondary" id="shareBtn" type="button">Share</button>
+      <button class="btn" id="printBtn" type="button">Print</button>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero-banner">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-tag"><span class="dot"></span> 06j — Agriculture &amp; Farming Sales</div>
+        <h1 class="hero-title">Agriculture &amp; Farming Businesses for Sale</h1>
+        <p class="hero-sub">Dairy plants, abattoirs, feed mills, and agri-processing businesses — browse broker-verified agricultural opportunities across multiple countries. PropertyFinder does not handle transactions or payments.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="val" id="totalCount">6</div><div class="lbl">Listings</div></div>
+        <div class="hero-stat"><div class="val">6</div><div class="lbl">Countries</div></div>
+        <div class="hero-stat"><div class="val" id="typeCount">6</div><div class="lbl">Venue types</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LISTINGS ===== -->
+  <div class="section" id="listingsSection">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Available Agriculture &amp; Farming Businesses</h2>
+          <p class="section-sub">Dairy processors, abattoirs, feed mills, and packing houses — every sale is managed by a verified agricultural broker</p>
+        </div>
+        <span class="result-count" id="resultCount">Showing 6 of 6</span>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-chip active" data-filter="all">All Agri-Business</button>
+        <button class="filter-chip" data-filter="dairy">Dairy &amp; Processing</button>
+        <button class="filter-chip" data-filter="poultry">Poultry &amp; Eggs</button>
+        <button class="filter-chip" data-filter="abattoir">Abattoir &amp; Meat</button>
+        <button class="filter-chip" data-filter="feed-mill">Feed Mill &amp; Nutrition</button>
+        <button class="filter-chip" data-filter="grain-milling">Grain Milling &amp; Flour</button>
+        <button class="filter-chip" data-filter="fruit-packing">Fruit &amp; Veg Packing</button>
+        <button class="filter-chip" data-filter="fish-processing">Fish &amp; Aquaculture</button>
+        <button class="filter-chip" data-filter="sugar-processing">Sugar Processing</button>
+        <button class="filter-chip" data-filter="olive-oil">Olive Oil / Oil Production</button>
+        <button class="filter-chip" data-filter="seed-fertiliser">Seed &amp; Fertiliser</button>
+        <button class="filter-chip" data-filter="profitable">Profitable</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="biz-grid" id="bizGrid"></div>
+
+      <!-- Empty -->
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="icon">🌾</div>
+        <h3>No agricultural businesses match this filter</h3>
+        <p>Try a different category or view all listings.</p>
+      </div>
+
+      <!-- Sector info panel -->
+      <div class="info-panel">
+        <h3>What to Look For When Buying an Agri-Business</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="ii-title">Processing Equipment</div>
+            <div class="ii-desc">Age, capacity, maintenance records, automation level. Replacement costs for abattoir, milling, or bottling lines are significant.</div>
+          </div>
+          <div class="info-item">
+            <div class="ii-title">Licenses &amp; Compliance</div>
+            <div class="ii-desc">Food safety (HACCP, FSSC 22000), abattoir permits, veterinary approvals, environmental compliance. These take time to obtain.</div>
+          </div>
+          <div class="info-item">
+            <div class="ii-title">Supply Contracts</div>
+            <div class="ii-desc">Raw material sourcing agreements, farmer contracts, offtake agreements with retailers and wholesalers. Stability matters.</div>
+          </div>
+          <div class="info-item">
+            <div class="ii-title">Cold Chain &amp; Storage</div>
+            <div class="ii-desc">Refrigeration capacity, cold rooms, blast freezers, temperature monitoring. Critical for meat, dairy, and fresh produce.</div>
+          </div>
+          <div class="info-item">
+            <div class="ii-title">Throughput &amp; Capacity</div>
+            <div class="ii-desc">Daily/weekly processing volumes, utilisation rate, peak vs off-peak. Room for growth is a key valuation driver.</div>
+          </div>
+          <div class="info-item">
+            <div class="ii-title">Workforce &amp; Skills</div>
+            <div class="ii-desc">Skilled operators, veterinary staff, quality controllers. Seasonal vs permanent staffing, training, and labour compliance.</div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <div class="invest-cta">
+    <div class="invest-inner">
+      <div class="invest-text">
+        <h2>How Agricultural Sales Work on PropertyFinder</h2>
+        <p>PropertyFinder connects you with verified agricultural brokers who understand farming and rural businesses. We never handle transactions, contracts, or payments.</p>
+      </div>
+      <div class="invest-steps">
+        <div class="invest-step">
+          <div class="num">1</div>
+          <div>
+            <div class="step-title">Browse &amp; Shortlist</div>
+            <div class="step-desc">Filter by farm type, land size, location, yield. Save to your shortlist.</div>
+          </div>
+        </div>
+        <div class="invest-step">
+          <div class="num">2</div>
+          <div>
+            <div class="step-title">Contact the Broker</div>
+            <div class="step-desc">Request production data, water rights documentation, and arrange a farm inspection.</div>
+          </div>
+        </div>
+        <div class="invest-step">
+          <div class="num">3</div>
+          <div>
+            <div class="step-title">Due Diligence &amp; Transfer</div>
+            <div class="step-desc">The broker manages land transfer, water rights, equipment valuation, and legal completion.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DISCLAIMER ===== -->
+  <div class="disclaimer-bar">
+    <div class="disclaimer-inner">
+      <div class="icon">⚖️</div>
+      <span><strong>Important:</strong> PropertyFinder does not broker, transact, or take payments for business sales. All financials, valuations, transfers, and contracts are handled exclusively by the listing broker. Figures shown are indicative — verify independently before making decisions.</span>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 06j — Agriculture & Farming for Sale
+     * Integration: localStorage.pf_selected_business_agriculture
+     * Detail page: 06j-agriculture-detail.html
+     * Broker-managed: PropertyFinder does NOT transact.
+     ********************************************************************/
+
+    function showToast(msg) {
+      const ex = document.querySelector('.pf-toast'); if (ex) ex.remove();
+      const t = document.createElement('div'); t.className = 'pf-toast'; t.textContent = msg;
+      document.body.appendChild(t); setTimeout(() => t.remove(), 3200);
+    }
+
+    function escapeHtmlAttr(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ===== DEMO LISTINGS (6 international agri-businesses) =====
+    const restaurants = [
+      {
+            "title": "Poultry \u0026 Egg Production — Broiler Farm",
+            "location": "Limpopo, South Africa",
+            "flag": "🇿🇦", "flagCode": "za", "country": "ZA",
+            "img": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "ZAR 22,000,000",
+            "currency": "ZAR",
+            "turnover": "ZAR 38,000,000 p.a.",
+            "netProfit": "ZAR 5,200,000 p.a.",
+            "employees": 45,
+            "established": 2008,
+            "subtype": "Poultry & Eggs",
+            "landSize": "28 hectares",
+            "annualYield": "1.2M birds per cycle",
+            "waterRights": "Bore holes + municipal",
+            "farmType": "Broiler production + processing",
+            "badges": ["poultry", "established", "profitable"],
+            "tags": ["Broiler Farm", "Processing", "Feed Mill", "Cold Chain", "Contract Supply", "Automated"],
+            "features": ["6 automated broiler houses", "On-site processing facility (HACCP)", "Feed mill on premises", "Long-term supply contract with national retailer"],
+            "desc": "Large-scale broiler production and processing operation with automated houses, on-site feed mill, and HACCP-certified processing facility. Contracted to national retailer.",
+            "lease": {"type": "Freehold", "term": "Property included", "rent": "N/A"},
+            "agent": {"name": "James Khumalo", "org": "Agri Brokers SA", "phone": "+27 15 000 0000", "email": "james@agribrokers.co.za", "whatsapp": "+27 15 000 0000"}
+      },
+      {
+            "title": "Abattoir \u0026 Meat Processing Plant",
+            "location": "Yorkshire, United Kingdom",
+            "flag": "🇬🇧", "flagCode": "gb", "country": "UK",
+            "img": "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "£3,800,000",
+            "currency": "GBP",
+            "turnover": "£8,200,000 p.a.",
+            "netProfit": "£920,000 p.a.",
+            "employees": 58,
+            "established": 2001,
+            "subtype": "Abattoir & Meat",
+            "landSize": "4 hectares (site)",
+            "annualYield": "18,000 tonnes p.a.",
+            "waterRights": "Mains + effluent treatment",
+            "farmType": "Multi-species abattoir + butchery",
+            "badges": ["abattoir", "established", "profitable"],
+            "tags": ["Abattoir", "Butchery", "Wholesale", "FSA Approved", "Multi-Species", "Cold Rooms"],
+            "features": ["FSA-approved multi-species abattoir", "On-site cutting & packing room", "8 cold rooms + blast freezer", "Wholesale and retail supply channels"],
+            "desc": "FSA-approved multi-species abattoir with cutting room, cold storage, and wholesale distribution. Serving butchers, restaurants, and retail across Northern England.",
+            "lease": {"type": "Freehold", "term": "Property included", "rent": "N/A"},
+            "agent": {"name": "David Clarke", "org": "Rural Business Sales UK", "phone": "+44 20 0000 0000", "email": "david@ruralbiz.co.uk", "whatsapp": "+44 20 0000 0000"}
+      },
+      {
+            "title": "Dairy Processing \u0026 Cheese Factory",
+            "location": "Appenzell, Switzerland",
+            "flag": "🇨🇭", "flagCode": "ch", "country": "CH",
+            "img": "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "CHF 4,800,000",
+            "currency": "CHF",
+            "turnover": "CHF 6,200,000 p.a.",
+            "netProfit": "CHF 980,000 p.a.",
+            "employees": 16,
+            "established": 1985,
+            "subtype": "Dairy & Processing",
+            "landSize": "2 hectares (factory site)",
+            "annualYield": "850,000L milk processed p.a.",
+            "waterRights": "Municipal + spring",
+            "farmType": "Cheese production + dairy processing",
+            "badges": ["dairy", "established", "profitable"],
+            "tags": ["Cheese Factory", "Dairy", "Appenzeller", "Swiss Made", "Organic", "Export"],
+            "features": ["FSSC 22000 certified dairy plant", "Artisan cheese ageing cellars", "Contracts with 12 local dairy farms", "Export to EU, UK, and Asia"],
+            "desc": "Established Swiss dairy processing facility and cheese factory in the Appenzell region. FSSC 22000 certified with artisan cheese production and international export channels.",
+            "lease": {"type": "Freehold", "term": "Property included", "rent": "N/A"},
+            "agent": {"name": "Lukas Weber", "org": "Swiss Agri M&A", "phone": "+41 71 000 0000", "email": "lukas@swissagri.ch", "whatsapp": "+41 71 000 0000"}
+      },
+      {
+            "title": "Feed Mill \u0026 Animal Nutrition Plant",
+            "location": "Sharjah, UAE",
+            "flag": "🇦🇪", "flagCode": "ae", "country": "AE",
+            "img": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "AED 9,500,000",
+            "currency": "AED",
+            "turnover": "AED 18,000,000 p.a.",
+            "netProfit": "AED 2,800,000 p.a.",
+            "employees": 35,
+            "established": 2012,
+            "subtype": "Feed Mill & Nutrition",
+            "landSize": "5,000 sqm (industrial)",
+            "annualYield": "45,000 tonnes feed p.a.",
+            "waterRights": "Municipal",
+            "farmType": "Animal feed production + distribution",
+            "badges": ["feed-mill", "established", "profitable"],
+            "tags": ["Feed Mill", "Poultry Feed", "Cattle Feed", "Pellet Lines", "GCC Supply", "ISO Certified"],
+            "features": ["45,000 tonne annual capacity", "Automated pellet & mash lines", "Supply contracts across GCC", "ISO 22000 food safety certified"],
+            "desc": "Large-scale animal feed mill supplying poultry, cattle, and aquaculture feed across the GCC. Automated production lines, ISO certified, and strong distributor network.",
+            "lease": {"type": "Leasehold (industrial)", "term": "10 years remaining", "rent": "AED 28,000/mo"},
+            "agent": {"name": "Ahmed Al-Rashid", "org": "Gulf Agri Brokers", "phone": "+971 6 000 0000", "email": "ahmed@gulfagri.ae", "whatsapp": "+971 6 000 0000"}
+      },
+      {
+            "title": "Grain Milling \u0026 Flour Production",
+            "location": "Hamburg, Germany",
+            "flag": "🇩🇪", "flagCode": "de", "country": "DE",
+            "img": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "€5,200,000",
+            "currency": "EUR",
+            "turnover": "€12,000,000 p.a.",
+            "netProfit": "€1,400,000 p.a.",
+            "employees": 32,
+            "established": 1972,
+            "subtype": "Grain Milling & Flour",
+            "landSize": "3,600 sqm (mill site)",
+            "annualYield": "28,000 tonnes flour p.a.",
+            "waterRights": "Municipal",
+            "farmType": "Wheat & rye milling + packaging",
+            "badges": ["grain-milling", "established", "profitable"],
+            "tags": ["Flour Mill", "Wheat", "Rye", "Bakery Supply", "Organic Range", "Heritage Brand"],
+            "features": ["28,000 tonne annual milling capacity", "Automated roller mill + sifting lines", "Supply to 200+ bakeries across North Germany", "Organic flour range growing 25% YoY"],
+            "desc": "Heritage grain milling operation producing wheat and rye flour for the bakery trade. Automated mill, strong regional brand, and growing organic product line. Third-generation, owner retiring.",
+            "lease": {"type": "Freehold", "term": "Property included", "rent": "N/A"},
+            "agent": {"name": "Thomas Bauer", "org": "Agrar M&A", "phone": "+49 40 000 0000", "email": "thomas@agrarma.de", "whatsapp": "+49 40 000 0000"}
+      },
+      {
+            "title": "Fruit Packing \u0026 Cold Storage Facility",
+            "location": "Singapore (Johor operations)",
+            "flag": "🇸🇬", "flagCode": "sg", "country": "SG",
+            "img": "https://images.unsplash.com/photo-1573246123716-6b1782bfc499?auto=format&fit=crop&w=800&q=80",
+            "askingPrice": "SGD 6,200,000",
+            "currency": "SGD",
+            "turnover": "SGD 14,000,000 p.a.",
+            "netProfit": "SGD 1,800,000 p.a.",
+            "employees": 42,
+            "established": 2010,
+            "subtype": "Fruit & Veg Packing",
+            "landSize": "4,200 sqm (facility)",
+            "annualYield": "22,000 tonnes packed p.a.",
+            "waterRights": "Municipal",
+            "farmType": "Sorting, grading, packing + cold storage",
+            "badges": ["fruit-packing", "established", "profitable", "growing"],
+            "tags": ["Fruit Packing", "Cold Storage", "Sorting & Grading", "Tropical Fruit", "Export", "HACCP"],
+            "features": ["Automated sorting & grading lines", "2,400 sqm cold storage (multi-temp)", "HACCP certified for export", "Supply to APAC supermarket chains"],
+            "desc": "Large-scale fruit packing and cold storage operation handling tropical fruits for APAC supermarket chains. HACCP certified with automated sorting, grading, and multi-temperature cold storage.",
+            "lease": {"type": "Leasehold", "term": "8 years remaining", "rent": "SGD 18,000/mo"},
+            "agent": {"name": "Mei Lin Tan", "org": "Asia Agri Exchange", "phone": "+65 0000 0000", "email": "meilin@asiaagri.sg", "whatsapp": "+65 0000 0000"}
+      }
+];
+    // ===== BADGE LABELS =====
+    function badgeLabel(b) {
+      const map = {
+      "dairy": "Dairy & Processing",
+      "poultry": "Poultry & Eggs",
+      "abattoir": "Abattoir & Meat",
+      "feed-mill": "Feed Mill",
+      "grain-milling": "Grain Milling",
+      "fruit-packing": "Fruit & Veg Pack",
+      "fish-processing": "Fish & Aquaculture",
+      "sugar-processing": "Sugar Processing",
+      "olive-oil": "Olive Oil / Oil",
+      "seed-fertiliser": "Seed & Fertiliser",
+      "vineyard": "Vineyard",
+      "agri-processing": "Agri Processing",
+      "established": "Established",
+      "profitable": "Profitable",
+      "growing": "Growing",
+      "turnkey": "Turnkey",
+      "freehold": "Freehold",
+      "leasehold": "Leasehold"
+    };
+      return map[b] || b;
+    }
+
+    // ===== RENDER CARDS =====
+    const grid = document.getElementById("bizGrid");
+    let activeFilter = "all";
+    let activeCountry = "ALL";
+
+    function renderCards() {
+      grid.innerHTML = "";
+
+      const filtered = restaurants.filter(biz => {
+        const matchFilter = (activeFilter === "all") ||
+          biz.badges.includes(activeFilter) ||
+          biz.subtype.toLowerCase().replace(/[& ]/g, '-').includes(activeFilter) ||
+          (biz.tags || []).some(t => t.toLowerCase().replace(/[& ]/g, '-').includes(activeFilter));
+        const matchCountry = (activeCountry === "ALL") || biz.country === activeCountry;
+        return matchFilter && matchCountry;
+      });
+
+      document.getElementById("emptyState").style.display = filtered.length ? "none" : "block";
+      document.getElementById("resultCount").textContent = "Showing " + filtered.length + " of " + restaurants.length;
+
+      filtered.forEach(biz => {
+        const card = document.createElement("div");
+        card.className = "biz-card";
+
+        const badgesHtml = (biz.badges || []).map(b =>
+          '<span class="biz-badge ' + b + '">' + badgeLabel(b) + '</span>'
+        ).join("");
+
+        const tagsHtml = (biz.tags || []).slice(0, 6).map(t =>
+          '<span class="btag">' + t + '</span>'
+        ).join("");
+
+        card.innerHTML = `
+          <div class="biz-img">
+            <img alt="${escapeHtmlAttr(biz.title)}" src="${biz.img}" loading="lazy"/>
+            <div class="badge-row">${badgesHtml}</div>
+            <div class="price-tag">${biz.askingPrice}</div>
+          </div>
+          <div class="biz-body">
+            <div class="biz-title">${biz.title}</div>
+            <div class="biz-location"><span class="flag">${biz.flag}</span> ${biz.location} • ${biz.subtype}</div>
+
+            <!-- Common metrics -->
+            <div class="metrics-common">
+              <div class="m-box"><div class="m-label">Turnover</div><div class="m-value">${biz.turnover}</div></div>
+              <div class="m-box"><div class="m-label">Net Profit</div><div class="m-value">${biz.netProfit}</div></div>
+              <div class="m-box"><div class="m-label">Employees</div><div class="m-value">${biz.employees}</div></div>
+              <div class="m-box"><div class="m-label">Est.</div><div class="m-value">${biz.established}</div></div>
+            </div>
+
+            <!-- Restaurant-specific metrics -->
+            <div class="metrics-sector">
+              <div class="m-box sector"><div class="m-label">Land Size</div><div class="m-value">${biz.landSize}</div></div>
+              <div class="m-box sector"><div class="m-label">Annual Yield</div><div class="m-value">${biz.annualYield}</div></div>
+              <div class="m-box sector"><div class="m-label">Water Rights</div><div class="m-value">${biz.waterRights}</div></div>
+              <div class="m-box sector"><div class="m-label">Farm Type</div><div class="m-value">${biz.farmType}</div></div>
+
+            <div class="biz-tags">${tagsHtml}</div>
+
+            <div class="biz-footer">
+              <div class="agent-mini">
+                <div class="av">PF</div>
+                <div>
+                  <div class="aname">${biz.agent.name}</div>
+                  <div class="aorg">${biz.agent.org}</div>
+                </div>
+              </div>
+              <button class="view-btn" type="button">View Details</button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          try {
+            localStorage.setItem('pf_selected_business_agriculture', JSON.stringify(biz));
+          } catch (e) { /* storage full or private mode */ }
+          showToast("Opening " + biz.title + "…");
+          // Final app: window.location.href = '06j-agriculture-detail.html';
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // ===== FILTER CHIPS =====
+    const chips = document.querySelectorAll(".filter-chip");
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeFilter = chip.dataset.filter;
+        renderCards();
+      });
+    });
+
+    // ===== COUNTRY SELECTOR =====
+    document.getElementById("countrySelect").addEventListener("change", (e) => {
+      activeCountry = e.target.value;
+      renderCards();
+    });
+
+    // ===== TOPBAR BUTTONS =====
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("shareBtn").addEventListener("click", () => showToast("Link copied to clipboard!"));
+    document.getElementById("backBtn").addEventListener("click", () => {
+      if (history.length > 1) history.back();
+      else showToast("Back to 06 hub in final app");
+    });
+
+    // ===== INIT =====
+    renderCards();
+    console.log("%c PropertyFinder — 06j Agriculture & Farming loaded", "color:#141c2b;font-weight:bold;font-size:12px");
+  </script>
+
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:20px;font-family:Inter,system-ui,sans-serif;font-size:0.85rem;margin-top:40px;">
+  <span id="yf"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#D4AF77;">Terms</a> |
+  <a href="privacy-policy.html" style="color:#D4AF77;">Privacy</a> |
+  <a href="anti-fraud.html" style="color:#D4AF77;">Anti-Fraud</a>
+</footer>
+<script>document.getElementById("yf").textContent = new Date().getFullYear();</script>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

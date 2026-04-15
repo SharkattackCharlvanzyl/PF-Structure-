@@ -1,0 +1,840 @@
+<!-- FILE: auction-seller-agreement.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Online Auction Seller Agreement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --pf-danger:#DC2626;--pf-success:#16A34A;--pf-warn:#D97706;--pf-info:#2563EB;
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+    .top-bar{padding:14px 24px;background:var(--nb-white);border-bottom:1px solid var(--nb-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:12px}
+    .top-bar .left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .top-bar .logo{font-family:var(--font-display);font-size:1rem;font-weight:700;color:#e8dfc8}
+    .top-bar .page-label{font-size:0.82rem;font-weight:700;color:var(--nb-muted)}
+    .topbtn{padding:8px 16px;border-radius:var(--radius3);font-size:0.82rem;font-weight:800;cursor:pointer;font-family:var(--font);background:var(--nb-snow);color:var(--nb-muted);border:1.5px solid var(--nb-border)}
+    .lock-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);border-radius:4px;padding:4px 10px;font-size:0.72rem;font-weight:700;color:#e8dfc8}
+    .step-bar{padding:14px 24px;background:var(--nb-white);border-bottom:1px solid var(--nb-border)}
+    .step-inner{max-width:960px;margin:0 auto;display:flex;align-items:center}
+    .step-item{display:flex;align-items:center;gap:8px;flex:1}
+    .step-item:last-child{flex:none}
+    .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;border:2px solid var(--nb-border);background:var(--nb-white);color:var(--nb-muted);transition:all 0.3s;flex-shrink:0}
+    .step-num.done{border-color:#c4a47c;background:#c4a47c;color:#0e1520}
+    .step-label{font-size:0.72rem;font-weight:700;color:var(--nb-muted);white-space:nowrap}
+    .step-line{flex:1;height:2px;background:var(--nb-border);margin:0 8px;transition:background 0.3s}
+    .step-line.done{background:var(--nb-green)}
+    @media(max-width:600px){.step-label{display:none}}
+    .progress-bar{padding:8px 24px;background:var(--nb-white);border-bottom:1px solid var(--nb-border)}
+    .pb-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:12px}
+    .pb-track{flex:1;height:5px;background:var(--nb-border);border-radius:3px;overflow:hidden}
+    .pb-fill{height:100%;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),var(--nb-lime));border-radius:3px;transition:width 0.4s ease;width:0%}
+    .pb-label{font-size:0.75rem;font-weight:800;color:var(--nb-muted);min-width:36px;text-align:right}
+    .agreement{max-width:960px;margin:24px auto;padding:0 24px 80px}
+    .doc-page{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:var(--shadow);padding:36px;margin-bottom:20px}
+    .doc-page h1{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#e8dfc8;text-align:center;margin-bottom:4px}
+    .doc-subtitle{text-align:center;font-size:0.88rem;color:var(--nb-muted);margin-bottom:4px}
+    .doc-version{text-align:center;font-size:0.75rem;color:var(--nb-muted);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--nb-border)}
+    .doc-page h2{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#e8dfc8;margin:28px 0 10px;padding-top:20px;border-top:1px solid var(--nb-border)}
+    .doc-page h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+    .doc-page h3{font-size:0.92rem;font-weight:800;color:#e8dfc8;margin:16px 0 6px}
+    .doc-page p{font-size:0.88rem;color:var(--nb-muted);line-height:1.75;margin-bottom:10px}
+    .doc-page ul{margin:8px 0 12px 20px;font-size:0.88rem;color:var(--nb-muted);line-height:1.75}
+    .doc-page ul li{margin-bottom:5px}
+    strong{color:#e8dfc8;font-weight:800}
+    .clauses{counter-reset:clause}
+    .clause{counter-increment:clause;margin-bottom:8px;padding-left:26px;position:relative;font-size:0.88rem;line-height:1.7;color:var(--nb-muted)}
+    .clause::before{content:counter(clause,lower-alpha)")";position:absolute;left:0;font-weight:800;color:#c4a47c}
+    .details-grid{display:grid;grid-template-columns:190px 1fr;gap:8px;margin:16px 0}
+    @media(max-width:600px){.details-grid{grid-template-columns:1fr}}
+    .d-label{font-size:0.82rem;font-weight:700;color:#e8dfc8;padding:8px 0;display:flex;align-items:center;gap:4px}
+    .d-req{color:var(--pf-danger)}
+    .d-value input,.d-value select,.d-value textarea{width:100%;padding:10px 12px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.88rem;font-family:var(--font);outline:none;transition:border-color 0.2s;background:var(--nb-white)}
+    .d-value input:focus,.d-value select:focus,.d-value textarea:focus{border-color:#c4a47c}
+    .d-value textarea{resize:vertical;min-height:72px}
+    .lt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+    @media(max-width:600px){.lt-grid{grid-template-columns:1fr 1fr}}
+    .lt-opt{padding:16px;border:2px solid var(--nb-border);border-radius:var(--radius2);cursor:pointer;transition:all 0.2s;text-align:center}
+    .lt-opt:hover{border-color:#c4a47c}
+    .lt-opt.selected{border-color:#c4a47c;background:rgba(196,164,124,0.04);box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .lt-opt input[type=radio]{display:none}
+    .lt-icon{font-size:1.6rem;margin-bottom:6px}
+    .lt-name{font-size:0.85rem;font-weight:800;color:#e8dfc8}
+    .lt-desc{font-size:0.75rem;color:var(--nb-muted);margin-top:3px;line-height:1.4}
+    .toggle-panel{background:var(--nb-snow);border-radius:var(--radius2);border:1px solid var(--nb-border);padding:16px 20px;margin:12px 0}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--nb-border)}
+    .toggle-row:last-child{border-bottom:none;padding-bottom:0}
+    .toggle-row:first-child{padding-top:0}
+    .toggle-label{font-size:0.88rem;font-weight:600;color:#e8dfc8}
+    .toggle-sub{font-size:0.75rem;color:var(--nb-muted);margin-top:2px;line-height:1.45;max-width:440px}
+    .toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;margin-left:16px}
+    .toggle-switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;inset:0;background:var(--nb-border);border-radius:24px;cursor:pointer;transition:0.3s}
+    .slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#1a2535;border-radius:50%;transition:0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+    .toggle-switch input:checked+.slider{background:var(--nb-green)}
+    .toggle-switch input:checked+.slider::before{transform:translateX(20px)}
+    .callout{border-left:4px solid var(--pf-warn);background:#FFFBEB;padding:14px 16px;border-radius:var(--radius2);margin:14px 0}
+    .callout p{margin:0;font-size:0.88rem;line-height:1.55;color:#92400E}
+    .callout-danger{border-left:4px solid var(--pf-danger);background:#FEF2F2;padding:14px 16px;border-radius:var(--radius2);margin:14px 0}
+    .callout-danger p{margin:0;font-size:0.88rem;line-height:1.55;color:#991B1B}
+    .note{font-size:0.82rem;padding:14px 18px;border-radius:var(--radius3);line-height:1.65;margin:14px 0}
+    .note.info{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.12);color:#1E40AF}
+    .note.warn{background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.12);color:#92400E}
+    .note.green{font-size:0.82rem;color:var(--nb-muted);padding:12px;margin-top:12px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+    .tl-item{display:flex;gap:16px;margin-bottom:16px;position:relative}
+    .tl-item:not(:last-child)::after{content:'';position:absolute;left:14px;top:32px;bottom:-8px;width:2px;background:var(--nb-border)}
+    .tl-dot{width:30px;height:30px;border-radius:50%;background:#c4a47c;color:#0e1520;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0;z-index:1}
+    .tl-body{padding-top:4px}
+    .tl-title{font-size:0.88rem;font-weight:800;color:#e8dfc8;margin-bottom:3px}
+    .tl-desc{font-size:0.82rem;color:var(--nb-muted);line-height:1.6}
+    .sig-section{padding:24px;border-radius:var(--radius2);background:var(--nb-snow);border:1px solid var(--nb-border);margin-top:20px}
+    .consent-box{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--nb-border);cursor:pointer;font-size:0.85rem;color:var(--nb-muted);line-height:1.55}
+    .consent-box:last-of-type{border-bottom:none}
+    .consent-box input[type=checkbox]{accent-color:#c4a47c;width:20px;height:20px;margin-top:2px;flex-shrink:0;cursor:pointer}
+    .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+    @media(max-width:600px){.sig-grid{grid-template-columns:1fr}}
+    .sig-box label{font-size:0.78rem;font-weight:800;color:#e8dfc8;display:block;margin-bottom:6px}
+    .sig-canvas-wrap{position:relative;border:2px solid var(--nb-border);border-radius:var(--radius3);background:#1a2535;overflow:hidden}
+    .sig-canvas-wrap canvas{display:block;width:100%;height:120px;cursor:crosshair}
+    .sig-clear{position:absolute;top:6px;right:6px;padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:700;background:var(--nb-snow);border:1px solid var(--nb-border);cursor:pointer;font-family:var(--font)}
+    .sig-typed{margin-top:6px}
+    .sig-typed input{width:100%;padding:8px 10px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.88rem;font-family:var(--font);outline:none;background:white}
+    .sig-typed input:focus{border-color:#c4a47c}
+    .sig-date{font-size:0.75rem;color:var(--nb-muted);margin-top:6px}
+    .submit-section{margin-top:28px;text-align:center}
+    .submit-btn{padding:18px 48px;border-radius:var(--radius3);background:#c4a47c;color:#0e1520;font-size:1rem;font-weight:800;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s;letter-spacing:0.02em}
+    .submit-btn:hover:not(:disabled){background:var(--nb-green-hover);transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,164,124,0.25)}
+    .submit-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+    .submit-note{font-size:0.78rem;color:var(--nb-muted);margin-top:10px;line-height:1.55}
+    .success-panel{display:none;text-align:center;padding:48px 24px;background:var(--nb-white);border-radius:var(--radius);border:2px solid var(--pf-success);box-shadow:var(--shadow);max-width:640px;margin:40px auto}
+    .success-panel.show{display:block}
+    .sp-check{width:72px;height:72px;border-radius:50%;background:var(--pf-success);color:white;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 20px;animation:popIn 0.4s ease}
+    @keyframes popIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+    .next-step-banner{background:linear-gradient(135deg,#0e1520,#141c2b));color:white;padding:20px 24px;border-radius:var(--radius2);margin-top:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .nsb-icon{font-size:2rem;flex-shrink:0}
+    .nsb-text{flex:1}
+    .nsb-title{font-weight:800;font-size:1rem;margin-bottom:4px}
+    .nsb-desc{font-size:0.85rem;opacity:0.85;line-height:1.5}
+    .nsb-btn{padding:12px 24px;border-radius:var(--radius3);background:var(--nb-lime);color:#e8dfc8;font-weight:800;font-size:0.88rem;border:none;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all 0.2s}
+    .nsb-btn:hover{background:white}
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards;white-space:nowrap}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+    @media print{.top-bar,.step-bar,.progress-bar{display:none!important}.doc-page{box-shadow:none!important;break-inside:avoid}}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="left">
+    <div class="logo">PROPERTYFINDER</div>
+    <span class="page-label">🔨 Online Auction Seller Agreement</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <span class="lock-badge">🔒 Secure Agreement</span>
+    <button class="topbtn" onclick="history.back()">← Back</button>
+  </div>
+</div>
+
+<div class="step-bar">
+  <div class="step-inner">
+    <div class="step-item"><div class="step-num done" id="s1">1</div><span class="step-label">Seller Details</span></div>
+    <div class="step-line" id="l1"></div>
+    <div class="step-item"><div class="step-num" id="s2">2</div><span class="step-label">Auction Setup</span></div>
+    <div class="step-line" id="l2"></div>
+    <div class="step-item"><div class="step-num" id="s3">3</div><span class="step-label">Fees &amp; Commission</span></div>
+    <div class="step-line" id="l3"></div>
+    <div class="step-item"><div class="step-num" id="s4">4</div><span class="step-label">Terms &amp; Conditions</span></div>
+    <div class="step-line" id="l4"></div>
+    <div class="step-item"><div class="step-num" id="s5">5</div><span class="step-label">Sign &amp; Submit</span></div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="pb-inner">
+    <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
+    <div class="pb-label" id="pbLabel">0%</div>
+  </div>
+</div>
+
+<div class="agreement" id="agreementContainer">
+
+  <!-- COVER -->
+  <div class="doc-page" style="text-align:center;padding:36px">
+    <div style="font-size:2.2rem;font-weight:900;color:#c4a47c;font-family:var(--font-display);margin-bottom:8px">PROPERTYFINDER</div>
+    <h1>Online Auction Seller Agreement</h1>
+    <div class="doc-subtitle">International Property &amp; Business Auction Platform — 185 Countries</div>
+    <div class="doc-version">Version 1.0 &nbsp;·&nbsp; Agreement Reference: <strong id="refNum">PF-AUC-______</strong> &nbsp;·&nbsp; <span id="docDate"></span></div>
+    <div class="note warn" style="text-align:left;max-width:640px;margin:0 auto">
+      <strong>⚠️ Required before listing or payment:</strong> This agreement must be read, completed, and digitally signed before you can upload your auction listing or proceed to payment. Your listing form and payment options unlock automatically once this agreement is signed.
+    </div>
+  </div>
+
+  <!-- SECTION 1: PARTIES & SELLER DETAILS -->
+  <div class="doc-page">
+    <h2>1. Parties &amp; Purpose</h2>
+    <p>This Online Auction Seller Agreement ("Agreement") is between <strong>PropertyFinder Head Office</strong> ("PropertyFinder", "Platform", "we", "us") and the seller, property owner, developer, or authorised agent/broker identified below ("Seller", "Agent", "you").</p>
+    <p>You appoint PropertyFinder to host your auction listing and to provide online auction functionality, subject to this Agreement, the <a href="auction-bidding-terms.html">Online Auction Bidding Terms &amp; Conditions</a>, the <a href="commission-fees.html">Commission &amp; Fees Policy</a>, and all other applicable Platform policies.</p>
+    <div class="note green">By completing and signing this Agreement you confirm that you have also read the <a href="auction-bidding-terms.html">Online Auction Bidding Terms &amp; Conditions</a> and accept that they govern buyer/bidder conduct on your auction listing.</div>
+
+    <h2>2. Seller Details</h2>
+    <p>Please complete all required fields accurately. This information forms part of the legally binding agreement and will appear on confirmation emails and invoices.</p>
+    <div class="details-grid">
+      <div class="d-label">Full Legal Name <span class="d-req">*</span></div>
+      <div class="d-value"><input type="text" id="sellerName" placeholder="Full name or registered entity name" oninput="up()"></div>
+      <div class="d-label">ID / Reg. No.</div>
+      <div class="d-value"><input type="text" id="sellerReg" placeholder="Identity number or company registration"></div>
+      <div class="d-label">Capacity <span class="d-req">*</span></div>
+      <div class="d-value"><select id="sellerCapacity" onchange="up()">
+        <option value="">Select your role</option>
+        <option>Private Owner / Individual</option>
+        <option>Company / Corporate Seller</option>
+        <option>Authorised Estate Agent / Realtor</option>
+        <option>Registered Auctioneer</option>
+        <option>Developer / Builder</option>
+        <option>Liquidator / Executor</option>
+        <option>Business Owner (Business Sale)</option>
+        <option>Legal Representative (PoA / Court Order)</option>
+      </select></div>
+      <div class="d-label">Licence / Accreditation No.</div>
+      <div class="d-value"><input type="text" id="licenceNo" placeholder="e.g. EAAB FFC number, auctioneer licence ref"></div>
+      <div class="d-label">Email Address <span class="d-req">*</span></div>
+      <div class="d-value"><input type="email" id="sellerEmail" placeholder="you@email.com — signed copy sent here" oninput="up()"></div>
+      <div class="d-label">Phone / WhatsApp <span class="d-req">*</span></div>
+      <div class="d-value"><input type="tel" id="sellerPhone" placeholder="+27 82 000 0000" oninput="up()"></div>
+      <div class="d-label">Physical Address <span class="d-req">*</span></div>
+      <div class="d-value"><input type="text" id="sellerAddress" placeholder="Full business or residential address" oninput="up()"></div>
+      <div class="d-label">Country <span class="d-req">*</span></div>
+      <div class="d-value"><select id="sellerCountry" onchange="up()">
+        <option value="">Select country</option>
+        <option>South Africa</option><option>United Kingdom</option><option>United Arab Emirates</option>
+        <option>Portugal</option><option>Spain</option><option>Australia</option><option>USA</option>
+        <option>Canada</option><option>Germany</option><option>France</option><option>Italy</option>
+        <option>Netherlands</option><option>Switzerland</option><option>Singapore</option>
+        <option>New Zealand</option><option>Mauritius</option><option>Kenya</option>
+        <option>Nigeria</option><option>Zimbabwe</option><option>Namibia</option><option>Botswana</option>
+        <option>Other</option>
+      </select></div>
+      <div class="d-label">VAT / Tax No.</div>
+      <div class="d-value"><input type="text" id="vatNo" placeholder="For invoice purposes (if applicable)"></div>
+      <div class="d-label">Mandate / Authority <span class="d-req">*</span></div>
+      <div class="d-value"><select id="mandateType" onchange="up()">
+        <option value="">Select mandate type</option>
+        <option>Owner — I am the registered owner</option>
+        <option>Written Mandate — Signed mandate from the owner</option>
+        <option>Power of Attorney — I hold a valid PoA</option>
+        <option>Court Order — Liquidation / Estate</option>
+        <option>Company Resolution — Authorised signatory</option>
+      </select></div>
+    </div>
+    <div class="note info">📋 <strong>Proof of authority</strong> (ownership title, mandate, PoA, or court order) must be uploaded when you submit your auction listing. Listings without verified authority will not go live.</div>
+  </div>
+
+  <!-- SECTION: BIDDER SECURITY DEPOSIT -->
+  <div class="doc-page">
+    <h2>3. Bidder Security Deposit &amp; Proof of Funds Requirement</h2>
+    <p>
+      To ensure that only serious, financially capable bidders can participate in your auction, PropertyFinder
+      requires every prospective bidder to complete a mandatory security deposit process <strong>before any bid
+      can be placed</strong> on your listing. As the Seller, you acknowledge and agree to this requirement as a
+      condition of listing on the Platform.
+    </p>
+
+    <div class="callout-danger">
+      <p>
+        <strong>No bid can be placed without completing the security deposit process.</strong>
+        The Platform will block any bidder who has not submitted proof of the required deposit and had it verified.
+        This protects you as the Seller from non-serious bids and reduces the risk of buyer default.
+      </p>
+    </div>
+
+    <h3>3.1 Security Deposit Amount</h3>
+    <p>
+      Before placing a bid on any PropertyFinder auction listing, every bidder is required to deposit
+      <strong>USD 10,000</strong> ("Security Deposit") into their own <strong>attorney's trust account</strong>
+      (or equivalent client trust / escrow account held by a qualified legal professional in their jurisdiction).
+    </p>
+    <div class="note green">
+      The Security Deposit is held by the <strong>bidder's own attorney</strong> — not by PropertyFinder.
+      PropertyFinder does not hold, receive, or manage these funds directly. The deposit remains in the
+      bidder's attorney trust account throughout the auction process and is subject to the terms below.
+    </div>
+
+    <h3>3.2 Proof of Deposit — Upload Requirement</h3>
+    <p>Once the Security Deposit has been made, the bidder must:</p>
+    <ul>
+      <li>Obtain a <strong>Proof of Funds / Trust Account Confirmation</strong> letter from their attorney, on the attorney's letterhead, confirming that USD 10,000 is held in trust for the purpose of bidding on the specified PropertyFinder listing.</li>
+      <li>Upload this document through the PropertyFinder webapp on the specific auction listing page before bidding opens.</li>
+      <li>The document must clearly state the <strong>Auction Listing Reference Number</strong> as displayed on the listing page (e.g. <em>PF-AUC-XXXX</em>).</li>
+      <li>A copy of the uploaded document is automatically forwarded to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ec8d998f988583829fac9c9e839c899e98958a858288899ec28f8381">[email&#160;protected]</a></strong> with the listing reference number for verification.</li>
+    </ul>
+    <div class="note info">
+      📎 <strong>Accepted proof documents include:</strong> Attorney trust account confirmation letter, conveyancer's holding letter, regulated escrow confirmation, or equivalent documentation from a qualified legal professional. Bank statements alone are not accepted as proof of the deposit.
+    </div>
+
+    <h3>3.3 Verification &amp; Bid Activation</h3>
+    <p>
+      PropertyFinder will verify the uploaded proof of deposit document before activating the bidder's ability
+      to place a bid. Verification typically occurs within <strong>24 hours</strong> of document upload during
+      business hours. Bidders are advised to complete this process well before the auction opens or closes.
+      PropertyFinder reserves the right to reject documents that are incomplete, unverifiable, or not on the
+      required attorney letterhead.
+    </p>
+
+    <h3>3.4 Application of Deposit to Purchase Price</h3>
+    <p>
+      If a bidder wins the auction and the sale proceeds to completion:
+    </p>
+    <ul>
+      <li>The <strong>USD 10,000 Security Deposit is deducted from the final purchase price</strong> payable by the winning bidder at the time of transfer/closing.</li>
+      <li>The deduction will be reflected in the sale agreement and settlement statement issued at closing.</li>
+      <li>The winning bidder's attorney releases the held funds as directed by the conveyancer or closing professional managing the transfer.</li>
+    </ul>
+
+    <h3>3.5 Refund of Deposit — Unsuccessful Bidders</h3>
+    <p>
+      If a bidder does not win the auction, or if the auction does not result in an Accepted Bid:
+    </p>
+    <ul>
+      <li>The <strong>USD 10,000 Security Deposit is fully refundable</strong> to the bidder.</li>
+      <li>The refund is processed <strong>directly by the bidder's own attorney</strong> from the trust account back to the bidder — no action is required from PropertyFinder or the Seller to release these funds.</li>
+      <li>Refund timing is governed by the bidder's attorney's trust account procedures and applicable law in their jurisdiction.</li>
+      <li>PropertyFinder will issue a <strong>Release Confirmation</strong> to the bidder's attorney within 3 business days of the auction close confirming that no successful bid was concluded, to facilitate the refund.</li>
+    </ul>
+    <div class="note green">
+      The refund process does not involve PropertyFinder holding or transferring any money. The bidder's attorney
+      independently holds and releases the funds. This structure protects all parties and minimises regulatory
+      and compliance risk.
+    </div>
+
+    <h3>3.6 Forfeiture in Case of Buyer Default</h3>
+    <p>
+      If a bidder wins the auction, their bid is accepted, and they subsequently default (fail to complete the
+      purchase), the following applies to the Security Deposit:
+    </p>
+    <ul>
+      <li>The Security Deposit held in the bidder's attorney trust account <strong>may not be refunded</strong> until the default matter is resolved.</li>
+      <li>The Seller may pursue a claim against the defaulting buyer, including a claim against the held deposit funds, as provided under the sale agreement and applicable law.</li>
+      <li>PropertyFinder's <strong>5% Platform Commission on the Accepted Bid</strong> (as described in Section 5.2 and the <a href="auction-bidding-terms.html#commission">Online Auction Bidding Terms, Section 5</a>) remains due and payable by the defaulting bidder within 48 hours of the default notice, separately from the Security Deposit.</li>
+    </ul>
+
+    <h3>3.7 Seller Acknowledgement</h3>
+    <p>
+      As the Seller, you confirm that you:
+    </p>
+    <div class="clauses">
+      <div class="clause">Are aware that all bidders on your listing will be required to complete the USD 10,000 Security Deposit process before they can place a bid.</div>
+      <div class="clause">Understand this requirement is designed to reduce the risk of non-serious bids and buyer default on your listing.</div>
+      <div class="clause">Agree that the Security Deposit process does not replace or limit the Seller's right to require additional buyer qualifications, proof of finance, or deposit requirements as specified in your listing's special conditions.</div>
+      <div class="clause">Understand that PropertyFinder does not hold, manage, or guarantee the Security Deposit funds, which are held exclusively by the bidder's own attorney in trust.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AUCTION SETUP -->
+  <div class="doc-page">
+    <h2>4. Asset Being Auctioned</h2>
+    <p>Provide details of what you are auctioning. These become part of this binding agreement and govern how your listing is set up on the Platform.</p>
+
+    <h3>4.1 Asset Type</h3>
+    <div class="lt-grid">
+      <label class="lt-opt selected" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Residential Property" checked><div class="lt-icon">🏡</div><div class="lt-name">Residential</div><div class="lt-desc">House, apartment, townhouse, sectional title</div></label>
+      <label class="lt-opt" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Commercial Property"><div class="lt-icon">🏢</div><div class="lt-name">Commercial</div><div class="lt-desc">Office, retail, warehouse, mixed-use</div></label>
+      <label class="lt-opt" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Land / Farm"><div class="lt-icon">🌾</div><div class="lt-name">Land / Farm</div><div class="lt-desc">Vacant land, agricultural, game farm</div></label>
+      <label class="lt-opt" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Business"><div class="lt-icon">💼</div><div class="lt-name">Business</div><div class="lt-desc">Going concern, franchise, business assets</div></label>
+      <label class="lt-opt" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Industrial Property"><div class="lt-icon">🏭</div><div class="lt-name">Industrial</div><div class="lt-desc">Factory, workshop, logistics facility</div></label>
+      <label class="lt-opt" onclick="selectAsset(this)"><input type="radio" name="assetType" value="Other Asset"><div class="lt-icon">📦</div><div class="lt-name">Other Asset</div><div class="lt-desc">Vehicle, vessel, equipment, other</div></label>
+    </div>
+
+    <h3>4.2 Auction Configuration</h3>
+    <p>Confirm the auction settings for your listing. You are responsible for ensuring these are correct before your listing goes live. Refer to the <a href="auction-bidding-terms.html">Auction Bidding Terms</a> for how each setting affects bidders.</p>
+    <div class="toggle-panel">
+      <div class="toggle-row">
+        <div><div class="toggle-label">Reserve Price Auction</div><div class="toggle-sub">Property only sells if the reserve price is met. "Reserve met / not yet met" status may be displayed to bidders.</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="hasReserve" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Display Reserve Status to Bidders</div><div class="toggle-sub">Bidders will see "Reserve not yet met" or "Reserve met" in real time during the auction.</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="showReserve" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Soft Close (Anti-Sniping Extension)</div><div class="toggle-sub">If a bid is placed in the final 5 minutes, the auction automatically extends by 5 minutes. Recommended.</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="softClose" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Require Buyer Pre-Qualification</div><div class="toggle-sub">Bidders must submit proof of funds or bond pre-approval before they can bid on this listing.</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="preQual"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">NDA Required Before Viewing Details</div><div class="toggle-sub">For confidential business sales — buyers must sign an NDA before accessing financials or sensitive details.</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="needsNda"><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <h3>4.3 Listing Details</h3>
+    <div class="details-grid">
+      <div class="d-label">Auction Duration <span class="d-req">*</span></div>
+      <div class="d-value"><select id="auctionDuration" onchange="up()">
+        <option value="">Select duration</option>
+        <option>7 Days</option><option>14 Days</option><option>21 Days</option><option>30 Days</option>
+      </select></div>
+      <div class="d-label">Estimated Value (USD) <span class="d-req">*</span></div>
+      <div class="d-value"><input type="number" id="estValue" placeholder="e.g. 250000" oninput="up()"></div>
+      <div class="d-label">Starting Bid (USD) <span class="d-req">*</span></div>
+      <div class="d-value"><input type="number" id="startBid" placeholder="Minimum opening bid amount" oninput="up()"></div>
+      <div class="d-label">Reserve Price (USD)</div>
+      <div class="d-value"><input type="number" id="reservePrice" placeholder="Minimum price that triggers the sale"></div>
+      <div class="d-label">Min. Bid Increment <span class="d-req">*</span></div>
+      <div class="d-value"><select id="bidIncrement" onchange="up()">
+        <option value="">Select increment</option>
+        <option>$100</option><option>$250</option><option>$500</option>
+        <option>$1,000</option><option>$2,500</option><option>$5,000</option>
+        <option>$10,000</option><option>$25,000</option><option>Custom (specify in listing)</option>
+      </select></div>
+      <div class="d-label">Buyer Deposit <span class="d-req">*</span></div>
+      <div class="d-value"><select id="buyerDeposit" onchange="up()">
+        <option value="">Select deposit requirement</option>
+        <option>5% of winning bid (Standard)</option>
+        <option>10% of winning bid</option>
+        <option>Fixed amount (specify in listing)</option>
+        <option>No deposit required</option>
+      </select></div>
+      <div class="d-label">Asset Location <span class="d-req">*</span></div>
+      <div class="d-value"><input type="text" id="assetLocation" placeholder="City, Region, Country" oninput="up()"></div>
+      <div class="d-label">Special Conditions</div>
+      <div class="d-value"><textarea id="specialConditions" placeholder="e.g. Voetstoots / sold as-is, subject to rates clearance, inspection window dates, required documents from buyer, transfer conditions…"></textarea></div>
+    </div>
+    <div class="note warn">⚠️ <strong>Accuracy is your responsibility.</strong> All pricing, location, size, zoning, and condition details must be accurate. PropertyFinder may edit, suspend, or remove any listing that violates policy or creates legal risk.</div>
+  </div>
+
+  <!-- SECTION 3: FEES & COMMISSION -->
+  <div class="doc-page">
+    <h2>5. Fees, Commission &amp; Invoicing</h2>
+    <p>The following commission structure applies to all auction sales concluded through the PropertyFinder Platform. Commission is charged on the <strong>final accepted sale price</strong> and is deducted at the time of transfer or closing. No commission is due until a sale is successfully concluded.</p>
+
+    <h3>5.1 Success Commission on Completed Sales</h3>
+    <p>The total commission payable on a successfully completed auction sale is <strong>10% of the final sale price</strong>, structured as follows depending on how the listing was created:</p>
+
+    <div style="border:1px solid var(--nb-border);border-radius:var(--radius2);overflow:hidden;margin:16px 0">
+      <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+        <thead>
+          <tr style="background:var(--nb-green-dark);color:white">
+            <th style="padding:12px 16px;text-align:left;font-weight:700">Listing Type</th>
+            <th style="padding:12px 16px;text-align:center;font-weight:700">PropertyFinder</th>
+            <th style="padding:12px 16px;text-align:center;font-weight:700">Agent / Auctioneer</th>
+            <th style="padding:12px 16px;text-align:center;font-weight:700">Total Commission</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--nb-border)">
+            <td style="padding:14px 16px;color:#e8dfc8;font-weight:700">Agent / Auctioneer Listed</td>
+            <td style="padding:14px 16px;text-align:center;color:#e8dfc8;font-weight:800">5%</td>
+            <td style="padding:14px 16px;text-align:center;color:#e8dfc8;font-weight:800">5%</td>
+            <td style="padding:14px 16px;text-align:center;font-weight:800;background:rgba(196,164,124,0.05)">10%</td>
+          </tr>
+          <tr>
+            <td style="padding:14px 16px;color:#e8dfc8;font-weight:700">Private / Owner Listed</td>
+            <td style="padding:14px 16px;text-align:center;color:#e8dfc8;font-weight:800">5%</td>
+            <td style="padding:14px 16px;text-align:center;color:var(--nb-muted)">—</td>
+            <td style="padding:14px 16px;text-align:center;font-weight:800;background:rgba(196,164,124,0.05)">5%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note green">
+      <strong>Example (Agent-listed):</strong> Property sells at USD 500,000 → PropertyFinder receives USD 25,000 (5%) + Agent receives USD 25,000 (5%) = USD 50,000 total commission. Seller receives USD 450,000 net before transfer costs.<br><br>
+      <strong>Example (Private listing):</strong> Property sells at USD 500,000 → PropertyFinder receives USD 25,000 (5%). Seller receives USD 475,000 net before transfer costs.
+    </div>
+    <div class="note info">
+      ℹ️ <strong>When listing:</strong> You must select your listing type correctly — "Agent / Auctioneer" or "Private Owner" — as this determines the commission structure that applies. Misrepresenting your listing type is a breach of this Agreement.
+    </div>
+
+    <h3>5.2 Platform Commission on Buyer Default — 5% (Separate)</h3>
+    <div class="callout-danger">
+      <p><strong>This is entirely separate from the success commission above.</strong> If a bidder's bid is accepted online and that bidder subsequently fails or refuses to complete the transaction, PropertyFinder will charge the <strong>defaulting bidder</strong> (not the Seller) a Platform Commission equal to <strong>5% of the Accepted Bid amount</strong>, payable within <strong>48 hours</strong> of the default notice — as set out in the <a href="auction-bidding-terms.html#commission">Online Auction Bidding Terms, Section 5</a>.</p>
+    </div>
+    <p>Where a buyer defaults, PropertyFinder may retain its 5% default commission from the forfeited deposit before remitting the balance to you. Your right to pursue additional legal remedies against the defaulting buyer remains unaffected. <strong>No success commission is owed by the Seller on a defaulted sale.</strong></p>
+
+    <h3>5.3 Payment Timeline After a Successful Sale</h3>
+    <div style="margin-top:14px">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-body"><div class="tl-title">Auction Closes — Winning Bid Confirmed</div><div class="tl-desc">PropertyFinder notifies seller and buyer via in-app notification, email, and SMS (where enabled). Buyer deposit is held in escrow.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-body"><div class="tl-title">Within 24 Hours — Purchase Agreement Issued</div><div class="tl-desc">The sale agreement is generated and sent to both parties. Seller must countersign within 48 hours.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-body"><div class="tl-title">Within 7 Days — Transfer / Closing Initiated</div><div class="tl-desc">Appointed conveyancer or closing professional takes over. Buyer pays the balance. Deposit is applied to the purchase price.</div></div>
+      </div>
+      <div class="tl-item" style="margin-bottom:0">
+        <div class="tl-dot">4</div>
+        <div class="tl-body"><div class="tl-title">On Transfer / Closing — Commission Deducted &amp; Seller Paid</div><div class="tl-desc">Platform commission is deducted from proceeds: 5% to PropertyFinder + 5% to the agent (if agent-listed), or 5% to PropertyFinder only (if private listing). Net amount paid to seller within 3 business days. Tax invoice issued automatically.</div></div>
+      </div>
+    </div>
+
+    <h3>5.4 Local Transfer Costs &amp; Taxes</h3>
+    <p>Transfer costs, conveyancing fees, local taxes, stamp duty, transfer duty, capital gains tax, VAT, notary fees, and all other regulatory costs are the <strong>sole responsibility of the Seller</strong> and are entirely separate from PropertyFinder's fees and commission. These vary by country and asset type.</p>
+    <div class="note warn">⚠️ <strong>PropertyFinder is not a legal or financial advisor.</strong> Sellers must engage a qualified local conveyancer or attorney to understand all costs and obligations in their jurisdiction before listing.</div>
+  </div>
+
+  <!-- SECTION 4: TERMS & CONDITIONS -->
+  <div class="doc-page">
+    <h2>6. Authority, Mandate &amp; Eligibility</h2>
+    <h3>5.1 Authority to List / Sell</h3>
+    <p>You warrant that you are the lawful owner of the asset or hold a valid written mandate/authority to list and auction it on behalf of the owner, and that you can provide documentary proof upon request.</p>
+    <h3>5.2 Compliance</h3>
+    <p>You warrant compliance with all applicable laws, licensing requirements, property and real-estate regulations, advertising standards, and consumer disclosure obligations in the relevant jurisdiction(s).</p>
+
+    <h2>7. Listing Content Standards</h2>
+    <h3>6.1 Accuracy &amp; Non-Misleading Content</h3>
+    <div class="clauses">
+      <div class="clause">All pricing, location, sizes, features, zoning, approvals, and descriptive claims must be accurate and not misleading.</div>
+      <div class="clause">Images, videos, floor plans, and documents must be owned by you or properly licensed for commercial use. No stock photos, watermarked images, or AI-generated property images.</div>
+      <div class="clause">Material defects or legally required disclosures must be included as required by local law.</div>
+      <div class="clause">Financial information for business sales must be accurate. Misrepresentation of revenue, profit, or financials is strictly prohibited.</div>
+    </div>
+    <h3>6.2 Content Moderation</h3>
+    <p>PropertyFinder may edit, reject, suspend, or remove any listing that violates policy, creates legal risk, or harms Platform integrity, at our sole discretion and without liability to the Seller.</p>
+
+    <h2>8. Auction Controls &amp; Seller Responsibilities</h2>
+    <h3>7.1 Pre-Auction Confirmation</h3>
+    <p>You are responsible for confirming all auction settings on your listing page before it goes live — including reserve price, reserve display status, minimum bid increments, buyer qualification requirements, special conditions, closing time, and soft-close extension rules.</p>
+    <h3>7.2 During the Auction</h3>
+    <div class="clauses">
+      <div class="clause">You must not withdraw a listing once active bids have been placed, except with PropertyFinder's written approval. Withdrawal after bids are placed may incur a fee as per the <a href="commission-fees.html">Commission &amp; Fees Policy</a>.</div>
+      <div class="clause">You must respond to buyer enquiries and document requests within 48 hours during the active auction period.</div>
+      <div class="clause">You must make the asset available for inspection during any advertised inspection window.</div>
+      <div class="clause">You must keep listing information current and notify PropertyFinder immediately if any material circumstance changes.</div>
+    </div>
+    <h3>7.3 Anti-Shill Bidding — Zero Tolerance</h3>
+    <div class="callout">
+      <p><strong>You may not</strong> use the auction function to generate artificial demand or to encourage shill bidding, bid manipulation, or any artificial inflation of bid prices. This includes placing bids yourself or arranging for third parties to do so. Any such activity may lead to immediate removal of your listing, account suspension, and legal action. See also <a href="anti-fraud-bid-integrity.html">Bid Integrity Policy</a> and <a href="auction-bidding-terms.html#anti">Auction Bidding Terms — Section 6</a>.</p>
+    </div>
+
+    <h2>9. Acceptance of Bids &amp; Sale Obligations</h2>
+    <h3>8.1 Seller Acceptance</h3>
+    <p>The highest bid at the scheduled close is not automatically an Accepted Bid unless the Seller confirms acceptance through the Platform. The Seller may accept, reject, or counter a bid, subject to applicable law and their mandate.</p>
+    <h3>8.2 After Accepting a Bid</h3>
+    <div class="clauses">
+      <div class="clause">Once you accept a bid through the Platform, you are legally obligated to cooperate promptly to finalise the transaction with the winning bidder and the appointed conveyancer or closing professional.</div>
+      <div class="clause">You must countersign the purchase agreement issued by PropertyFinder within 48 hours of auction close.</div>
+      <div class="clause">Failure to proceed after an Accepted Bid may result in legal action by the buyer and/or PropertyFinder, forfeiture of applicable fees, and permanent account suspension.</div>
+    </div>
+    <h3>8.3 No-Reserve Auctions</h3>
+    <p>If you elect to run a no-reserve auction, you are unconditionally obligated to sell to the highest bidder regardless of the final price achieved. A no-reserve auction cannot be withdrawn once live.</p>
+
+    <h2>10. Data, Leads &amp; Communications</h2>
+    <p>Enquiries and leads generated through the Platform may be routed to you. You agree to respond professionally and to comply with applicable data protection laws (including GDPR, POPIA, and relevant privacy legislation) when handling buyer and bidder information.</p>
+
+    <h2>11. Intellectual Property Licence</h2>
+    <p>You grant PropertyFinder a worldwide, royalty-free licence to host, display, reproduce, distribute, and promote your listing content on the Platform and in marketing channels for the purpose of providing the service, during the listing term and for a reasonable period thereafter for audit, record-keeping, and dispute resolution purposes.</p>
+
+    <h2>12. PropertyFinder's Role &amp; Limitation of Liability</h2>
+    <p>PropertyFinder operates as a <strong>marketplace platform only</strong> and is not a party to the sale agreement between Seller and buyer. To the maximum extent permitted by law, PropertyFinder accepts no liability for listing accuracy, seller or buyer conduct, financial representations, or transaction outcomes. Maximum platform liability is limited to fees paid by the Seller in the previous 12 months.</p>
+
+    <h2>13. Indemnity</h2>
+    <p>To the maximum extent permitted by law, you agree to indemnify and hold PropertyFinder harmless from all claims, losses, penalties, and costs arising from: (a) inaccurate or misleading listing content; (b) lack of valid ownership or mandate; (c) IP infringement in your uploaded content; (d) your failure to complete a confirmed sale; or (e) any breach of applicable law or this Agreement.</p>
+
+    <h2>14. Suspension &amp; Termination</h2>
+    <p>PropertyFinder may suspend or terminate your listings and/or account where we reasonably believe there is fraud, bid manipulation, legal risk, or breach of policy or these terms. You may remove listings subject to any outstanding fees and active transaction obligations.</p>
+
+    <h2>15. Governing Law &amp; Disputes</h2>
+    <p>This Agreement is governed by the law applicable in your country of registration, subject always to mandatory consumer and property legislation in the jurisdiction where the asset is located. All disputes must first be referred to PropertyFinder Head Office at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="422e2725232e0232302d322730363b242b2c2627306c212d2f">[email&#160;protected]</a></strong> for a 30-day resolution attempt before any external legal proceedings are commenced. See also <a href="dispute-resolution.html">Dispute Resolution &amp; Arbitration</a>.</p>
+
+    <h2>16. Amendments</h2>
+    <p>PropertyFinder may amend these terms with 30 days written notice. Listings already live at the time of an amendment are governed by the version of this Agreement signed at listing time. Updated terms are published on the Platform.</p>
+  </div>
+
+  <!-- SECTION 5: DIGITAL SIGNATURE -->
+  <div class="doc-page">
+    <h2>17. Digital Signature &amp; Acceptance</h2>
+    <p>By signing below, you confirm that you have read, understood, and agree to all terms of this Online Auction Seller Agreement, including the <a href="commission-fees.html">Commission &amp; Fees Policy</a> and the <a href="auction-bidding-terms.html">Online Auction Bidding Terms &amp; Conditions</a>. Your digital signature carries the same legal force as a handwritten signature.</p>
+
+    <div class="sig-section">
+      <h3 style="color:#e8dfc8;margin-bottom:14px">✅ Consent &amp; Acknowledgement</h3>
+      <label class="consent-box"><input type="checkbox" id="c1" onchange="up()"><span>I have read and understood all sections of this Online Auction Seller Agreement, including all fees, commission terms, and payment timelines.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c2" onchange="up()"><span>I confirm that I am the lawful owner of the asset or hold a valid written mandate/authority to list and auction it, and I can provide documentary proof upon request.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c3" onchange="up()"><span>I have read and accept the <a href="auction-bidding-terms.html">Online Auction Bidding Terms &amp; Conditions</a>, including the <strong>5% Platform Commission</strong> charged to a defaulting bidder on an Accepted Bid (Section 5 of those terms).</span></label>
+      <label class="consent-box"><input type="checkbox" id="c4" onchange="up()"><span>I understand and agree to the commission structure in Section 5: <strong>5% to PropertyFinder + 5% to the agent = 10% total</strong> if agent-listed, or <strong>5% to PropertyFinder only</strong> if privately listed. Commission is charged on the final sale price on a completed sale only.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c5" onchange="up()"><span>I understand that if I accept a bid and fail to complete the sale, this may result in legal action, forfeiture of fees, and account suspension.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c6" onchange="up()"><span>I confirm I will not engage in or facilitate shill bidding, bid manipulation, or any artificial inflation of bids, and I accept this is grounds for immediate removal and legal action.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c7" onchange="up()"><span>I understand that local transfer costs, conveyancing fees, taxes, and regulatory costs in my jurisdiction are my sole responsibility and are separate from PropertyFinder's fees.</span></label>
+      <label class="consent-box"><input type="checkbox" id="c8" onchange="up()"><span>I agree that this digitally signed agreement is legally binding. A copy will be stored on the Platform and emailed to <strong id="emailPreview">my registered email</strong> immediately upon submission.</span></label>
+
+      <h3 style="color:#e8dfc8;margin-top:24px;margin-bottom:14px">✍️ Signatures</h3>
+      <div class="sig-grid">
+        <div class="sig-box">
+          <label>PropertyFinder Head Office</label>
+          <div style="padding:18px;text-align:center;background:#1a2535;border:2px solid var(--nb-border);border-radius:var(--radius3)">
+            <div style="font-family:'Brush Script MT',cursive;font-size:1.5rem;color:#e8dfc8;margin-bottom:6px">PropertyFinder</div>
+            <div style="font-size:0.72rem;color:var(--nb-muted)">Digitally pre-signed · Auction Compliance Team</div>
+            <div style="font-size:0.72rem;color:var(--nb-muted);margin-top:2px">Date: <span id="pfDate"></span></div>
+          </div>
+        </div>
+        <div class="sig-box">
+          <label>Seller Signature <span style="color:var(--pf-danger)">*</span></label>
+          <div class="sig-canvas-wrap">
+            <canvas id="sigCanvas" width="600" height="120"></canvas>
+            <button class="sig-clear" onclick="clearSig()">Clear</button>
+          </div>
+          <div class="sig-typed"><input type="text" id="sigTyped" placeholder="Or type your full legal name to sign" oninput="up()"></div>
+          <div class="sig-date">Signed: <span id="sigDate"></span> &nbsp;·&nbsp; IP logged &nbsp;·&nbsp; Ref: <span id="refFooter"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note warn" style="margin-top:20px">
+      <strong>⚠️ What happens immediately after signing:</strong><br>
+      1. Your signed agreement is stored securely on PropertyFinder's servers with a timestamp and IP record.<br>
+      2. A PDF copy is emailed to <strong id="emailPreview2">your registered email</strong> immediately.<br>
+      3. Your auction listing upload form and payment page unlock automatically.<br>
+      4. You can download your signed agreement at any time from your Seller Dashboard.
+    </div>
+
+    <div class="submit-section">
+      <button class="submit-btn" id="submitBtn" disabled onclick="submitAgreement()">🔏 Sign Agreement &amp; Unlock Listing</button>
+      <div class="submit-note" id="submitNote">Complete all required fields and tick all consent boxes to enable signing.</div>
+    </div>
+  </div>
+
+  <!-- HEAD OFFICE -->
+  <div class="doc-page" style="padding:24px 36px">
+    <h2>18. Head Office Details</h2>
+    <p><strong>Contracting Entity:</strong> [Legal Entity Name]</p>
+    <p><strong>Registration No.:</strong> [Insert]</p>
+    <p><strong>Address:</strong> [Insert]</p>
+    <p><strong>Legal Notices:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb878e8c8a87ab9b99849b8e999f928d82858f8e99c5888486">[email&#160;protected]</a></p>
+    <p style="margin-top:12px">
+      <strong>Related documents:</strong>
+      <a href="auction-bidding-terms.html">Auction Bidding Terms</a> &nbsp;·&nbsp;
+      <a href="commission-fees.html">Commission &amp; Fees</a> &nbsp;·&nbsp;
+      <a href="anti-fraud-bid-integrity.html">Bid Integrity Policy</a> &nbsp;·&nbsp;
+      <a href="dispute-resolution.html">Dispute Resolution</a> &nbsp;·&nbsp;
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+    <div class="note green" style="margin-top:16px">© <span id="footYear"></span> PropertyFinder. This agreement must be accepted by the Seller before any auction listing is activated or payment is processed on the Platform.</div>
+  </div>
+
+</div><!-- /agreementContainer -->
+
+<!-- SUCCESS PANEL -->
+<div class="success-panel" id="successPanel">
+  <div class="sp-check">✓</div>
+  <h2 style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:#e8dfc8;margin-bottom:8px">Agreement Signed Successfully!</h2>
+  <p style="font-size:0.92rem;color:var(--nb-muted);line-height:1.6;margin-bottom:20px">Your Online Auction Seller Agreement has been submitted. A signed copy has been emailed to <strong id="successEmail">your email</strong>.</p>
+  <div style="padding:20px;border-radius:var(--radius2);background:var(--nb-snow);border:1px solid var(--nb-border);text-align:left;max-width:480px;margin:0 auto 24px;font-size:0.85rem">
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--nb-border)"><span>Reference:</span><strong id="successRef">—</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--nb-border)"><span>Seller:</span><strong id="successName">—</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--nb-border)"><span>Asset Type:</span><strong id="successAsset">—</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--nb-border)"><span>Location:</span><strong id="successLocation">—</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--nb-border)"><span>Est. Value:</span><strong id="successValue">—</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:6px 0"><span>Signed:</span><strong id="successDate">—</strong></div>
+  </div>
+  <div class="next-step-banner">
+    <div class="nsb-icon">🚀</div>
+    <div class="nsb-text">
+      <div class="nsb-title">Your listing form is now unlocked!</div>
+      <div class="nsb-desc">Proceed to upload your auction listing, photos, and documents. Payment is required to activate your listing.</div>
+    </div>
+    <button class="nsb-btn" onclick="goToListing()">Upload Listing →</button>
+  </div>
+  <div style="font-size:0.82rem;color:var(--nb-muted);margin-top:20px;line-height:1.7">
+    📧 Signed agreement emailed &nbsp;·&nbsp; 📋 Stored on your Seller Dashboard<br>
+    🔨 Listing form unlocked &nbsp;·&nbsp; 💳 Payment required to activate listing
+  </div>
+  <button class="topbtn" style="margin-top:20px" onclick="location.reload()">← Back to Start</button>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const ref   = 'PF-AUC-' + String(Math.floor(1000 + Math.random() * 9000));
+  document.getElementById('pfDate').textContent    = today;
+  document.getElementById('sigDate').textContent   = today;
+  document.getElementById('docDate').textContent   = today;
+  document.getElementById('refNum').textContent    = ref;
+  document.getElementById('refFooter').textContent = ref;
+  document.getElementById('footYear').textContent  = new Date().getFullYear();
+
+  function selectAsset(el) {
+    document.querySelectorAll('.lt-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected'); up();
+  }
+
+  let sigHasDrawing = false;
+
+  function up() {
+    const textF  = ['sellerName','sellerEmail','sellerPhone','sellerAddress','estValue','startBid','assetLocation'];
+    const selF   = ['sellerCapacity','sellerCountry','mandateType','auctionDuration','bidIncrement','buyerDeposit'];
+    const checks = ['c1','c2','c3','c4','c5','c6','c7','c8'];
+    let filled = 0;
+    const total = textF.length + selF.length + checks.length + 1;
+    textF.forEach(id  => { if (document.getElementById(id)?.value.trim()) filled++; });
+    selF.forEach(id   => { if (document.getElementById(id)?.value)        filled++; });
+    checks.forEach(id => { if (document.getElementById(id)?.checked)      filled++; });
+    if (document.getElementById('sigTyped').value.trim() || sigHasDrawing) filled++;
+    const pct = Math.round(filled / total * 100);
+    document.getElementById('pbFill').style.width  = pct + '%';
+    document.getElementById('pbLabel').textContent = pct + '%';
+    document.getElementById('submitBtn').disabled  = pct < 100;
+    const s1 = ['sellerName','sellerEmail','sellerPhone','sellerAddress'].every(id=>document.getElementById(id)?.value.trim())
+            && ['sellerCapacity','sellerCountry','mandateType'].every(id=>document.getElementById(id)?.value);
+    const s2 = ['auctionDuration','bidIncrement','buyerDeposit'].every(id=>document.getElementById(id)?.value)
+            && document.getElementById('startBid')?.value && document.getElementById('estValue')?.value
+            && document.getElementById('assetLocation')?.value;
+    const s5 = checks.every(id=>document.getElementById(id)?.checked)
+            && (document.getElementById('sigTyped').value.trim() || sigHasDrawing);
+    setStep(1,s1); setStep(2,s2); setStep(3,s2); setStep(4,s2); setStep(5,s5);
+    const em = document.getElementById('sellerEmail').value || 'your registered email';
+    document.getElementById('emailPreview').textContent  = em;
+    document.getElementById('emailPreview2').textContent = em;
+    const rem = total - filled;
+    document.getElementById('submitNote').textContent = pct < 100
+      ? `${rem} item${rem!==1?'s':''} still required — complete all fields and consent boxes above.`
+      : '✅ All fields complete — you can now sign and submit.';
+  }
+
+  function setStep(n, done) {
+    const el = document.getElementById('s'+n), line = document.getElementById('l'+(n-1));
+    if (!el) return;
+    if (done) { el.classList.add('done'); el.textContent='✓'; } else { el.classList.remove('done'); if(!['1'].includes(String(n))) el.textContent=n; }
+    if (line) { done ? line.classList.add('done') : line.classList.remove('done'); }
+  }
+
+  const canvas=document.getElementById('sigCanvas'), ctx=canvas.getContext('2d');
+  let drawing=false;
+  canvas.addEventListener('mousedown', e=>{drawing=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);});
+  canvas.addEventListener('mousemove', e=>{if(!drawing)return;ctx.lineTo(e.offsetX,e.offsetY);ctx.strokeStyle='#1A1A1A';ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();sigHasDrawing=true;up();});
+  canvas.addEventListener('mouseup',   ()=>drawing=false);
+  canvas.addEventListener('mouseleave',()=>drawing=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const r=canvas.getBoundingClientRect();ctx.beginPath();ctx.moveTo(e.touches[0].clientX-r.left,e.touches[0].clientY-r.top);},{passive:false});
+  canvas.addEventListener('touchmove', e=>{e.preventDefault();if(!drawing)return;const r=canvas.getBoundingClientRect();ctx.lineTo(e.touches[0].clientX-r.left,e.touches[0].clientY-r.top);ctx.strokeStyle='#1A1A1A';ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();sigHasDrawing=true;up();},{passive:false});
+  canvas.addEventListener('touchend',  ()=>drawing=false);
+  function clearSig(){ctx.clearRect(0,0,canvas.width,canvas.height);sigHasDrawing=false;up();}
+
+  function submitAgreement(){
+    const g = id => (document.getElementById(id)||{}).value||'';
+    const sig = (() => { try { return document.getElementById('sigCanvas').toDataURL(); } catch(e) { return ''; } })();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = '⧗ Submitting…';
+
+    const payload = {
+      plan:          'Auction',
+      agreementType: 'Auction',
+      name:          g('sellerName'),
+      email:         g('sellerEmail'),
+      phone:         g('sellerPhone'),
+      country:       g('sellerCountry'),
+      company:       g('sellerCapacity'),
+      city:          g('assetLocation'),
+      listings:      document.querySelector('input[name=assetType]:checked')?.value || '',
+      syncSystem:    'Manual Upload',
+      signature:     sig,
+    };
+
+    fetch('https://property-finder.co.za/api/submit-agreement.php', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        const data = {ref, name:payload.name, email:payload.email,
+          assetType:payload.listings, location:payload.city,
+          estValue:g('estValue'), date:today, signed:true};
+        try{
+          const arr = JSON.parse(localStorage.getItem('pf_auction_agreements')||'[]');
+          arr.push(data);
+          localStorage.setItem('pf_auction_agreements', JSON.stringify(arr));
+          localStorage.setItem('pf_auction_agreed_'+ref, JSON.stringify(data));
+          localStorage.setItem('pf_auction_listing_unlocked', 'true');
+        }catch(e){}
+        document.getElementById('successEmail').textContent    = payload.email;
+        document.getElementById('successRef').textContent      = res.ref || ref;
+        document.getElementById('successName').textContent     = payload.name;
+        document.getElementById('successAsset').textContent    = payload.listings || '—';
+        document.getElementById('successLocation').textContent = payload.city || '—';
+        document.getElementById('successValue').textContent    = g('estValue') ? '$'+parseInt(g('estValue')).toLocaleString() : '—';
+        document.getElementById('successDate').textContent     = today;
+        document.getElementById('agreementContainer').style.display = 'none';
+        document.getElementById('successPanel').style.display = 'block';
+        window.scrollTo({top:0,behavior:'smooth'});
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Submit Agreement';
+        alert('Submission error: ' + (res.error || 'Please try again.'));
+      }
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Submit Agreement';
+      alert('Network error. Please try again.');
+    });
+  }
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

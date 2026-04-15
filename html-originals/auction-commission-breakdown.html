@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Auction Commission Breakdown</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --g:#141c2b;--gd:#0e1520;--gh:#1a2535;--lime:#c4a47c;
+      --white:#fff;--off:#F6F8F7;--snow:#EDF2EF;--border:#E3E8E5;
+      --text:#e8dfc8;--muted:#8a7d5a;
+      --agent:#2563EB;--agent-bg:#EFF6FF;--agent-border:#BFDBFE;
+      --private:#D97706;--private-bg:#FFFBEB;--private-border:#FDE68A;
+      --font:'DM Sans',system-ui,sans-serif;
+      --display:'Cinzel','Playfair Display',Georgia,serif;
+      --r:14px;--r2:10px;--r3:6px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased}
+    a{color:var(--g);text-decoration:none;font-weight:700}
+
+    /* ── HEADER ── */
+    header{
+      background:linear-gradient(135deg,var(--gd) 0%,var(--g) 55%,var(--gh) 100%);
+      padding:44px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header::after{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:rgba(196,164,124,0.08);pointer-events:none}
+    .hw{position:relative;z-index:1;max-width:1040px;margin:0 auto}
+    header h1{font-family:var(--display);font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;margin:0 0 8px}
+    header p{color:rgba(255,255,255,0.75);font-size:0.9rem;max-width:600px;line-height:1.6;margin-bottom:14px}
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap}
+    .nav-links a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);font-size:0.8rem;transition:all 0.2s}
+    .nav-links a:hover{background:rgba(255,255,255,0.13);color:#fff;text-decoration:none}
+
+    /* ── MAIN ── */
+    main{max-width:1040px;margin:0 auto;padding:28px 24px 72px}
+
+    /* ── SLIDER PANEL ── */
+    .slider-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.05)}
+    .slider-top{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:22px}
+    .slider-top h2{font-family:var(--display);font-size:1.05rem;font-weight:700;color:var(--gd)}
+    .price-display{font-family:var(--display);font-size:2rem;font-weight:700;color:var(--g);letter-spacing:-0.5px}
+    .price-display span{font-size:1rem;color:var(--muted);font-family:var(--font);font-weight:400;margin-left:4px}
+
+    input[type=range]{
+      -webkit-appearance:none;appearance:none;
+      width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;
+      background:linear-gradient(90deg,var(--g) 0%,var(--g) var(--pct,30%),var(--border) var(--pct,30%),var(--border) 100%);
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+      background:var(--white);border:3px solid var(--g);box-shadow:0 2px 8px rgba(196,164,124,0.25);
+      transition:transform 0.15s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+    input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--white);border:3px solid var(--g);box-shadow:0 2px 8px rgba(196,164,124,0.25);cursor:pointer}
+
+    .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .preset{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:0.78rem;font-weight:700;cursor:pointer;font-family:var(--font);background:var(--off);color:var(--muted);transition:all 0.2s}
+    .preset:hover,.preset.active{background:var(--g);color:#fff;border-color:var(--g)}
+
+    /* ── CARDS GRID ── */
+    .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+    @media(max-width:720px){.cards{grid-template-columns:1fr}}
+
+    .card{border-radius:var(--r);padding:0;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:transform 0.2s,box-shadow 0.2s}
+    .card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,0.1)}
+    .card-header{padding:20px 24px 16px;display:flex;align-items:center;gap:14px}
+    .card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+    .card-title{font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:3px}
+    .card-sub{font-size:0.78rem;font-weight:600;opacity:0.75}
+    .card-body{padding:0 24px 24px}
+
+    .card.agent .card-header{background:var(--agent-bg);border-bottom:1px solid var(--agent-border)}
+    .card.agent .card-icon{background:rgba(37,99,235,0.12)}
+    .card.agent .card-title{color:#1E40AF}
+    .card.agent .card-sub{color:#3B82F6}
+    .card.agent{border:2px solid var(--agent-border);background:var(--white)}
+
+    .card.private .card-header{background:var(--private-bg);border-bottom:1px solid var(--private-border)}
+    .card.private .card-icon{background:rgba(217,119,6,0.12)}
+    .card.private .card-title{color:#92400E}
+    .card.private .card-sub{color:#D97706}
+    .card.private{border:2px solid var(--private-border);background:var(--white)}
+
+    /* ── BREAKDOWN ROWS ── */
+    .breakdown{margin-top:18px}
+    .br-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:12px}
+    .br-row:last-child{border-bottom:none}
+    .br-label{font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex:1}
+    .br-label .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .br-amount{font-size:0.92rem;font-weight:800;text-align:right;white-space:nowrap}
+    .br-pct{font-size:0.72rem;font-weight:600;color:var(--muted);margin-left:4px}
+
+    .br-total{background:var(--snow);border-radius:var(--r2);padding:14px 16px;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+    .br-total-label{font-size:0.85rem;font-weight:700;color:var(--text)}
+    .br-total-amount{font-family:var(--display);font-size:1.25rem;font-weight:700}
+    .card.agent .br-total-amount{color:#1D4ED8}
+    .card.private .br-total-amount{color:#92400E}
+
+    .net-box{border-radius:var(--r2);padding:16px;margin-top:12px;text-align:center}
+    .card.agent .net-box{background:rgba(37,99,235,0.05);border:1px solid var(--agent-border)}
+    .card.private .net-box{background:rgba(217,119,6,0.05);border:1px solid var(--private-border)}
+    .net-label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .net-amount{font-family:var(--display);font-size:1.6rem;font-weight:700}
+    .card.agent .net-amount{color:#1D4ED8}
+    .card.private .net-amount{color:#B45309}
+    .net-sub{font-size:0.75rem;color:var(--muted);margin-top:4px;line-height:1.4}
+
+    /* ── VISUAL BAR ── */
+    .vis-bar{border-radius:var(--r2);overflow:hidden;height:28px;display:flex;margin-top:14px;position:relative}
+    .vb-seg{display:flex;align-items:center;justify-content:center;font-size:0.67rem;font-weight:800;color:white;transition:width 0.5s ease;overflow:hidden;white-space:nowrap;padding:0 4px}
+    .vb-pf{background:var(--g)}
+    .vb-ag{background:var(--agent)}
+    .vb-tc{background:#94A3B8}
+    .vb-net-a{background:#60A5FA}
+    .vb-net-p{background:#FCD34D}
+    .bar-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .bl-item{display:flex;align-items:center;gap:5px;font-size:0.73rem;color:var(--muted)}
+    .bl-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+    /* ── COMPARISON TABLE ── */
+    .compare-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:24px}
+    .compare-wrap h2{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--gd);padding:20px 24px 0}
+    .compare-wrap p{font-size:0.84rem;color:var(--muted);padding:6px 24px 16px}
+    table{width:100%;border-collapse:collapse;font-size:0.88rem}
+    thead tr{background:var(--gd);color:white}
+    thead th{padding:12px 18px;text-align:left;font-weight:700;font-size:0.82rem}
+    thead th:not(:first-child){text-align:right}
+    tbody tr{border-bottom:1px solid var(--border)}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:nth-child(even){background:var(--off)}
+    tbody td{padding:11px 18px;color:var(--muted)}
+    tbody td:first-child{color:var(--text);font-weight:600}
+    tbody td:not(:first-child){text-align:right;font-weight:700}
+    .td-pf{color:var(--g)!important}
+    .td-ag{color:var(--agent)!important}
+    .td-total{color:var(--text)!important}
+    .td-net{color:var(--gd)!important}
+    .row-highlight td{background:rgba(196,164,124,0.05)!important}
+    tfoot tr{background:var(--snow)}
+    tfoot td{padding:13px 18px;font-weight:800;font-size:0.9rem;color:var(--text)}
+    tfoot td:not(:first-child){text-align:right}
+    @media(max-width:600px){thead th:nth-child(3),tbody td:nth-child(3),tfoot td:nth-child(3){display:none}}
+
+    /* ── NOTES ── */
+    .note-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+    @media(max-width:680px){.note-grid{grid-template-columns:1fr}}
+    .note-card{border-radius:var(--r2);padding:18px 20px}
+    .note-card h3{font-size:0.88rem;font-weight:800;margin-bottom:8px}
+    .note-card ul{padding-left:18px;font-size:0.84rem;color:var(--muted);line-height:1.7}
+    .note-card ul li{margin-bottom:4px}
+    .note-card.info{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.15)}
+    .note-card.info h3{color:#1D4ED8}
+    .note-card.warn{background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.2)}
+    .note-card.warn h3{color:#92400E}
+
+    .disclaimer{font-size:0.78rem;color:var(--muted);background:var(--snow);border:1px dashed rgba(196,164,124,0.2);border-radius:var(--r2);padding:14px 18px;line-height:1.6}
+
+    footer{max-width:1040px;margin:0 auto;padding:20px 24px 40px;color:var(--muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--border)}
+
+    @media print{
+      header{background:var(--g)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .slider-panel{display:none}
+      .presets{display:none}
+    }
+
+    /* Animations */
+    .card{animation:fadeUp 0.4s ease both}
+    .card:nth-child(2){animation-delay:0.1s}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .amount-change{animation:flash 0.35s ease}
+    @keyframes flash{0%{opacity:0.3;transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hw">
+    <h1>Auction Commission &amp; Net Proceeds Breakdown</h1>
+    <p>See exactly what commission is payable and what you receive as the seller — whether you list through a registered estate agent or privately on PropertyFinder.</p>
+    <div class="nav-links">
+      <a href="auctions.html">← All Auctions</a>
+      <a href="auction-seller-agreement.html">Seller Agreement</a>
+      <a href="auction-faq.html">FAQ</a>
+      <a href="commission-fees.html">Full Fees Policy</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- SLIDER -->
+  <div class="slider-panel">
+    <div class="slider-top">
+      <h2>Adjust Sale Price</h2>
+      <div class="price-display" id="priceDisplay">$500,000 <span>USD</span></div>
+    </div>
+    <input type="range" id="priceSlider" min="50000" max="5000000" step="10000" value="500000" oninput="update(this.value)">
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:6px;font-weight:600">
+      <span>$50,000</span><span>$1M</span><span>$2M</span><span>$3M</span><span>$4M</span><span>$5,000,000</span>
+    </div>
+    <div class="presets">
+      <span>Quick select:</span>
+      <button class="preset" onclick="setPrice(100000)">$100K</button>
+      <button class="preset" onclick="setPrice(250000)">$250K</button>
+      <button class="preset active" onclick="setPrice(500000)">$500K</button>
+      <button class="preset" onclick="setPrice(750000)">$750K</button>
+      <button class="preset" onclick="setPrice(1000000)">$1M</button>
+      <button class="preset" onclick="setPrice(2000000)">$2M</button>
+      <button class="preset" onclick="setPrice(5000000)">$5M</button>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards">
+
+    <!-- AGENT CARD -->
+    <div class="card agent">
+      <div class="card-header">
+        <div class="card-icon">🏢</div>
+        <div>
+          <div class="card-title">Agent / Auctioneer Listed</div>
+          <div class="card-sub">Sold through a registered estate agent or auctioneer</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="breakdown">
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:#374151"></div>Final Sale Price (Hammer Price)</div>
+            <div class="br-amount" id="a-sale" style="color:var(--text)">—</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:var(--g)"></div>PropertyFinder Commission <span class="br-pct">(5%)</span></div>
+            <div class="br-amount td-pf" id="a-pf">—</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:var(--agent)"></div>Agent / Auctioneer Commission <span class="br-pct">(5%)</span></div>
+            <div class="br-amount td-ag" id="a-ag">—</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:#94A3B8"></div>Total Commission Deducted</div>
+            <div class="br-amount" id="a-total-comm" style="color:#374151">—</div>
+          </div>
+        </div>
+
+        <div class="br-total">
+          <div class="br-total-label">🏦 Estimated Transfer Costs*</div>
+          <div class="br-total-amount" id="a-tc">—</div>
+        </div>
+
+        <div class="vis-bar" id="a-bar" style="margin-top:16px">
+          <div class="vb-seg vb-pf" id="a-bar-pf">PF 5%</div>
+          <div class="vb-seg vb-ag" id="a-bar-ag">Agent 5%</div>
+          <div class="vb-seg vb-tc" id="a-bar-tc">Costs</div>
+          <div class="vb-seg vb-net-a" id="a-bar-net">You Receive</div>
+        </div>
+        <div class="bar-legend">
+          <div class="bl-item"><div class="bl-dot" style="background:var(--g)"></div>PropertyFinder (5%)</div>
+          <div class="bl-item"><div class="bl-dot" style="background:var(--agent)"></div>Agent (5%)</div>
+          <div class="bl-item"><div class="bl-dot" style="background:#94A3B8"></div>Transfer costs*</div>
+          <div class="bl-item"><div class="bl-dot" style="background:#60A5FA"></div>You receive</div>
+        </div>
+
+        <div class="net-box">
+          <div class="net-label">💰 Seller Net Proceeds (after commission)</div>
+          <div class="net-amount" id="a-net">—</div>
+          <div class="net-sub" id="a-net-sub">After PropertyFinder & agent commission. Before transfer costs & taxes.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PRIVATE CARD -->
+    <div class="card private">
+      <div class="card-header">
+        <div class="card-icon">🏡</div>
+        <div>
+          <div class="card-title">Private / Owner Listed</div>
+          <div class="card-sub">Sold directly by the property owner — no agent involved</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="breakdown">
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:#374151"></div>Final Sale Price (Hammer Price)</div>
+            <div class="br-amount" id="p-sale" style="color:var(--text)">—</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:var(--g)"></div>PropertyFinder Commission <span class="br-pct">(5%)</span></div>
+            <div class="br-amount td-pf" id="p-pf">—</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:#E5E7EB"></div>Agent Commission</div>
+            <div class="br-amount" style="color:var(--muted);font-weight:400">None — $0</div>
+          </div>
+          <div class="br-row">
+            <div class="br-label"><div class="dot" style="background:#94A3B8"></div>Total Commission Deducted</div>
+            <div class="br-amount" id="p-total-comm" style="color:#374151">—</div>
+          </div>
+        </div>
+
+        <div class="br-total">
+          <div class="br-total-label">🏦 Estimated Transfer Costs*</div>
+          <div class="br-total-amount" id="p-tc">—</div>
+        </div>
+
+        <div class="vis-bar" style="margin-top:16px">
+          <div class="vb-seg vb-pf" id="p-bar-pf">PF 5%</div>
+          <div class="vb-seg vb-tc" id="p-bar-tc">Costs</div>
+          <div class="vb-seg vb-net-p" id="p-bar-net">You Receive</div>
+        </div>
+        <div class="bar-legend">
+          <div class="bl-item"><div class="bl-dot" style="background:var(--g)"></div>PropertyFinder (5%)</div>
+          <div class="bl-item"><div class="bl-dot" style="background:#94A3B8"></div>Transfer costs*</div>
+          <div class="bl-item"><div class="bl-dot" style="background:#FCD34D"></div>You receive</div>
+        </div>
+
+        <div class="net-box">
+          <div class="net-label">💰 Seller Net Proceeds (after commission)</div>
+          <div class="net-amount" id="p-net">—</div>
+          <div class="net-sub" id="p-net-sub">After PropertyFinder commission only. Before transfer costs & taxes.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+
+  <!-- SAVING HIGHLIGHT -->
+  <div style="background:linear-gradient(135deg,var(--gd),var(--g));border-radius:var(--r);padding:22px 28px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;color:white;box-shadow:0 4px 20px rgba(196,164,124,0.25)">
+    <div style="font-size:2.2rem">💡</div>
+    <div style="flex:1">
+      <div style="font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:4px">Private Listing Saving vs Agent</div>
+      <div style="font-size:0.85rem;opacity:0.85;line-height:1.5">By listing privately, you save the agent's 5% commission. At <span id="saving-price" style="font-weight:800">$500,000</span> that's a saving of <span id="saving-amount" style="font-weight:800;color:var(--lime)">$25,000</span> in your pocket. PropertyFinder's 5% applies in both scenarios.</div>
+    </div>
+    <div style="text-align:center;background:rgba(255,255,255,0.12);border-radius:var(--r2);padding:16px 24px;flex-shrink:0">
+      <div style="font-size:0.72rem;font-weight:700;opacity:0.75;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Agent Commission Saved</div>
+      <div style="font-family:var(--display);font-size:1.6rem;font-weight:700;color:var(--lime)" id="saving-big">$25,000</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="compare-wrap">
+    <h2>Side-by-Side Comparison at Selected Price</h2>
+    <p>All amounts in USD. Transfer costs are estimated — actual costs vary by country.</p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Agent Listed</th>
+          <th>Private Listed</th>
+          <th>Difference</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Final Sale Price</td>
+          <td id="t-sale-a" class="td-total">—</td>
+          <td id="t-sale-p" class="td-total">—</td>
+          <td style="color:var(--muted)">Same</td>
+        </tr>
+        <tr>
+          <td>PropertyFinder Commission (5%)</td>
+          <td id="t-pf-a" class="td-pf">—</td>
+          <td id="t-pf-p" class="td-pf">—</td>
+          <td style="color:var(--muted)">Same</td>
+        </tr>
+        <tr>
+          <td>Agent / Auctioneer Commission (5%)</td>
+          <td id="t-ag-a" class="td-ag">—</td>
+          <td style="color:var(--muted);font-style:italic">None</td>
+          <td id="t-ag-diff" class="td-ag">—</td>
+        </tr>
+        <tr class="row-highlight">
+          <td>Total Commission</td>
+          <td id="t-comm-a">—</td>
+          <td id="t-comm-p">—</td>
+          <td id="t-comm-diff" style="color:var(--private)">—</td>
+        </tr>
+        <tr>
+          <td>Est. Transfer Costs (varies by country)*</td>
+          <td id="t-tc-a" style="color:var(--muted)">—</td>
+          <td id="t-tc-p" style="color:var(--muted)">—</td>
+          <td style="color:var(--muted)">Same</td>
+        </tr>
+        <tr>
+          <td>Buyer Security Deposit Credit</td>
+          <td style="color:var(--g);font-weight:700">–$10,000</td>
+          <td style="color:var(--g);font-weight:700">–$10,000</td>
+          <td style="color:var(--muted)">Same</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>💰 Seller Net (after commission, before transfer costs)</td>
+          <td id="t-net-a" class="td-net">—</td>
+          <td id="t-net-p" class="td-net">—</td>
+          <td id="t-net-diff" style="color:var(--private);font-weight:800">—</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- DEFAULT SECTION -->
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:24px 28px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
+    <h2 style="font-family:var(--display);font-size:1rem;font-weight:700;color:var(--gd);margin-bottom:6px">What if the winning bidder defaults?</h2>
+    <p style="font-size:0.84rem;color:var(--muted);margin-bottom:16px;line-height:1.6">If the winning bidder fails to complete the purchase after their bid is accepted, the following applies regardless of listing type:</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--r2);padding:16px">
+        <div style="font-size:1.4rem;margin-bottom:8px">🚫</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#991B1B;margin-bottom:4px">No Success Commission</div>
+        <div style="font-size:0.82rem;color:#B91C1C;line-height:1.5">Success commission (5% or 10%) is NOT owed by the seller on a defaulted sale. The sale did not complete.</div>
+      </div>
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--r2);padding:16px">
+        <div style="font-size:1.4rem;margin-bottom:8px">⚡</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#991B1B;margin-bottom:4px">5% Charged to Defaulting Buyer</div>
+        <div style="font-size:0.82rem;color:#B91C1C;line-height:1.5">PropertyFinder charges the <strong>buyer</strong> 5% of the accepted bid, payable within 48 hours. This is a separate charge to the buyer — not deducted from the seller.</div>
+      </div>
+      <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--r2);padding:16px">
+        <div style="font-size:1.4rem;margin-bottom:8px">🔒</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#92400E;margin-bottom:4px">$10,000 Security Deposit</div>
+        <div style="font-size:0.82rem;color:#92400E;line-height:1.5">The buyer's $10,000 attorney trust deposit may not be refunded until the default is resolved. The seller may pursue claims against these funds.</div>
+      </div>
+      <div style="background:rgba(196,164,124,0.04);border:1px solid rgba(196,164,124,0.15);border-radius:var(--r2);padding:16px">
+        <div style="font-size:1.4rem;margin-bottom:8px">🔄</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--gd);margin-bottom:4px">Seller Can Relist</div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.5">PropertyFinder may, at its discretion, offer the property to the second-highest bidder, or the seller may relist the property for a new auction.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="note-grid">
+    <div class="note-card info">
+      <h3>ℹ️ What's included in commission</h3>
+      <ul>
+        <li>PropertyFinder's 5% covers: Platform hosting, online auction technology, bidder verification, marketing reach across 185 countries, and the full auction management process.</li>
+        <li>The agent's 5% covers: Property valuation, marketing support, buyer introductions, viewings, negotiation assistance, and post-sale coordination.</li>
+        <li>Commission is deducted from sale proceeds at closing — not payable upfront.</li>
+      </ul>
+    </div>
+    <div class="note-card warn">
+      <h3>⚠️ Transfer costs are separate</h3>
+      <ul>
+        <li><strong>South Africa:</strong> Transfer duty (buyer), conveyancing fees, compliance certs (elec, beetle, gas).</li>
+        <li><strong>UK:</strong> Stamp Duty Land Tax, conveyancing fees.</li>
+        <li><strong>Australia:</strong> State stamp duty, conveyancing, CGT.</li>
+        <li><strong>UAE:</strong> 4% DLD fee, agency fees, NOC fees.</li>
+        <li><strong>Portugal / Spain:</strong> IMT, notary, land registry, VAT.</li>
+        <li><strong>USA:</strong> Transfer taxes, closing costs, title insurance.</li>
+        <li>Always get local legal advice before listing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    * <strong>Transfer cost estimates</strong> shown above are indicative only (approx. 3–5% of sale price) and vary significantly by country, property type, and transaction structure. They are shown for illustrative purposes only. PropertyFinder is not a legal or tax advisor. Sellers must obtain independent legal and tax advice before listing. All figures shown are in USD. Commission is charged on the final accepted sale price and deducted at transfer/closing. No commission is due on unsold or defaulted listings (seller-side). See the <a href="auction-seller-agreement.html">Seller Agreement</a> and <a href="commission-fees.html">Commission &amp; Fees Policy</a> for full terms.
+  </div>
+
+</main>
+
+<footer>
+  © <span id="yr"></span> PropertyFinder International. All rights reserved. &nbsp;·&nbsp;
+  <a href="auction-seller-agreement.html">Seller Agreement</a> &nbsp;·&nbsp;
+  <a href="auction-faq.html">FAQ</a> &nbsp;·&nbsp;
+  <a href="commission-fees.html">Full Fees Policy</a>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+  const pct = (n,t) => '(' + (n/t*100).toFixed(1) + '%)';
+
+  function update(val) {
+    val = parseInt(val);
+    const slider = document.getElementById('priceSlider');
+    slider.value = val;
+
+    // Update slider gradient
+    const min = 50000, max = 5000000;
+    const p = ((val - min) / (max - min) * 100).toFixed(1);
+    slider.style.setProperty('--pct', p + '%');
+
+    // Update presets
+    document.querySelectorAll('.preset').forEach(b => b.classList.remove('active'));
+    const presetVals = [100000,250000,500000,750000,1000000,2000000,5000000];
+    document.querySelectorAll('.preset').forEach((b,i) => {
+      if(presetVals[i] === val) b.classList.add('active');
+    });
+
+    document.getElementById('priceDisplay').innerHTML = fmt(val) + ' <span>USD</span>';
+
+    // Commission calcs
+    const pfComm   = val * 0.05;
+    const agComm   = val * 0.05;
+    const tcEst    = val * 0.04; // ~4% estimate
+    const aNetComm = val - pfComm - agComm;        // after commission, before transfer
+    const pNetComm = val - pfComm;                 // after commission, before transfer
+    const aNetFull = val - pfComm - agComm - tcEst; // after all
+    const pNetFull = val - pfComm - tcEst;          // after all
+
+    // ── AGENT CARD ──
+    flash('a-sale');  document.getElementById('a-sale').textContent  = fmt(val);
+    flash('a-pf');    document.getElementById('a-pf').textContent    = '– ' + fmt(pfComm);
+    flash('a-ag');    document.getElementById('a-ag').textContent    = '– ' + fmt(agComm);
+    flash('a-total-comm'); document.getElementById('a-total-comm').textContent = '– ' + fmt(pfComm + agComm);
+    flash('a-tc');    document.getElementById('a-tc').textContent    = '≈ ' + fmt(tcEst);
+    flash('a-net');   document.getElementById('a-net').textContent   = fmt(aNetComm);
+    document.getElementById('a-net-sub').textContent = 'That\'s ' + (aNetComm/val*100).toFixed(1) + '% of the sale price after paying ' + fmt(pfComm+agComm) + ' total commission.';
+
+    // Agent bar widths
+    const aPfW  = 5;
+    const aAgW  = 5;
+    const aTcW  = tcEst/val*100;
+    const aNetW = aNetFull/val*100;
+    document.getElementById('a-bar-pf').style.width  = aPfW + '%';
+    document.getElementById('a-bar-ag').style.width  = aAgW + '%';
+    document.getElementById('a-bar-tc').style.width  = aTcW.toFixed(1) + '%';
+    document.getElementById('a-bar-net').style.width = aNetW.toFixed(1) + '%';
+    document.getElementById('a-bar-net').textContent = 'You ' + (aNetW).toFixed(0) + '%';
+
+    // ── PRIVATE CARD ──
+    flash('p-sale');  document.getElementById('p-sale').textContent  = fmt(val);
+    flash('p-pf');    document.getElementById('p-pf').textContent    = '– ' + fmt(pfComm);
+    flash('p-total-comm'); document.getElementById('p-total-comm').textContent = '– ' + fmt(pfComm);
+    flash('p-tc');    document.getElementById('p-tc').textContent    = '≈ ' + fmt(tcEst);
+    flash('p-net');   document.getElementById('p-net').textContent   = fmt(pNetComm);
+    document.getElementById('p-net-sub').textContent = 'That\'s ' + (pNetComm/val*100).toFixed(1) + '% of the sale price after paying ' + fmt(pfComm) + ' to PropertyFinder.';
+
+    // Private bar widths
+    const pPfW  = 5;
+    const pTcW  = tcEst/val*100;
+    const pNetW = pNetFull/val*100;
+    document.getElementById('p-bar-pf').style.width  = pPfW + '%';
+    document.getElementById('p-bar-tc').style.width  = pTcW.toFixed(1) + '%';
+    document.getElementById('p-bar-net').style.width = pNetW.toFixed(1) + '%';
+    document.getElementById('p-bar-net').textContent = 'You ' + (pNetW).toFixed(0) + '%';
+
+    // ── SAVING BANNER ──
+    document.getElementById('saving-price').textContent  = fmt(val);
+    document.getElementById('saving-amount').textContent = fmt(agComm);
+    document.getElementById('saving-big').textContent    = fmt(agComm);
+
+    // ── TABLE ──
+    document.getElementById('t-sale-a').textContent  = fmt(val);
+    document.getElementById('t-sale-p').textContent  = fmt(val);
+    document.getElementById('t-pf-a').textContent    = fmt(pfComm);
+    document.getElementById('t-pf-p').textContent    = fmt(pfComm);
+    document.getElementById('t-ag-a').textContent    = fmt(agComm);
+    document.getElementById('t-ag-diff').textContent = fmt(agComm);
+    document.getElementById('t-comm-a').textContent  = fmt(pfComm + agComm) + ' (10%)';
+    document.getElementById('t-comm-p').textContent  = fmt(pfComm) + ' (5%)';
+    document.getElementById('t-comm-diff').textContent = fmt(agComm) + ' more';
+    document.getElementById('t-tc-a').textContent    = '≈ ' + fmt(tcEst);
+    document.getElementById('t-tc-p').textContent    = '≈ ' + fmt(tcEst);
+    document.getElementById('t-net-a').textContent   = fmt(aNetComm);
+    document.getElementById('t-net-p').textContent   = fmt(pNetComm);
+    document.getElementById('t-net-diff').textContent = fmt(pNetComm - aNetComm) + ' more (private)';
+  }
+
+  function setPrice(val) {
+    update(val);
+  }
+
+  function flash(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('amount-change');
+    void el.offsetWidth;
+    el.classList.add('amount-change');
+  }
+
+  // Init
+  update(500000);
+</script>
+
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

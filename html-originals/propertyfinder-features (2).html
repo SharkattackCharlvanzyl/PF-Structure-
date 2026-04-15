@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropertyFinder Global — Platform Features</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #141c2b;
+    --card: #1a2535;
+    --card-hover: #1f2d3d;
+    --gold: #b8976a;
+    --gold-mid: #a8845a;
+    --gold-accent: #c4a47c;
+    --cream: #c4a47c;
+    --cream-bright: #c4a47c;
+    --body-text: #e8dfc8;
+    --mid-text: #c8b98a;
+    --subtle-text: #8a7d5a;
+    --border: rgba(196,164,124,0.18);
+    --border-strong: rgba(196,164,124,0.40);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--body-text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #0e1520 0%, #141c2b 50%, #111828 100%);
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .hero-orb-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(196,164,124,0.15) 0%, transparent 70%);
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+  }
+  .hero-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,164,124,0.08) 0%, transparent 70%);
+    bottom: 0; right: -100px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid var(--border-strong);
+    border-radius: 40px;
+    padding: 7px 20px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 36px;
+    background: rgba(196,164,124,0.1);
+    animation: fadeUp 0.8s ease both;
+    font-weight: 800;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 9vw, 110px);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--cream);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    animation: fadeUp 0.9s ease 0.1s both;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-accent); }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--mid-text);
+    margin-bottom: 48px;
+    animation: fadeUp 0.9s ease 0.2s both;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 1s ease 0.3s both;
+    background: rgba(196,164,124,0.06);
+    border: 1px solid rgba(196,164,124,0.2);
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-stat {
+    padding: 20px 40px;
+    border-left: 1px solid var(--border);
+    text-align: center;
+  }
+  .hero-stat:first-child { border-left: none; }
+  .hero-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold-accent);
+    display: block;
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtle-text);
+    display: block;
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+    margin: 60px auto 0;
+    animation: fadeIn 1s ease 0.5s both;
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    padding: 100px 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    color: var(--cream);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.12);
+  }
+  .section-title em { font-style: italic; color: var(--gold-accent); }
+
+  .section-desc {
+    font-size: 16px;
+    color: var(--mid-text);
+    max-width: 560px;
+    margin-bottom: 60px;
+    font-weight: 600;
+    line-height: 1.75;
+  }
+
+  .hr-gold {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-mid), transparent);
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* AI GRID */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3px;
+  }
+
+  .ai-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .ai-card:hover {
+    border-color: var(--border-strong);
+    background: var(--card-hover);
+  }
+  .ai-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--gold-accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .ai-card:hover::after { opacity: 1; }
+
+  .ai-card-icon { font-size: 32px; margin-bottom: 20px; display: block; color: var(--gold-accent); line-height: 1; }
+  .bento-icon { font-size: 28px; margin-bottom: 14px; display: block; color: var(--gold-accent); line-height: 1; }
+  .region-flag { font-size: 22px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(196,164,124,0.12); border: 1px solid var(--border); border-radius: 50%; color: var(--gold-accent); flex-shrink: 0; }
+  .ai-card-title {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-strong);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    background: rgba(196,164,124,0.1);
+  }
+  .ai-card-text { font-size: 14px; color: var(--body-text); line-height: 1.75; font-weight: 600; }
+  .ai-card-tag {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    background: rgba(196,164,124,0.1);
+  }
+
+  /* FIRST STRIP */
+  .first-strip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  .first-strip::before {
+    content: 'FIRST';
+    position: absolute;
+    right: -30px; top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 160px;
+    font-weight: 300;
+    color: rgba(196,164,124,0.06);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+  .first-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    list-style: none;
+    margin-top: 40px;
+  }
+  .first-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 14px;
+    color: var(--body-text);
+    line-height: 1.65;
+    font-weight: 500;
+  }
+  .first-list li::before {
+    content: '✦';
+    color: var(--gold);
+    font-size: 12px;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  strong.gold { color: var(--gold-mid); font-weight: 700; }
+
+  /* BENTO */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+    margin-top: 60px;
+  }
+  .bento-cell {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 36px 32px;
+    transition: background 0.3s, border-color 0.3s;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+  .bento-cell:hover {
+    background: var(--card-hover);
+    border-color: var(--border-strong);
+  }
+  .bento-cell.span-4 { grid-column: span 4; }
+  .bento-cell.span-6 { grid-column: span 6; }
+  .bento-cell.span-8 { grid-column: span 8; }
+  .bento-cell.span-12 { grid-column: span 12; }
+
+  
+  .bento-title {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-strong);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    background: rgba(196,164,124,0.1);
+  }
+  .bento-text { font-size: 13px; color: var(--body-text); line-height: 1.65; font-weight: 600; }
+  .bento-big-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--gold-accent);
+    line-height: 0.9;
+    margin-bottom: 12px;
+  }
+
+  /* COMPARISON */
+  .compare-wrap { overflow-x: auto; margin-top: 60px; }
+  .compare-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+  .compare-table th {
+    padding: 16px 24px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+    text-align: left;
+    font-weight: 800;
+    color: var(--subtle-text);
+    background: var(--card);
+  }
+  .compare-table th.hl { color: var(--gold); border-bottom-color: var(--gold-mid); background: var(--card-hover); }
+  .compare-table td {
+    padding: 14px 24px;
+    font-size: 13.5px;
+    border-bottom: 1px solid rgba(196,164,124,0.12);
+    color: var(--mid-text);
+    font-weight: 600;
+    background: var(--card);
+  }
+  .compare-table td.hl { color: var(--body-text); font-weight: 700; background: var(--card-hover); }
+  .compare-table td.yes { color: var(--gold-accent); font-weight: 800; }
+  .compare-table td.no { color: #4a5568; font-weight: 500; }
+  .compare-table tr:hover td { background: var(--card-hover); }
+
+  /* PRICING */
+  .pricing-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 60px;
+  }
+  .price-card {
+    border: 1px solid var(--border);
+    padding: 48px 36px;
+    background: var(--card);
+    position: relative;
+    transition: border-color 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  }
+  .price-card.featured { border-color: var(--gold-mid); background: var(--card-hover); box-shadow: 0 4px 24px rgba(196,164,124,0.18); }
+  .price-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold-mid);
+    color: #f5ecd4;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    font-weight: 800;
+    padding: 4px 14px;
+  }
+  .price-card:hover { border-color: var(--border-strong); }
+
+  .price-plan { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; font-weight: 800; }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--cream-bright);
+    line-height: 1;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.18);
+  }
+  .price-amount sup { font-size: 24px; vertical-align: super; }
+  .price-period { font-size: 12px; color: var(--subtle-text); margin-bottom: 32px; font-weight: 600; }
+  .price-feature {
+    font-size: 13px;
+    color: var(--body-text);
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(196,164,124,0.12);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 600;
+  }
+  .price-feature::before { content: '✓'; color: var(--gold-mid); flex-shrink: 0; font-size: 12px; font-weight: 800; }
+  .price-for { font-size: 11px; color: var(--subtle-text); margin-top: 24px; font-style: italic; font-weight: 500; }
+
+  /* GLOBE */
+  .globe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .region-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; list-style: none; margin-top: 32px; }
+  .region-item {
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--body-text);
+    transition: border-color 0.3s;
+    background: var(--card);
+    font-weight: 600;
+  }
+  .region-item:hover { border-color: var(--border-strong); background: var(--card-hover); }
+  .region-count { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold-accent); display: block; line-height: 1; font-weight: 700; }
+  .region-name { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--subtle-text); font-weight: 700; }
+
+  .globe-vis { display: flex; align-items: center; justify-content: center; }
+  .globe-ring { position: relative; width: 380px; height: 380px; display: flex; align-items: center; justify-content: center; }
+  .globe-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spinSlow 30s linear infinite; }
+  .globe-ring svg.rev { animation-direction: reverse; animation-duration: 20s; }
+  @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .globe-center { position: relative; text-align: center; z-index: 1; }
+  .globe-num { font-family: 'Cormorant Garamond', serif; font-size: 80px; font-weight: 700; color: var(--gold-accent); line-height: 1; }
+  .globe-label { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--subtle-text); margin-top: 4px; font-weight: 700; }
+
+  /* CALCS */
+  .calc-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3px; margin-top: 60px; }
+  .calc-card {
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    background: var(--card);
+    text-align: center;
+    transition: all 0.3s;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+  .calc-card:hover { background: var(--card-hover); border-color: var(--border-strong); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .calc-icon { font-size: 28px; margin-bottom: 12px; display: block; color: var(--gold-accent); line-height: 1; }
+  .calc-title {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-strong);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    background: rgba(196,164,124,0.1);
+  }
+  .calc-desc { font-size: 12px; color: var(--body-text); line-height: 1.6; font-weight: 500; }
+
+  /* SECTORS */
+  .sectors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3px; margin-top: 60px; }
+  .sector-card {
+    border: 1px solid var(--border);
+    padding: 28px;
+    background: var(--card);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.3s;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  }
+  .sector-card:hover { border-color: var(--border-strong); background: var(--card-hover); }
+  .sector-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; color: var(--gold-accent); line-height: 1; flex-shrink: 0; opacity: 0.75; }
+  .sector-name { font-size: 14px; font-weight: 700; color: var(--body-text); line-height: 1.4; }
+  .sector-sub { font-size: 11px; color: var(--subtle-text); margin-top: 3px; font-weight: 500; }
+
+  /* PROVAL */
+  .proval-box {
+    border: 1px solid var(--gold-mid);
+    background: var(--card);
+    padding: 64px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 60px;
+    box-shadow: 0 4px 20px rgba(196,164,124,0.12);
+  }
+  .proval-box::before {
+    content: 'ProVal';
+    position: absolute;
+    right: -10px; bottom: -20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(196,164,124,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .proval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .proval-steps { counter-reset: step; list-style: none; margin-top: 24px; }
+  .proval-steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(196,164,124,0.12);
+    font-size: 13.5px;
+    color: var(--body-text);
+    font-weight: 500;
+  }
+  .proval-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold-mid);
+    flex-shrink: 0;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .proval-points { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 24px; }
+  .proval-point {
+    font-size: 12px;
+    color: var(--mid-text);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  .proval-point::before { content: '·'; color: var(--gold-mid); flex-shrink: 0; font-size: 16px; line-height: 1; }
+
+  /* CTA */
+  .cta-strip {
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .cta-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(196,164,124,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-strip p { font-size: 16px; color: var(--mid-text); margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto; font-weight: 600; }
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold-mid);
+    color: #f5ecd4;
+    padding: 16px 40px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-gold:hover { background: var(--gold); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--gold-mid);
+    color: var(--gold-mid);
+    padding: 16px 40px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: transparent;
+    margin-left: 12px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,164,124,0.06); }
+
+  /* TICKER */
+  .ticker-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 14px 0;
+    white-space: nowrap;
+    background: var(--card);
+  }
+  .ticker { display: inline-block; animation: ticker 40s linear infinite; }
+  .ticker-item { display: inline-block; padding: 0 40px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--subtle-text); font-weight: 700; }
+  .ticker-item span { color: var(--gold); margin-left: 8px; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .globe-grid { grid-template-columns: 1fr; }
+    .globe-vis { display: none; }
+    .pricing-row { grid-template-columns: 1fr; }
+    .proval-grid { grid-template-columns: 1fr; }
+    .bento-cell.span-4, .bento-cell.span-6, .bento-cell.span-8, .bento-cell.span-12 { grid-column: span 12; }
+    .hero-stat { padding: 16px 24px; }
+    .first-strip { padding: 40px 24px; }
+    .proval-box { padding: 40px 24px; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 20px; }
+    .region-list { grid-template-columns: 1fr 1fr; }
+    .proval-points { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; }
+    .hero-stat { border-left: none; border-top: 1px solid var(--border); }
+    .hero-stat:first-child { border-top: none; }
+    .btn-outline { margin-left: 0; margin-top: 12px; }
+  }
+
+  /* LIGHT SECTIONS */
+  .section-light {
+    background: #faf8f4 !important;
+  }
+  .section-light .section-label { color: #8a6318; }
+  .section-light .section-title { color: #1a1408; }
+  .section-light .section-title em { color: #b8976a; }
+  .section-light .section-desc { color: #4a3f2a; }
+  .section-light .ai-card {
+    background: #1a2535;
+    border-color: rgba(184,151,106,0.25);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  .section-light .ai-card:hover { background: #fdf8f0; border-color: rgba(184,151,106,0.5); }
+  .section-light .ai-card-text { color: #3a3228; }
+  .section-light .bento-cell {
+    background: #1a2535;
+    border-color: rgba(184,151,106,0.2);
+  }
+  .section-light .bento-cell:hover { background: #fdf8f0; border-color: rgba(184,151,106,0.45); }
+  .section-light .bento-text { color: #3a3228; }
+  .section-light .calc-card { background: #1a2535; border-color: rgba(184,151,106,0.2); }
+  .section-light .calc-card:hover { background: #fdf8f0; }
+  .section-light .calc-desc { color: #3a3228; }
+  .section-light .compare-table th { background: #f0ece4; color: #4a3f2a; }
+  .section-light .compare-table th.hl { background: #fdf8f0; color: #8a6318; }
+  .section-light .compare-table td { background: #1a2535; color: #3a3228; border-bottom-color: rgba(184,151,106,0.15); }
+  .section-light .compare-table td.hl { background: #fdf8f0; color: #1a1408; }
+  .section-light .compare-table tr:hover td { background: #fdf8f0; }
+  .section-light .price-card { background: #1a2535; border-color: rgba(184,151,106,0.25); }
+  .section-light .price-card:hover { border-color: rgba(184,151,106,0.5); }
+  .section-light .price-card.featured { background: #1a2535; border-color: #b8976a; }
+  .section-light .price-card.featured .price-plan,
+  .section-light .price-card.featured .price-period,
+  .section-light .price-card.featured .price-for { color: #c4a47c; }
+  .section-light .price-card.featured .price-feature { color: #e8dfc8; }
+  .section-light .price-plan { color: #8a6318; }
+  .section-light .price-amount { color: #1a1408; }
+  .section-light .price-period { color: #6a5a3a; }
+  .section-light .price-feature { color: #3a3228; border-bottom-color: rgba(184,151,106,0.12); }
+  .section-light .price-for { color: #6a5a3a; }
+  .section-light .region-item { background: #1a2535; border-color: rgba(184,151,106,0.2); color: #3a3228; }
+  .section-light .region-item:hover { background: #fdf8f0; border-color: rgba(184,151,106,0.45); }
+  .section-light .region-name { color: #6a5a3a; }
+  .section-light .hr-gold { background: linear-gradient(to right, transparent, rgba(184,151,106,0.4), transparent); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-badge">New to the Property Industry</div>
+  <h1 class="hero-title">Property&thinsp;<em>Redefined</em></h1>
+  <p class="hero-sub">The world's most advanced real estate &amp; business platform</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num">185</span><span class="hero-stat-label">Countries</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">10</span><span class="hero-stat-label">Business Sectors</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">85+</span><span class="hero-stat-label">Sub-Categories</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">AI</span><span class="hero-stat-label">Powered Platform</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">$2</span><span class="hero-stat-label">From / Listing</span></div>
+  </div>
+  <div class="hero-divider"></div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">AI Voice Search <span>NEW</span></span>
+    <span class="ticker-item">ProVal AI Valuation <span>NEW</span></span>
+    <span class="ticker-item">Live Online Auctions <span>NEW</span></span>
+    <span class="ticker-item">185 Countries <span>ONE PLATFORM</span></span>
+    <span class="ticker-item">Business Marketplace <span>10 SECTORS</span></span>
+    <span class="ticker-item">From $2 / Listing <span>NO CONTRACTS</span></span>
+    <span class="ticker-item">30 Photos + Video + Portal <span>INCLUDED</span></span>
+    <span class="ticker-item">WhatsApp Direct Contact <span>NO GATEKEEPERS</span></span>
+    <span class="ticker-item">Smart Neighbourhood Intelligence <span>AUTO-POPULATED</span></span>
+    <span class="ticker-item">AI Voice Search <span>NEW</span></span>
+    <span class="ticker-item">ProVal AI Valuation <span>NEW</span></span>
+    <span class="ticker-item">Live Online Auctions <span>NEW</span></span>
+    <span class="ticker-item">185 Countries <span>ONE PLATFORM</span></span>
+    <span class="ticker-item">Business Marketplace <span>10 SECTORS</span></span>
+    <span class="ticker-item">From $2 / Listing <span>NO CONTRACTS</span></span>
+    <span class="ticker-item">30 Photos + Video + Portal <span>INCLUDED</span></span>
+    <span class="ticker-item">WhatsApp Direct Contact <span>NO GATEKEEPERS</span></span>
+    <span class="ticker-item">Smart Neighbourhood Intelligence <span>AUTO-POPULATED</span></span>
+  </div>
+</div>
+
+<!-- WHAT'S NEW -->
+<section class="reveal">
+  <div class="section-label">Industry Firsts</div>
+  <h2 class="section-title">Features <em>Never Seen</em><br>in Property Before</h2>
+  <p class="section-desc">PropertyFinder Global introduces technology that simply doesn't exist anywhere else in the property industry — at this scale, at this price.</p>
+  <div class="first-strip">
+    <div class="section-label" style="margin-bottom:8px">Groundbreaking</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:800;line-height:1.1;color:var(--cream-bright);text-shadow:0 1px 8px rgba(0,0,0,0.18)">What PropertyFinder<br><em>brings to the world</em></div>
+    <ul class="first-list">
+      <li><strong class="gold">AI Voice Search</strong> — Speak naturally in your own language. The first voice-native property search in the African market at international scale.</li>
+      <li><strong class="gold">ProVal AI Valuation</strong> — The industry's first commercially available, payment-gated AI valuation tool. 24 data points, satellite mapping, delivered instantly in-browser.</li>
+      <li><strong class="gold">Smart Neighbourhood Intelligence</strong> — Every listing auto-populates transport, schools, and lifestyle data per country. Zero manual input from agents.</li>
+      <li><strong class="gold">Live Online Auction Platform</strong> — Real-time countdown bidding, verified bidders, digital auction agreements, and anti-fraud controls — all built in.</li>
+      <li><strong class="gold">Business-for-Sale Marketplace</strong> — 10 sectors, 85+ sub-categories on the same platform as property. One unified search, globally.</li>
+      <li><strong class="gold">Auto-Sync from Any CRM</strong> — 20+ property and 13+ business broker CRM systems. Listings update globally within 24 hours — automatically.</li>
+      <li><strong class="gold">Online Contracts &amp; Digital Signatures</strong> — Every sale, valuation, and auction agreement signed completely in-browser. No printing. No delays.</li>
+      <li><strong class="gold">185 Countries, One Search Bar</strong> — Buy, rent, bid, or buy a business across 185 countries from a single unified platform. No other portal comes close.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- AI FEATURES -->
+<section class="reveal section-light">
+  <div class="section-label">Technology</div>
+  <h2 class="section-title">Built on <em>Artificial Intelligence</em></h2>
+  <p class="section-desc">Six AI-powered features work seamlessly together — from the moment a buyer arrives to the moment contracts are signed.</p>
+  <div class="ai-grid">
+    <div class="ai-card">
+      <span class="ai-card-icon">✦</span>
+      <div class="ai-card-title">AI Voice Search</div>
+      <p class="ai-card-text">Speak naturally: "3-bedroom house in Cape Town under 3 million." The platform interprets intent, extracts all filters, and returns results instantly — in any language.</p>
+      <span class="ai-card-tag">First in Africa</span>
+    </div>
+    <div class="ai-card">
+      <span class="ai-card-icon">◈</span>
+      <div class="ai-card-title">ProVal Valuation Engine</div>
+      <p class="ai-card-text">24-point AI property valuation covering comparable sales, flood risk, satellite mapping, neighbourhood intelligence, and rental yield — delivered instantly in-browser for $124.</p>
+      <span class="ai-card-tag">Industry First</span>
+    </div>
+    <div class="ai-card">
+      <span class="ai-card-icon">◉</span>
+      <div class="ai-card-title">24/7 AI Chat Assistant</div>
+      <p class="ai-card-text">Powered by Claude — instant expert answers in any language, any time of day. Answers platform questions, explains processes, guides buyers. 24/7/365, zero wait time.</p>
+      <span class="ai-card-tag">Always On</span>
+    </div>
+    <div class="ai-card">
+      <span class="ai-card-icon">⊕</span>
+      <div class="ai-card-title">Smart Neighbourhood Intelligence</div>
+      <p class="ai-card-text">Transport, schools, healthcare, retail, and security — all auto-populated using AI and Google APIs, adapted per country. An agent in Dubai gets different data to one in Cape Town.</p>
+      <span class="ai-card-tag">Country-Smart</span>
+    </div>
+    <div class="ai-card">
+      <span class="ai-card-icon">⊜</span>
+      <div class="ai-card-title">4-Property Comparison Tool</div>
+      <p class="ai-card-text">Compare up to four properties side-by-side across price, size, features, location, and financials simultaneously — no more browser tab juggling.</p>
+      <span class="ai-card-tag">Built In</span>
+    </div>
+    <div class="ai-card">
+      <span class="ai-card-icon">◇</span>
+      <div class="ai-card-title">Smart Alerts System</div>
+      <p class="ai-card-text">Buyers save search criteria and receive instant notifications when matching properties go live — via email, WhatsApp, or push notification.</p>
+      <span class="ai-card-tag">Instant</span>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- PROVAL -->
+<section class="reveal">
+  <div class="section-label">ProVal</div>
+  <h2 class="section-title">The World's First<br><em>AI Valuation Platform</em></h2>
+  <p class="section-desc">Payment-gated. Digitally signed. Instantly delivered. 24 research points. Available across 185 countries.</p>
+  <div class="proval-box">
+    <div class="proval-grid">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">How It Works</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:800;line-height:1.2;margin-bottom:4px;color:var(--cream-bright);text-shadow:0 1px 6px rgba(0,0,0,0.15)">Five steps from <em>listing to valuation</em></div>
+        <ol class="proval-steps">
+          <li>View the property listing — address auto-populated via Google Maps globally</li>
+          <li>View a complete example valuation report before committing to purchase</li>
+          <li>Sign the ProVal agreement digitally in-browser — unique reference auto-generated</li>
+          <li>Secure payment of $124 USD via Stripe or PayFast — button unlocks instantly</li>
+          <li>Full AI valuation report delivered immediately in-browser</li>
+        </ol>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">24 Data Points Analysed</div>
+        <div class="proval-points">
+          <div class="proval-point">Comparable active sales</div>
+          <div class="proval-point">Comparable sold prices</div>
+          <div class="proval-point">Price per sqm trends</div>
+          <div class="proval-point">Active market listings</div>
+          <div class="proval-point">Flood risk zone</div>
+          <div class="proval-point">School proximity</div>
+          <div class="proval-point">Public transport access</div>
+          <div class="proval-point">Shopping &amp; retail</div>
+          <div class="proval-point">Healthcare facilities</div>
+          <div class="proval-point">Crime index data</div>
+          <div class="proval-point">Zoning &amp; planning</div>
+          <div class="proval-point">Satellite map view</div>
+          <div class="proval-point">Security features</div>
+          <div class="proval-point">Smart home technology</div>
+          <div class="proval-point">Pool &amp; leisure features</div>
+          <div class="proval-point">Interior finishes graded</div>
+          <div class="proval-point">Energy &amp; utility ratings</div>
+          <div class="proval-point">Neighbourhood overview</div>
+          <div class="proval-point">Legal &amp; ownership status</div>
+          <div class="proval-point">Costs &amp; levies</div>
+          <div class="proval-point">Outdoor features</div>
+          <div class="proval-point">Parking &amp; access</div>
+          <div class="proval-point">Rental yield potential</div>
+          <div class="proval-point">Comfort systems assessed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- CATEGORIES -->
+<section class="reveal section-light">
+  <div class="section-label">What You Can List</div>
+  <h2 class="section-title">Every Property Type,<br><em>One Platform</em></h2>
+  <p class="section-desc">From a holiday apartment in Bali to a 5,000-hectare farm in South Africa — and every business type in between.</p>
+  <div class="bento">
+    <div class="bento-cell span-4">
+      <span class="bento-icon">⌂</span>
+      <div class="bento-title">Residential Sales</div>
+      <p class="bento-text">Houses, apartments, estates — 30 photos, video, virtual tour, 25+ attributes per listing.</p>
+    </div>
+    <div class="bento-cell span-4">
+      <span class="bento-icon">▣</span>
+      <div class="bento-title">Commercial &amp; Industrial</div>
+      <p class="bento-text">Offices, warehouses, factories — with zoning, GLA, loading bays, power supply, and freight intelligence.</p>
+    </div>
+    <div class="bento-cell span-4">
+      <span class="bento-icon">✦</span>
+      <div class="bento-title">Farms &amp; Agricultural</div>
+      <p class="bento-text">Total hectares, water rights, dams, irrigation, livestock capacity, outbuildings — global farm listings.</p>
+    </div>
+    <div class="bento-cell span-6">
+      <span class="bento-icon">⊞</span>
+      <div class="bento-title">New Developments</div>
+      <p class="bento-text">Phase releases, unit types, completion dates, off-plan pricing, deposit structures, and developer profiles all in one place.</p>
+    </div>
+    <div class="bento-cell span-6">
+      <span class="bento-icon">◈</span>
+      <div class="bento-title">Short-Stay &amp; Holiday Rentals</div>
+      <p class="bento-text">Nightly and weekly pricing, amenities, house rules, instant book, and seasonal rate management built in.</p>
+    </div>
+    <div class="bento-cell span-4">
+      <div class="bento-big-num">85+</div>
+      <div class="bento-title">Business Sub-Categories</div>
+      <p class="bento-text">The most granular business-for-sale platform in the world.</p>
+    </div>
+    <div class="bento-cell span-8">
+      <span class="bento-icon">◆</span>
+      <div class="bento-title">Live Online Auctions</div>
+      <p class="bento-text">Residential, commercial, industrial, and farm auctions with real-time countdown bidding, verified bidders, digital auction agreements, buyer deposit management, and anti-fraud controls. Every property type is auction-eligible.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- BUSINESS SECTORS -->
+<section class="reveal">
+  <div class="section-label">Business Marketplace</div>
+  <h2 class="section-title">10 Sectors, <em>85+ Sub-Categories</em></h2>
+  <p class="section-desc">One of the most granular business-for-sale platforms on earth. Every listing gets 30 photos, video, full detail page, WhatsApp contact, and 185-country exposure.</p>
+  <div class="sectors-grid">
+    <div class="sector-card"><div class="sector-num">01</div><div><div class="sector-name">Restaurants &amp; Food Service</div><div class="sector-sub">11 sub-categories incl. cloud kitchens &amp; food trucks</div></div></div>
+    <div class="sector-card"><div class="sector-num">02</div><div><div class="sector-name">Retail &amp; Commerce</div><div class="sector-sub">12 sub-categories incl. e-commerce &amp; pharmacy</div></div></div>
+    <div class="sector-card"><div class="sector-num">03</div><div><div class="sector-name">Technology Services</div><div class="sector-sub">12 sub-categories incl. SaaS &amp; cybersecurity</div></div></div>
+    <div class="sector-card"><div class="sector-num">04</div><div><div class="sector-name">Hospitality &amp; Tourism</div><div class="sector-sub">11 sub-categories incl. lodges, safaris &amp; glamping</div></div></div>
+    <div class="sector-card"><div class="sector-num">05</div><div><div class="sector-name">Manufacturing &amp; Industrial</div><div class="sector-sub">15 sub-categories incl. cold storage &amp; recycling</div></div></div>
+    <div class="sector-card"><div class="sector-num">06</div><div><div class="sector-name">Franchises</div><div class="sector-sub">15 sub-categories across food, retail, fitness &amp; more</div></div></div>
+    <div class="sector-card"><div class="sector-num">07</div><div><div class="sector-name">Healthcare &amp; Medical</div><div class="sector-sub">12 sub-categories incl. dental, veterinary &amp; aesthetics</div></div></div>
+    <div class="sector-card"><div class="sector-num">08</div><div><div class="sector-name">Automotive</div><div class="sector-sub">12 sub-categories incl. EV specialist &amp; fleet</div></div></div>
+    <div class="sector-card"><div class="sector-num">09</div><div><div class="sector-name">Agriculture &amp; Farming</div><div class="sector-sub">15 sub-categories incl. hydroponics &amp; aquaculture</div></div></div>
+    <div class="sector-card"><div class="sector-num">10</div><div><div class="sector-name">Professional Services</div><div class="sector-sub">12 sub-categories incl. law, accounting &amp; engineering</div></div></div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- GLOBAL COVERAGE -->
+<section class="reveal section-light">
+  <div class="globe-grid">
+    <div>
+      <div class="section-label">Global Reach</div>
+      <h2 class="section-title"><em>185 Countries</em><br>One Platform</h2>
+      <p class="section-desc">Auto-detecting language, currency, and region the moment a buyer lands — PropertyFinder is already speaking their language before they type a word.</p>
+      <ul class="region-list">
+        <li class="region-item"><span class="region-flag">◉</span><div><span class="region-count">40+</span><span class="region-name">African Countries</span></div></li>
+        <li class="region-item"><span class="region-flag">◉</span><div><span class="region-count">40+</span><span class="region-name">European Countries</span></div></li>
+        <li class="region-item"><span class="region-flag">◉</span><div><span class="region-count">33</span><span class="region-name">Asia &amp; Middle East</span></div></li>
+        <li class="region-item"><span class="region-flag">◉</span><div><span class="region-count">28</span><span class="region-name">The Americas</span></div></li>
+        <li class="region-item"><span class="region-flag">◉</span><div><span class="region-count">8</span><span class="region-name">Oceania</span></div></li>
+        <li class="region-item"><span class="region-flag">▣</span><div><span class="region-count">8</span><span class="region-name">Payment Methods</span></div></li>
+      </ul>
+    </div>
+    <div class="globe-vis">
+      <div class="globe-ring">
+        <svg viewBox="0 0 380 380">
+          <circle cx="190" cy="190" r="178" fill="none" stroke="rgba(196,164,124,0.12)" stroke-width="1"/>
+          <circle cx="190" cy="190" r="178" fill="none" stroke="rgba(196,164,124,0.35)" stroke-width="1" stroke-dasharray="8 22" stroke-linecap="round"/>
+        </svg>
+        <svg viewBox="0 0 380 380" class="rev">
+          <circle cx="190" cy="190" r="148" fill="none" stroke="rgba(196,164,124,0.08)" stroke-width="1"/>
+          <circle cx="190" cy="190" r="148" fill="none" stroke="rgba(196,164,124,0.25)" stroke-width="1" stroke-dasharray="4 14" stroke-linecap="round"/>
+        </svg>
+        <svg viewBox="0 0 380 380">
+          <circle cx="190" cy="190" r="110" fill="none" stroke="rgba(196,164,124,0.15)" stroke-width="1" stroke-dasharray="40 8" stroke-linecap="round"/>
+        </svg>
+        <div class="globe-center">
+          <div class="globe-num">185</div>
+          <div class="globe-label">Countries</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- PRICING -->
+<section class="reveal section-light">
+  <div class="section-label">Transparent Pricing</div>
+  <h2 class="section-title">No Hidden Fees.<br><em>No Lock-in. Ever.</em></h2>
+  <p class="section-desc">Every listing type — sales, rentals, business, auctions — gets identical features. Cancel anytime. No commission deducted at listing stage.</p>
+  <div class="pricing-row">
+    <div class="price-card">
+      <div class="price-plan">Private Seller</div>
+      <div class="price-amount"><sup>$</sup>7.50</div>
+      <div class="price-period">per listing / per month &bull; 1–10 listings</div>
+      <div class="price-feature">30 high-resolution photos</div>
+      <div class="price-feature">1 video + 1 portal walkthrough</div>
+      <div class="price-feature">Full property detail page</div>
+      <div class="price-feature">WhatsApp, email &amp; phone contact</div>
+      <div class="price-feature">Featured badge &amp; priority ranking</div>
+      <div class="price-feature">Full analytics dashboard</div>
+      <div class="price-feature">185-country exposure</div>
+      <div class="price-feature">Auction eligibility included</div>
+      <div class="price-for">Private sellers &amp; landlords. Cancel anytime.</div>
+    </div>
+    <div class="price-card featured">
+      <div class="price-plan">Agency</div>
+      <div class="price-amount"><sup>$</sup>3.00</div>
+      <div class="price-period">per listing / per month &bull; 11–2,000 listings</div>
+      <div class="price-feature">30 high-resolution photos</div>
+      <div class="price-feature">1 video + 1 portal walkthrough</div>
+      <div class="price-feature">Full property detail page</div>
+      <div class="price-feature">WhatsApp, email &amp; phone contact</div>
+      <div class="price-feature">Featured badge &amp; priority ranking</div>
+      <div class="price-feature">Full analytics dashboard</div>
+      <div class="price-feature">185-country exposure</div>
+      <div class="price-feature">Auto-sync &amp; social promotion</div>
+      <div class="price-for">Agents, brokers &amp; developers. Cancel anytime.</div>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Enterprise</div>
+      <div class="price-amount"><sup>$</sup>2.00</div>
+      <div class="price-period">per listing / per month &bull; 2,000+ listings</div>
+      <div class="price-feature">30 high-resolution photos</div>
+      <div class="price-feature">1 video + 1 portal walkthrough</div>
+      <div class="price-feature">Full property detail page</div>
+      <div class="price-feature">WhatsApp, email &amp; phone contact</div>
+      <div class="price-feature">Featured badge &amp; priority ranking</div>
+      <div class="price-feature">Full analytics dashboard</div>
+      <div class="price-feature">185-country exposure</div>
+      <div class="price-feature">White-label &amp; dedicated manager</div>
+      <div class="price-for">Portals, large developers &amp; franchises. Cancel anytime.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- COMPARISON -->
+<section class="reveal section-light">
+  <div class="section-label">The Old Way vs The New Way</div>
+  <h2 class="section-title">How We Compare to<br><em>Traditional Portals</em></h2>
+  <p class="section-desc">For too long, agents and sellers have been overcharged, locked in, and underserved. That changes now.</p>
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="hl">PropertyFinder Global</th>
+          <th>Traditional Portals</th>
+          <th>Agency Platforms</th>
+          <th>Classified Sites</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>International reach (185 countries)</td><td class="hl yes">✓ Included</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Pay-per-listing (no contracts)</td><td class="hl yes">✓ Always</td><td class="no">✗</td><td class="no">✗</td><td>Sometimes</td></tr>
+        <tr><td>Pricing from $2/month per listing</td><td class="hl yes">✓</td><td class="no">✗</td><td class="no">✗</td><td>—</td></tr>
+        <tr><td>Live online auction platform</td><td class="hl yes">✓ Built in</td><td class="no">✗</td><td>—</td><td class="no">✗</td></tr>
+        <tr><td>WhatsApp direct contact</td><td class="hl yes">✓ All listings</td><td class="no">✗</td><td>—</td><td>—</td></tr>
+        <tr><td>AI voice search</td><td class="hl yes">✓ Native</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>30 photos + video + portal walkthrough</td><td class="hl yes">✓ Every listing</td><td>—</td><td>Sometimes</td><td>—</td></tr>
+        <tr><td>Auto-sync from your CRM / feed</td><td class="hl yes">✓ 20+ systems</td><td class="no">✗</td><td>—</td><td class="no">✗</td></tr>
+        <tr><td>Business-for-sale marketplace</td><td class="hl yes">✓ 10 sectors</td><td class="no">✗</td><td class="no">✗</td><td>—</td></tr>
+        <tr><td>5 professional financial calculators</td><td class="hl yes">✓ Free</td><td>—</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Full analytics dashboard</td><td class="hl yes">✓ Included</td><td>Extra cost</td><td>Extra cost</td><td class="no">✗</td></tr>
+        <tr><td>Native language interface</td><td class="hl yes">✓ Auto-detect</td><td class="no">✗</td><td class="no">✗</td><td>—</td></tr>
+        <tr><td>Open to private sellers</td><td class="hl yes">✓ Everyone</td><td class="no">✗</td><td class="no">✗</td><td>Sometimes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- CALCULATORS -->
+<section class="reveal section-light">
+  <div class="section-label">Financial Tools</div>
+  <h2 class="section-title">5 Professional<br><em>Calculators — All Free</em></h2>
+  <p class="section-desc">Built directly into the platform. No third-party tools. No upsells. Available to every buyer and seller at no extra cost.</p>
+  <div class="calc-row">
+    <div class="calc-card"><span class="calc-icon">⌂</span><div class="calc-title">Mortgage</div><p class="calc-desc">Loan amount, rate, term → monthly instalment, total repayment, full amortisation schedule</p></div>
+    <div class="calc-card"><span class="calc-icon">◈</span><div class="calc-title">Affordability</div><p class="calc-desc">Net income, expenses, deposit → maximum qualifying bond, stress-tested against bank criteria</p></div>
+    <div class="calc-card"><span class="calc-icon">▦</span><div class="calc-title">Transfer Cost</div><p class="calc-desc">Country-specific transfer duty, conveyancing fees, bond registration — 6+ countries supported</p></div>
+    <div class="calc-card"><span class="calc-icon">◆</span><div class="calc-title">Rental Yield</div><p class="calc-desc">Purchase price, monthly rent → gross yield, net yield, cap rate, cash-on-cash return</p></div>
+    <div class="calc-card"><span class="calc-icon">▣</span><div class="calc-title">Bond Calculator</div><p class="calc-desc">Bond amount, term, rate → full amortisation table, interest vs capital, early settlement savings</p></div>
+  </div>
+</section>
+
+<hr class="hr-gold">
+
+<!-- CTA -->
+<div class="cta-strip reveal">
+  <div class="section-label" style="justify-content:center">Join the Platform</div>
+  <h2 class="section-title" style="margin-bottom:16px">The Future of Property<br><em>Starts Here</em></h2>
+  <p>185 countries. AI-powered. From $2 a listing. No contracts. No hidden fees. Built for agents, sellers, buyers, and businesses worldwide.</p>
+  <div>
+    <a href="#" class="btn-gold">List Your Property</a>
+    <a href="#" class="btn-outline">Explore the Platform</a>
+  </div>
+</div>
+
+<!-- FOOTER TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">PropertyFinder Global <span>2026</span></span>
+    <span class="ticker-item">185 Countries <span>✦</span></span>
+    <span class="ticker-item">10 Business Sectors <span>✦</span></span>
+    <span class="ticker-item">AI Powered <span>✦</span></span>
+    <span class="ticker-item">From $2 / Listing <span>✦</span></span>
+    <span class="ticker-item">No Contracts <span>✦</span></span>
+    <span class="ticker-item">Cancel Anytime <span>✦</span></span>
+    <span class="ticker-item">PropertyFinder Global <span>2026</span></span>
+    <span class="ticker-item">185 Countries <span>✦</span></span>
+    <span class="ticker-item">10 Business Sectors <span>✦</span></span>
+    <span class="ticker-item">AI Powered <span>✦</span></span>
+    <span class="ticker-item">From $2 / Listing <span>✦</span></span>
+    <span class="ticker-item">No Contracts <span>✦</span></span>
+    <span class="ticker-item">Cancel Anytime <span>✦</span></span>
+  </div>
+</div>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => io.observe(el));
+</script>
+  <script src="/social-share.js" defer></script>
+  <script src="/search-filter.js" defer></script>
+</body>
+</html>

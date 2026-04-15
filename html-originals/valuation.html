@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — ProVal AI Valuation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#141c2b;--accent2:#ffffff;--accent-dark:#0e1520;--lime:#c4a47c;
+      --bg:#faf8f4;--panel:#ffffff;--text:#1a1408;--muted:#5a4f3a;--line:rgba(196,164,124,0.18);
+      --navy:#0F2744;--navy2:#1a3a5c;--gold:#C4983A;--gold2:#DDB96A;
+      --radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.07);
+      --font:'DM Sans',system-ui,sans-serif;
+      --font-display:'Cinzel',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+
+    /* ── Hero ── */
+    .hero{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);padding:64px 24px 56px;color:#fff;text-align:center;position:relative;overflow:hidden}
+    .hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(196,164,124,0.12) 0%,transparent 70%);pointer-events:none}
+    .hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(196,152,58,0.15);border:1px solid rgba(196,152,58,0.4);color:var(--gold2);font-size:0.75rem;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:20px}
+    .hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;margin-bottom:8px;letter-spacing:0.02em}
+    .hero h1 span{color:var(--gold2)}
+    .hero-sub{font-size:1.05rem;opacity:0.85;max-width:560px;margin:0 auto 32px;line-height:1.65}
+    .hero-cta{display:inline-block;background:var(--gold);color:#fff;font-weight:800;font-size:1rem;padding:16px 40px;border-radius:8px;letter-spacing:0.03em;transition:all 0.2s;font-family:var(--font-display)}
+    .hero-cta:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,152,58,0.35)}
+    .hero-note{margin-top:14px;font-size:0.8rem;opacity:0.6}
+    .hero-stats{display:flex;justify-content:center;gap:40px;margin-top:40px;flex-wrap:wrap;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1)}
+    .hero-stat .num{font-size:1.8rem;font-weight:800;color:var(--gold2)}
+    .hero-stat .lbl{font-size:0.72rem;opacity:0.7;text-transform:uppercase;letter-spacing:0.06em;margin-top:3px}
+
+    /* ── Sections ── */
+    main{max-width:960px;margin:0 auto;padding:0 24px 80px}
+    .sec{padding:56px 0 0}
+    .sec-label{display:inline-block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#c4a47c;background:rgba(196,164,124,0.08);padding:4px 12px;border-radius:20px;margin-bottom:12px}
+    .sec-title{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;color:var(--accent-dark);margin-bottom:10px}
+    .sec-sub{color:var(--muted);font-size:0.95rem;line-height:1.65;max-width:620px}
+
+    /* ── What is ProVal ── */
+    .what-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+    @media(max-width:620px){.what-grid{grid-template-columns:1fr}}
+    .what-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .what-icon{font-size:1.6rem;margin-bottom:10px}
+    .what-card h4{font-family:var(--font-display);font-size:0.95rem;font-weight:700;color:var(--accent-dark);margin-bottom:6px}
+    .what-card p{font-size:0.84rem;color:var(--muted);line-height:1.55}
+
+    /* ── How it works ── */
+    .steps{display:flex;flex-direction:column;gap:0;margin-top:32px;position:relative}
+    .steps::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent2));opacity:0.2}
+    .step{display:flex;gap:20px;align-items:flex-start;padding:20px 0}
+    .step-num{min-width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.9rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(196,164,124,0.25);position:relative;z-index:1}
+    .step-body{padding-top:8px}
+    .step-body h4{font-weight:800;font-size:0.95rem;color:var(--text);margin-bottom:4px}
+    .step-body p{font-size:0.84rem;color:var(--muted);line-height:1.55}
+    .step-badge{display:inline-block;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(196,152,58,0.12);color:var(--gold);margin-left:8px;vertical-align:middle}
+
+    /* ── Pricing ── */
+    .pricing-wrap{display:grid;grid-template-columns:1fr 1.4fr;gap:24px;margin-top:32px;align-items:start}
+    @media(max-width:680px){.pricing-wrap{grid-template-columns:1fr}}
+    .price-card{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:var(--radius);padding:36px 32px;color:#fff;text-align:center;box-shadow:0 8px 32px rgba(15,39,68,0.25)}
+    .price-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold2);opacity:0.8;margin-bottom:12px}
+    .price-amount{font-family:var(--font-display);font-size:4rem;font-weight:700;color:var(--gold);line-height:1}
+    .price-currency{font-size:1.2rem;vertical-align:top;margin-top:10px;display:inline-block}
+    .price-desc{font-size:0.8rem;color:rgba(221,185,106,0.5);letter-spacing:0.05em;margin-top:6px;text-transform:uppercase}
+    .price-cta{display:block;margin-top:24px;background:var(--gold);color:#fff;font-weight:800;padding:14px 28px;border-radius:8px;font-size:0.9rem;transition:all 0.2s}
+    .price-cta:hover{background:var(--gold2);transform:translateY(-1px)}
+    .price-note{font-size:0.75rem;opacity:0.5;margin-top:10px}
+
+    .includes-list{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+    .includes-list h4{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent-dark);margin-bottom:18px}
+    .include-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+    .include-item:last-child{border-bottom:none}
+    .include-tick{color:#c4a47c;font-size:1rem;flex-shrink:0;margin-top:1px}
+    .include-text h5{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:2px}
+    .include-text p{font-size:0.8rem;color:var(--muted);line-height:1.45}
+
+    /* ── Example report preview ── */
+    .report-preview{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 40px rgba(15,39,68,0.2);margin-top:32px}
+    .rp-header{padding:28px 32px;border-bottom:1px solid rgba(255,255,255,0.08)}
+    .rp-badge{display:inline-block;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);background:rgba(196,152,58,0.15);border:1px solid rgba(196,152,58,0.25);padding:3px 10px;border-radius:10px;margin-bottom:10px}
+    .rp-header h3{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:4px}
+    .rp-header p{font-size:0.82rem;color:rgba(255,255,255,0.5)}
+    .rp-body{padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:580px){.rp-body{grid-template-columns:1fr}}
+    .rp-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px 20px}
+    .rp-stat-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(221,185,106,0.6);margin-bottom:6px;font-weight:700}
+    .rp-stat-val{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:#fff}
+    .rp-stat-sub{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:3px}
+    .rp-blur-banner{background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);padding:20px 32px;text-align:center;border-top:1px solid rgba(255,255,255,0.06)}
+    .rp-blur-banner p{color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:12px}
+    .rp-unlock-btn{display:inline-block;background:var(--gold);color:#fff;font-weight:800;padding:12px 32px;border-radius:8px;font-size:0.9rem;transition:all 0.2s}
+    .rp-unlock-btn:hover{background:var(--gold2)}
+
+    /* ── Who is it for ── */
+    .who-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:24px}
+    .who-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow)}
+    .who-icon{font-size:1.8rem;margin-bottom:10px}
+    .who-card h4{font-size:0.88rem;font-weight:800;color:var(--accent-dark);margin-bottom:4px}
+    .who-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+    /* ── FAQ ── */
+    .faq{margin-top:28px;display:flex;flex-direction:column;gap:2px}
+    .faq-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .faq-q{padding:16px 20px;font-weight:700;font-size:0.88rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text)}
+    .faq-q:hover{background:#F0F4F2}
+    .faq-a{padding:0 20px 16px;font-size:0.84rem;color:var(--muted);line-height:1.6;display:none}
+    .faq-item.open .faq-a{display:block}
+    .faq-item.open .faq-q{color:var(--accent)}
+    .faq-arrow{transition:transform 0.2s;font-size:0.7rem;opacity:0.5}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+    /* ── Bottom CTA ── */
+    .bottom-cta{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),var(--accent));border-radius:var(--radius);padding:48px 40px;text-align:center;color:#fff;margin-top:56px;box-shadow:0 8px 32px rgba(14,21,32,0.2)}
+    .bottom-cta h2{font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:10px}
+    .bottom-cta p{opacity:0.8;font-size:0.95rem;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6}
+    .bottom-cta a{display:inline-block;background:var(--gold);color:#fff;font-weight:800;padding:16px 44px;border-radius:8px;font-size:1rem;transition:all 0.2s}
+    .bottom-cta a:hover{background:var(--gold2);transform:translateY(-2px)}
+    .bottom-note{margin-top:14px;font-size:0.78rem;opacity:0.5}
+
+    footer{text-align:center;padding:24px;color:var(--muted);font-size:0.78rem;border-top:1px solid var(--line)}
+    footer a{color:#c4a47c;font-weight:600}
+  </style>
+</head>
+<body>
+
+<nav class="pf-nav" id="pfNav"></nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏆 ProVal AI</div>
+    <h1>Instant Property Valuation<br><span>Powered by AI</span></h1>
+    <p class="hero-sub">Get a professional AI-powered valuation report for any residential property — in minutes, at a fraction of traditional costs. Available in 185 countries.</p>
+    <a href="proval.html" class="hero-cta">🔍 Start My Valuation — $124 USD</a>
+    <div class="hero-note">One-time flat fee · Instant report · All countries</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">$124</div><div class="lbl">Flat fee USD</div></div>
+      <div class="hero-stat"><div class="num">185</div><div class="lbl">Countries</div></div>
+      <div class="hero-stat"><div class="num">±7%</div><div class="lbl">Accuracy range</div></div>
+      <div class="hero-stat"><div class="num">AI</div><div class="lbl">Powered analysis</div></div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <!-- What is ProVal -->
+  <div class="sec">
+    <div class="sec-label">What Is ProVal?</div>
+    <h2 class="sec-title">More Than a Valuation — It's a Full Property Intelligence Report</h2>
+    <p class="sec-sub">ProVal uses AI to analyse comparable sales, market trends, build costs, land values and neighbourhood data to produce a detailed valuation report — the same way a professional valuer would, but faster and more affordable.</p>
+    <div class="what-grid">
+      <div class="what-card">
+        <div class="what-icon">🤖</div>
+        <h4>AI-Powered Analysis</h4>
+        <p>Our AI analyses thousands of data points — comparable sales, price per m², land values, build costs and more — to calculate an accurate market value.</p>
+      </div>
+      <div class="what-card">
+        <div class="what-icon">🌍</div>
+        <h4>Global Coverage</h4>
+        <p>Available for residential properties in all 185 countries on our platform. The report automatically adapts to local market conditions and currency.</p>
+      </div>
+      <div class="what-card">
+        <div class="what-icon">📊</div>
+        <h4>Comparable Sales Data</h4>
+        <p>See what similar properties in the same area have sold for recently, with price per m² analysis and market trend insights.</p>
+      </div>
+      <div class="what-card">
+        <div class="what-icon">⚡</div>
+        <h4>Instant Results</h4>
+        <p>No waiting days for a valuer to visit. Enter the property details and receive your full ProVal report within minutes of payment.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="sec">
+    <div class="sec-label">How It Works</div>
+    <h2 class="sec-title">5 Simple Steps to Your Valuation Report</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Enter the Property Address</h4>
+          <p>Type the address of the residential property you want valued. Our system auto-populates key property details from the listing where available.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Review the Example Report <span class="step-badge">FREE PREVIEW</span></h4>
+          <p>Before you pay, view a sample ProVal report so you know exactly what you're getting. See the format, sections and level of detail included.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Sign the Valuation Agreement</h4>
+          <p>Review and accept our ProVal terms and conditions. This protects both you and PropertyFinder and ensures the report is used appropriately.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Pay $124 USD — Once-Off Flat Fee <span class="step-badge">ALL COUNTRIES</span></h4>
+          <p>Pay securely via card or PayPal. One flat fee regardless of property value or location. No hidden costs, no subscriptions.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Receive Your Full ProVal Report</h4>
+          <p>Your complete AI valuation report is instantly unlocked and emailed to you as a PDF. Print it, share it or use it for negotiations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="sec">
+    <div class="sec-label">Pricing</div>
+    <h2 class="sec-title">Simple, Transparent Pricing</h2>
+    <p class="sec-sub">One price. Every property. Every country. No hidden fees.</p>
+    <div class="pricing-wrap">
+      <div class="price-card">
+        <div class="price-label">ProVal AI Report</div>
+        <div class="price-amount"><span class="price-currency">$</span>124</div>
+        <div class="price-desc">USD · Flat Fee · All Countries</div>
+        <a href="proval.html" class="price-cta">🔒 Get My Report Now</a>
+        <div class="price-note">One-time payment · No subscription</div>
+      </div>
+      <div class="includes-list">
+        <h4>What's Included in Your Report</h4>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>AI Estimated Market Value</h5><p>Calculated value with a ±7% confidence range based on comparable data</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>Comparable Sales Analysis</h5><p>Recent sales of similar properties in the same area with price per m²</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>AI Build Cost Research</h5><p>Current construction cost per m² for the property type and region</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>Land Value Assessment</h5><p>Estimated land value per m² based on local market data</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>Market Intelligence</h5><p>Neighbourhood price trends, average days on market and demand indicators</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>Valuation Methodology</h5><p>Full explanation of how the value was calculated with weighting breakdown</p></div>
+        </div>
+        <div class="include-item">
+          <div class="include-tick">✅</div>
+          <div class="include-text"><h5>PDF Report + Email Copy</h5><p>Downloadable, printable report sent to your email immediately after payment</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example report preview -->
+  <div class="sec">
+    <div class="sec-label">Example Report</div>
+    <h2 class="sec-title">See What Your Report Looks Like</h2>
+    <p class="sec-sub">Here's a sample of the data you'll receive in your ProVal report. The full report contains much more detail.</p>
+    <div class="report-preview">
+      <div class="rp-header">
+        <div class="rp-badge">📋 ProVal AI Report — Sample</div>
+        <h3>4 Bedroom House · Cape Town, South Africa</h3>
+        <p>Generated by ProVal AI · For illustration purposes only</p>
+      </div>
+      <div class="rp-body">
+        <div class="rp-stat">
+          <div class="rp-stat-label">AI Estimated Value</div>
+          <div class="rp-stat-val">R 3,887,000</div>
+          <div class="rp-stat-sub">Value range: R 3,616,000 — R 4,158,000</div>
+        </div>
+        <div class="rp-stat">
+          <div class="rp-stat-label">Price per m²</div>
+          <div class="rp-stat-val">R 13,882 / m²</div>
+          <div class="rp-stat-sub">Area avg: R 14,800 / m²</div>
+        </div>
+        <div class="rp-stat">
+          <div class="rp-stat-label">Comparable Avg Sale</div>
+          <div class="rp-stat-val">R 3,470,000</div>
+          <div class="rp-stat-sub">Based on 3 recent comparable sales</div>
+        </div>
+        <div class="rp-stat">
+          <div class="rp-stat-label">AI Build Cost Used</div>
+          <div class="rp-stat-val">R 14,800 / m²</div>
+          <div class="rp-stat-sub">AI researched · Region specific</div>
+        </div>
+      </div>
+      <div class="rp-blur-banner">
+        <p>🔒 Full comparables table, valuation methodology, market intelligence and PDF report are unlocked after payment</p>
+        <a href="proval.html#report" class="rp-unlock-btn" onclick="localStorage.setItem('proval_screen','report')">View Full Example Report →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Who is it for -->
+  <div class="sec">
+    <div class="sec-label">Who Is It For?</div>
+    <h2 class="sec-title">ProVal Is Perfect For</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-icon">🏠</div>
+        <h4>Home Buyers</h4>
+        <p>Know if you're paying a fair price before making an offer</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">💰</div>
+        <h4>Property Sellers</h4>
+        <p>Price your home correctly from day one to sell faster</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">📈</div>
+        <h4>Investors</h4>
+        <p>Analyse investment potential and rental yield estimates</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🏦</div>
+        <h4>Finance Applications</h4>
+        <p>Supporting documentation for bond or mortgage applications</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">⚖️</div>
+        <h4>Estate Planning</h4>
+        <p>Fair market value for estate planning or asset division</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec">
+    <div class="sec-label">FAQ</div>
+    <h2 class="sec-title">Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is ProVal a certified professional valuation? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">ProVal is an AI-powered market analysis report, not a registered valuer's certificate. It provides an accurate market value estimate for informational and negotiation purposes. For official bank or legal valuations, a registered property valuer may be required in some jurisdictions.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How accurate is the AI valuation? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">ProVal targets a ±7% accuracy range based on available comparable sales data. Accuracy depends on the availability of recent comparable sales in your area. In areas with high transaction volumes, accuracy is typically higher.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I get a valuation for any country? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Yes — ProVal is available for residential properties in all 185 countries on the PropertyFinder platform. The report adapts to local market conditions, currencies and available data sources.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">We accept credit/debit card and PayPal. All payments are secured and processed at $124 USD (converted to your local currency at checkout where applicable).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How quickly do I receive my report? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Your ProVal report will be delivered within 60 minutes of payment being confirmed. A PDF copy will be sent to your email address as soon as the report is ready. In most cases delivery is sooner — we will notify you by email the moment it is complete.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I get a valuation for a property that's not listed on PropertyFinder? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Yes — you can enter any residential property address manually. The ProVal tool will run the AI analysis based on the address and property details you provide, even if the property is not currently listed on our platform.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there a refund policy? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Once your report has been generated and delivered, refunds are not available as the service has been fully rendered. Please review the free example report before purchasing to ensure ProVal meets your needs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <h2>Ready to Know What Your Property Is Worth?</h2>
+    <p>Join thousands of buyers, sellers and investors who use ProVal to make smarter property decisions worldwide.</p>
+    <a href="proval.html">🔍 Get My ProVal Report — $124 USD</a>
+    <div class="bottom-note">One-time payment · Instant delivery · 185 countries</div>
+  </div>
+
+</main>
+
+<footer>
+  © <span id="yr"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html">Terms</a> |
+  <a href="privacy-policy.html">Privacy</a> |
+  <a href="how-it-works.html">How It Works</a>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+function toggleFaq(el){
+  var item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

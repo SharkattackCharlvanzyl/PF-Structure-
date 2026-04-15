@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — 09 List Your Property</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#ffffff;--nb-offwhite:#faf8f4;
+      --nb-snow:#f0ece4;--nb-border:rgba(196,164,124,0.18);--nb-border-strong:#D1D9D4;
+      --nb-text:#1a1408;--nb-muted:#8a7d5a;
+      --nb-hero-grad:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      --nb-hero-overlay:linear-gradient(160deg,rgba(14,21,32,0.3) 0%,rgba(14,21,32,0.05) 100%);
+      --pf-danger:#DC2626;--pf-success:#16A34A;--pf-warn:#D97706;
+      --shadow-card:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-card-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+      --transition:0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#1a1408;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    .hero-banner{position:relative;background:var(--nb-hero-grad);padding:60px 24px 50px;overflow:hidden}
+    .hero-banner::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero-title{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;color:white;margin-bottom:12px}
+    .hero-sub{font-size:1rem;color:rgba(255,255,255,0.75);max-width:640px;margin:0 auto 20px;line-height:1.6}
+    .hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .hero-pill{padding:8px 16px;border-radius:4px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);font-size:0.82rem;font-weight:700}
+
+    .section{padding:48px 24px;background:var(--nb-white)}
+    .section.alt{background:var(--nb-offwhite)}
+    .section.dark{background:linear-gradient(135deg,#0e1520,#141c2b));color:white}
+    .section-inner{max-width:1220px;margin:0 auto}
+    .section-title{font-family:var(--font-display);font-size:clamp(1.15rem,2.5vw,1.5rem);font-weight:700;color:#e8dfc8;text-align:center;margin-bottom:6px}
+    .section.dark .section-title{color:white}
+    .section-sub{font-size:0.92rem;color:var(--nb-muted);text-align:center;max-width:600px;margin:0 auto 32px}
+    .section.dark .section-sub{color:rgba(255,255,255,0.65)}
+
+    /* Collapsible categories */
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .cat-card{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:var(--shadow-card);overflow:hidden;transition:all var(--transition);cursor:pointer}
+    .cat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+    .cat-top{padding:20px;display:flex;align-items:center;gap:14px}
+    .cat-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.1);flex-shrink:0}
+    .cat-info h3{font-size:0.95rem;font-weight:800;margin:0 0 3px}
+    .cat-info p{font-size:0.78rem;color:var(--nb-muted);margin:0}
+    .cat-body{display:none;padding:0 20px 20px;font-size:0.85rem;color:var(--nb-muted);line-height:1.6}
+    .cat-card.open .cat-body{display:block;animation:fadeIn 0.25s ease}
+    .cat-card.open{border-color:#c4a47c}
+    .cat-list{list-style:none;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+    .cat-list li{padding:4px 0;display:flex;align-items:center;gap:6px;font-size:0.82rem}
+    .cat-list li::before{content:'✓';color:#c4a47c;font-weight:900;font-size:0.7rem}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+    /* Comparison table */
+    .comp-wrap{overflow-x:auto;margin:0 -24px;padding:0 24px}
+    .comp-table{width:100%;border-collapse:collapse;min-width:700px;font-size:0.85rem}
+    .comp-table th{padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:800;color:var(--nb-muted);text-transform:uppercase;letter-spacing:0.5px;background:var(--nb-snow);border-bottom:2px solid var(--nb-border)}
+    .comp-table th.pf{background:#c4a47c;color:#0e1520;text-align:center;border-radius:var(--radius3) var(--radius3) 0 0}
+    .comp-table td{padding:12px 16px;border-bottom:1px solid var(--nb-border);vertical-align:middle}
+    .comp-table td.pf{background:rgba(196,164,124,0.03);text-align:center;font-weight:800;color:#c4a47c}
+    .comp-table td.other{text-align:center;color:var(--nb-muted)}
+    .comp-table .feat{font-weight:700;color:#e8dfc8}
+    .comp-table .check{color:var(--pf-success);font-size:1.1rem}
+    .comp-table .cross{color:var(--pf-danger);font-size:1.1rem}
+    .comp-table .partial{color:var(--pf-warn);font-size:0.9rem}
+    .comp-table tr:hover td{background:rgba(196,164,124,0.02)}
+
+    /* Pricing cards */
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+    @media(max-width:800px){.pricing-grid{grid-template-columns:1fr}}
+    .price-card{background:#1a2535;border-radius:var(--radius);border:2px solid var(--nb-border);padding:32px 28px;text-align:center;transition:all var(--transition);position:relative}
+    .price-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card-hover)}
+    .price-card.popular{border-color:#c4a47c;box-shadow:0 8px 32px rgba(196,164,124,0.15)}
+    .price-card.popular::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#c4a47c;color:#0e1520;padding:4px 16px;border-radius:4px;font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
+    .price-tier{font-size:0.78rem;font-weight:800;color:#c4a47c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .price-amount{font-family:var(--font-display);font-size:2.8rem;font-weight:700;color:#e8dfc8;line-height:1;margin-bottom:4px}
+    .price-period{font-size:0.85rem;color:var(--nb-muted);margin-bottom:20px}
+    .price-features{text-align:left;margin-bottom:24px}
+    .price-feat{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:0.88rem}
+    .price-feat .ico{width:22px;height:22px;border-radius:50%;background:rgba(196,164,124,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;color:#c4a47c}
+    .price-cta{display:block;width:100%;padding:14px;border-radius:var(--radius3);background:var(--nb-white);border:2px solid rgba(196,164,124,0.4);color:#c4a47c;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:var(--font);transition:all 0.2s ease;text-align:center}
+    .price-cta:hover{background:#c4a47c;color:#0e1520;text-decoration:none}
+    .price-card.popular .price-cta{background:#c4a47c;color:#0e1520}
+    .price-card.popular .price-cta:hover{background:var(--nb-green-hover)}
+    .price-fine{font-size:0.75rem;color:var(--nb-muted);margin-top:10px}
+
+    /* Steps */
+    .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+    .step-card{padding:24px;border-radius:var(--radius);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow-card);text-align:center}
+    .section.dark .step-card{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12)}
+    .step-num{width:40px;height:40px;border-radius:50%;background:#c4a47c;color:#0e1520;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;margin:0 auto 12px}
+    .section.dark .step-num{background:var(--nb-lime);color:#e8dfc8}
+    .step-card h3{font-size:0.92rem;font-weight:800;margin-bottom:6px}
+    .section.dark .step-card h3{color:white}
+    .step-card p{font-size:0.82rem;color:var(--nb-muted);line-height:1.5}
+    .section.dark .step-card p{color:rgba(255,255,255,0.6)}
+
+    /* Video cards */
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+    .video-card{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);overflow:hidden;box-shadow:var(--shadow-card);transition:all var(--transition)}
+    .video-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+    .video-thumb{aspect-ratio:16/9;background:var(--nb-snow);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+    .video-thumb .play{width:56px;height:56px;border-radius:50%;background:rgba(196,164,124,0.9);display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;transition:transform 0.2s ease}
+    .video-card:hover .play{transform:scale(1.1)}
+    .video-body{padding:16px}
+    .video-body h3{font-size:0.92rem;font-weight:800;margin-bottom:4px}
+    .video-body p{font-size:0.78rem;color:var(--nb-muted)}
+
+    /* After payment */
+    .after-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .after-card{padding:20px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow-card)}
+    .after-card .a-ico{font-size:1.5rem;margin-bottom:10px}
+    .after-card h3{font-size:0.88rem;font-weight:800;color:#e8dfc8;margin-bottom:6px}
+    .after-card p{font-size:0.82rem;color:var(--nb-muted);line-height:1.5}
+
+    /* FAQ accordions */
+    .accord{border:1px solid var(--nb-border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--nb-white)}
+    .accord:last-child{margin-bottom:0}
+    .accord summary{padding:16px 18px;cursor:pointer;font-weight:800;font-size:0.92rem;background:var(--nb-white);list-style:none;display:flex;justify-content:space-between;align-items:center}
+    .accord summary::-webkit-details-marker{display:none}
+    .accord summary::after{content:"▸";font-size:14px;color:var(--nb-muted);transition:transform 0.25s ease}
+    .accord[open] summary{background:var(--nb-offwhite);border-bottom:1px solid var(--nb-border)}
+    .accord[open] summary::after{transform:rotate(90deg)}
+    .accord .acc-body{padding:18px;font-size:0.9rem;color:var(--nb-muted);line-height:1.65}
+
+    /* Support */
+    .support-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .support-card{padding:24px;border-radius:var(--radius);background:var(--nb-white);border:1px solid var(--nb-border);text-align:center;box-shadow:var(--shadow-card);transition:all var(--transition)}
+    .support-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover);border-color:#c4a47c}
+    .support-card .s-ico{font-size:2rem;margin-bottom:10px}
+    .support-card h3{font-size:0.9rem;font-weight:800;margin-bottom:4px}
+    .support-card p{font-size:0.78rem;color:var(--nb-muted)}
+
+    .note{font-size:0.78rem;color:var(--nb-muted);padding:12px;border:1px dashed rgba(196,164,124,0.15);border-radius:var(--radius3);background:rgba(196,164,124,0.02);line-height:1.5;margin-top:16px;text-align:center}
+
+    /* Auto-sync flow */
+    .flow-steps{display:flex;flex-direction:column;gap:0;max-width:740px;margin:0 auto}
+    .flow-step{display:flex;gap:18px;align-items:flex-start;position:relative;padding-bottom:32px}
+    .flow-step:last-child{padding-bottom:0}
+    .flow-step::before{content:'';position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),var(--nb-lime))}
+    .flow-step:last-child::before{display:none}
+    .flow-num{width:56px;height:56px;border-radius:50%;background:#c4a47c;color:#0e1520;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;flex-shrink:0;box-shadow:0 4px 16px rgba(196,164,124,0.2);position:relative;z-index:1}
+    .flow-content{flex:1;padding-top:6px}
+    .flow-content h3{font-size:1rem;font-weight:800;margin-bottom:6px;color:#e8dfc8}
+    .flow-content p{font-size:0.88rem;color:var(--nb-muted);line-height:1.6;margin-bottom:8px}
+    .flow-detail{padding:12px 16px;border-radius:var(--radius2);background:var(--nb-snow);border:1px solid var(--nb-border);font-size:0.82rem;color:var(--nb-muted);line-height:1.55}
+
+    /* Systems grid */
+    .systems-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+    .sys-card{padding:16px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);text-align:center;transition:all 0.2s ease;box-shadow:var(--shadow-card)}
+    .sys-card:hover{border-color:#c4a47c;transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+    .sys-card .sys-ico{font-size:1.8rem;margin-bottom:8px}
+    .sys-card h4{font-size:0.82rem;font-weight:800;color:#e8dfc8;margin-bottom:3px}
+    .sys-card p{font-size:0.7rem;color:var(--nb-muted)}
+
+    /* Preview/approval */
+    .approval-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+    .appr-card{padding:20px;border-radius:var(--radius);text-align:center;border:2px solid var(--nb-border);background:var(--nb-white);transition:all 0.2s ease}
+    .appr-card.highlight{border-color:#c4a47c;background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.02))}
+    .appr-card .a-num{width:36px;height:36px;border-radius:50%;background:#c4a47c;color:#0e1520;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem;margin:0 auto 10px}
+    .appr-card .a-ico{font-size:1.8rem;margin-bottom:8px}
+    .appr-card h4{font-size:0.88rem;font-weight:800;margin-bottom:4px}
+    .appr-card p{font-size:0.78rem;color:var(--nb-muted);line-height:1.5}
+    .appr-arrow{display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c4a47c;font-weight:900}
+    @media(max-width:700px){.appr-arrow{transform:rotate(90deg)}}
+
+    /* Benefit pills */
+    .benefit-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+    .benefit-pill{padding:10px 18px;border-radius:4px;background:#c4a47c;color:#0e1520;font-size:0.85rem;font-weight:700;display:flex;align-items:center;gap:8px}
+
+    .cta-banner{position:relative;padding:52px 24px;background:linear-gradient(135deg,#0e1520,#141c2b));overflow:hidden;text-align:center}
+    .cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 80% 50%,rgba(255,255,255,0.05),transparent);pointer-events:none}
+    .cta-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+    .cta-inner h2{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;color:white;margin-bottom:12px}
+    .cta-inner p{color:rgba(255,255,255,0.7);font-size:0.92rem;margin-bottom:24px;line-height:1.6}
+    .cta-btn{display:inline-flex;gap:8px;align-items:center;padding:14px 32px;border-radius:4px;background:var(--nb-lime);color:#e8dfc8;font-weight:800;font-size:1rem;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s ease}
+    .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,164,124,0.3);text-decoration:none}
+
+    .footer{max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hero-inner">
+      <h1 class="hero-title">List Your Property or Business</h1>
+      <p class="hero-sub">Whether you're a private seller, agent, or enterprise — reach millions of buyers across 185 countries. Every listing gets 30 photos, video, portal walkthrough, viewing appointments, instant notifications, and full analytics. No contracts, no commission, no hidden fees.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">🌍 185 Countries</span>
+        <span class="hero-pill">💰 From $2/listing</span>
+        <span class="hero-pill">📸 30 Photos + Video + Portal</span>
+        <span class="hero-pill">📅 Schedule Viewings</span>
+        <span class="hero-pill">🔔 Instant Notifications</span>
+        <span class="hero-pill">📱 WhatsApp Direct</span>
+        <span class="hero-pill">📊 Performance Analytics</span>
+        <span class="hero-pill">🔄 Auto-Sync</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 1. WHAT CAN YOU LIST (Collapsible) ═══ -->
+  <div class="section" id="whatToList">
+    <div class="section-inner">
+      <h2 class="section-title">What Can You List?</h2>
+      <p class="section-sub">PropertyFinder supports property and business listings across all major categories. Click a category to see what's included.</p>
+
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🏠</div><div class="cat-info"><h3>Residential Property</h3><p>Houses, apartments, townhouses, estates</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Houses &amp; Villas</li><li>Apartments &amp; Flats</li><li>Townhouses</li><li>Estates &amp; Mansions</li><li>New Developments</li><li>Retirement / Lifestyle</li><li>Student Accommodation</li><li>Vacant Land (residential)</li></ul></div>
+        </div>
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🏢</div><div class="cat-info"><h3>Commercial Property</h3><p>Offices, retail, mixed-use, investment</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Office Space</li><li>Retail / Shopping</li><li>Mixed-Use</li><li>Medical Suites</li><li>Hospitality</li><li>Investment Properties</li><li>Co-Working Space</li><li>Development Sites</li></ul></div>
+        </div>
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🏭</div><div class="cat-info"><h3>Industrial Property</h3><p>Warehouses, factories, logistics parks</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Warehouses</li><li>Factories</li><li>Logistics Parks</li><li>Cold Storage</li><li>Workshops</li><li>Distribution Centres</li><li>Industrial Land</li><li>Flex Space</li></ul></div>
+        </div>
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🌾</div><div class="cat-info"><h3>Farms &amp; Agricultural</h3><p>Farms, smallholdings, wine estates, agri-business</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Crop Farms</li><li>Livestock Farms</li><li>Wine Estates</li><li>Game Farms</li><li>Smallholdings</li><li>Agri-Processing</li><li>Timber / Forestry</li><li>Agricultural Land</li></ul></div>
+        </div>
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🏪</div><div class="cat-info"><h3>Business for Sale</h3><p>Restaurants, retail, tech, franchises, healthcare, and more</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Restaurants &amp; Food</li><li>Retail &amp; Commerce</li><li>Technology Services</li><li>Professional Services</li><li>Hospitality &amp; Tourism</li><li>Manufacturing</li><li>Franchises</li><li>Healthcare &amp; Medical</li></ul></div>
+        </div>
+        <div class="cat-card" onclick="this.classList.toggle('open')">
+          <div class="cat-top"><div class="cat-ico">🏖️</div><div class="cat-info"><h3>Short-Term Rentals</h3><p>Holiday lets, Airbnb, serviced apartments</p></div></div>
+          <div class="cat-body"><ul class="cat-list"><li>Holiday Homes</li><li>Airbnb Properties</li><li>Serviced Apartments</li><li>Beach Houses</li><li>Mountain Lodges</li><li>City Apartments</li><li>Eco Stays</li><li>Glamping &amp; Boutique</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ AUTO-SYNC: HOW IT WORKS ═══ -->
+  <div class="section alt" id="autoSync">
+    <div class="section-inner">
+      <h2 class="section-title">Auto-Sync — Zero Effort Listing</h2>
+      <p class="section-sub">Already have listings on another system? We import everything automatically. No manual uploads. No copy-pasting. No double work.</p>
+
+      <div class="benefit-row">
+        <span class="benefit-pill">🚀 Zero Manual Upload</span>
+        <span class="benefit-pill">🔄 Daily Auto-Sync</span>
+        <span class="benefit-pill">🔒 Secure Login With Your Permission</span>
+        <span class="benefit-pill">📸 Photos, Video &amp; Details Cloned</span>
+        <span class="benefit-pill">✅ You Approve Before It Goes Live</span>
+      </div>
+
+      <!-- STEP-BY-STEP FLOW -->
+      <div style="margin-top:40px">
+        <h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;text-align:center;color:#e8dfc8;margin-bottom:28px">How Auto-Sync Works — Step by Step</h3>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div class="flow-content">
+              <h3>🔗 Connect Your System</h3>
+              <p>During sign-up, choose "Auto-Sync" and select your current listing platform, CRM, or website. If your system isn't listed, simply enter your website URL.</p>
+              <div class="flow-detail">PropertyFinder connects to your existing platform via secure API integration, XML/JSON feed import, or — with your explicit permission — by logging into your system with the username and password you provide. We can sync from virtually any property website or CRM.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div class="flow-content">
+              <h3>🔐 Grant Secure Access</h3>
+              <p>You provide your login credentials or API key. Your credentials are encrypted with bank-level AES-256 encryption and stored in a secure vault. PropertyFinder staff never see your password.</p>
+              <div class="flow-detail">We only need <strong>read-only access</strong> — we never modify, delete, or change anything on your existing system. We simply read your listings and clone them to PropertyFinder. You can revoke access at any time from your dashboard.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div class="flow-content">
+              <h3>🤖 We Clone Everything Automatically</h3>
+              <p>Our system logs into your platform, reads all your active listings, and imports everything — photos, descriptions, pricing, property details, floor plans, videos, and contact info.</p>
+              <div class="flow-detail"><strong>What gets imported:</strong> Property title, description, price, address, photos (up to 30), video, floor plans, property type, bedrooms, bathrooms, size, land area, features list, agent name, phone, email — everything that's on your current listing.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">4</div>
+            <div class="flow-content">
+              <h3>👀 Preview &amp; Approve</h3>
+              <p>Before anything goes live, you review every imported listing on your PropertyFinder dashboard. Each listing shows a full preview exactly as buyers will see it.</p>
+              <div class="flow-detail">You can edit any detail, add or remove photos, adjust pricing, or update descriptions. Nothing is published until you give explicit approval. <strong>See the Approval Process below for the full flow.</strong></div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">5</div>
+            <div class="flow-content">
+              <h3>✅ One-Click Approval &amp; Go Live</h3>
+              <p>Once you're happy, click "Approve &amp; Publish" — individually or in bulk. Your listings go live across 185 countries instantly.</p>
+              <div class="flow-detail">You'll receive a confirmation email for every listing published, with a direct link to view it live. Bulk approval is available — approve all listings at once or select specific ones.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">6</div>
+            <div class="flow-content">
+              <h3>🔄 Daily Auto-Sync Keeps Everything Fresh</h3>
+              <p>After the initial import, PropertyFinder checks your source system daily. New listings are added, sold/removed listings are archived, and price or detail changes sync automatically.</p>
+              <div class="flow-detail"><strong>You never upload again.</strong> Update your listing on your original system and PropertyFinder mirrors the change within 24 hours. Changed listings go through the same preview process — you can choose to auto-approve updates or require manual approval for each change.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ COMPATIBLE SYSTEMS ═══ -->
+  <div class="section" id="compatibleSystems">
+    <div class="section-inner">
+      <h2 class="section-title">Compatible Systems — We Sync With Everything</h2>
+      <p class="section-sub">PropertyFinder can import listings from any of these platforms, CRMs, and website systems. Don't see yours? We can likely connect to it — just enter your website URL.</p>
+
+      <div class="systems-grid">
+        <div class="sys-card"><div class="sys-ico">🔧</div><h4>Fusion (Prop Data)</h4><p>SA market leader CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">🏢</div><h4>Flex MLS</h4><p>US/Canada MLS system</p></div>
+        <div class="sys-card"><div class="sys-ico">📊</div><h4>Rex Software</h4><p>AU/NZ agency CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">🌐</div><h4>Reapit (Foundations)</h4><p>UK estate agent CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">🏠</div><h4>AgentBox</h4><p>AU real estate CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">📋</div><h4>Salesforce (RE)</h4><p>Enterprise CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">🔑</div><h4>Propertybase</h4><p>Global RE platform</p></div>
+        <div class="sys-card"><div class="sys-ico">💼</div><h4>HubSpot CRM</h4><p>Marketing + leads</p></div>
+        <div class="sys-card"><div class="sys-ico">📐</div><h4>Entegral (OMS)</h4><p>SA listing management</p></div>
+        <div class="sys-card"><div class="sys-ico">🏗️</div><h4>PropCtrl</h4><p>SA property management</p></div>
+        <div class="sys-card"><div class="sys-ico">🌍</div><h4>Kyero / Resales Online</h4><p>EU/Spain portals</p></div>
+        <div class="sys-card"><div class="sys-ico">🇬🇧</div><h4>Vebra Alto / Dezrez</h4><p>UK letting/sales CRM</p></div>
+        <div class="sys-card"><div class="sys-ico">📡</div><h4>BLM / RETS Feed</h4><p>UK/US data feeds</p></div>
+        <div class="sys-card"><div class="sys-ico">🔗</div><h4>XML / JSON Feed</h4><p>Any structured data</p></div>
+        <div class="sys-card"><div class="sys-ico">🌐</div><h4>WordPress + IDX</h4><p>Agent websites</p></div>
+        <div class="sys-card"><div class="sys-ico">🖥️</div><h4>Wix / Squarespace</h4><p>Any property website</p></div>
+        <div class="sys-card"><div class="sys-ico">📱</div><h4>Property24 / PP</h4><p>SA portal listings</p></div>
+        <div class="sys-card"><div class="sys-ico">🏘️</div><h4>Rightmove / Zoopla</h4><p>UK portal listings</p></div>
+        <div class="sys-card"><div class="sys-ico">🏡</div><h4>Zillow / Realtor</h4><p>US portal listings</p></div>
+        <div class="sys-card"><div class="sys-ico">🔗</div><h4>Any Website URL</h4><p>We clone from any site</p></div>
+      </div>
+
+      <div style="margin-top:24px;padding:18px;border-radius:14px;background:linear-gradient(135deg,rgba(196,164,124,0.06),rgba(196,164,124,0.03));border:1px solid rgba(196,164,124,0.12);text-align:center">
+        <div style="font-size:0.92rem;font-weight:800;color:#e8dfc8;margin-bottom:6px">Don't see your system?</div>
+        <div style="font-size:0.85rem;color:var(--nb-muted)">Just provide your website URL and login credentials — our system can crawl and import listings from virtually any property website. If it's on the internet, we can sync it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PREVIEW & APPROVAL PROCESS ═══ -->
+  <div class="section alt" id="approvalProcess">
+    <div class="section-inner">
+      <h2 class="section-title">Preview &amp; Approve Before Going Live</h2>
+      <p class="section-sub">You always have the final say. No listing is ever published without your explicit approval. Here's how the approval process works.</p>
+
+      <div class="approval-flow" style="max-width:1000px;margin:0 auto 28px">
+        <div class="appr-card">
+          <div class="a-ico">📥</div>
+          <div class="a-num">1</div>
+          <h4>Listings Imported</h4>
+          <p>Your listings are synced from your system and placed in your "Pending Review" queue on the PropertyFinder dashboard.</p>
+        </div>
+        <div class="appr-arrow">→</div>
+        <div class="appr-card">
+          <div class="a-ico">👁️</div>
+          <div class="a-num">2</div>
+          <h4>Full Preview</h4>
+          <p>View each listing exactly as buyers will see it — photos, description, map, details, contact. Edit anything you want before approval.</p>
+        </div>
+        <div class="appr-arrow">→</div>
+        <div class="appr-card highlight">
+          <div class="a-ico">✅</div>
+          <div class="a-num">3</div>
+          <h4>Approve &amp; Publish</h4>
+          <p>Click "Approve" on each listing or use "Approve All" for bulk. You also receive an email with a one-click confirmation link.</p>
+        </div>
+        <div class="appr-arrow">→</div>
+        <div class="appr-card">
+          <div class="a-ico">🌍</div>
+          <div class="a-num">4</div>
+          <h4>Live in 185 countries</h4>
+          <p>Approved listings go live instantly. You get a confirmation email with direct links to every published listing.</p>
+        </div>
+      </div>
+
+      <!-- APPROVAL OPTIONS DETAIL -->
+      <div style="max-width:800px;margin:0 auto">
+        <h3 style="font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#e8dfc8;margin-bottom:18px;text-align:center">Two Ways to Approve — You Choose</h3>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+          <div style="padding:20px;border-radius:14px;border:2px solid rgba(196,164,124,0.4);background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.02))">
+            <div style="font-size:1.3rem;margin-bottom:8px;text-align:center">🖱️</div>
+            <h4 style="font-size:0.9rem;font-weight:800;text-align:center;margin-bottom:8px;color:#e8dfc8">Option A: Dashboard Approval</h4>
+            <p style="font-size:0.82rem;color:var(--nb-muted);line-height:1.55;text-align:center">Log into your PropertyFinder dashboard, review each listing in the "Pending" tab, make any edits, then click "Approve &amp; Publish" — individually or in bulk.</p>
+          </div>
+          <div style="padding:20px;border-radius:14px;border:2px solid rgba(196,164,124,0.4);background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.02))">
+            <div style="font-size:1.3rem;margin-bottom:8px;text-align:center">📧</div>
+            <h4 style="font-size:0.9rem;font-weight:800;text-align:center;margin-bottom:8px;color:#e8dfc8">Option B: Email One-Click Approval</h4>
+            <p style="font-size:0.82rem;color:var(--nb-muted);line-height:1.55;text-align:center">Receive an email summary of imported listings with preview thumbnails. Click the green "Approve All" button in the email — or click individual listings to review first.</p>
+          </div>
+        </div>
+
+        <div style="padding:16px;border-radius:10px;background:var(--nb-snow);border:1px solid var(--nb-border);margin-bottom:20px">
+          <h4 style="font-size:0.88rem;font-weight:800;color:#e8dfc8;margin-bottom:8px">🔒 Safety Controls — You're Always in Charge</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.82rem;color:var(--nb-muted)">
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Nothing publishes without your approval — ever</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Pending listings expire after 14 days if not approved</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Choose: auto-approve updates OR require manual review</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Unpublish any listing instantly with one click</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Edit photos, price, or description before approving</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Revoke system access anytime from your settings</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Full audit log of every sync, edit, and approval</div>
+            <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Email notifications for every action on your account</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WHY PRIVATE SELLERS LOVE IT ═══ -->
+  <div class="section" id="whyPrivate">
+    <div class="section-inner">
+      <h2 class="section-title">Private Sellers — Same System, Same Benefits</h2>
+      <p class="section-sub">Selling your own property? You get every feature an agent gets — no exceptions. No licence needed. List today, get enquiries today.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:1100px;margin:0 auto">
+        <div class="after-card"><div class="a-ico">📅</div><h3>Buyers Book Viewings Directly With You</h3><p>Buyers can request a viewing appointment directly through your listing. You receive an instant notification via email, SMS, and WhatsApp — with the buyer's name, preferred date/time, and phone number. Confirm or suggest an alternative with one tap.</p></div>
+        <div class="after-card"><div class="a-ico">🔔</div><h3>Instant Notifications</h3><p>Get notified the moment someone enquires, saves your listing, requests a viewing, or sends a message. Notifications via email, SMS, WhatsApp, and in-app — you choose which channels. Never miss a potential buyer.</p></div>
+        <div class="after-card"><div class="a-ico">📱</div><h3>WhatsApp, Email & Phone</h3><p>Buyers contact you directly — no middleman, no agent taking a cut. Your WhatsApp number, email, and phone are displayed on your listing. You control which contact methods are visible.</p></div>
+        <div class="after-card"><div class="a-ico">💰</div><h3>Zero Commission</h3><p>PropertyFinder charges $7.50/month per listing and zero commission. You keep 100% of the sale price. No agent fees. No hidden costs. No percentage of the deal.</p></div>
+        <div class="after-card"><div class="a-ico">📸</div><h3>Professional Listing — Same as Agents</h3><p>30 high-res photos, video upload, 3D virtual walkthrough, full property detail page, Google Maps integration, featured badge, and priority search ranking — identical to what agents get.</p></div>
+        <div class="after-card"><div class="a-ico">📊</div><h3>Full Analytics Dashboard</h3><p>See exactly how your listing is performing: total views, unique visitors, enquiry count, buyer countries, search impressions, and save/favourite count. Know which buyers are interested.</p></div>
+        <div class="after-card"><div class="a-ico">🔨</div><h3>Auction Your Property</h3><p>Private sellers can list their property for online auction — set a reserve price, choose dates, and let buyers bid. Same auction platform agents use. No auctioneer needed.</p></div>
+        <div class="after-card"><div class="a-ico">🌍</div><h3>185-Country Exposure</h3><p>Your property is visible to international buyers in 185 countries. Listings are translated, currency-converted, and searchable globally. More exposure than any local agent can offer.</p></div>
+      </div>
+
+      <!-- NOTIFICATION DETAIL -->
+      <div style="max-width:900px;margin:28px auto 0;padding:20px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(196,164,124,0.06),rgba(196,164,124,0.03));border:2px solid rgba(196,164,124,0.15)">
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:#e8dfc8;margin-bottom:12px;text-align:center">🔔 Notifications You Receive as a Private Seller</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.82rem;color:var(--nb-muted)">
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> New enquiry received (email + WhatsApp + SMS)</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Viewing appointment requested (with buyer details)</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Buyer saved/favourited your listing</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> New message from a buyer</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Listing milestone (100 views, 500 views, etc.)</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Auction bid received (if listed for auction)</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Weekly performance summary email</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Payment confirmation &amp; invoice issued</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Listing renewal reminder (7 days before)</div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><span style="color:#c4a47c;font-weight:900">✓</span> Callback request from a buyer</div>
+        </div>
+        <div style="text-align:center;margin-top:10px;font-size:0.78rem;color:var(--nb-muted)">All notifications apply to Private, Agency, and Enterprise tiers equally. Configure your preferences in Settings.</div>
+      </div>
+
+      <!-- VIEWING APPOINTMENT FLOW -->
+      <div style="max-width:900px;margin:20px auto 0;padding:20px 24px;border-radius:14px;background:var(--nb-snow);border:1px solid var(--nb-border)">
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:#e8dfc8;margin-bottom:12px;text-align:center">📅 How Viewing Appointments Work</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center;font-size:0.82rem">
+          <div style="padding:14px;border-radius:10px;background:#1a2535;border:1px solid var(--nb-border)"><div style="font-size:1.3rem;margin-bottom:6px">🔍</div><strong>Buyer Finds Your Listing</strong><br><span style="color:var(--nb-muted)">Buyer browses and clicks "Schedule Viewing"</span></div>
+          <div style="padding:14px;border-radius:10px;background:#1a2535;border:1px solid var(--nb-border)"><div style="font-size:1.3rem;margin-bottom:6px">📝</div><strong>Buyer Picks Date &amp; Time</strong><br><span style="color:var(--nb-muted)">Selects preferred day, time slot, and leaves phone number</span></div>
+          <div style="padding:14px;border-radius:10px;background:#1a2535;border:1px solid var(--nb-border)"><div style="font-size:1.3rem;margin-bottom:6px">🔔</div><strong>You Get Notified Instantly</strong><br><span style="color:var(--nb-muted)">Email + WhatsApp + SMS with buyer name and details</span></div>
+          <div style="padding:14px;border-radius:10px;background:#1a2535;border:1px solid rgba(196,164,124,0.3)"><div style="font-size:1.3rem;margin-bottom:6px">✅</div><strong>Confirm or Reschedule</strong><br><span style="color:var(--nb-muted)">One-tap confirm, or suggest alternative time</span></div>
+        </div>
+        <div style="text-align:center;margin-top:10px;font-size:0.78rem;color:var(--nb-muted)">Both buyer and seller receive email &amp; WhatsApp confirmations with address, date, time, and contact details.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WHY AGENTS LOVE IT ═══ -->
+  <div class="section alt" id="whyAgents">
+    <div class="section-inner">
+      <h2 class="section-title">Why Agents Switch to PropertyFinder</h2>
+      <p class="section-sub">Built for busy agents — auto-sync your CRM, get international exposure, same notifications and viewing system as everyone.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:1100px;margin:0 auto">
+        <div class="after-card"><div class="a-ico">⚡</div><h3>Sign Up in 3 Minutes</h3><p>Create account → connect your CRM or website → we handle the rest. No forms to fill. No photos to upload. No copy-pasting descriptions.</p></div>
+        <div class="after-card"><div class="a-ico">🆓</div><h3>Zero Setup Fees</h3><p>No integration fees, no onboarding charges, no setup costs. We connect to your system for free. You only pay the per-listing fee once listings are approved and live.</p></div>
+        <div class="after-card"><div class="a-ico">🔄</div><h3>Set It and Forget It</h3><p>Once connected, your listings stay in sync automatically. Sell a property? It's archived on PropertyFinder. Change a price? It's updated within 24 hours.</p></div>
+        <div class="after-card"><div class="a-ico">🛡️</div><h3>100% Control</h3><p>Preview every listing before it goes live. Approve individually or in bulk. Edit anything. Unpublish instantly. Full audit trail of every action.</p></div>
+        <div class="after-card"><div class="a-ico">🌍</div><h3>Instant Global Reach</h3><p>Your listings — already on your local CRM — are now visible to buyers in 185 countries. No extra work. Same listing, international audience.</p></div>
+        <div class="after-card"><div class="a-ico">🤝</div><h3>Works Alongside Your Portal</h3><p>PropertyFinder doesn't replace your current portals. It adds international exposure on top of what you already have. No conflicts, no exclusivity.</p></div>
+        <div class="after-card"><div class="a-ico">💰</div><h3>From $3/listing for Agents</h3><p>With 11+ listings you pay just $3 per listing per month — with 30 photos, video, portal walkthrough, analytics, and featured badge included.</p></div>
+        <div class="after-card"><div class="a-ico">📊</div><h3>See What's Working</h3><p>Full analytics dashboard shows views, enquiries, buyer countries, and engagement per listing. Know which properties attract international interest.</p></div>
+      </div>
+
+      <div class="note">Already have 50+ listings on another system? Our onboarding team will help you connect and import everything — typically completed within 1 business day. <a href="#support">Contact us</a> to get started.</div>
+    </div>
+  </div>
+
+  <!-- ═══ 2. COMPETITIVE COMPARISON ═══ -->
+  <div class="section alt" id="compare">
+    <div class="section-inner">
+      <h2 class="section-title">Why PropertyFinder?</h2>
+      <p class="section-sub">See how we compare against traditional portals, agency-only platforms, and classified sites.</p>
+
+      <div class="comp-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="pf">PropertyFinder</th>
+              <th>Traditional Portals</th>
+              <th>Agency Platforms</th>
+              <th>Classified Sites</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="feat">International reach (185 countries)</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">Pay-per-listing (no contracts)</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="check">✓</span></td></tr>
+            <tr><td class="feat">From $2/month per listing</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">Online auction platform</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="cross">✕</span></td></tr>
+            <tr><td class="feat">WhatsApp direct contact</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">AI voice search</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td></tr>
+            <tr><td class="feat">Property comparison tool</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td></tr>
+            <tr><td class="feat">Performance analytics dashboard</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="check">✓</span></td><td class="other"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td></tr>
+            <tr><td class="feat">30 photos + video + portal per listing</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="check">✓</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">Auto-sync with your website</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="cross">✕</span></td></tr>
+            <tr><td class="feat">Business-for-sale marketplace</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">Native language interface</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="partial">~</span></td></tr>
+            <tr><td class="feat">Professional calculators (5 tools)</td><td class="pf"><span class="check">✓</span></td><td class="other"><span class="partial">~</span></td><td class="other"><span class="cross">✕</span></td><td class="other"><span class="cross">✕</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">✓ = Full feature | ~ = Partial / limited | ✕ = Not available. Comparison based on publicly available feature sets of major platforms as of 2026.</div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. PRICING (3 Tiers) ═══ -->
+  <div class="section" id="pricing">
+    <div class="section-inner">
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-sub">No hidden fees. No lock-in contracts. Pay per listing, cancel anytime. ALL listings get the same features — the only difference is volume pricing.</p>
+
+      <!-- EQUAL FEATURES BANNER -->
+      <div style="max-width:1000px;margin:0 auto 28px;padding:18px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(196,164,124,0.06),rgba(196,164,124,0.03));border:2px solid rgba(196,164,124,0.15);text-align:center">
+        <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:#e8dfc8;margin-bottom:8px">Every Listing Gets The Same — No Exceptions</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:0.82rem;font-weight:700;color:#c4a47c">
+          <span>📸 30 Photos</span>
+          <span>🎥 1 Video</span>
+          <span>🏠 1 Portal Walkthrough</span>
+          <span>⭐ Featured Badge</span>
+          <span>📊 Full Analytics</span>
+          <span>📱 WhatsApp Contact</span>
+          <span>🔍 Priority Search</span>
+          <span>🌍 185 countries</span>
+          <span>🔨 Auction Eligible</span>
+          <span>🔄 Auto-Sync</span>
+          <span>📅 Schedule Viewing</span>
+          <span>🔔 Instant Notifications</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--nb-muted);margin-top:8px">Applies to all listing types: Sales, Rentals, Business for Sale, Auction Listings. Private sellers, agents, and enterprises — identical features.</div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Private</div>
+          <div class="price-amount">$7.50</div>
+          <div class="price-period">per listing / per month</div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">1 – 10 listings</div>
+          <div class="price-features">
+            <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 portal walkthrough</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full property/business detail page</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Auto-sync &amp; social promotion</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>📅 Schedule viewing &amp; appointments</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant enquiry &amp; viewing notifications</span></div>
+          </div>
+          <button class="price-cta" onclick="location.href='listing-agreement-private.html'">List Now — $7.50/mo</button>
+          <div class="price-fine">Private sellers &amp; small landlords. Cancel anytime.</div>
+        </div>
+
+        <div class="price-card popular">
+          <div class="price-tier">Agency</div>
+          <div class="price-amount">$3</div>
+          <div class="price-period">per listing / per month</div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">11 – 2,000 listings</div>
+          <div class="price-features">
+            <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 portal walkthrough</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full property/business detail page</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Auto-sync &amp; social promotion</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>📅 Schedule viewing &amp; appointments</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant enquiry &amp; viewing notifications</span></div>
+          </div>
+          <button class="price-cta" onclick="location.href='listing-agreement-agency.html'">List Now — $3/mo per listing</button>
+          <div class="price-fine">Agents, brokers &amp; developers. Cancel anytime.</div>
+        </div>
+
+        <div class="price-card">
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">$2</div>
+          <div class="price-period">per listing / per month</div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--nb-muted);margin-bottom:16px;padding:8px;background:var(--nb-snow);border-radius:4px">2,000+ listings</div>
+          <div class="price-features">
+            <div class="price-feat"><div class="ico">✓</div><span><strong>30 high-resolution photos</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 video upload</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span><strong>1 portal walkthrough</strong></span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full property/business detail page</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>WhatsApp, email &amp; phone contact</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Featured badge &amp; priority ranking</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Full analytics dashboard</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>185-country exposure</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Online auction eligibility</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>Auto-sync &amp; social promotion</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>📅 Schedule viewing &amp; appointments</span></div>
+            <div class="price-feat"><div class="ico">✓</div><span>🔔 Instant enquiry &amp; viewing notifications</span></div>
+          </div>
+          <button class="price-cta" onclick="location.href='listing-agreement-enterprise.html'">List Now — $2/mo per listing</button>
+          <div class="price-fine">Portals, large developers &amp; franchises. Cancel anytime.</div>
+        </div>
+      </div>
+
+      <!-- EXAMPLES -->
+      <div style="max-width:1000px;margin:24px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center;font-size:0.82rem">
+        <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>5 listings</strong> = $37.50/mo</div>
+        <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>100 listings</strong> = $300/mo</div>
+        <div style="padding:12px;background:var(--nb-snow);border-radius:8px;border:1px solid var(--nb-border)"><strong>3,000 listings</strong> = $6,000/mo</div>
+      </div>
+      <div class="note">All prices in USD. All listing types (sales, rentals, business, auctions) get identical features. No commission on sales. No setup fees. No contracts.</div>
+    </div>
+  </div>
+
+  <!-- ═══ 4. PAYMENT GUIDE (Step-by-Step) ═══ -->
+  <div class="section dark" id="paymentGuide">
+    <div class="section-inner">
+      <h2 class="section-title">How to List &amp; Pay — Step by Step</h2>
+      <p class="section-sub">From sign-up to your listing going live — here's exactly what to do.</p>
+
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><h3>Create Your Account</h3><p>Sign up free with email, Google, or Apple. No payment needed to create an account.</p></div>
+        <div class="step-card"><div class="step-num">2</div><h3>Choose Your Listing Type</h3><p>Select property or business, choose your category. Your price tier is automatic based on your total active listings (Private 1–10, Agency 11–2,000, Enterprise 2,000+).</p></div>
+        <div class="step-card"><div class="step-num">3</div><h3>Upload Your Listing</h3><p>Fill in property details, upload photos and videos, set your price, and add contact information.</p></div>
+        <div class="step-card"><div class="step-num">4</div><h3>Review &amp; Pay</h3><p>Preview your listing, confirm details, and pay securely via card, PayPal, EFT, or local payment method.</p></div>
+        <div class="step-card"><div class="step-num">5</div><h3>Listing Goes Live</h3><p>Your listing is published within minutes. You'll receive a confirmation email with your listing URL.</p></div>
+        <div class="step-card"><div class="step-num">6</div><h3>Track Performance</h3><p>Monitor views, enquiries, and buyer interest from your analytics dashboard. Upgrade anytime.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 5. PAYMENT TUTORIAL VIDEOS ═══ -->
+  <div class="section alt" id="tutorials">
+    <div class="section-inner">
+      <h2 class="section-title">Video Tutorials</h2>
+      <p class="section-sub">Watch step-by-step guides to help you list your property and make payment.</p>
+
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="video-thumb" onclick="showToast('Playing: How to Create Your First Listing')"><div class="play">▶</div></div>
+          <div class="video-body"><h3>How to Create Your First Listing</h3><p>3 min — Complete walkthrough from sign-up to published listing</p></div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb" onclick="showToast('Playing: How to Pay for Your Listing')"><div class="play">▶</div></div>
+          <div class="video-body"><h3>How to Pay for Your Listing</h3><p>2 min — Card, PayPal, EFT, and local payment methods explained</p></div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb" onclick="showToast('Playing: Uploading Photos & Videos')"><div class="play">▶</div></div>
+          <div class="video-body"><h3>Uploading Photos &amp; Videos</h3><p>2 min — Tips for great listing images that attract buyers</p></div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb" onclick="showToast('Playing: Understanding Your Analytics Dashboard')"><div class="play">▶</div></div>
+          <div class="video-body"><h3>Understanding Your Analytics Dashboard</h3><p>3 min — Track views, enquiries, and optimise your listing</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 6. WHAT HAPPENS AFTER PAYMENT ═══ -->
+  <div class="section" id="afterPayment">
+    <div class="section-inner">
+      <h2 class="section-title">What Happens After Payment?</h2>
+      <p class="section-sub">Once you pay, here's what you can expect.</p>
+
+      <div class="after-grid">
+        <div class="after-card"><div class="a-ico">⚡</div><h3>Instant Publishing</h3><p>Your listing goes live within minutes of payment confirmation. No manual approval delays.</p></div>
+        <div class="after-card"><div class="a-ico">📧</div><h3>Confirmation Email</h3><p>You'll receive an email with your listing URL, invoice, and dashboard access link.</p></div>
+        <div class="after-card"><div class="a-ico">📊</div><h3>Analytics Activate</h3><p>View tracking starts immediately. See views, clicks, enquiries, and buyer locations in real-time.</p></div>
+        <div class="after-card"><div class="a-ico">🔔</div><h3>Notifications Start</h3><p>From the moment you're live, you receive instant notifications for enquiries, viewing requests, messages, saves, and milestones — via email, WhatsApp, and SMS.</p></div>
+        <div class="after-card"><div class="a-ico">📅</div><h3>Viewing Appointments Enabled</h3><p>Buyers can request viewings directly from your listing. You receive their name, phone, and preferred date/time. Confirm or reschedule with one tap.</p></div>
+        <div class="after-card"><div class="a-ico">🔔</div><h3>Buyer Alerts Triggered</h3><p>Buyers with matching saved searches are notified about your new listing automatically.</p></div>
+        <div class="after-card"><div class="a-ico">✏️</div><h3>Edit Anytime</h3><p>Update photos, price, description, or contact details at any time from your dashboard.</p></div>
+        <div class="after-card"><div class="a-ico">🔄</div><h3>Auto-Renewal</h3><p>Listing renews monthly. Cancel or downgrade from your dashboard before renewal date — no penalties.</p></div>
+        <div class="after-card"><div class="a-ico">📱</div><h3>Enquiries via WhatsApp</h3><p>Buyers can contact you directly via WhatsApp, email, or phone — you choose which to display.</p></div>
+        <div class="after-card"><div class="a-ico">⬆️</div><h3>Auto Volume Tier</h3><p>As you add more listings, your price per listing drops automatically. 11+ = $3/listing, 2,000+ = $2/listing. No action needed.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 7. PAYMENT FAQ ═══ -->
+  <div class="section alt" id="faq">
+    <div class="section-inner" style="max-width:800px">
+      <h2 class="section-title">Payment FAQ</h2>
+      <p class="section-sub">Common questions about listing, payments, and billing.</p>
+
+      <details class="accord" open>
+        <summary>What payment methods do you accept?</summary>
+        <div class="acc-body"><p>We accept Visa, Mastercard, American Express, PayPal, instant EFT (South Africa), bank transfer (SWIFT/SEPA), and selected local payment methods depending on your country. All payments are processed securely through our PCI-compliant payment gateway.</p></div>
+      </details>
+      <details class="accord">
+        <summary>Can I pay in my local currency?</summary>
+        <div class="acc-body"><p>Prices are displayed in USD but you can pay in your local currency. Your bank or payment provider will convert at the prevailing exchange rate. We're working on adding native currency pricing for major markets (ZAR, GBP, EUR, AED, CHF, SGD).</p></div>
+      </details>
+      <details class="accord">
+        <summary>Is there a free trial or free listing option?</summary>
+        <div class="acc-body"><p>We don't offer free listings, but at $7.50/month for private sellers (or as low as $2/listing for enterprise), PropertyFinder is the most affordable international property platform available. Every listing gets the same 30 photos, video, portal walkthrough, analytics, and 185-country exposure. You can cancel anytime with no penalties. Creating an account is always free.</p></div>
+      </details>
+      <details class="accord">
+        <summary>How do I cancel a listing?</summary>
+        <div class="acc-body"><p>Log into your dashboard → My Listings → select the listing → click "Cancel Listing". The listing stays active until the end of your current billing cycle, then it's removed. No cancellation fees. Your price tier adjusts automatically as your listing count changes.</p></div>
+      </details>
+      <details class="accord">
+        <summary>Do you offer refunds?</summary>
+        <div class="acc-body"><p>Listing fees are generally non-refundable once the listing is published. If you experience a technical issue that prevents your listing from being displayed, contact support within 7 days for a review. Duplicate payments are refunded automatically.</p></div>
+      </details>
+      <details class="accord">
+        <summary>Do you offer agency or bulk discounts?</summary>
+        <div class="acc-body"><p>Volume discounts are automatic. With 11+ active listings your price drops to $3/listing, and at 2,000+ listings it drops to $2/listing. All features remain identical — 30 photos, video, portal walkthrough, analytics, WhatsApp, featured badge, and 185-country exposure at every tier. No need to negotiate or apply — it happens automatically as your listing count grows.</p></div>
+      </details>
+      <details class="accord">
+        <summary>Is my payment information secure?</summary>
+        <div class="acc-body"><p>Absolutely. We use industry-standard encryption (SSL/TLS) and our payment gateway is PCI DSS Level 1 compliant. We never store your full card details on our servers. Payments are processed by Stripe / PayFast / PayPal (depending on region).</p></div>
+      </details>
+      <details class="accord">
+        <summary>What happens if my payment fails?</summary>
+        <div class="acc-body"><p>If a payment fails, your listing remains active for 3 days while we retry. You'll receive an email notification with a link to update your payment method. If payment is not resolved within 7 days, the listing is paused (not deleted) until payment is made.</p></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ═══ 8. PAYMENT SUPPORT ═══ -->
+  <div class="section" id="support">
+    <div class="section-inner">
+      <h2 class="section-title">Need Help?</h2>
+      <p class="section-sub">Our support team is here to help you list, pay, and succeed.</p>
+
+      <div class="support-grid">
+        <div class="support-card" onclick="showToast('Opening live chat...')"><div class="s-ico">💬</div><h3>Live Chat</h3><p>Chat with our team in real-time. Available Mon–Fri 08:00–20:00 (GMT+2).</p></div>
+        <div class="support-card" onclick="showToast('Opening email form...')"><div class="s-ico">📧</div><h3>Email Support</h3><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6f1c1a1f1f001d1b2f1f1d001f0a1d1b160906010b0a1d410c0002">[email&#160;protected]</a> — response within 24 hours.</p></div>
+        <div class="support-card" onclick="showToast('Opening WhatsApp...')"><div class="s-ico">📱</div><h3>WhatsApp</h3><p>Message us directly on WhatsApp for quick questions.</p></div>
+        <div class="support-card" onclick="showToast('Opening help centre...')"><div class="s-ico">📖</div><h3>Help Centre</h3><p>Browse guides, tutorials, and FAQs at your own pace.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <div class="cta-inner">
+      <h2>Ready to List Your Property?</h2>
+      <p>Join thousands of sellers and agents reaching international buyers on PropertyFinder. From $2/listing — 30 photos, video, portal walkthrough, full analytics. No contracts, no hidden fees, no feature gating.</p>
+      <a class="cta-btn" href="#pricing" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});return false;">🏠 Start Listing Now →</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    © <span id="y"></span> PropertyFinder. All rights reserved. | <a href="terms-of-use.html">Terms</a> | <a href="privacy-policy.html">Privacy</a> | <a href="commission-fees.html">Fees</a>
+  </div>
+
+  <script>
+    function showToast(msg){const ex=document.querySelector('.pf-toast');if(ex)ex.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+    document.getElementById('y').textContent = new Date().getFullYear();
+    console.log('%c PropertyFinder — List Property loaded','color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:24px 20px;font-family:'DM Sans',system-ui,sans-serif;font-size:0.82rem;margin-top:40px;line-height:1.8">
+  <div style="max-width:1220px;margin:0 auto">
+    <div style="margin-bottom:10px">
+      <a href="index.html" style="color:#c4a47c;font-weight:700;font-size:0.95rem;text-decoration:none">Property<span style="color:#D4AF77">Finder</span></a>
+      <span style="color:rgba(255,255,255,0.4);margin:0 8px">|</span>
+      <span style="color:rgba(255,255,255,0.6)">Connecting Buyers, Sellers & Businesses Across 185 Countries</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:10px">
+      <a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Home</a>
+      <a href="buy.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Buy</a>
+      <a href="rent.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Rent</a>
+      <a href="auctions.html" style="color:#c4a47c;text-decoration:none">Auctions</a>
+      <a href="business.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Business for Sale</a>
+      <a href="countries.html" style="color:rgba(255,255,255,0.7);text-decoration:none">185 Countries</a>
+      <a href="valuation.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Valuation</a>
+      <a href="calculators.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Calculators</a>
+      <a href="advertise.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Advertise</a>
+      <a href="how-it-works.html" style="color:rgba(255,255,255,0.7);text-decoration:none">How It Works</a>
+      <a href="list-property.html" style="color:rgba(255,255,255,0.7);text-decoration:none">List Property</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:12px">
+      <a href="terms-of-use.html" style="color:#D4AF77;text-decoration:none">Terms of Use</a>
+      <a href="privacy-policy.html" style="color:#D4AF77;text-decoration:none">Privacy</a>
+      <a href="commission-fees.html" style="color:#D4AF77;text-decoration:none">Fees</a>
+      <a href="anti-fraud.html" style="color:#D4AF77;text-decoration:none">Anti-Fraud</a>
+      <a href="auction-terms.html" style="color:#D4AF77;text-decoration:none">Auction Terms</a>
+      <a href="dispute-resolution.html" style="color:#D4AF77;text-decoration:none">Disputes</a>
+      <a href="seller-agent-listing.html" style="color:#D4AF77;text-decoration:none">Seller Agreement</a>
+    </div>
+    <div style="color:rgba(255,255,255,0.4);font-size:0.75rem">
+      © <span id="pf-year"></span> PropertyFinder Global. All rights reserved. | 185 Countries · 10 Business Sectors · AI-Powered · Real-Time Auctions
+    </div>
+  </div>
+</footer>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script src="pf-core.js"></script>
+<script src="pf-core.js"></script>
+<!-- ═══ MOBILE BOTTOM NAV ═══ -->
+<style>
+#pfBotNav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:#0e1520;border-top:1px solid rgba(196,164,124,0.25);z-index:999999;padding-bottom:env(safe-area-inset-bottom,0px)}
+#pfBotNav .bn-inner{display:flex;align-items:stretch;height:64px;max-width:500px;margin:0 auto}
+#pfBotNav a,#pfBotNav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(232,223,200,0.5);text-decoration:none;font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;text-transform:uppercase;letter-spacing:0.03em}
+#pfBotNav a:active{color:#c4a47c}
+#pfBotNav .bn-ico{font-size:20px;line-height:1}
+#pfBotNav .bn-cta{background:#c4a47c!important;color:#1a1408!important;border-radius:10px;margin:8px 4px;padding:4px 8px;font-weight:800!important}
+#pfBotNav .bn-cta span:last-child{color:#1a1408!important}
+#pfBotOverlay{display:none;position:fixed;inset:0;background:rgba(14,21,32,0.8);z-index:9999999;backdrop-filter:blur(4px)}
+#pfBotOverlay.open{display:block}
+#pfBotDrawer{position:fixed;bottom:0;left:0;right:0;background:#141c2b;border-radius:20px 20px 0 0;border-top:1px solid rgba(196,164,124,0.25);z-index:10000000;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);max-height:88vh;overflow-y:auto;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px)}
+#pfBotDrawer.open{transform:translateY(0)}
+.bn-handle{width:40px;height:4px;background:rgba(196,164,124,0.3);border-radius:2px;margin:12px auto 0}
+.bn-dhead{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid rgba(196,164,124,0.12)}
+.bn-dtitle{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#e8dfc8}
+.bn-dclose{width:32px;height:32px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.2);border-radius:8px;color:#c4a47c;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
+.bn-dsec{padding:14px 20px 6px}
+.bn-dlab{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:#c4a47c;margin-bottom:10px;font-family:'DM Sans',sans-serif}
+.bn-dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.bn-ditem{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1a2535;border:1px solid rgba(196,164,124,0.15);border-radius:10px;color:#e8dfc8;text-decoration:none;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+.bn-ditem:active{background:#1f2d3d;color:#c4a47c}
+.bn-ditem .bn-di{font-size:20px;flex-shrink:0}
+.bn-ditem.bn-full{grid-column:span 2;background:#c4a47c;border-color:#c4a47c;color:#1a1408;justify-content:center;font-weight:800;font-size:14px}
+.bn-ddiv{height:1px;background:rgba(196,164,124,0.1);margin:4px 20px}
+.bn-dsec2{display:flex;flex-wrap:wrap;gap:8px;padding:8px 20px 16px}
+.bn-dsec2 a{padding:7px 14px;background:#1a2535;border:1px solid rgba(196,164,124,0.12);border-radius:999px;color:#c8b98a;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;text-decoration:none}
+@media(max-width:768px){#pfBotNav{display:block!important}body{padding-bottom:72px!important}}
+</style>
+<div id="pfBotNav"><div class="bn-inner">
+  <a href="index.html"><span class="bn-ico">🏠</span><span>Home</span></a>
+  <a href="buy.html"><span class="bn-ico">🔍</span><span>Buy</span></a>
+  <a href="rent.html"><span class="bn-ico">🔑</span><span>Rent</span></a>
+  <a href="auctions.html"><span class="bn-ico">🔨</span><span>Auctions</span></a>
+  <a href="list-property.html" class="bn-cta"><span class="bn-ico">＋</span><span>List</span></a>
+  <button onclick="document.getElementById('pfBotDrawer').classList.add('open');document.getElementById('pfBotOverlay').classList.add('open');document.body.style.overflow='hidden'"><span class="bn-ico">☰</span><span>More</span></button>
+</div></div>
+<div id="pfBotOverlay" onclick="document.getElementById('pfBotDrawer').classList.remove('open');document.getElementById('pfBotOverlay').classList.remove('open');document.body.style.overflow=''"></div>
+<div id="pfBotDrawer">
+  <div class="bn-handle"></div>
+  <div class="bn-dhead"><span class="bn-dtitle">PropertyFinder</span><button class="bn-dclose" onclick="document.getElementById('pfBotDrawer').classList.remove('open');document.getElementById('pfBotOverlay').classList.remove('open');document.body.style.overflow=''">✕</button></div>
+  <div class="bn-dsec"><div class="bn-dlab">Property</div><div class="bn-dgrid">
+    <a class="bn-ditem" href="buy.html"><span class="bn-di">🏠</span>Buy</a>
+    <a class="bn-ditem" href="rent.html"><span class="bn-di">🔑</span>Rent</a>
+    <a class="bn-ditem" href="auctions.html"><span class="bn-di">🔨</span>Auctions</a>
+    <a class="bn-ditem" href="business.html"><span class="bn-di">💼</span>Business</a>
+    <a class="bn-ditem" href="countries.html"><span class="bn-di">🌍</span>185 Countries</a>
+    <a class="bn-ditem" href="valuation.html"><span class="bn-di">📊</span>ProVal</a>
+    <a class="bn-ditem bn-full" href="list-property.html">＋ List Your Property</a>
+  </div></div>
+  <div class="bn-ddiv"></div>
+  <div class="bn-dsec"><div class="bn-dlab">Tools</div><div class="bn-dgrid">
+    <a class="bn-ditem" href="calculators.html"><span class="bn-di">🧮</span>Calculators</a>
+    <a class="bn-ditem" href="how-it-works.html"><span class="bn-di">💡</span>How It Works</a>
+    <a class="bn-ditem" href="popular-searches.html"><span class="bn-di">🔥</span>Popular</a>
+    <a class="bn-ditem" href="advertise.html"><span class="bn-di">📢</span>Advertise</a>
+  </div></div>
+  <div class="bn-ddiv"></div>
+  <div class="bn-dsec2">
+    <a href="terms-of-use.html">Terms</a><a href="privacy-policy.html">Privacy</a>
+    <a href="fees.html">Fees</a><a href="anti-fraud.html">Anti-Fraud</a>
+  </div>
+</div>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

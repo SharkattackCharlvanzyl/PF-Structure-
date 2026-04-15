@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Buy Property</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;--lime:#c4a47c;
+      --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;--line:rgba(196,164,124,0.18);
+      --radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.07);
+      --font:'DM Sans',system-ui,sans-serif;
+      --font-display:'Cinzel',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+    .hero{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);padding:56px 24px 48px;text-align:center;color:#fff;position:relative;overflow:hidden}
+    .hero-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+    .hero-badge{display:inline-block;background:rgba(196,164,124,0.2);border:1px solid rgba(196,164,124,0.4);color:#c4a47c;font-size:0.75rem;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:16px}
+    .hero h1{font-family:'Cinzel',Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:12px}
+    .hero p{font-size:1rem;opacity:0.85;max-width:520px;margin:0 auto;line-height:1.6}
+    .hero-stats{display:flex;justify-content:center;gap:32px;margin-top:28px;flex-wrap:wrap}
+    .hero-stat .num{font-size:1.6rem;font-weight:800;color:#c4a47c}
+    .hero-stat .lbl{font-size:0.75rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px}
+
+    main{max-width:900px;margin:0 auto;padding:40px 24px 60px}
+
+    .section-title{font-family:'Cinzel',Georgia,serif;font-size:1.3rem;font-weight:700;color:#0e1520;text-align:center;margin-bottom:8px}
+    .section-sub{text-align:center;color:#8a7d5a;font-size:0.9rem;margin-bottom:32px}
+
+    .sectors{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:48px}
+
+    .sector-card{background:#1a2535;border:1px solid #E3E8E5;border-radius:14px;padding:28px 24px;cursor:pointer;text-decoration:none;color:#e8dfc8;transition:all 0.25s ease;display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.07);position:relative;overflow:hidden}
+    .sector-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#141c2b,#1a2535);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease}
+    .sector-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(196,164,124,0.13);border-color:#141c2b;text-decoration:none;color:#1A1A1A}
+    .sector-card:hover::before{transform:scaleX(1)}
+
+    .sector-icon{font-size:2rem;line-height:1}
+    .sector-name{font-family:'Cinzel',Georgia,serif;font-size:1.05rem;font-weight:700;color:#0e1520}
+    .sector-desc{font-size:0.84rem;color:#8a7d5a;line-height:1.55}
+    .sector-arrow{margin-top:auto;display:flex;align-items:center;gap:6px;font-size:0.8rem;font-weight:700;color:#141c2b}
+
+    .info-strip{background:#1a2535;border:1px solid #E3E8E5;border-radius:14px;padding:24px 32px;display:flex;gap:32px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+    .info-item{text-align:center}
+    .info-item .val{font-size:1.2rem;font-weight:800;color:#141c2b;font-family:'Cinzel',Georgia,serif}
+    .info-item .key{font-size:0.75rem;color:#8a7d5a;text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+
+    .how{background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.06));border:1px solid rgba(196,164,124,0.12);border-radius:14px;padding:28px 24px;margin-bottom:32px}
+    .how h3{font-family:'Cinzel',Georgia,serif;font-size:1rem;font-weight:700;color:#0e1520;margin-bottom:16px;text-align:center}
+    .how-steps{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+    .how-step{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:140px;max-width:180px}
+    .how-num{min-width:28px;height:28px;border-radius:50%;background:#141c2b;color:#fff;font-size:0.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .how-text{font-size:0.83rem;color:#8a7d5a;line-height:1.5}
+    .how-text strong{color:#e8dfc8;display:block;margin-bottom:2px}
+
+    footer{text-align:center;padding:24px;color:#8a7d5a;font-size:0.78rem;border-top:1px solid #E3E8E5}
+    footer a{color:#141c2b;font-weight:600}
+  </style>
+</head>
+<body>
+
+<nav class="pf-nav" id="pfNav"></nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏡 Buy Property</div>
+    <h1>Find Your Dream Property</h1>
+    <p>Browse residential homes, commercial buildings, industrial units, farms and new developments for sale across 185 countries.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">185</div><div class="lbl">Countries</div></div>
+      <div class="hero-stat"><div class="num">5</div><div class="lbl">Categories</div></div>
+      <div class="hero-stat"><div class="num">0%</div><div class="lbl">Commission</div></div>
+      <div class="hero-stat"><div class="num">30</div><div class="lbl">Photos per Listing</div></div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <div class="info-strip">
+    <div class="info-item"><div class="val">Residential</div><div class="key">Homes & Apartments</div></div>
+    <div class="info-item"><div class="val">Commercial</div><div class="key">Offices & Retail</div></div>
+    <div class="info-item"><div class="val">Industrial</div><div class="key">Warehouses & Factories</div></div>
+    <div class="info-item"><div class="val">Developments</div><div class="key">New & Off-Plan</div></div>
+  </div>
+
+  <h2 class="section-title">Choose a Property Category</h2>
+  <p class="section-sub">Click any category to browse available properties for sale</p>
+
+  <div class="sectors">
+
+    <a href="buy-residential.html" class="sector-card">
+      <div class="sector-icon">🏠</div>
+      <div class="sector-name">Residential</div>
+      <div class="sector-desc">Houses, apartments, townhouses, villas and cottages for sale. Browse verified listings from trusted agents worldwide.</div>
+      <div class="sector-arrow">Browse Residential →</div>
+    </a>
+
+    <a href="buy-commercial.html" class="sector-card">
+      <div class="sector-icon">🏢</div>
+      <div class="sector-name">Commercial</div>
+      <div class="sector-desc">Office buildings, retail spaces, shopping centres and mixed-use commercial properties for sale globally.</div>
+      <div class="sector-arrow">Browse Commercial →</div>
+    </a>
+
+    <a href="buy-industrial.html" class="sector-card">
+      <div class="sector-icon">🏭</div>
+      <div class="sector-name">Industrial</div>
+      <div class="sector-desc">Warehouses, factories, logistics hubs and manufacturing facilities available for purchase across all regions.</div>
+      <div class="sector-arrow">Browse Industrial →</div>
+    </a>
+
+    <a href="buy-farm.html" class="sector-card">
+      <div class="sector-icon">🌾</div>
+      <div class="sector-name">Agricultural</div>
+      <div class="sector-desc">Farms, smallholdings, orchards, vineyards and rural land for sale. All sizes and farming types across 185 countries.</div>
+      <div class="sector-arrow">Browse Agricultural →</div>
+    </a>
+
+    <a href="buy-developments.html" class="sector-card">
+      <div class="sector-icon">🏗️</div>
+      <div class="sector-name">New Developments</div>
+      <div class="sector-desc">Off-plan, under construction and newly completed developments. Secure your unit direct from the developer.</div>
+      <div class="sector-arrow">Browse Developments →</div>
+    </a>
+
+  </div>
+
+  <div class="how">
+    <h3>How Buying Works on PropertyFinder</h3>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-num">1</div><div class="how-text"><strong>Choose Category</strong>Select your property type above</div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-text"><strong>Browse Listings</strong>Filter by country, price & size</div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-text"><strong>Contact Agent</strong>Call, email or WhatsApp directly</div></div>
+      <div class="how-step"><div class="how-num">4</div><div class="how-text"><strong>Book Viewing</strong>In-person or virtual tour</div></div>
+      <div class="how-step"><div class="how-num">5</div><div class="how-text"><strong>Make an Offer</strong>Complete your purchase</div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © <span id="yr"></span> PropertyFinder Global. All rights reserved. |
+  <a href="terms-of-use.html">Terms</a> |
+  <a href="privacy-policy.html">Privacy</a>
+</footer>
+
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

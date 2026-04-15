@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Private Seller Listing Agreement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --g:#141c2b;--gd:#0e1520;--gh:#1a2535;--lime:#c4a47c;
+      --white:#fff;--off:#F6F8F7;--snow:#EDF2EF;--border:#E3E8E5;
+      --text:#e8dfc8;--muted:#8a7d5a;
+      --warn:#D97706;--warn-bg:#FFFBEB;--warn-border:#FDE68A;
+      --danger:#DC2626;--danger-bg:#FEF2F2;--danger-border:#FECACA;
+      --info:#2563EB;--info-bg:#EFF6FF;--info-border:#BFDBFE;
+      --success:#16A34A;
+      --font:'DM Sans',system-ui,sans-serif;
+      --display:'Cinzel','Playfair Display',Georgia,serif;
+      --r:14px;--r2:10px;--r3:6px;--max:960px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--off);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--g);font-weight:700;text-decoration:none}
+    a:hover{text-decoration:underline}
+    strong{color:var(--text)}
+
+    /* HEADER */
+    header{
+      background:linear-gradient(135deg,var(--gd) 0%,var(--g) 55%,var(--gh) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.32) 100%);pointer-events:none}
+    header::after{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:rgba(196,164,124,0.08);pointer-events:none}
+    .hw{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    header .badge{display:inline-block;background:rgba(196,164,124,0.2);border:1px solid rgba(196,164,124,0.4);color:var(--lime);font-size:0.72rem;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px}
+    header h1{font-family:var(--display);font-size:clamp(1.3rem,3vw,1.85rem);font-weight:700;margin-bottom:8px}
+    header p{color:rgba(255,255,255,0.75);font-size:0.88rem;max-width:620px;line-height:1.6;margin-bottom:16px}
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap}
+    .nav-links a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);font-size:0.78rem;transition:all 0.2s}
+    .nav-links a:hover{background:rgba(255,255,255,0.15);color:#fff;text-decoration:none}
+
+    /* STEPS */
+    .steps-bar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+    .steps-inner{max-width:var(--max);margin:0 auto;display:flex;gap:0;align-items:center;overflow-x:auto}
+    .step-item{display:flex;align-items:center;gap:8px;flex-shrink:0;padding:0 14px 0 0;margin:0 14px 0 0;border-right:1px solid var(--border);cursor:pointer}
+    .step-item:last-child{border-right:none;margin-right:0;padding-right:0}
+    .step-num{width:26px;height:26px;border-radius:50%;background:var(--border);color:var(--muted);font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s}
+    .step-num.done{background:var(--g);color:#fff}
+    .step-num.active{background:var(--gd);color:#fff;box-shadow:0 0 0 3px rgba(196,164,124,0.2)}
+    .step-label{font-size:0.72rem;font-weight:700;color:var(--muted);white-space:nowrap}
+
+    /* MAIN */
+    main{max-width:var(--max);margin:0 auto;padding:28px 24px 80px}
+
+    /* SECTIONS */
+    .sec{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+    .sec-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--gd);color:#fff;font-size:0.8rem;font-weight:800;flex-shrink:0;font-family:var(--display)}
+    .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+    .sec-head h2{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--gd)}
+    .sec h3{font-size:0.9rem;font-weight:800;color:var(--text);margin:18px 0 8px}
+    .sec h3:first-of-type{margin-top:0}
+    .sec p{font-size:0.88rem;color:var(--muted);margin-bottom:10px;line-height:1.65}
+    .sec p:last-child{margin-bottom:0}
+    .sec ul,.sec ol{padding-left:20px;margin:8px 0 10px;font-size:0.87rem;color:var(--muted)}
+    .sec ul li,.sec ol li{margin-bottom:6px;line-height:1.55}
+
+    /* CALLOUTS */
+    .note{font-size:0.84rem;color:var(--muted);padding:14px 16px;border-radius:var(--r2);margin:12px 0;line-height:1.6;border-left:4px solid var(--g);background:rgba(196,164,124,0.05)}
+    .note.warn{border-left-color:var(--warn);background:var(--warn-bg);color:#92400E}
+    .note.danger{border-left-color:var(--danger);background:var(--danger-bg);color:#991B1B}
+    .note.info{border-left-color:var(--info);background:var(--info-bg);color:#1E40AF}
+    .note strong{color:inherit}
+
+    /* COMMISSION TABLE */
+    .comm-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:14px 0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--border)}
+    .comm-table thead tr{background:var(--gd);color:white}
+    .comm-table thead th{padding:11px 16px;text-align:left;font-weight:700;font-size:0.82rem}
+    .comm-table thead th:not(:first-child){text-align:center}
+    .comm-table tbody tr{border-bottom:1px solid var(--border)}
+    .comm-table tbody td{padding:11px 16px;color:var(--muted);font-size:0.86rem}
+    .comm-table tbody td:not(:first-child){text-align:center;font-weight:800}
+    .comm-table tbody tr.highlight{background:rgba(196,164,124,0.04)}
+    .comm-table tbody .td-g{color:var(--gd)}
+    .comm-table tbody .td-m{color:var(--muted);font-weight:400;font-style:italic}
+
+    /* FORM FIELDS */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+    @media(max-width:580px){.form-grid{grid-template-columns:1fr}}
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field.full{grid-column:1/-1}
+    .field label{font-size:0.78rem;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:0.4px}
+    .field label span{color:var(--danger);margin-left:2px}
+    .field input,.field select,.field textarea{
+      padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--r3);
+      font-family:var(--font);font-size:0.88rem;color:var(--text);background:var(--white);
+      transition:border-color 0.2s,box-shadow 0.2s;outline:none;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(196,164,124,0.12)}
+    .field textarea{resize:vertical;min-height:80px}
+    .field select{cursor:pointer}
+
+    /* CHECKBOXES */
+    .consents{display:flex;flex-direction:column;gap:10px;margin:18px 0}
+    .consent-box{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r2);cursor:pointer;transition:border-color 0.2s,background 0.2s;font-size:0.85rem;color:var(--muted);line-height:1.5}
+    .consent-box:hover{border-color:var(--g);background:rgba(196,164,124,0.03)}
+    .consent-box input[type=checkbox]{width:18px;height:18px;accent-color:var(--g);flex-shrink:0;margin-top:1px;cursor:pointer}
+    .consent-box.checked{border-color:var(--g);background:rgba(196,164,124,0.04)}
+    .consent-box strong{color:var(--text)}
+
+    /* SIGNATURE */
+    .sig-tabs{display:flex;gap:8px;margin-bottom:14px}
+    .sig-tab{padding:7px 18px;border-radius:var(--r3);border:1.5px solid var(--border);font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font);background:var(--off);color:var(--muted);transition:all 0.2s}
+    .sig-tab.active{background:var(--g);color:#fff;border-color:var(--g)}
+    .sig-area{position:relative}
+    #sigCanvas{border:1.5px dashed var(--border);border-radius:var(--r2);width:100%;height:130px;cursor:crosshair;background:#fafcfb;touch-action:none;display:block}
+    #sigCanvas.has-sig{border-color:var(--g);border-style:solid}
+    #typeInput{width:100%;padding:14px;font-size:1.5rem;font-family:'Playfair Display',Georgia,serif;border:1.5px solid var(--border);border-radius:var(--r2);color:var(--gd);background:#fafcfb;display:none;outline:none}
+    #typeInput:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(196,164,124,0.12)}
+    .sig-actions{display:flex;gap:8px;margin-top:8px}
+    .sig-btn{padding:6px 14px;border-radius:var(--r3);border:1.5px solid var(--border);font-size:0.78rem;font-weight:700;cursor:pointer;font-family:var(--font);background:var(--off);color:var(--muted);transition:all 0.2s}
+    .sig-btn:hover{border-color:var(--g);color:var(--g)}
+
+    /* SUBMIT */
+    .submit-btn{
+      width:100%;padding:16px;background:var(--gd);color:#fff;border:none;border-radius:var(--r2);
+      font-family:var(--display);font-size:1rem;font-weight:700;cursor:pointer;
+      transition:background 0.2s,transform 0.15s,box-shadow 0.2s;
+      letter-spacing:0.3px;margin-top:8px;
+    }
+    .submit-btn:hover:not(:disabled){background:var(--g);box-shadow:0 4px 16px rgba(196,164,124,0.3);transform:translateY(-1px)}
+    .submit-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
+    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:10px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--g);border-radius:2px;transition:width 0.4s ease;width:0%}
+    .progress-label{font-size:0.75rem;color:var(--muted);font-weight:700;margin-bottom:14px;text-align:right}
+
+    /* SUCCESS */
+    .success-panel{display:none;background:var(--white);border:2px solid var(--g);border-radius:var(--r);padding:40px 32px;text-align:center;margin-top:20px}
+    .success-panel.show{display:block}
+    .success-icon{font-size:3.5rem;margin-bottom:16px}
+    .success-panel h2{font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--gd);margin-bottom:8px}
+    .success-panel p{color:var(--muted);font-size:0.88rem;margin-bottom:6px;line-height:1.6}
+    .ref-box{background:var(--snow);border:1px solid var(--border);border-radius:var(--r2);padding:14px 20px;margin:18px 0;display:inline-block}
+    .ref-box .ref-label{font-size:0.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .ref-box .ref-num{font-family:var(--display);font-size:1.2rem;font-weight:700;color:var(--gd)}
+    .next-steps{text-align:left;background:var(--off);border-radius:var(--r2);padding:18px 20px;margin-top:16px}
+    .next-steps h3{font-size:0.88rem;font-weight:800;color:var(--text);margin-bottom:10px}
+    .next-steps ol{padding-left:20px;font-size:0.85rem;color:var(--muted);line-height:1.7}
+
+    footer{max-width:var(--max);margin:0 auto;padding:20px 24px 40px;color:var(--muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hw">
+    <div class="badge">Private Owner Listing</div>
+    <h1>Private Seller Listing Agreement</h1>
+    <p>This agreement is for property owners who wish to list and sell or auction their property directly on PropertyFinder — without the involvement of an estate agent or auctioneer.</p>
+    <div class="nav-links">
+      <a href="09-list-your-property.html">← List Your Property</a>
+      <a href="seller-listing-agreement.html">Agent Agreement</a>
+      <a href="auction-seller-agreement.html">Auction Agreement</a>
+      <a href="commission-fees.html">Commission &amp; Fees</a>
+      <a href="auction-faq.html">FAQ</a>
+    </div>
+  </div>
+</header>
+
+<!-- STEPS BAR -->
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item"><div class="step-num active" id="s1">1</div><span class="step-label">About This Agreement</span></div>
+    <div class="step-item"><div class="step-num" id="s2">2</div><span class="step-label">Your Obligations</span></div>
+    <div class="step-item"><div class="step-num" id="s3">3</div><span class="step-label">Commission &amp; Fees</span></div>
+    <div class="step-item"><div class="step-num" id="s4">4</div><span class="step-label">Legal &amp; Compliance</span></div>
+    <div class="step-item"><div class="step-num" id="s5">5</div><span class="step-label">Your Details &amp; Sign</span></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── SECTION 1 ── -->
+  <div class="sec" id="sec1">
+    <div class="sec-head">
+      <div class="sec-num">1</div>
+      <h2>Parties, Purpose &amp; Scope</h2>
+    </div>
+    <p>This Private Seller Listing Agreement ("Agreement") is between <strong>PropertyFinder Head Office</strong> ("PropertyFinder", "Platform", "we", "us") and the individual property owner or legal entity identified below ("Private Seller", "Owner", "you").</p>
+    <p>This Agreement applies specifically to sellers who are listing their own property without a registered estate agent, auctioneer, or mandate holder acting on their behalf. If you are an estate agent or auctioneer, please use the <a href="seller-listing-agreement.html">Seller / Agent Listing Agreement</a> instead.</p>
+    <p>By signing this Agreement, you appoint PropertyFinder to host and market your property listing on the Platform and (if selected) to provide online auction functionality, subject to the terms below and all applicable Platform policies.</p>
+    <div class="note info">ℹ️ <strong>This is a private listing.</strong> As a private seller, you take on the responsibilities that an estate agent would ordinarily perform — including viewings, communications with buyers, negotiation, and compliance with disclosure obligations in your jurisdiction. PropertyFinder provides the platform and technology only.</div>
+  </div>
+
+  <!-- ── SECTION 2 ── -->
+  <div class="sec" id="sec2">
+    <div class="sec-head">
+      <div class="sec-num">2</div>
+      <h2>Ownership, Authority &amp; Eligibility</h2>
+    </div>
+    <h3>2.1 Proof of Ownership</h3>
+    <p>You warrant that you are the registered owner of the property being listed, or that you have the legal authority to list and sell it (e.g. executor of an estate, trustee, or power of attorney holder). You must be able to provide documentary proof upon request, including but not limited to:</p>
+    <ul>
+      <li>Title deed or equivalent ownership document</li>
+      <li>FICA / KYC identity documents (ID or passport)</li>
+      <li>Rates clearance certificate or equivalent (where applicable)</li>
+      <li>If selling on behalf of an estate or trust: grant of probate, letters of administration, or trust deed</li>
+    </ul>
+    <h3>2.2 No Outstanding Conflicts</h3>
+    <p>You confirm that no other agent, auctioneer, or mandate holder has an existing exclusive mandate over this property that would prevent you from listing privately. You indemnify PropertyFinder against any claims arising from mandate disputes.</p>
+    <h3>2.3 Eligibility</h3>
+    <p>You must be 18 years or older, or a duly authorised representative of a legal entity. You must not be listed on any sanctions, fraud, or money-laundering watchlists applicable in your jurisdiction.</p>
+  </div>
+
+  <!-- ── SECTION 3 ── -->
+  <div class="sec" id="sec3">
+    <div class="sec-head">
+      <div class="sec-num">3</div>
+      <h2>Listing Content &amp; Accuracy</h2>
+    </div>
+    <h3>3.1 Accuracy Obligation</h3>
+    <p>All listing content you provide — including photographs, descriptions, stated dimensions, zoning, permitted use, legal title, and price — must be accurate, complete, and not misleading. You are solely responsible for the accuracy of your listing. PropertyFinder does not verify listing content.</p>
+    <div class="note warn">⚠️ <strong>Misrepresentation is a serious legal risk.</strong> As a private seller, you do not have the protection of a professional intermediary. Any misrepresentation of the property — whether in the listing description, photographs, or documents shared with buyers — may expose you to civil claims, regulatory penalties, or criminal liability depending on your jurisdiction. Always get legal advice if you are unsure.</div>
+    <h3>3.2 Photographs &amp; Media</h3>
+    <p>You must own the rights to all photographs, videos, and media uploaded to your listing or have the explicit permission of the copyright holder to use them. You grant PropertyFinder a worldwide, royalty-free licence to display and reproduce this content on the Platform and in marketing channels for the duration of your listing, and for a reasonable period thereafter for record-keeping and dispute resolution purposes.</p>
+    <h3>3.3 Property Defects &amp; Disclosure</h3>
+    <p>You must disclose all known material defects, latent defects, encumbrances, servitudes, bonds, or conditions affecting the property. Failure to disclose known defects may result in the sale being set aside or a damages claim against you. Many jurisdictions impose statutory disclosure obligations on private sellers — you are responsible for complying with these.</p>
+    <h3>3.4 Content Moderation</h3>
+    <p>PropertyFinder reserves the right to remove, edit, or reject any listing content that violates our policies, applicable law, or advertising standards. Listings may not include external contact details (phone numbers, email addresses, or social media links) in the description or images.</p>
+  </div>
+
+  <!-- ── SECTION 4 ── -->
+  <div class="sec" id="sec4">
+    <div class="sec-head">
+      <div class="sec-num">4</div>
+      <h2>Your Responsibilities as a Private Seller</h2>
+    </div>
+    <p>As a private seller, you assume full responsibility for all activities that would ordinarily be managed by a professional estate agent or auctioneer. These include but are not limited to:</p>
+
+    <h3>4.1 Viewings &amp; Access</h3>
+    <p>You are responsible for scheduling, managing, and attending all property viewings. PropertyFinder does not arrange viewings on your behalf. You must ensure buyers gain lawful access to the property and that viewings are conducted safely and in compliance with any occupant or tenancy obligations.</p>
+
+    <h3>4.2 Buyer Communication &amp; Negotiation</h3>
+    <p>All communications with prospective buyers, offers received, counter-offers, and negotiations are your sole responsibility. PropertyFinder provides a platform messaging system for initial enquiries, but any correspondence beyond that is between you and the buyer directly.</p>
+    <div class="note warn">⚠️ <strong>Never share banking details, OTPs, or personal financial information</strong> via unsecured channels. PropertyFinder will never request this information from you or a buyer via chat or email.</div>
+
+    <h3>4.3 Offer &amp; Sale Agreement</h3>
+    <p>You are responsible for reviewing, accepting, or declining any offer to purchase. PropertyFinder does not draft, review, or validate sale agreements. You are <strong>strongly advised to use a qualified conveyancer or property attorney</strong> to prepare and review the sale agreement before signing.</p>
+
+    <h3>4.4 FICA &amp; Anti-Money Laundering Compliance</h3>
+    <p>Private property transactions are subject to FICA (or equivalent AML legislation in your jurisdiction). You are responsible for ensuring that any buyer is properly identified and that the transaction complies with applicable anti-money laundering regulations. Your appointed conveyancer will typically assist with this, but the obligation also rests with you as the seller.</p>
+
+    <h3>4.5 Compliance Certificates</h3>
+    <p>Depending on your jurisdiction, you may be required to obtain compliance certificates before transfer — such as electrical, plumbing, gas, beetle, electric fence, or energy performance certificates. You are solely responsible for obtaining and providing these. PropertyFinder is not liable for any delays in transfer caused by outstanding certificates.</p>
+
+    <h3>4.6 Transfer &amp; Conveyancing</h3>
+    <p>You must appoint a registered conveyancer or attorney to manage the legal transfer of the property. Transfer costs, conveyancing fees, rates clearances, bond cancellation fees, taxes (including capital gains tax, transfer duty, and VAT where applicable), and all other regulatory costs are entirely your responsibility and are separate from PropertyFinder's commission.</p>
+  </div>
+
+  <!-- ── SECTION 5 ── -->
+  <div class="sec" id="sec5">
+    <div class="sec-head">
+      <div class="sec-num">5</div>
+      <h2>Commission, Fees &amp; Payment</h2>
+    </div>
+
+    <h3>5.1 Private Seller Commission Structure</h3>
+    <p>As a private seller (no agent or auctioneer involved), the following commission structure applies on a <strong>successfully completed sale</strong>:</p>
+
+    <table class="comm-table">
+      <thead>
+        <tr>
+          <th>Listing Type</th>
+          <th>PropertyFinder</th>
+          <th>Agent / Auctioneer</th>
+          <th>Total Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td><strong>Private / Owner Listed ✓ This Agreement</strong></td>
+          <td class="td-g">5%</td>
+          <td class="td-m">None — $0</td>
+          <td class="td-g">5%</td>
+        </tr>
+        <tr>
+          <td>Agent / Auctioneer Listed (for reference)</td>
+          <td>5%</td>
+          <td>5%</td>
+          <td>10%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Example:</strong> Your property sells for <strong>USD 400,000</strong><br>
+      PropertyFinder commission (5%) = <strong>USD 20,000</strong><br>
+      Agent commission = <strong>USD 0</strong> (private listing)<br>
+      <strong>You receive: USD 380,000</strong> net — before transfer costs, taxes, and conveyancing fees.
+    </div>
+
+    <h3>5.2 When Commission is Charged</h3>
+    <p>Commission is <strong>only charged on a successfully completed sale</strong>. It is deducted from the seller's proceeds at the time of transfer or closing. No commission is due if the property does not sell, if the auction receives no accepted bid, or if the sale falls through before transfer.</p>
+    <p>A tax invoice will be issued automatically at the time of deduction.</p>
+
+    <h3>5.3 Listing Fees</h3>
+    <p>Separate listing and promotional fees may apply depending on the listing tier and features selected (e.g. featured placement, premium photography, auction hosting). These fees are displayed at checkout and are <strong>prepaid upfront</strong>. No listing is published until payment has cleared. Listing fees are non-refundable once the listing is live.</p>
+
+    <h3>5.4 Auction Listings — Additional Terms</h3>
+    <p>If you choose to list your property as an online auction, the <a href="auction-seller-agreement.html">Online Auction Seller Agreement</a> also applies in full and must be signed separately. The 5% private seller commission applies equally to auction sales.</p>
+    <p>On a private auction listing, if the winning bidder defaults after an Accepted Bid, PropertyFinder charges the <strong>defaulting bidder</strong> (not you) a separate 5% Platform Commission on the accepted bid amount, payable within 48 hours — as set out in the <a href="auction-bidding-terms.html">Auction Bidding Terms, Section 5</a>. No success commission is owed by you as the seller on a defaulted sale.</p>
+
+    <div class="note warn">⚠️ <strong>Transfer costs are separate from commission.</strong> Transfer duty, stamp duty, conveyancing fees, FICA compliance costs, compliance certificates, bond cancellation fees, capital gains tax, VAT, and all other regulatory or closing costs are your responsibility and vary by country and property type. PropertyFinder is not liable for these costs.</div>
+
+    <p>See the <a href="auction-commission-breakdown.html">Commission Breakdown Calculator</a> for an interactive example of net proceeds at any sale price.</p>
+  </div>
+
+  <!-- ── SECTION 6 ── -->
+  <div class="sec" id="sec6">
+    <div class="sec-head">
+      <div class="sec-num">6</div>
+      <h2>Listing Duration, Withdrawal &amp; Cancellation</h2>
+    </div>
+    <h3>6.1 Listing Duration</h3>
+    <p>Your listing will remain active for the duration selected at checkout (typically 30, 60, or 90 days), or until the property is sold, withdrawn, or suspended. Listings may be renewed at the applicable rate.</p>
+    <h3>6.2 Withdrawal Before Sale</h3>
+    <p>You may withdraw your listing at any time before an accepted offer or accepted auction bid. Prepaid listing fees are non-refundable. Withdrawal does not attract a commission charge.</p>
+    <h3>6.3 Withdrawal After Accepted Offer / Bid</h3>
+    <p>If you withdraw or refuse to complete a sale after an offer has been formally accepted (or after an auction bid has been accepted), you may be liable for a withdrawal fee as set out in the <a href="commission-fees.html">Commission &amp; Fees Policy</a>, and may be subject to legal action by the buyer. Your listing may be suspended pending resolution.</p>
+    <div class="note danger">🚫 <strong>You may not withdraw an active auction listing once bids have been placed</strong>, except with PropertyFinder's prior written approval. Unauthorised withdrawal after bids are placed may result in immediate account suspension and fee recovery action.</div>
+  </div>
+
+  <!-- ── SECTION 7 ── -->
+  <div class="sec" id="sec7">
+    <div class="sec-head">
+      <div class="sec-num">7</div>
+      <h2>Anti-Fraud, Shill Bidding &amp; Off-Platform Dealing</h2>
+    </div>
+    <h3>7.1 Prohibited Conduct</h3>
+    <p>The following are strictly prohibited and may result in immediate listing removal, account suspension, and referral to law enforcement:</p>
+    <ul>
+      <li>Creating fake enquiries or bids to inflate perceived demand (shill bidding)</li>
+      <li>Instructing family members, associates, or agents to bid on your listing to drive up the price</li>
+      <li>Misrepresenting ownership, title, or the existence of a mandate</li>
+      <li>Listing a property you do not own or do not have authority to sell</li>
+      <li>Soliciting buyers to transact off-platform to avoid commission</li>
+      <li>Providing false identity or financial information during FICA/KYC verification</li>
+    </ul>
+    <h3>7.2 Off-Platform Transactions</h3>
+    <p>If a buyer introduced to you through PropertyFinder (via enquiry, auction, or listing interaction) subsequently purchases your property outside the Platform — whether to avoid commission or otherwise — PropertyFinder's 5% commission remains due and payable. PropertyFinder may enforce this obligation through legal action.</p>
+    <p>This obligation survives the withdrawal or expiry of your listing for a period of <strong>12 months</strong> from the date the buyer was first introduced via the Platform.</p>
+    <div class="note info">ℹ️ All on-platform communications and bid/enquiry records are stored and may be used as evidence in the event of a commission dispute or legal proceeding.</div>
+  </div>
+
+  <!-- ── SECTION 8 ── -->
+  <div class="sec" id="sec8">
+    <div class="sec-head">
+      <div class="sec-num">8</div>
+      <h2>Data Protection &amp; Privacy</h2>
+    </div>
+    <p>PropertyFinder processes your personal data as described in the <a href="privacy-policy.html">Privacy Policy</a>. By signing this Agreement, you consent to PropertyFinder using your contact details, listing data, and transaction records for the purpose of providing and improving the Platform services, and for regulatory compliance and dispute resolution.</p>
+    <p>Enquiries and buyer data passed to you through the Platform must be handled in compliance with applicable data protection legislation in your jurisdiction. You may not use buyer contact information for any purpose other than completing the property transaction.</p>
+  </div>
+
+  <!-- ── SECTION 9 ── -->
+  <div class="sec" id="sec9">
+    <div class="sec-head">
+      <div class="sec-num">9</div>
+      <h2>Platform Liability &amp; Indemnity</h2>
+    </div>
+    <h3>9.1 Platform Role</h3>
+    <p>PropertyFinder operates as a <strong>marketplace platform only</strong>. We are not a party to the sale agreement between you and any buyer. We do not provide legal, financial, tax, or conveyancing advice. We do not verify the accuracy of listing content, the identity of buyers, or the financial capacity of bidders.</p>
+    <h3>9.2 Limitation of Liability</h3>
+    <p>To the maximum extent permitted by law, PropertyFinder's total liability to you in connection with any listing or transaction is limited to the listing fees paid by you in the 12 months preceding the relevant claim. PropertyFinder is not liable for: loss of sale, buyer default, market price movements, failed transfers, or any consequential, indirect, or special losses.</p>
+    <h3>9.3 Your Indemnity to PropertyFinder</h3>
+    <p>You agree to indemnify and hold PropertyFinder harmless from all claims, losses, fines, penalties, and legal costs arising from: (a) inaccurate or misleading listing content; (b) listing a property without lawful authority; (c) intellectual property infringement in your uploaded content; (d) your failure to complete a confirmed sale; (e) mandate disputes with estate agents; or (f) any breach of applicable law or this Agreement.</p>
+  </div>
+
+  <!-- ── SECTION 10 ── -->
+  <div class="sec" id="sec10">
+    <div class="sec-head">
+      <div class="sec-num">10</div>
+      <h2>Governing Law, Amendments &amp; Entire Agreement</h2>
+    </div>
+    <p>This Agreement is governed by the laws applicable to PropertyFinder's contracting entity, subject to mandatory provisions in the jurisdiction where the property is situated. Any dispute arising under this Agreement shall be handled in accordance with the <a href="dispute-resolution.html">Dispute Resolution &amp; Arbitration Policy</a>.</p>
+    <p>PropertyFinder may update this Agreement from time to time. You will be notified of material changes via email and/or a prominent notice on the Platform. Continued use of the Platform after the effective date of any amendment constitutes your acceptance of the revised terms.</p>
+    <p>This Agreement, together with the <a href="commission-fees.html">Commission &amp; Fees Policy</a>, <a href="privacy-policy.html">Privacy Policy</a>, and any applicable <a href="auction-seller-agreement.html">Auction Seller Agreement</a>, constitutes the entire agreement between you and PropertyFinder regarding private seller listings.</p>
+  </div>
+
+  <!-- ── SECTION 11 — DETAILS & SIGNATURE ── -->
+  <div class="sec" id="sec11">
+    <div class="sec-head">
+      <div class="sec-num">11</div>
+      <h2>Your Details &amp; Digital Signature</h2>
+    </div>
+
+    <div class="note info" style="margin-bottom:20px">ℹ️ Please complete your details accurately. This information will be stored securely with your agreement record and used to generate your listing reference.</div>
+
+    <!-- SELLER DETAILS -->
+    <h3>About You</h3>
+    <div class="form-grid" style="margin-top:12px">
+      <div class="field">
+        <label>Full Legal Name <span>*</span></label>
+        <input type="text" id="fullName" placeholder="As it appears on your ID / title deed" oninput="up()">
+      </div>
+      <div class="field">
+        <label>ID / Passport Number <span>*</span></label>
+        <input type="text" id="idNumber" placeholder="National ID or passport number" oninput="up()">
+      </div>
+      <div class="field">
+        <label>Email Address <span>*</span></label>
+        <input type="email" id="email" placeholder="Your email address" oninput="up()">
+      </div>
+      <div class="field">
+        <label>Mobile Number <span>*</span></label>
+        <input type="tel" id="phone" placeholder="+1 or country code + number" oninput="up()">
+      </div>
+      <div class="field">
+        <label>Country of Residence <span>*</span></label>
+        <select id="country" onchange="up()">
+          <option value="">— Select country —</option>
+          <option>South Africa</option><option>United Kingdom</option><option>United States</option>
+          <option>Australia</option><option>United Arab Emirates</option><option>Portugal</option>
+          <option>Spain</option><option>France</option><option>Germany</option><option>Netherlands</option>
+          <option>Canada</option><option>New Zealand</option><option>Kenya</option>
+          <option>Nigeria</option><option>Ghana</option><option>Zimbabwe</option>
+          <option>Botswana</option><option>Namibia</option><option>Mauritius</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Listing Type</label>
+        <select id="listingType" onchange="up()">
+          <option value="">— Select —</option>
+          <option>Standard Sale Listing</option>
+          <option>Online Auction Listing</option>
+          <option>Both — Sale &amp; Auction</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PROPERTY DETAILS -->
+    <h3 style="margin-top:4px">Property Being Listed</h3>
+    <div class="form-grid" style="margin-top:12px">
+      <div class="field full">
+        <label>Property Address <span>*</span></label>
+        <input type="text" id="propAddress" placeholder="Full street address of the property" oninput="up()">
+      </div>
+      <div class="field">
+        <label>Property Type <span>*</span></label>
+        <select id="propType" onchange="up()">
+          <option value="">— Select —</option>
+          <option>Residential House</option><option>Apartment / Flat</option>
+          <option>Townhouse</option><option>Vacant Land / Plot</option>
+          <option>Farm / Agricultural</option><option>Commercial Building</option>
+          <option>Industrial Property</option><option>Holiday Home / Timeshare</option>
+          <option>Business (Going Concern)</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Asking / Reserve Price (USD)</label>
+        <input type="number" id="askingPrice" placeholder="e.g. 500000" oninput="up()">
+      </div>
+      <div class="field">
+        <label>Ownership Basis</label>
+        <select id="ownership" onchange="up()">
+          <option value="">— Select —</option>
+          <option>Sole Owner</option>
+          <option>Joint Owner</option>
+          <option>Executor / Estate</option>
+          <option>Trustee</option>
+          <option>Power of Attorney</option>
+          <option>Company / CC / Trust</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Existing Bond / Mortgage?</label>
+        <select id="bond" onchange="up()">
+          <option value="">— Select —</option>
+          <option>No — property is bond-free</option>
+          <option>Yes — bond will be cancelled at transfer</option>
+          <option>Yes — buyer is taking over the bond</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>Any known defects, encumbrances, or servitudes? (Optional)</label>
+        <textarea id="defects" placeholder="Describe any known material defects, rights of way, neighbour agreements, or legal encumbrances..." oninput="up()"></textarea>
+      </div>
+    </div>
+
+    <!-- CONSENTS -->
+    <h3 style="margin-top:8px">Declarations &amp; Consents</h3>
+    <div class="consents">
+      <label class="consent-box" id="cb1"><input type="checkbox" id="c1" onchange="up()"><span>I confirm that I am the registered owner of this property or have lawful authority to list and sell it, and I can provide proof of ownership upon request.</span></label>
+      <label class="consent-box" id="cb2"><input type="checkbox" id="c2" onchange="up()"><span>I have read and understood this Private Seller Listing Agreement in full, including my obligations regarding viewings, disclosure, compliance certificates, conveyancing, and FICA compliance.</span></label>
+      <label class="consent-box" id="cb3"><input type="checkbox" id="c3" onchange="up()"><span>I understand and agree to the commission structure: <strong>5% of the final sale price is payable to PropertyFinder</strong> on a successfully completed sale. No agent commission applies as this is a private listing.</span></label>
+      <label class="consent-box" id="cb4"><input type="checkbox" id="c4" onchange="up()"><span>I confirm that no valid exclusive mandate exists with another agent or auctioneer that would prevent this private listing. I indemnify PropertyFinder against any mandate disputes.</span></label>
+      <label class="consent-box" id="cb5"><input type="checkbox" id="c5" onchange="up()"><span>I understand that PropertyFinder is a marketplace platform only and is not a party to the sale agreement between me and the buyer. I will appoint my own conveyancer to handle the legal transfer.</span></label>
+      <label class="consent-box" id="cb6"><input type="checkbox" id="c6" onchange="up()"><span>I understand that if a buyer introduced through PropertyFinder purchases my property off-platform within 12 months, PropertyFinder's 5% commission remains due and payable.</span></label>
+      <label class="consent-box" id="cb7"><input type="checkbox" id="c7" onchange="up()"><span>I consent to PropertyFinder processing my personal data in accordance with the <a href="privacy-policy.html">Privacy Policy</a> for the purpose of providing listing services and regulatory compliance.</span></label>
+      <label class="consent-box" id="cb8"><input type="checkbox" id="c8" onchange="up()"><span>I confirm all information provided in this form is accurate and complete to the best of my knowledge. I understand that misrepresentation may result in listing removal, account suspension, legal action, and forfeiture of fees.</span></label>
+    </div>
+
+    <!-- SIGNATURE -->
+    <h3 style="margin-top:8px">Digital Signature</h3>
+    <p style="font-size:0.84rem;color:var(--muted);margin-bottom:12px">Sign below by drawing or typing your name. Your signature carries the same legal force as a handwritten signature.</p>
+    <div class="sig-tabs">
+      <button class="sig-tab active" id="tabDraw" onclick="switchTab('draw')">✏️ Draw Signature</button>
+      <button class="sig-tab" id="tabType" onclick="switchTab('type')">⌨️ Type Signature</button>
+    </div>
+    <div class="sig-area">
+      <canvas id="sigCanvas" width="900" height="130"></canvas>
+      <input type="text" id="typeInput" placeholder="Type your full legal name here..." oninput="up()">
+    </div>
+    <div class="sig-actions">
+      <button class="sig-btn" onclick="clearSig()">🗑 Clear</button>
+      <span id="sigStatus" style="font-size:0.78rem;color:var(--muted);align-self:center;margin-left:4px"></span>
+    </div>
+
+    <!-- PROGRESS -->
+    <div style="margin-top:24px">
+      <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+      <div class="progress-label" id="progLabel">0 of 8 consents — please complete all fields</div>
+    </div>
+    <button class="submit-btn" id="submitBtn" disabled onclick="submit()">
+      Sign &amp; Submit Private Seller Listing Agreement
+    </button>
+  </div>
+
+  <!-- SUCCESS PANEL -->
+  <div class="success-panel" id="successPanel">
+    <div class="success-icon">✅</div>
+    <h2>Agreement Signed Successfully</h2>
+    <p>Your Private Seller Listing Agreement has been submitted and recorded.</p>
+    <p>A confirmation email has been sent to <strong id="successEmail"></strong></p>
+    <div class="ref-box">
+      <div class="ref-label">Your Agreement Reference</div>
+      <div class="ref-num" id="successRef"></div>
+    </div>
+    <div class="next-steps">
+      <h3>📋 What happens next?</h3>
+      <ol>
+        <li>Check your email for a copy of this signed agreement and your reference number.</li>
+        <li>Your account will be enabled to create and manage private listings immediately.</li>
+        <li>Use the Listing Dashboard to upload property details, photos, and documents.</li>
+        <li>Your listing will go live once the listing fee payment clears (if applicable).</li>
+        <li>Buyers will be able to submit enquiries — you'll be notified by email and in-app.</li>
+        <li>When you receive an acceptable offer, appoint a conveyancer to handle the transfer.</li>
+        <li>On transfer, PropertyFinder's 5% commission is deducted from your proceeds. Done.</li>
+      </ol>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="pricing.html" style="padding:12px 28px;background:#c4a47c;color:#1a1408;border-radius:10px;font-weight:700;font-size:0.95rem;text-decoration:none;display:inline-block">Proceed to Payment →</a>
+      <a href="09-list-your-property.html" style="padding:10px 20px;background:var(--gd);color:#fff;border-radius:var(--r2);font-weight:700;font-size:0.88rem">Create Your First Listing →</a>
+      <a href="auction-commission-breakdown.html" style="padding:10px 20px;background:var(--snow);color:var(--gd);border:1px solid var(--border);border-radius:var(--r2);font-weight:700;font-size:0.88rem">View Commission Calculator</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © <span id="yr"></span> PropertyFinder International. All rights reserved. &nbsp;·&nbsp;
+  <a href="private-seller-listing-agreement.html">This Agreement</a> &nbsp;·&nbsp;
+  <a href="seller-listing-agreement.html">Agent Agreement</a> &nbsp;·&nbsp;
+  <a href="auction-seller-agreement.html">Auction Agreement</a> &nbsp;·&nbsp;
+  <a href="commission-fees.html">Fees</a> &nbsp;·&nbsp;
+  <a href="privacy-policy.html">Privacy</a>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ── DRAWING ──
+  const canvas = document.getElementById('sigCanvas');
+  const ctx    = canvas.getContext('2d');
+  let drawing  = false, hasSig = false, mode = 'draw';
+
+  function resize() {
+    const w = canvas.parentElement.clientWidth;
+    canvas.width = w * (window.devicePixelRatio || 1);
+    canvas.height = 130 * (window.devicePixelRatio || 1);
+    canvas.style.width  = w + 'px';
+    canvas.style.height = '130px';
+    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    ctx.strokeStyle = '#141c2b';
+    ctx.lineWidth   = 2.5;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  canvas.addEventListener('mousedown',  e => { drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove',  e => { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; canvas.classList.add('has-sig'); up(); });
+  canvas.addEventListener('mouseup',    () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); }, { passive: false });
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; canvas.classList.add('has-sig'); up(); }, { passive: false });
+  canvas.addEventListener('touchend',   () => drawing = false);
+
+  function switchTab(t) {
+    mode = t;
+    document.getElementById('tabDraw').classList.toggle('active', t === 'draw');
+    document.getElementById('tabType').classList.toggle('active', t === 'type');
+    canvas.style.display          = t === 'draw' ? 'block' : 'none';
+    document.getElementById('typeInput').style.display = t === 'type' ? 'block' : 'none';
+    hasSig = false;
+    up();
+  }
+
+  function clearSig() {
+    ctx.clearRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+    hasSig = false;
+    canvas.classList.remove('has-sig');
+    document.getElementById('typeInput').value = '';
+    document.getElementById('sigStatus').textContent = '';
+    up();
+  }
+
+  // ── VALIDATION ──
+  function hasSigValue() {
+    if (mode === 'draw') return hasSig;
+    return document.getElementById('typeInput').value.trim().length > 1;
+  }
+
+  const requiredFields = ['fullName','idNumber','email','phone','country','propAddress','propType'];
+  const checkboxIds    = ['c1','c2','c3','c4','c5','c6','c7','c8'];
+
+  function up() {
+    const allFields  = requiredFields.every(id => document.getElementById(id).value.trim() !== '');
+    const checked    = checkboxIds.filter(id => document.getElementById(id).checked);
+    const allChecked = checked.length === checkboxIds.length;
+    const sigOk      = hasSigValue();
+
+    // Update checkbox styles
+    checkboxIds.forEach(id => {
+      const box = document.getElementById(id).closest('.consent-box');
+      if (box) box.classList.toggle('checked', document.getElementById(id).checked);
+    });
+
+    // Progress
+    const total   = requiredFields.length + checkboxIds.length + 1; // +1 for sig
+    let   done    = requiredFields.filter(id => document.getElementById(id).value.trim() !== '').length;
+    done += checked.length;
+    if (sigOk) done++;
+    const pct = Math.round(done / total * 100);
+    document.getElementById('progFill').style.width  = pct + '%';
+    document.getElementById('progLabel').textContent =
+      checked.length + ' of 8 consents · ' + pct + '% complete' + (pct === 100 ? ' — ready to sign ✓' : '');
+
+    // Step indicators
+    document.getElementById('s1').className = 'step-num done';
+    document.getElementById('s2').className = allFields ? 'step-num done' : 'step-num active';
+    document.getElementById('s3').className = allFields ? 'step-num done' : 'step-num';
+    document.getElementById('s4').className = allChecked ? 'step-num done' : (allFields ? 'step-num active' : 'step-num');
+    document.getElementById('s5').className = (allChecked && sigOk) ? 'step-num done' : (allChecked ? 'step-num active' : 'step-num');
+
+    // Sig status
+    if (sigOk) document.getElementById('sigStatus').textContent = '✓ Signature captured';
+
+    // Submit
+    document.getElementById('submitBtn').disabled = !(allFields && allChecked && sigOk);
+  }
+
+  // ── SUBMIT ──
+  function submit() {
+    const g = id => (document.getElementById(id)||{}).value||'';
+    const sig = (() => { try { return document.getElementById('sigCanvas').toDataURL(); } catch(e) { return ''; } })();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = '⧗ Submitting…';
+
+    const payload = {
+      plan:          'Private Seller',
+      agreementType: 'Private Seller',
+      name:          g('fullName'),
+      email:         g('email'),
+      phone:         g('phone'),
+      country:       g('country'),
+      idNumber:      g('idNumber'),
+      listings:      g('listingType'),
+      city:          g('propAddress'),
+      syncSystem:    'Manual Upload',
+      signature:     sig,
+    };
+
+    fetch('https://property-finder.co.za/api/submit-agreement.php', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        localStorage.setItem('pf_agreement_private_seller', JSON.stringify({
+          signed: true, date: new Date().toISOString(),
+          plan: 'Private Seller', name: payload.name, ref: res.ref
+        }));
+        document.getElementById('sec11').style.display = 'none';
+        const panel = document.getElementById('successPanel');
+        document.getElementById('successEmail').textContent = payload.email;
+        document.getElementById('successRef').textContent   = res.ref || 'PF-PSL-' + Date.now().toString(36).toUpperCase().slice(-6);
+        panel.classList.add('show');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Sign & Submit Private Seller Listing Agreement';
+        alert('Submission error: ' + (res.error || 'Please try again.'));
+      }
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Sign & Submit Private Seller Listing Agreement';
+      alert('Network error — please check your connection and try again.');
+    });
+  }
+</script>
+
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

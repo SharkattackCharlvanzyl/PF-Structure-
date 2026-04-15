@@ -1,0 +1,16 @@
+{
+  "referenceId": "PF-VAL-LG56Q9",
+  "status": "pending",
+  "propertyType": "house",
+  "address": "45 Beach Road, Camps Bay",
+  "fullName": "Test User",
+  "email": "test@example.com",
+  "phone": "+27821234567",
+  "bedrooms": "4",
+  "bathrooms": "3",
+  "size": "350",
+  "condition": "excellent",
+  "notes": "Test notes",
+  "createdAt": "2026-04-04T21:01:32.997Z",
+  "ip": "::1"
+}

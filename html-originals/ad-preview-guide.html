@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PropertyFinder — Live Ad Preview on Real Devices</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#141c2b;--g2:#1a2535;--gd:#0e1520;--lime:#c4a47c;--bg:#080C09;--panel:#0f1710;--panel2:#141f16;--text:#F0F0F0;--muted:#7a8f7d;--line:rgba(255,255,255,0.07);--font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--lime);text-decoration:none}
+img{display:block;max-width:100%}
+
+.hero{background:linear-gradient(135deg,#000 0%,#0e1520 35%,#141c2b 65%,#040d06 100%);padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(196,164,124,0.14),transparent);pointer-events:none}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.hero-back{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;padding:6px 14px;border:1px solid rgba(255,255,255,0.12);border-radius:6px;background:rgba(255,255,255,0.05);margin-bottom:22px;transition:all 0.2s}
+.hero-back:hover{color:#fff;border-color:rgba(255,255,255,0.3);text-decoration:none}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.3);color:#c4a47c;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-family:var(--font-d);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:700;color:#fff;margin-bottom:14px;line-height:1.1}
+.hero h1 span{color:#c4a47c}
+.hero p{color:rgba(255,255,255,0.58);font-size:15.5px;line-height:1.75;max-width:600px;margin:0 auto}
+
+/* PAY PER CLICK GLOW */
+.ppc-hero{padding:56px 24px;background:linear-gradient(135deg,#000 0%,#0e1520 50%,#000 100%);text-align:center;position:relative;overflow:hidden}
+.ppc-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 50% 50%,rgba(196,164,124,0.07),transparent);pointer-events:none}
+.ppc-glow{display:inline-block;position:relative;font-family:var(--font-d);font-size:clamp(2.2rem,6vw,5rem);font-weight:800;color:#c4a47c;letter-spacing:-0.5px;line-height:1;text-shadow:0 0 20px rgba(196,164,124,0.9),0 0 40px rgba(196,164,124,0.7),0 0 80px rgba(196,164,124,0.4),0 0 140px rgba(196,164,124,0.2);animation:glowPulse 2.5s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 20px rgba(196,164,124,0.9),0 0 40px rgba(196,164,124,0.7),0 0 80px rgba(196,164,124,0.4),0 0 140px rgba(196,164,124,0.2)}50%{text-shadow:0 0 30px rgba(196,164,124,1),0 0 60px rgba(196,164,124,0.9),0 0 120px rgba(196,164,124,0.6),0 0 220px rgba(196,164,124,0.3)}}
+.ppc-sub{font-family:var(--font-d);font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:700;color:#fff;margin-top:12px;margin-bottom:16px}
+.ppc-explain{font-size:15px;color:rgba(255,255,255,0.52);max-width:640px;margin:0 auto 32px;line-height:1.85}
+.ppc-pills{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ppc-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.22);color:#c4a47c;font-size:13px;font-weight:700;padding:9px 18px;border-radius:999px}
+.ppc-pill span{font-size:15px}
+
+.section{padding:72px 24px}
+.section.dark{background:var(--panel)}
+.section.darker{background:var(--panel2)}
+.wrap{max-width:1200px;margin:0 auto}
+.s-eyebrow{font-size:11px;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;text-align:center}
+.s-title{font-family:var(--font-d);font-size:clamp(1.3rem,3vw,2rem);font-weight:700;color:#fff;text-align:center;margin-bottom:10px}
+.s-sub{font-size:14.5px;color:var(--muted);text-align:center;max-width:620px;margin:0 auto 48px;line-height:1.7}
+
+/* SHOWCASE */
+.showcase-wrap{max-width:1180px;margin:0 auto;background:linear-gradient(135deg,#141c2b,#1a2535);border:1px solid rgba(196,164,124,0.15);border-radius:24px;padding:48px 40px;text-align:center;position:relative;overflow:hidden}
+.showcase-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(196,164,124,0.05),transparent);pointer-events:none}
+.showcase-phones-img{width:100%;max-width:1100px;margin:0 auto;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.04);position:relative;z-index:1}
+.showcase-caption{margin-top:24px;font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;position:relative;z-index:1}
+.showcase-caption strong{color:rgba(255,255,255,0.7)}
+
+.format-legend{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:32px;position:relative;z-index:1}
+@media(max-width:900px){.format-legend{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:540px){.format-legend{grid-template-columns:repeat(2,1fr)}}
+.fl-item{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 10px;text-align:center}
+.fl-item .fl-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:3px}
+.fl-item .fl-dims{font-size:9.5px;color:var(--muted);margin-bottom:6px}
+.fl-item .fl-price{font-family:var(--font-d);font-size:1.2rem;font-weight:700;color:var(--lime);text-shadow:0 0 10px rgba(196,164,124,0.4)}
+.fl-item .fl-unit{font-size:9px;color:var(--muted)}
+
+/* LEADER SECTION */
+.leader-section{padding:72px 24px;background:linear-gradient(135deg,#000,#0e1520,#000)}
+.leader-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:800px){.leader-grid{grid-template-columns:1fr;gap:40px}}
+.leader-phone-wrap{display:flex;justify-content:center}
+.leader-phone-img{max-width:320px;width:100%;filter:drop-shadow(0 24px 60px rgba(0,0,0,0.8));animation:phoneFloat 4s ease-in-out infinite}
+@keyframes phoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.leader-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.3);color:#c4a47c;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:999px;margin-bottom:16px}
+.leader-title{font-family:var(--font-d);font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:#fff;margin-bottom:12px;line-height:1.2}
+.leader-desc{color:rgba(255,255,255,0.52);font-size:14.5px;line-height:1.85;margin-bottom:28px}
+.leader-price-box{display:inline-flex;align-items:baseline;gap:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.3);border-radius:12px;padding:14px 22px;margin-bottom:16px}
+.lp-amt{font-family:var(--font-d);font-size:2.8rem;font-weight:700;color:#c4a47c;line-height:1;text-shadow:0 0 20px rgba(196,164,124,0.5)}
+.lp-unit{font-size:14px;color:rgba(255,255,255,0.45)}
+.leader-ppc-note{font-size:13px;color:var(--lime);font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:24px}
+
+.spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+@media(max-width:640px){.spec-grid{grid-template-columns:1fr}}
+.spec-item{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.spec-item .si-ico{font-size:18px;flex-shrink:0}
+.si-label{font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.si-val{font-size:13px;font-weight:700;color:#fff;margin-top:2px}
+
+/* PPC EXPLAINER */
+.ppc-explainer{background:linear-gradient(135deg,#0e1520,#141c2b);border:1px solid rgba(196,164,124,0.2);border-radius:20px;padding:48px 40px;margin:0 auto 60px;max-width:1000px;text-align:center;position:relative;overflow:hidden}
+.ppc-explainer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(196,164,124,0.05),transparent);pointer-events:none}
+.ppc-explainer .ppc-big2{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;color:#c4a47c;position:relative;text-shadow:0 0 30px rgba(196,164,124,0.6),0 0 60px rgba(196,164,124,0.3);animation:glowPulse 2.5s ease-in-out infinite;margin-bottom:12px}
+.ppc-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.ppc-step{display:flex;flex-direction:column;align-items:center;gap:8px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px 16px;min-width:150px;flex:1;max-width:190px}
+.ppc-step .ps-ico{font-size:28px}
+.ppc-step .ps-title{font-size:13px;font-weight:700;color:#fff;text-align:center}
+.ppc-step .ps-desc{font-size:11px;color:var(--muted);text-align:center;line-height:1.55}
+.ppc-arrow{font-size:20px;color:rgba(196,164,124,0.35);display:flex;align-items:center}
+@media(max-width:640px){.ppc-arrow{display:none}}
+
+/* SPECS TABLE */
+.specs-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.specs-table th{padding:12px 16px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--line)}
+.specs-table td{padding:13px 16px;border-bottom:1px solid var(--line);color:rgba(255,255,255,0.72);vertical-align:middle}
+.specs-table tr:last-child td{border-bottom:none}
+.specs-table tr:hover td{background:rgba(255,255,255,0.015)}
+.t-name{font-weight:700;color:#fff!important}
+.t-price{font-family:var(--font-d);font-size:1.1rem!important;font-weight:700;color:var(--lime)!important;text-shadow:0 0 10px rgba(196,164,124,0.3)}
+.t-badge{display:inline-flex;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:800}
+.t-badge.popular{background:rgba(196,164,124,0.15);color:#c4a47c;border:1px solid rgba(196,164,124,0.3)}
+.t-badge.mobile-only{background:rgba(37,99,235,0.15);color:#60a5fa;border:1px solid rgba(37,99,235,0.3)}
+.t-badge.premium{background:rgba(220,38,38,0.15);color:#f87171;border:1px solid rgba(220,38,38,0.3)}
+
+/* PRICING CARDS */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.pricing-grid{grid-template-columns:1fr}}
+.price-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px 18px;text-align:center;transition:all 0.3s;position:relative}
+.price-card:hover{border-color:rgba(196,164,124,0.4);transform:translateY(-3px)}
+.price-card.featured{border-color:rgba(196,164,124,0.4);background:rgba(196,164,124,0.04)}
+.price-card.featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:#003d20;padding:4px 14px;border-radius:4px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.pc-name{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.pc-dims{font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:12px}
+.pc-price{font-family:var(--font-d);font-size:2.2rem;font-weight:700;color:var(--lime);line-height:1;margin-bottom:3px;text-shadow:0 0 15px rgba(196,164,124,0.4)}
+.pc-unit{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.pc-ppc{font-size:11px;color:var(--lime);font-weight:700;margin-bottom:14px}
+.pc-cta{display:block;width:100%;padding:10px;border-radius:8px;background:transparent;border:1.5px solid rgba(196,164,124,0.35);color:var(--lime);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s;text-decoration:none}
+.pc-cta:hover{background:var(--g);border-color:var(--g);color:#fff;text-decoration:none}
+.price-card.featured .pc-cta{background:var(--g);border-color:var(--g);color:#fff}
+
+/* CTA */
+.cta-banner{background:linear-gradient(135deg,var(--gd),var(--g),var(--g2));padding:72px 24px;text-align:center;position:relative;overflow:hidden}
+.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 50%,rgba(255,255,255,0.06),transparent)}
+.cta-inner{max-width:650px;margin:0 auto;position:relative}
+.cta-glow{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,3rem);font-weight:800;color:#fff;margin-bottom:8px;text-shadow:0 0 30px rgba(255,255,255,0.2)}
+.cta-glow span{color:#c4a47c;text-shadow:0 0 20px rgba(196,164,124,0.8),0 0 40px rgba(196,164,124,0.5)}
+.cta-inner p{color:rgba(255,255,255,0.68);font-size:15px;margin-bottom:32px;line-height:1.7}
+.cta-btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:999px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);transition:all 0.2s;text-decoration:none;border:none}
+.cta-btn.primary{background:#c4a47c;color:#003d20}
+.cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(196,164,124,0.4);text-decoration:none}
+.cta-btn.outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.35)}
+.cta-btn.outline:hover{background:rgba(255,255,255,0.1);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <a href="advertise.html" class="hero-back">← Back to Advertise</a>
+    <div class="hero-badge">📱 Real Device Previews</div>
+    <h1>See Your Ad on a <span>Real Phone</span></h1>
+    <p>Exactly how your PropertyFinder ad appears on real mobile screens — 6 ad formats, real prices, real advertisers showing exactly what buyers will see.</p>
+  </div>
+</div>
+
+<!-- BIG GLOWING PAY PER CLICK -->
+<div class="ppc-hero">
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto">
+    <div class="ppc-glow">YOU ONLY PAY PER CLICK</div>
+    <div class="ppc-sub">Not per impression. Not per day. Only when someone taps your ad.</div>
+    <p class="ppc-explain">Every dollar you spend goes directly towards real people clicking your ad and landing on your website. No wasted budget on people who scroll past. If nobody clicks — you pay nothing. Zero.</p>
+    <div class="ppc-pills">
+      <div class="ppc-pill"><span>✅</span> Zero impressions charge</div>
+      <div class="ppc-pill"><span>💰</span> $50 minimum to start</div>
+      <div class="ppc-pill"><span>📊</span> Real-time click tracking</div>
+      <div class="ppc-pill"><span>⏹️</span> Pause or stop anytime</div>
+      <div class="ppc-pill"><span>🔒</span> No contracts</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 PHONES IMAGE SHOWCASE -->
+<div class="section dark">
+  <div class="wrap">
+    <div class="s-eyebrow">All 6 Ad Formats — Real Screens</div>
+    <div class="s-title">Every Format. Every Price. One Platform.</div>
+    <div class="s-sub">Real ads shown on real mobile screens — exactly as buyers see them when browsing PropertyFinder listings across 185 countries.</div>
+
+    <div class="showcase-wrap">
+      <img src="Advertisement_adds_on_Mobiles.png" alt="PropertyFinder all 6 ad formats on real mobile phones" class="showcase-phones-img">
+      <div class="showcase-caption">
+        <strong>6 real ad formats</strong> — Medium Rectangle · Leaderboard · Half-Page · Wide Skyscraper · Mobile Leaderboard · Large Rectangle<br>
+        Sample advertisers: Plumbing · Attorney · Solar · Home Builders · Legal Services · Emergency Repairs
+      </div>
+
+      <div class="format-legend">
+        <div class="fl-item">
+          <div class="fl-name">Medium Rectangle</div>
+          <div class="fl-dims">300 × 250 px</div>
+          <div class="fl-price">$0.12</div>
+          <div class="fl-unit">per click</div>
+        </div>
+        <div class="fl-item">
+          <div class="fl-name">Leaderboard</div>
+          <div class="fl-dims">728 × 90 px</div>
+          <div class="fl-price">$0.10</div>
+          <div class="fl-unit">per click</div>
+        </div>
+        <div class="fl-item" style="border-color:rgba(196,164,124,0.3);background:rgba(196,164,124,0.06)">
+          <div class="fl-name" style="color:#c4a47c">Half-Page ⭐</div>
+          <div class="fl-dims">300 × 600 px</div>
+          <div class="fl-price">$0.15</div>
+          <div class="fl-unit">per click</div>
+        </div>
+        <div class="fl-item">
+          <div class="fl-name">Wide Skyscraper</div>
+          <div class="fl-dims">160 × 600 px</div>
+          <div class="fl-price">$0.18</div>
+          <div class="fl-unit">per click</div>
+        </div>
+        <div class="fl-item">
+          <div class="fl-name">Mobile Leaderboard</div>
+          <div class="fl-dims">320 × 50 px</div>
+          <div class="fl-price">$0.08</div>
+          <div class="fl-unit">per click</div>
+        </div>
+        <div class="fl-item">
+          <div class="fl-name">Large Rectangle</div>
+          <div class="fl-dims">336 × 280 px</div>
+          <div class="fl-price">$0.14</div>
+          <div class="fl-unit">per click</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SINGLE PHONE LEADERBOARD -->
+<div class="leader-section">
+  <div class="leader-grid">
+    <div class="leader-phone-wrap">
+      <img src="Mobile_add_leaderboard.png" alt="Mobile Leaderboard Ad on Real Phone" class="leader-phone-img">
+    </div>
+    <div>
+      <div class="leader-badge">📱 Format Spotlight</div>
+      <div class="leader-title">Mobile Leaderboard<br>— Most Affordable Format</div>
+      <p class="leader-desc">Appears at the top of the mobile screen the moment users open a page. Compact, unmissable, and app-like. Ideal for attorneys, financial services, plumbers, and any business wanting constant mobile presence at the lowest CPC available.</p>
+      <div class="leader-price-box">
+        <div class="lp-amt">$0.08</div>
+        <div class="lp-unit">per click · 320 × 50 px</div>
+      </div>
+      <div class="leader-ppc-note"><span>✅</span> YOU ONLY PAY WHEN SOMEONE CLICKS — not for views</div>
+      <div class="spec-grid">
+        <div class="spec-item"><span class="si-ico">📐</span><div><div class="si-label">Size</div><div class="si-val">320 × 50 px · @2x: 640 × 100</div></div></div>
+        <div class="spec-item"><span class="si-ico">💰</span><div><div class="si-label">CPC Rate</div><div class="si-val">$0.08 per click</div></div></div>
+        <div class="spec-item"><span class="si-ico">📱</span><div><div class="si-label">Placement</div><div class="si-val">Mobile only · Sticky top/bottom</div></div></div>
+        <div class="spec-item"><span class="si-ico">📁</span><div><div class="si-label">Formats</div><div class="si-val">PNG · JPG · GIF · WebP · SVG</div></div></div>
+        <div class="spec-item"><span class="si-ico">📦</span><div><div class="si-label">Max File Size</div><div class="si-val">150 KB</div></div></div>
+        <div class="spec-item"><span class="si-ico">🎯</span><div><div class="si-label">Best For</div><div class="si-val">Legal · Finance · Services · Agents</div></div></div>
+      </div>
+      <div style="margin-top:24px">
+        <a href="advertise.html" style="display:inline-flex;align-items:center;gap:8px;background:#c4a47c;color:#003d20;font-size:14.5px;font-weight:800;padding:14px 28px;border-radius:999px;text-decoration:none;font-family:'DM Sans',sans-serif">🚀 Book This Format →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW PPC WORKS -->
+<div class="section darker">
+  <div class="wrap">
+    <div class="ppc-explainer">
+      <div class="ppc-big2">YOU ONLY PAY PER CLICK</div>
+      <p style="color:rgba(255,255,255,0.48);font-size:14.5px;max-width:540px;margin:0 auto;line-height:1.8;position:relative">No impression fees. No daily rates. No wasted budget.<br>Every cent = a real person who clicked your ad.</p>
+      <div class="ppc-row">
+        <div class="ppc-step"><div class="ps-ico">💰</div><div class="ps-title">Deposit Budget</div><div class="ps-desc">Load $50 minimum into your ad wallet. Unused balance never expires.</div></div>
+        <div class="ppc-arrow">→</div>
+        <div class="ppc-step"><div class="ps-ico">📱</div><div class="ps-title">Ad Goes Live</div><div class="ps-desc">Your ad appears to buyers browsing listings in your target area.</div></div>
+        <div class="ppc-arrow">→</div>
+        <div class="ppc-step"><div class="ps-ico">👆</div><div class="ps-title">Someone Clicks</div><div class="ps-desc">Only when a real buyer taps your ad does your balance decrease.</div></div>
+        <div class="ppc-arrow">→</div>
+        <div class="ppc-step"><div class="ps-ico">📊</div><div class="ps-title">Track Results</div><div class="ps-desc">See every click, spend, and CTR in real-time in your dashboard.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL SPECS TABLE -->
+<div class="section dark">
+  <div class="wrap">
+    <div class="s-eyebrow">Full Specification Guide</div>
+    <div class="s-title">All 6 Ad Formats & Pricing</div>
+    <div class="s-sub">Every dimension, file requirement and price. You only pay when someone clicks.</div>
+
+    <div style="background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:48px">
+      <table class="specs-table">
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Dimensions</th>
+            <th>@2x Retina</th>
+            <th>Max File</th>
+            <th>Placement</th>
+            <th style="color:var(--lime)">CPC — Per Click</th>
+            <th>Tag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="t-name">Medium Rectangle</td><td>300 × 250 px</td><td>600 × 500 px</td><td>200 KB</td><td>Inline between listings</td><td class="t-price">$0.12</td><td><span class="t-badge popular">Popular</span></td></tr>
+          <tr><td class="t-name">Leaderboard</td><td>728 × 90 px</td><td>1456 × 180 px</td><td>200 KB</td><td>Top of page · Desktop</td><td class="t-price">$0.10</td><td></td></tr>
+          <tr><td class="t-name">Half-Page ⭐</td><td>300 × 600 px</td><td>600 × 1200 px</td><td>300 KB</td><td>Full-width inline</td><td class="t-price">$0.15</td><td><span class="t-badge popular">Best CTR</span></td></tr>
+          <tr><td class="t-name">Wide Skyscraper</td><td>160 × 600 px</td><td>320 × 1200 px</td><td>250 KB</td><td>Sidebar · Sticky scroll</td><td class="t-price">$0.18</td><td><span class="t-badge premium">Premium</span></td></tr>
+          <tr><td class="t-name">Mobile Leaderboard</td><td>320 × 50 px</td><td>640 × 100 px</td><td>150 KB</td><td>Sticky top/bottom · Mobile</td><td class="t-price">$0.08</td><td><span class="t-badge mobile-only">Mobile Only</span></td></tr>
+          <tr><td class="t-name">Large Rectangle</td><td>336 × 280 px</td><td>672 × 560 px</td><td>200 KB</td><td>Inline between listings</td><td class="t-price">$0.14</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BOTH IMAGES SHOWN AS VISUAL REFERENCE -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:60px;align-items:start">
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:16px;padding:28px;text-align:center">
+        <div class="s-eyebrow" style="margin-bottom:14px">All 6 Formats</div>
+        <img src="Advertisement_adds_on_Mobiles.png" alt="All 6 ad formats" style="width:100%;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+        <p style="margin-top:12px;font-size:12px;color:var(--muted)">Medium · Leaderboard · Half-Page · Skyscraper · Mobile Leader · Large Rectangle</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:16px;padding:28px;text-align:center">
+        <div class="s-eyebrow" style="margin-bottom:14px">Mobile Leaderboard</div>
+        <img src="Mobile_add_leaderboard.png" alt="Mobile Leaderboard" style="width:100%;max-width:240px;margin:0 auto;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+        <p style="margin-top:12px;font-size:12px;color:var(--muted)">$0.08/click · Mobile only</p>
+      </div>
+    </div>
+    @media(max-width:640px){div[style*="grid-template-columns:2fr 1fr"]{grid-template-columns:1fr!important}}
+
+    <!-- PRICING CARDS -->
+    <div class="s-title" style="margin-bottom:8px">Choose Your Format</div>
+    <div class="s-sub">CPC pricing — you only pay when someone clicks. Start from $50.</div>
+    <div class="pricing-grid">
+      <div class="price-card"><div class="pc-name">Mobile Leaderboard</div><div class="pc-dims">320 × 50 px · Mobile only</div><div class="pc-price">$0.08</div><div class="pc-unit">per click</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+      <div class="price-card"><div class="pc-name">Leaderboard</div><div class="pc-dims">728 × 90 px · Desktop</div><div class="pc-price">$0.10</div><div class="pc-unit">per click</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+      <div class="price-card"><div class="pc-name">Medium Rectangle</div><div class="pc-dims">300 × 250 px · All devices</div><div class="pc-price">$0.12</div><div class="pc-unit">per click</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+      <div class="price-card"><div class="pc-name">Large Rectangle</div><div class="pc-dims">336 × 280 px · All devices</div><div class="pc-price">$0.14</div><div class="pc-unit">per click</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+      <div class="price-card featured"><div class="pc-name">Half-Page</div><div class="pc-dims">300 × 600 px · Highest CTR</div><div class="pc-price">$0.15</div><div class="pc-unit">per click</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+      <div class="price-card"><div class="pc-name">Wide Skyscraper</div><div class="pc-dims">160 × 600 px · Desktop sidebar</div><div class="pc-price">$0.18</div><div class="pc-unit">per click · Max visibility</div><div class="pc-ppc">✓ Only pay per click</div><a href="advertise.html" class="pc-cta">Start for $50 →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-glow">YOU ONLY PAY<br><span>PER CLICK</span></div>
+    <p>$50 minimum deposit · No contracts · No lock-in · Real-time tracking · Pause anytime<br>Reach 2.4 million monthly property buyers across 185 countries.</p>
+    <div class="cta-btn-row">
+      <a href="advertise.html" class="cta-btn primary">🚀 Start Advertising Now →</a>
+      <a href="advertise.html#faq" class="cta-btn outline">📋 Read the FAQ</a>
+    </div>
+  </div>
+</div>
+
+<div style="background:#030905;color:rgba(255,255,255,0.3);text-align:center;padding:20px;font-size:12.5px;font-family:'DM Sans',sans-serif">
+  © <span id="y"></span> PropertyFinder Global · Ad Placement Preview Guide · CPC rates are launch pricing ·
+  <a href="advertise.html" style="color:rgba(255,255,255,0.4)">Back to Advertise</a> ·
+  <a href="terms-of-use.html" style="color:rgba(255,255,255,0.4)">Terms</a>
+</div>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

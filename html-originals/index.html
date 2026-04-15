@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PropertyFinder Global — Find Your Dream Property</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* CORE VARIABLES (from 01-core-styles.html — required for standalone)  */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ══ PropertyFinder Dark Navy Palette ══ */
+      --pf-green: #c4a47c;
+      --pf-green-light: #d4b98c;
+      --pf-green-dark: #b8976a;
+      --pf-accent: #c4a47c;
+      --pf-gold: #c4a47c;
+      --pf-gold-light: #d4b98c;
+      /* Dark Neutrals */
+      --pf-snow: #1a2535;
+      --pf-warm: #1a2535;
+      --pf-pale: #1f2d3d;
+      /* Text — cream on dark */
+      --pf-text: #e8dfc8;
+      --pf-text-muted: #8a7d5a;
+      /* Borders */
+      --pf-border: rgba(196,164,124,0.18);
+      --pf-border-strong: rgba(196,164,124,0.35);
+      /* Radius */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 10px;
+      --radius-xl: 14px;
+      /* Shadows */
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
+      --shadow-card-hover: 0 4px 12px rgba(196,164,124,0.1), 0 12px 36px rgba(0,0,0,0.2);
+      --shadow-glow: 0 0 0 1px rgba(196,164,124,0.12);
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; overflow-x: clip; width: 100%; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #141c2b;
+      color: #e8dfc8;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip;
+      width: 100%;
+      min-width: 0;
+      letter-spacing: -0.01em;
+      padding-top: 72px; /* desktop */
+    }
+
+    .display-font { font-family: 'Cinzel', 'Playfair Display', Georgia, serif; }
+
+    /* ── Utility ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
+    @media (min-width: 640px) { .container { padding: 0 32px; } }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* HEADER — Sticky Navigation Bar                                       */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      width: 100%;
+      background: linear-gradient(135deg,#0e1520 0%,#141c2b 55%,#1a2535 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212,175,119,0.2);
+      transition: box-shadow var(--transition);
+    }
+    .site-header.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.25); }
+
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; min-width: 0; width: 100%;
+    }
+
+    /* ── Logo ── */
+    .logo { display: flex; align-items: center; gap: 12px; min-width: 0; flex-shrink: 1; }
+    .logo-icon {
+      width: 40px; height: 40px; background: rgba(255,255,255,0.1);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(212,175,119,0.25); flex-shrink: 0;
+    }
+    .logo-icon svg { width: 22px; height: 22px; color: #D4AF77; }
+    .logo-text {
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 600; color: #FFFFFF;
+      letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ── Desktop Nav Links ── */
+    .nav-links { display: none; align-items: center; gap: 2px; }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+
+    .nav-link {
+      padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+      font-weight: 600; color: rgba(232,223,200,0.82);
+      transition: all 0.2s; background: transparent; border: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-link:hover, .nav-link.active { color: #e8dfc8; background: rgba(196,164,124,0.1); }
+
+    /* Remove all boxes from highlight and auction links */
+    .nav-link-highlight {
+      background: transparent !important; color: rgba(232,223,200,0.82) !important;
+      font-weight: 600; border: none !important;
+    }
+    .nav-link-highlight:hover { background: rgba(196,164,124,0.1) !important; color: #e8dfc8 !important; }
+    .nav-link-auction {
+      background: transparent !important; color: rgba(232,223,200,0.82) !important;
+      font-weight: 600; border: none !important; position: relative;
+    }
+    .nav-link-auction::before {
+      content: 'LIVE'; position: absolute; top: -8px; right: -4px;
+      background: #c4a47c; color: #1a1408; font-size: 0.5rem; font-weight: 800;
+      padding: 2px 5px; border-radius: 3px;
+    }
+    .nav-link-auction:hover { background: rgba(196,164,124,0.1) !important; color: #e8dfc8 !important; }
+
+    /* ── Header Actions (right side) ── */
+    .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    /* Country selector button */
+    .country-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: all var(--transition); font-size: 0.85rem;
+      color: rgba(255,255,255,0.7); font-weight: 500;
+    }
+    .country-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+    .country-btn img { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; }
+    .country-btn span { display: none; }
+    @media (min-width: 640px) { .country-btn span { display: inline; } }
+
+    /* Auth buttons — logged out state */
+    .header-auth { display: flex; align-items: center; gap: 8px; }
+
+        .btn-login-REPLACED {
+      display: none; padding: 8px 16px; border-radius: 6px;
+      font-size: 0.88rem; font-weight: 500; color: rgba(255,255,255,0.85);
+      transition: all var(--transition);
+    }
+    .btn-login:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    @media (min-width: 640px) { .btn-login { display: block; } }
+
+    .btn-signup {
+      padding: 9px 22px; border-radius: 6px; font-size: 0.88rem;
+      font-weight: 600; color: #0F3D2A; background: #D4AF77;
+      border: 1px solid rgba(212,175,119,0.6);
+      transition: all var(--transition); letter-spacing: 0.02em;
+    }
+    .btn-signup:hover { background: #E2C899; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,175,119,0.3); }
+
+    /* Auth buttons — responsive override */
+    @media (max-width: 900px) {
+      .header-auth { display: none; }
+    }
+
+    /* ── Mobile Menu Toggle ── */
+    .mobile-menu-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 6px;
+      transition: background var(--transition);
+    }
+    .mobile-menu-btn:hover { background: rgba(255,255,255,0.08); }
+    .mobile-menu-btn svg { width: 22px; height: 22px; color: rgba(255,255,255,0.85); }
+    @media (min-width: 768px) { .mobile-menu-btn { display: none; } }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* MOBILE NAV — Full-Screen Drawer                                      */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .mobile-nav {
+      display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+      background: rgba(248,249,246,0.98); backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px); z-index: 99;
+      padding: 24px; flex-direction: column; gap: 4px;
+      animation: slideDown 0.3s ease;
+    }
+    .mobile-nav.open { display: flex; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .mobile-nav a {
+      display: block; padding: 16px 20px; border-radius: var(--radius-md);
+      font-size: 1.05rem; font-weight: 600; color: var(--pf-text);
+      transition: all var(--transition);
+    }
+    .mobile-nav a:hover { background: var(--pf-pale); color: var(--pf-green); }
+
+    .mobile-nav .mobile-nav-cta {
+      margin-top: auto; display: flex; flex-direction: column; gap: 8px;
+    }
+    .mobile-nav .mobile-nav-cta a {
+      text-align: center; border-radius: var(--radius-md);
+    }
+    .mobile-nav .mobile-nav-cta .cta-primary {
+      background: var(--pf-green); color: white;
+    }
+
+    /* ── Mobile Nav Refinement (override) ── */
+    .mobile-nav a {
+      border-radius: 6px !important;
+    }
+    .mobile-nav .mobile-nav-cta .cta-primary {
+      background: #0F3D2A !important;
+      border-radius: 8px !important;
+    }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* TOAST NOTIFICATIONS (stub for standalone testing)                     */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .pf-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      padding: 14px 28px; border-radius: 8px !important;
+      font-size: 0.95rem; font-weight: 600; color: white;
+      z-index: 10000; animation: toastIn 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .pf-toast.success { background: linear-gradient(135deg,#0e1520 0%,#141c2b 55%,#1a2535 100%); }
+    .pf-toast.error { background: #dc2626; }
+    .pf-toast.info { background: #1E5C45; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* DEMO: Spacer content for scroll testing                               */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .demo-spacer {
+      min-height: 200vh;
+      padding: 48px 24px 60px;
+      background: linear-gradient(180deg, var(--pf-snow) 0%, var(--pf-warm) 100%);
+      width: 100%; box-sizing: border-box;
+    }
+    .demo-spacer h2 {
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--pf-green); margin-bottom: 12px;
+    }
+    .demo-spacer p {
+      color: var(--pf-text-muted); font-size: 0.95rem; max-width: 600px;
+    }
+    .demo-section-markers {
+      display: flex; flex-direction: column; gap: 200px; margin-top: 60px;
+    }
+    .demo-marker {
+      padding: 24px 32px; background: #1a2535;
+      border: 1px dashed var(--pf-border-strong); border-radius: var(--radius-md);
+      font-weight: 600; color: var(--pf-text-muted); font-size: 0.9rem;
+      word-break: break-word; overflow-wrap: break-word;
+    }
+  
+/* ── Shared base additions ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;color:#e8dfc8;background:#141c2b}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+.site-header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0e1520 0%,#141c2b 55%,#1a2535 100%);
+  border-bottom:1px solid rgba(255,255,255,0.1)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;color:#fff}
+.logo-text{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#fff}
+.logo-badge{font-size:0.6rem;font-weight:800;background:rgba(255,255,255,0.2);
+  color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:0.08em}
+.nav-links{display:none;align-items:center;gap:2px}
+@media(min-width:768px){.nav-links{display:flex}}
+.nav-link{padding:8px 14px;border-radius:6px;font-size:0.88rem;font-weight:500;
+  color:rgba(255,255,255,0.75);text-decoration:none;white-space:nowrap;
+  transition:all 0.2s;border:none;background:none;cursor:pointer;font-family:inherit}
+.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,0.12)}
+.nav-link-auction{background:rgba(255,215,0,0.12)!important;color:#FFD700!important}
+.nav-link-auction:hover{background:rgba(255,215,0,0.22)!important}
+.nav-link-highlight{background:rgba(255,255,255,0.15)!important;color:#fff!important;font-weight:700!important}
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-auth{display:flex;align-items:center;gap:8px}
+.btn-login{padding:8px 16px;border-radius:6px;font-size:0.82rem;font-weight:600;color:#e8dfc8;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.3);
+  color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.25);cursor:pointer;font-family:inherit;transition:all 0.2s}
+.btn-login:hover{background:rgba(196,164,124,0.2);color:#e8dfc8}
+.btn-signup{padding:8px 16px;border-radius:6px;font-size:0.82rem;font-weight:700;color:#1a1408;background:#c4a47c;border:1px solid #c4a47c;
+  color:#141c2b;background:#1a2535;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.btn-signup:hover{background:#b8976a;color:#1a1408;transform:translateY(-1px)}
+.mobile-menu-btn{display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;border-radius:8px;width:40px;height:40px;cursor:pointer}
+@media(min-width:768px){.mobile-menu-btn{display:none}}
+.mobile-nav{display:none;flex-direction:column;gap:4px;padding:12px 0}
+.mobile-nav.open{display:flex}
+.mobile-nav .nav-link{color:rgba(255,255,255,0.85);padding:12px 8px}
+.pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#1A1A1A;color:#fff;padding:12px 24px;border-radius:8px;
+  font-size:0.88rem;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:opacity 0.4s;white-space:nowrap;pointer-events:none}
+.pf-toast.success{background:#141c2b}
+.pf-toast.error{background:#DC2626}
+.pf-toast.info{background:#1A4FA0}
+
+
+/* ── Hero CSS (from file 03 — untouched) ── */
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* CORE VARIABLES (from 01-core-styles.html — required for standalone)  */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pf-green: #c4a47c;
+      --pf-green-light: #d4b98c;
+      --pf-green-dark: #b8976a;
+      --pf-accent: #c4a47c;
+      --pf-gold: #c4a47c;
+      --pf-gold-light: #d4b98c;
+      --pf-snow: #1a2535;
+      --pf-warm: #1a2535;
+      --pf-pale: #1f2d3d;
+      --pf-text: #e8dfc8;
+      --pf-text-muted: #8a7d5a;
+      --pf-border: rgba(196,164,124,0.18);
+      --pf-border-strong: rgba(196,164,124,0.35);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 10px;
+      --radius-xl: 14px;
+      --shadow-card: 0 1px 3px rgba(196,164,124,0.04), 0 4px 16px rgba(196,164,124,0.03);
+      --shadow-card-hover: 0 4px 12px rgba(196,164,124,0.06), 0 12px 36px rgba(196,164,124,0.06);
+      --shadow-glow: 0 0 0 1px rgba(196,164,124,0.08);
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; overflow-x: clip; width: 100%; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #141c2b; color: #e8dfc8; line-height: 1.65;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip; width: 100%; min-width: 0; letter-spacing: -0.01em;
+    }
+    .display-font { font-family: 'Cinzel', 'Playfair Display', Georgia, serif; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
+    @media (min-width: 640px) { .container { padding: 0 32px; } }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; }
+
+    /* Reveal Animations */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* Global Emoji Enhancement */
+    .wiz-enjoy-confetti, .wiz-opt-emoji { text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* HERO SECTION                                                         */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      padding: 100px 0 120px;
+    }
+    @media (min-width: 768px) { .hero { padding: 130px 0 150px; } }
+    .hero::before {
+      content: ''; position: absolute; top: -40%; right: -15%; width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(196,164,124,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -30%; left: -10%; width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(196,164,124,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-grid-pattern {
+      position: absolute; inset: 0; opacity: 0.02;
+      background-image:
+        linear-gradient(rgba(196,164,124,0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196,164,124,0.4) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .hero-content { position: relative; z-index: 2; text-align: center; max-width: 800px; margin: 0 auto; }
+    .hero h1 {
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 600; color: white; line-height: 1.18;
+      margin-bottom: 24px; letter-spacing: 0.02em;
+    }
+    .hero h1 em {
+      font-style: italic; display: block; margin-top: 8px;
+      color: rgba(196,164,124,0.85); font-weight: 400;
+      font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.95); max-width: 540px; margin: 0 auto 40px;
+      line-height: 1.7; font-weight: 600;
+    }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* WIZARD PROGRESS BAR                                                   */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .wizard-progress { max-width: 480px; margin: 0 auto 28px; position: relative; }
+    .wp-track {
+      height: 4px; background: rgba(255,255,255,0.15); border-radius: 4px;
+      position: absolute; top: 50%; left: 24px; right: 24px; transform: translateY(-50%);
+    }
+    .wp-fill {
+      height: 100%; border-radius: 4px; background: var(--pf-gold);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .wp-steps { display: flex; justify-content: space-between; position: relative; z-index: 1; }
+    .wp-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition); color: rgba(255,255,255,0.5);
+      font-weight: 700; font-size: 0.8rem;
+    }
+    .wp-dot span { pointer-events: none; }
+    .wp-dot.active { background: #FFFFFF; border-color: #FFFFFF; color: var(--pf-green); }
+    .wp-dot.done { background: #FFFFFF; border-color: #FFFFFF; color: var(--pf-accent); }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* WIZARD CARD                                                           */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .wizard-card {
+      max-width: 680px; margin: 0 auto;
+      background: #FFFFFF; border-radius: var(--radius-xl); padding: 32px 28px;
+      box-shadow: none; border: 2px solid var(--pf-border-strong);
+      min-height: 260px; position: relative;
+    }
+    @media (max-width: 768px) {
+      body { padding-top: 58px !important; }
+      .site-header { height: 58px !important; }
+    }
+    @media (max-width: 640px) { .wizard-card { padding: 24px 18px; } }
+
+    /* Steps show/hide */
+    .wiz-step { display: none; animation: wizFadeIn 0.4s ease; }
+    .wiz-step.active { display: block; }
+    @keyframes wizFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .wiz-step-header { text-align: center; margin-bottom: 24px; }
+    .wiz-step-num {
+      display: inline-block; padding: 4px 14px; border-radius: 4px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; background: var(--pf-green); color: white; margin-bottom: 8px;
+    }
+    .wiz-step-title {
+      font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 700; color: var(--pf-text); margin-bottom: 4px;
+    }
+    .wiz-step-sub { font-size: 0.9rem; color: var(--pf-text-muted); }
+
+    /* ── Step 1: Option Cards (Image-based) ── */
+    .wiz-options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .wiz-options-img { gap: 16px; }
+    .wiz-option-card-img {
+      position: relative; border-radius: var(--radius-lg); overflow: hidden;
+      border: 2px solid var(--pf-border); background: #FFFFFF;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: none;
+    }
+    .wiz-option-card-img:hover { border-color: var(--pf-green); transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+    .wiz-option-card-img.selected { border-color: var(--pf-green); box-shadow: 0 0 0 3px rgba(196,164,124,0.15); }
+    .wiz-card-img { position: relative; height: 120px; overflow: hidden; }
+    .wiz-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .wiz-option-card-img:hover .wiz-card-img img { transform: scale(1.02); }
+    .wiz-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%); }
+    .wiz-card-badge {
+      position: absolute; top: 10px; right: 10px;
+      padding: 4px 10px; border-radius: 4px;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .wiz-card-badge.buy { background: var(--pf-gold); color: #1a1a1a; }
+    .wiz-card-badge.rent { background: var(--pf-accent); color: white; }
+    .wiz-card-content { padding: 14px 16px; text-align: center; background: #1a2535; }
+    .wiz-card-content .wiz-opt-label { display: block; font-size: 1.1rem; font-weight: 700; color: var(--pf-text); margin-bottom: 2px; }
+    .wiz-card-content .wiz-opt-desc { display: block; font-size: 0.75rem; color: var(--pf-text-muted); }
+    @media (max-width: 500px) {
+      .wiz-card-img { height: 90px; }
+      .wiz-card-content { padding: 10px 12px; }
+      .wiz-card-content .wiz-opt-label { font-size: 0.95rem; }
+    }
+
+    /* Icon-based cards (kept for compatibility) */
+    .wiz-option-card {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 24px 16px; border-radius: var(--radius-lg);
+      border: 2px solid var(--pf-border); background: #FFFFFF;
+      transition: all var(--transition); text-align: center;
+    }
+    .wiz-option-card:hover { border-color: var(--pf-green); background: var(--pf-pale); transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+    .wiz-option-card.selected { border-color: var(--pf-green); background: var(--pf-pale); box-shadow: 0 0 0 3px rgba(196,164,124,0.15); }
+    .wiz-opt-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%), var(--pf-accent));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(196,164,124,0.2);
+    }
+    .wiz-opt-icon svg { width: 26px; height: 26px; color: white; }
+    .wiz-opt-label { font-size: 1rem; font-weight: 700; color: var(--pf-text); }
+    .wiz-opt-desc { font-size: 0.78rem; color: var(--pf-text-muted); }
+
+    /* Enjoy step icon */
+    .wiz-enjoy-icon {
+      width: 56px; height: 56px; margin: 0 auto 12px;
+      background: linear-gradient(135deg, var(--pf-accent), var(--pf-green));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(196,164,124,0.3);
+      animation: pulseSuccess 2s ease-in-out infinite;
+    }
+    .wiz-enjoy-icon svg { width: 32px; height: 32px; color: white; }
+    @keyframes pulseSuccess {
+      0%, 100% { box-shadow: 0 4px 16px rgba(196,164,124,0.3); }
+      50% { box-shadow: 0 4px 24px rgba(196,164,124,0.5); }
+    }
+
+    /* ── Step 2: Country Search & Grid ── */
+    .wiz-country-search { margin-bottom: 12px; }
+    .wiz-country-search-input {
+      width: 100%; padding: 10px 16px; border-radius: var(--radius-md);
+      border: 2px solid var(--pf-border); background: #FFFFFF;
+      font-size: 0.9rem; color: var(--pf-text); transition: all var(--transition);
+    }
+    .wiz-country-search-input:focus { outline: none; border-color: var(--pf-green); }
+    .wiz-country-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+      max-height: 280px; overflow-y: auto; padding: 4px;
+      scrollbar-width: thin; scrollbar-color: var(--pf-green) var(--pf-pale);
+    }
+    .wiz-country-grid::-webkit-scrollbar { width: 6px; }
+    .wiz-country-grid::-webkit-scrollbar-track { background: var(--pf-pale); border-radius: 3px; }
+    .wiz-country-grid::-webkit-scrollbar-thumb { background: var(--pf-green); border-radius: 3px; }
+    @media (max-width: 640px) { .wiz-country-grid { grid-template-columns: repeat(3, 1fr); max-height: 240px; } }
+    @media (max-width: 400px) { .wiz-country-grid { grid-template-columns: repeat(2, 1fr); } }
+    .wiz-region-btn {
+      display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+      border-radius:999px;border:1.5px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);
+      font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;
+      transition:all 0.2s;
+    }
+    .wiz-region-btn:hover,.wiz-region-btn.wiz-region-active {
+      background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.5);color:#fff;
+    }
+    .wiz-reg-count {
+      background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:99px;font-size:11px;
+    }
+    .wiz-country-card {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 10px 6px; border-radius: var(--radius-md);
+      border: 2px solid var(--pf-border); background: #FFFFFF;
+      transition: all var(--transition); text-align: center;
+    }
+    .wiz-country-card:hover { border-color: var(--pf-green); background: var(--pf-pale); transform: translateY(-2px); }
+    .wiz-country-card.selected { border-color: var(--pf-green); background: var(--pf-pale); box-shadow: 0 0 0 3px rgba(196,164,124,0.15); }
+    .wiz-country-card.hidden { display: none; }
+    .wiz-country-card img { width: 36px; height: 24px; object-fit: cover; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .wc-name { font-size: 0.68rem; font-weight: 700; color: var(--pf-text); line-height: 1.2; }
+    .wc-count { font-size: 0.58rem; color: var(--pf-text-muted); }
+
+    /* ── Step 3: Language Grid ── */
+    .wiz-lang-grid { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .wiz-lang-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 16px 24px; border-radius: var(--radius-md);
+      border: 2px solid var(--pf-border); background: #FFFFFF;
+      transition: all var(--transition); min-width: 160px; justify-content: center;
+    }
+    .wiz-lang-card:hover { border-color: var(--pf-green); background: var(--pf-pale); transform: translateY(-2px); }
+    .wiz-lang-card.selected { border-color: var(--pf-green); background: var(--pf-pale); box-shadow: 0 0 0 3px rgba(196,164,124,0.15); }
+    .wl-emoji { font-size: 1.4rem; }
+    .wl-name { font-size: 0.95rem; font-weight: 700; color: var(--pf-text); }
+
+    /* ── Step 4: Search Bar ── */
+    .wiz-search-wrap { max-width: 560px; margin: 0 auto; }
+    .wiz-search-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px; background: #FFFFFF; border-radius: var(--radius-lg);
+      border: 2px solid var(--pf-border); transition: border-color var(--transition);
+    }
+    .wiz-search-bar:focus-within { border-color: var(--pf-green); }
+    .wiz-search-flag {
+      width: 36px; height: 36px; border-radius: 10px; background: var(--pf-pale);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      border: 1px solid var(--pf-border);
+    }
+    .wiz-search-flag img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; }
+    .wiz-search-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-size: 0.95rem; color: var(--pf-text); min-width: 0; padding: 8px 4px;
+    }
+    .wiz-search-input::placeholder { color: #aaa; }
+    .wiz-search-go {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 20px; border-radius: 12px;
+      background: var(--pf-green); color: white;
+      font-size: 0.88rem; font-weight: 600;
+      box-shadow: 0 2px 12px rgba(196,164,124,0.3);
+      transition: all var(--transition); flex-shrink: 0; white-space: nowrap;
+    }
+    .wiz-search-go:hover { background: var(--pf-green-light); }
+    .wiz-search-go svg { width: 16px; height: 16px; }
+
+    /* Voice search button */
+    .voice-btn {
+      position: relative; width: 38px; height: 38px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; background: rgba(196,164,124,0.06);
+      color: var(--pf-green); transition: all var(--transition);
+    }
+    .voice-btn:hover { background: rgba(196,164,124,0.1); }
+    .voice-btn svg { width: 18px; height: 18px; }
+    .voice-btn .ai-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--pf-gold); color: white; font-size: 7px;
+      font-weight: 800; padding: 2px 5px; border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(196,164,124,0.4); letter-spacing: 0.05em;
+    }
+    /* Voice listening state */
+    .voice-btn.listening {
+      background: #dc2626 !important; color: white !important;
+      animation: voicePulse 1s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(220,38,38,0.4);
+    }
+    .voice-btn.listening .ai-badge { background: #1a2535; color: #dc2626; }
+    @keyframes voicePulse {
+      0%   { box-shadow: 0 0 0 0 rgba(220,38,38,0.5); }
+      70%  { box-shadow: 0 0 0 10px rgba(220,38,38,0); }
+      100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+    }
+    /* Voice not supported */
+    .voice-btn.not-supported { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Step 5: Enjoy ── */
+    .wiz-enjoy { text-align: center; }
+    .wiz-summary-chips {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0;
+    }
+    .wiz-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 4px; font-size: 0.78rem;
+      font-weight: 600; background: #1a2535; color: #e8dfc8;
+      border: 1px solid var(--pf-border);
+    }
+    .wiz-chip img { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; }
+    .wiz-chip svg { width: 12px; height: 12px; }
+    .wiz-enjoy-msg { font-size: 0.85rem; color: var(--pf-text-muted); margin: 12px 0; line-height: 1.5; }
+    .wiz-restart-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 20px; border-radius: 4px;
+      background: #1a2535; color: #e8dfc8;
+      font-size: 0.8rem; font-weight: 600;
+      border: 2px solid var(--pf-border); transition: all var(--transition);
+    }
+    .wiz-restart-btn:hover { background: var(--pf-pale); border-color: var(--pf-green); }
+
+    /* ── Wizard Nav ── */
+    .wiz-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--pf-border);
+    }
+    .wiz-back-btn {
+      display: flex; align-items: center; gap: 4px;
+      padding: 8px 16px; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; color: var(--pf-text-muted);
+      transition: all var(--transition);
+    }
+    .wiz-back-btn:hover { color: var(--pf-green); background: var(--pf-pale); }
+    .wiz-step-indicator { font-size: 0.78rem; color: var(--pf-text-muted); font-weight: 500; }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* HERO AUCTION BUTTON — Premium Corporate                              */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .hero-auction-btn-wrap { text-align: center; margin: 44px auto 0; max-width: 560px; }
+    .hero-auction-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+      min-width: 380px; padding: 22px 48px;
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.18em;
+      color: #FFFFFF; text-decoration: none;
+      background: linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      border: 1px solid rgba(196,164,124,0.5); border-radius: 8px;
+      position: relative; overflow: hidden; cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 8px rgba(196,164,124,0.15), 0 8px 32px rgba(196,164,124,0.1);
+      animation: none; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .hero-auction-btn::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 100%);
+      border-radius: 8px 8px 0 0; pointer-events: none;
+    }
+    .hero-auction-btn::after {
+      content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.15) 70%, transparent 100%);
+      transform: skewX(-20deg); animation: neonStreak 5s ease-in-out infinite; pointer-events: none;
+    }
+    .hero-auction-btn:hover {
+      transform: translateY(-2px); border-color: #1a2535;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 4px 12px rgba(196,164,124,0.2), 0 12px 40px rgba(196,164,124,0.15);
+    }
+    .hero-auction-btn:active { transform: translateY(0); }
+    @keyframes neonStreak { 0% { left: -120%; } 45%, 100% { left: 140%; } }
+
+    .neon-live-indicator {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 1.35rem; font-weight: 800; letter-spacing: 0.18em;
+      color: #FFFFFF; text-transform: uppercase;
+      background: rgba(255,255,255,0.15); padding: 6px 18px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.4);
+      text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(196,164,124,0.5);
+      animation: liveGlow 1.5s ease-in-out infinite;
+    }
+    @keyframes liveGlow {
+      0%, 100% { text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(196,164,124,0.5); }
+      50% { text-shadow: 0 0 12px #fff, 0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(196,164,124,0.7), 0 0 80px rgba(196,164,124,0.4); }
+    }
+    .neon-live-dot {
+      width: 10px; height: 10px; background: #FFFFFF; border-radius: 50%;
+      box-shadow: 0 0 6px #fff, 0 0 15px rgba(196,164,124,0.8), 0 0 30px rgba(196,164,124,0.5);
+      animation: neonDotPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes neonDotPulse { 0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 6px #fff, 0 0 15px rgba(196,164,124,0.8); } 50% { opacity: 0.7; transform: scale(1.3); box-shadow: 0 0 10px #fff, 0 0 25px rgba(196,164,124,1), 0 0 45px rgba(196,164,124,0.6); } }
+    .neon-btn-text { position: relative; z-index: 1; text-shadow: none; }
+    .neon-btn-icon { font-size: 1.2rem; filter: none; }
+    .hero-auction-sub { margin-top: 18px; font-size: 0.9rem; color: rgba(255,255,255,0.9); letter-spacing: 0.02em; font-weight: 600; }
+    .hero-auction-sub strong { color: #c4a47c; text-shadow: none; font-weight: 700; }
+    @media (max-width: 520px) {
+      .hero-auction-btn { min-width: 0; width: 100%; padding: 20px 28px; font-size: 1.15rem; gap: 10px; letter-spacing: 1px; }
+      .neon-live-indicator { font-size: 1.1rem; padding: 5px 14px; }
+    }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* TRUST BADGES                                                          */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .trust-badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .trust-badge {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 4px;
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(4px);
+      border: 1px solid rgba(196,164,124,0.15);
+    }
+    .trust-badge svg { width: 12px; height: 12px; color: #c4a47c; }
+    .trust-badge span { font-size: 0.62rem; font-weight: 500; color: rgba(255,255,255,0.7); letter-spacing: 0.03em; }
+    @media (max-width: 640px) { .trust-badges { gap: 6px; } .trust-badge { padding: 4px 8px; } .trust-badge span { font-size: 0.58rem; } }
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* TOAST (stub for standalone)                                           */
+    /* ══════════════════════════════════════════════════════════════════════ */
+    .pf-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+      color: white; z-index: 10000; animation: toastIn 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .pf-toast.success { background: #141c2b; }
+    .pf-toast.info { background: #1a2535; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  
+
+/* ── Homepage cards ── */
+.sections-grid{padding:80px 0;background:#141c2b}
+.sections-grid h2{text-align:center;font-family:'Cinzel',serif;font-size:1.8rem;color:#e8dfc8;
+  color:#141c2b;margin-bottom:8px}
+.sections-grid .sub{text-align:center;color:#8a7d5a;font-size:1rem;margin-bottom:48px}
+.cards-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.section-card{background:#1a2535;border-radius:16px;padding:28px 24px;text-decoration:none;
+  color:#e8dfc8;box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  transition:all 0.25s;border:1.5px solid transparent;display:flex;flex-direction:column;gap:10px}
+.section-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(196,164,124,0.15);
+  border-color:#141c2b}
+.card-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:1.5rem}
+.section-card h3{font-size:1.05rem;font-weight:800;color:#e8dfc8;margin:0}
+.section-card p{font-size:0.84rem;color:#8a7d5a;line-height:1.5;flex:1;margin:0}
+.card-arrow{font-size:0.82rem;font-weight:700;color:#c4a47c;margin-top:4px}
+
+
+
+
+
+
+/* ── Footer ── */
+footer{background:#1A1A1A;color:rgba(255,255,255,0.6);padding:40px 0;text-align:center;font-size:0.85rem}
+footer a{color:rgba(255,255,255,0.6);text-decoration:none;margin:0 12px}
+footer a:hover{color:#fff}
+.footer-links{margin-bottom:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+
+
+/* ── Navbar mobile fixes ── */
+@media (max-width: 767px) {
+  .header-inner { height: 64px; padding: 0 12px; }
+  .logo { gap: 8px; }
+  .logo-icon { width: 34px; height: 34px; }
+  .logo-text { font-size: 1rem; }
+  .logo-badge { font-size: 0.55rem; padding: 2px 5px; }
+  .header-actions { gap: 6px; }
+  .btn-signup {
+    padding: 8px 14px; font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  
+  .mobile-menu-btn { width: 36px; height: 36px; }
+  body { padding-top: 64px; }
+}
+@media (max-width: 400px) {
+  .logo-badge { display: none; }
+  .logo-text { font-size: 0.92rem; }
+  .btn-signup { padding: 7px 11px; font-size: 0.75rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════ */
+/* MOBILE RESPONSIVENESS FIXES — PropertyFinder Global                  */
+/* ══════════════════════════════════════════════════════════════════════ */
+
+/* Search bar mobile fix */
+@media (max-width: 480px) {
+  .wiz-search-wrap { padding: 0 2px; }
+  .wiz-search-bar { flex-wrap: wrap; gap: 6px; padding: 10px; }
+  .wiz-search-flag { display: none; }
+  .wiz-search-input { width: 100%; min-width: 0; font-size: 1rem; order: 1; }
+  .voice-btn { order: 2; width: 44px; height: 44px; flex-shrink: 0; }
+  .wiz-search-go { order: 3; flex: 1; justify-content: center; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; }
+}
+
+/* Wizard card mobile */
+@media (max-width: 480px) {
+  .wizard-card { padding: 20px 14px; margin: 0 4px; }
+  .wiz-step-title { font-size: 1.1rem; }
+  .wiz-options-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wiz-card-img { height: 90px; }
+  .wiz-card-content { padding: 10px 10px 12px; }
+  .wiz-opt-label { font-size: 0.9rem; }
+  .wiz-opt-desc { font-size: 0.72rem; }
+  .wiz-country-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 280px; }
+  .wiz-country-card { padding: 10px 8px; }
+  .wiz-country-card img { width: 36px; height: 24px; }
+  .wc-name { font-size: 0.78rem; }
+  .wc-count { font-size: 0.65rem; }
+  .wiz-lang-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .wiz-lang-card { padding: 12px 10px; min-width: 0; }
+}
+
+/* Wizard progress dots mobile */
+@media (max-width: 400px) {
+  .wizard-progress { max-width: 100%; padding: 0 8px; }
+  .wp-dot { width: 28px; height: 28px; font-size: 0.7rem; }
+}
+
+/* Hero section mobile */
+@media (max-width: 640px) {
+  .hero { padding: 60px 0 80px; }
+  .hero h1 { font-size: 1.8rem; margin-bottom: 16px; }
+  .hero-sub { font-size: 0.95rem; margin-bottom: 28px; }
+}
+
+}
+
+/* Homepage cards mobile */
+@media (max-width: 640px) {
+  .cards-wrap { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .section-card { padding: 18px 14px; }
+  .sections-grid h2 { font-size: 1.4rem; }
+  .sections-grid .sub { font-size: 0.88rem; margin-bottom: 28px; }
+  .sections-grid { padding: 48px 0; }
+}
+@media (max-width: 360px) {
+  .cards-wrap { grid-template-columns: 1fr; }
+}
+
+/* Mobile nav improvements */
+@media (max-width: 767px) {
+  .mobile-nav {
+    position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg,#0e1520 0%,#141c2b 55%,#1a2535 100%); overflow-y: auto; z-index: 99;
+    padding: 16px 16px 32px;
+  }
+  .mobile-nav a {
+    color: rgba(255,255,255,0.9) !important;
+    font-size: 1.1rem; padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0 !important;
+  }
+  .mobile-nav a:hover { background: rgba(255,255,255,0.1) !important; }
+  .mobile-nav a:last-child { border-bottom: none; }
+}
+
+/* Header logo mobile */
+@media (max-width: 360px) {
+  .logo-text { font-size: 1rem; }
+  .logo-badge { display: none; }
+}
+
+/* Footer mobile */
+@media (max-width: 480px) {
+  footer { padding: 28px 16px; font-size: 0.78rem; }
+  footer a { margin: 0 6px; }
+  .footer-links { gap: 4px; }
+}
+
+/* Touch targets — all buttons at least 44px on mobile */
+@media (max-width: 767px) {
+  .wiz-back-btn, .wiz-restart-btn, .btn-login, .btn-signup { min-height: 44px; }
+  .wp-dot { min-width: 36px; min-height: 36px; }
+  button { -webkit-tap-highlight-color: transparent; }
+}
+
+
+/* ══ MOBILE NAV COMPLETE FIX — overrides all conflicts ══ */
+
+/* Force mobile nav hidden by default — no matter what */
+#mobileNav {
+  display: none !important;
+  position: fixed !important;
+  top: 64px !important;
+  left: 0 !important; right: 0 !important; bottom: 0 !important;
+  background: #0F3D2A !important;
+  z-index: 999 !important;
+  flex-direction: column !important;
+  padding: 8px 16px 32px !important;
+  overflow-y: auto !important;
+  gap: 0 !important;
+  animation: slideDown 0.3s ease;
+}
+#mobileNav.open { display: flex !important; }
+
+#mobileNav a {
+  display: block !important;
+  padding: 18px 20px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: rgba(255,255,255,0.92) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+  transition: background 0.2s !important;
+}
+#mobileNav a:last-child { border-bottom: none !important; }
+#mobileNav a:hover,
+#mobileNav a.active { 
+  background: rgba(255,255,255,0.1) !important; 
+  color: #fff !important;
+}
+#mobileNav a.nav-link-auction { color: #c4a47c !important; }
+#mobileNav a.nav-link-highlight { color: #D4AF77 !important; }
+
+/* Logo fix — never truncate */
+.logo { min-width: 0; flex-shrink: 1; max-width: calc(100% - 140px); }
+.logo-text { 
+  font-size: 1rem !important; 
+  overflow: hidden !important; 
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 140px;
+}
+
+/* Header compact on mobile */
+@media (max-width: 767px) {
+  .site-header { top: 0 !important; }
+  .header-inner { height: 64px !important; padding: 0 14px !important; }
+  body { padding-top: 64px !important; }
+  #mobileNav { top: 64px !important; }
+  
+  /* Smaller Sign Up button */
+  .btn-signup {
+    padding: 8px 12px !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+  }
+  /* Hide Log In on mobile */
+  
+  
+  /* Smaller logo icon */
+  .logo-icon { width: 34px !important; height: 34px !important; }
+  .logo-badge { font-size: 0.5rem !important; padding: 2px 4px !important; }
+  
+  /* Hamburger always visible */
+  .mobile-menu-btn { 
+    display: flex !important;
+    width: 38px !important; height: 38px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  #mobileNav { display: none !important; }
+  .mobile-menu-btn { display: none !important; }
+}
+
+  
+    /* ── FORCE: no boxes on any nav link ── */
+    .nav-link, .nav-link-auction, .nav-link-highlight,
+    .btn-login, a.nav-link {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: rgba(232,223,200,0.82) !important;
+      padding: 6px 10px !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+    }
+    .nav-link:hover, .nav-link-auction:hover, .nav-link-highlight:hover,
+    .btn-login:hover {
+      background: rgba(196,164,124,0.1) !important;
+      color: #e8dfc8 !important;
+    }
+    /* Only Sign Up gets a gold box */
+    .btn-signup {
+      background: #c4a47c !important;
+      color: #1a1408 !important;
+      border: 1px solid #c4a47c !important;
+      padding: 6px 14px !important;
+      border-radius: 6px !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+    }
+</style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+<header id="siteHeader" style="position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0e1520 0%,#141c2b 55%,#1a2535 100%);border-bottom:1px solid rgba(196,164,124,0.15);font-family:'DM Sans',sans-serif;width:100%;box-sizing:border-box">
+
+  <!-- ROW 1: Logo + Secondary Links + Auth Buttons -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:48px;border-bottom:1px solid rgba(196,164,124,0.08)">
+    <div style="display:flex;align-items:center;gap:4px">
+      <a href="index.html" style="font-family:'Cinzel',Georgia,serif;font-size:1rem;font-weight:700;color:#e8dfc8;text-decoration:none;white-space:nowrap;margin-right:8px">Property<span style="color:#c4a47c">Finder</span></a>
+      <span style="width:1px;height:18px;background:rgba(196,164,124,0.2);margin:0 6px"></span>
+      <a href="calculators.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Calculators</a>
+      <a href="advertise.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Advertise With Us</a>
+      <a href="how-it-works.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">How It Works</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <a href="login.html" id="dashBtn" style="display:inline-flex;align-items:center;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;background:transparent;border:1px solid rgba(196,164,124,0.3);color:#e8dfc8" onmouseover="this.style.background='rgba(196,164,124,0.1)'" onmouseout="this.style.background='transparent'">👤 My Dashboard</a>
+      <a href="login.html" id="loginBtn" style="display:inline-flex;align-items:center;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;background:transparent;border:1px solid rgba(196,164,124,0.3);color:#e8dfc8" onmouseover="this.style.background='rgba(196,164,124,0.1)'" onmouseout="this.style.background='transparent'">Log In</a>
+      <a href="login.html?tab=signup" id="signupBtn" style="display:inline-flex;align-items:center;padding:6px 14px;border-radius:6px;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;background:#c4a47c;border:1px solid #c4a47c;color:#1a1408;font-weight:700" onmouseover="this.style.background='#b8976a'" onmouseout="this.style.background='#c4a47c'">Sign Up</a>
+    </div>
+  </div>
+
+  <!-- ROW 2: Main Nav Links Centred -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:2px;padding:0 20px;height:40px">
+    <a href="index.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Home</a>
+    <a href="buy.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Buy</a>
+    <a href="rent.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Rent</a>
+    <a href="business.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Business for Sale</a>
+    <a href="auctions.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s;color:#c4a47c">🔨 Auctions</a>
+    <a href="auctions-live-preview.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s;color:#c4a47c;border:1px solid rgba(196,164,124,0.4);padding:3px 10px;font-size:0.76rem">● Live Auction</a>
+    <a href="countries.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">185 Countries</a>
+    <a href="valuation.html" style="color:rgba(232,223,200,0.75);font-size:0.8rem;font-weight:600;padding:5px 9px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:all 0.2s">Valuate My Property</a>
+  
+    <button id="navCountryBtn" onclick="csShowPicker();document.getElementById('countrySection').scrollIntoView({behavior:'smooth'})" style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1.5px solid rgba(196,164,124,0.5);background:rgba(196,164,124,0.08);color:#c4a47c;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-left:8px;white-space:nowrap" onmouseover="this.style.background='rgba(196,164,124,0.18)'" onmouseout="this.style.background='rgba(196,164,124,0.08)'">
+      <img id="navCountryFlag" src="https://flagcdn.com/32x24/gb.png" alt="" style="width:22px;height:16px;object-fit:cover;border-radius:2px"> <span id="navCountryLang">Select Country</span>
+    </button>
+  </div>
+
+</header>
+
+<section class="hero" id="heroSection">
+  <div class="hero-grid-pattern"></div>
+  <div class="container">
+    <div class="hero-content">
+
+      <!-- HEADLINE -->
+      <h1 class="reveal visible">
+        Find Your Dream Property
+        <em>Anywhere in the World</em>
+      </h1>
+      <p class="hero-sub reveal visible reveal-delay-1">
+        Buy · Rent · Auction · Value — across <strong>185 countries</strong> from one platform.
+      </p>
+
+      <!-- QUICK NAV BUTTONS -->
+      <div class="reveal visible reveal-delay-2" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:28px 0 24px">
+        <a href="buy.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:999px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Buy</a>
+        <a href="rent.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:999px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Rent</a>
+        <a href="auctions.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:999px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'"><span style="color:#ff6b6b">●</span> Live Auctions</a>
+        <a href="valuation.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:999px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Valuate Your Property</a>
+        <a href="business.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:999px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Business for Sale</a>
+        <a href="list-property.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#c4a47c;border:1.5px solid #c4a47c;border-radius:999px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='#8dd94f'" onmouseout="this.style.background='#c4a47c'">➕ List Property</a>
+      </div>
+
+      <!-- FEATURES GLOW BUTTON -->
+      <div class="reveal visible reveal-delay-3" style="margin:0 0 20px">
+        <a href="propertyfinder-features.html"
+           style="display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:rgba(196,164,124,0.18);border:2px solid #c4a47c;border-radius:999px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.3s;letter-spacing:0.01em;box-shadow:0 0 18px rgba(196,164,124,0.45),0 0 40px rgba(196,164,124,0.2),inset 0 0 12px rgba(196,164,124,0.08)"
+           onmouseover="this.style.background='rgba(196,164,124,0.32)';this.style.boxShadow='0 0 28px rgba(196,164,124,0.7),0 0 60px rgba(196,164,124,0.35),inset 0 0 16px rgba(196,164,124,0.15)';this.style.transform='translateY(-2px)'"
+           onmouseout="this.style.background='rgba(196,164,124,0.18)';this.style.boxShadow='0 0 18px rgba(196,164,124,0.45),0 0 40px rgba(196,164,124,0.2),inset 0 0 12px rgba(196,164,124,0.08)';this.style.transform='translateY(0)'">
+          <span style="font-size:18px">✦</span> Explore Platform Features
+          <span style="font-size:13px;opacity:0.8;font-weight:600">→</span>
+        </a>
+      </div>
+
+      <!-- SCROLL CUE -->
+      <p class="reveal visible reveal-delay-3" style="color:rgba(255,255,255,0.65);font-size:13px;font-family:'DM Sans',sans-serif">
+        ↓ Select your country below to get started
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ═══ WHERE ARE YOU LOOKING? — HERO COUNTRY SELECTOR ═══ -->
+<section id="countrySection" style="background:linear-gradient(180deg,#0e1520 0%,#141c2b 100%);padding:60px 20px 50px;position:relative">
+  <div style="max-width:1100px;margin:0 auto">
+
+    <div style="text-align:center;margin-bottom:36px">
+      <h2 id="csHeading" style="font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#e8dfc8;margin:0 0 12px;letter-spacing:-0.02em">Where are you looking for property?</h2>
+      <p id="csSubheading" style="font-size:15px;color:#8a7d5a;max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif">Select your country and we'll personalise your currency, language and listings.</p>
+    </div>
+
+    <div id="csSavedBar" style="display:none;background:linear-gradient(135deg,#1a2535 0%,#1f2d3d 100%);border:2px solid #c4a47c;border-radius:16px;padding:24px 28px;margin-bottom:28px;max-width:680px;margin-left:auto;margin-right:auto;box-shadow:0 4px 24px rgba(196,164,124,0.12);transition:all 0.4s ease">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <img id="csSavedFlag" src="https://flagcdn.com/48x36/za.png" alt="" style="width:48px;height:36px;object-fit:cover;border-radius:4px">
+        <div style="flex:1;min-width:150px">
+          <div id="csSavedName" style="font-size:20px;font-weight:800;color:#e8dfc8;font-family:'Cinzel',serif;margin-bottom:2px">South Africa</div>
+          <div id="csSavedMeta" style="font-size:13px;color:#c4a47c;font-family:'DM Sans',sans-serif;font-weight:600">ZAR &middot; English</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span style="color:#c4a47c;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif">&#x2713; Active</span>
+          <button onclick="csShowPicker()" style="background:rgba(196,164,124,0.15);color:#c4a47c;border:1.5px solid rgba(196,164,124,0.4);padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(196,164,124,0.25)'" onmouseout="this.style.background='rgba(196,164,124,0.15)'">Change Country</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="csPicker">
+      <div style="max-width:680px;margin:0 auto 24px;position:relative">
+        <span style="position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none;z-index:1">&#x1F50D;</span>
+        <input id="csSearchInput" type="text"
+          placeholder="Search for a country — e.g. South Africa, Germany, UAE..."
+          oninput="csDoSearch(this.value)"
+          onfocus="this.style.borderColor='#c4a47c';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.15),0 0 0 3px rgba(196,164,124,0.1)';csShowAllDrop(this.value)"
+          onblur="this.style.borderColor='rgba(196,164,124,0.3)';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.15)'"
+          autocomplete="off"
+          style="width:100%;padding:18px 20px 18px 52px;border:2px solid rgba(196,164,124,0.3);border-radius:14px;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;background:#1a2535;color:#e8dfc8;box-sizing:border-box;transition:all 0.3s;box-shadow:0 2px 12px rgba(0,0,0,0.15)">
+        <div id="csDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:#1a2535;border:2px solid rgba(196,164,124,0.25);border-radius:12px;margin-top:4px;max-height:320px;overflow-y:auto;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,0.4)"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px">
+        <button class="cs-rpill cs-rpill-on" onclick="csRegion('All',this)">All</button>
+        <button class="cs-rpill" onclick="csRegion('Africa',this)">&#x1F30D; Africa</button>
+        <button class="cs-rpill" onclick="csRegion('Middle East',this)">&#x1F319; Middle East</button>
+        <button class="cs-rpill" onclick="csRegion('Europe',this)">&#x1F1EA;&#x1F1FA; Europe</button>
+        <button class="cs-rpill" onclick="csRegion('Asia',this)">&#x1F30F; Asia</button>
+        <button class="cs-rpill" onclick="csRegion('Americas',this)">&#x1F30E; Americas</button>
+        <button class="cs-rpill" onclick="csRegion('Oceania',this)">&#x1F30A; Oceania</button>
+      </div>
+
+      <div id="csGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:420px;overflow-y:auto;padding:4px;margin-bottom:20px"></div>
+
+      <div id="csLangSection" style="display:none;background:linear-gradient(135deg,#1a2535 0%,#1f2d3d 100%);border:2px solid rgba(196,164,124,0.25);border-radius:14px;padding:24px;margin-top:20px;transition:all 0.3s ease">
+        <div style="font-size:14px;font-weight:700;color:#c4a47c;margin-bottom:14px;font-family:'DM Sans',sans-serif;letter-spacing:0.02em">Choose your preferred language:</div>
+        <div id="csLangRow" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+      </div>
+
+      <div style="text-align:center;margin-top:28px">
+        <button id="csConfirmBtn" onclick="csConfirm()"
+          style="background:linear-gradient(135deg,#c4a47c 0%,#d4b98c 100%);color:#1a1408;border:none;padding:16px 56px;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.3s;box-shadow:0 4px 16px rgba(196,164,124,0.3);letter-spacing:0.01em"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(196,164,124,0.4)'"
+          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(196,164,124,0.3)'">
+          Confirm My Country &amp; Language &rarr;
+        </button>
+        <div style="font-size:12px;color:#8a7d5a;margin-top:10px;font-family:'DM Sans',sans-serif">Your preference is saved automatically for future visits</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .cs-rpill{padding:9px 18px;border-radius:999px;border:1.5px solid rgba(196,164,124,0.2);background:transparent;color:#8a7d5a;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.3s}
+  .cs-rpill:hover{border-color:rgba(196,164,124,0.5);color:#e8dfc8;background:rgba(196,164,124,0.08)}
+  .cs-rpill.cs-rpill-on{border-color:#c4a47c;color:#c4a47c;background:rgba(196,164,124,0.12)}
+  .cs-ccard{background:#1a2535;border:2px solid rgba(196,164,124,0.12);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.3s cubic-bezier(0.25,0.46,0.45,0.94);font-family:'DM Sans',sans-serif}
+  .cs-ccard:hover{border-color:rgba(196,164,124,0.4);background:rgba(196,164,124,0.06);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+  .cs-ccard.cs-on{border-color:#c4a47c;background:rgba(196,164,124,0.1);box-shadow:0 0 0 3px rgba(196,164,124,0.15)}
+  .cs-cflag{font-size:32px;display:block;margin-bottom:8px;line-height:1;transition:transform 0.3s}
+  .cs-ccard:hover .cs-cflag{transform:scale(1.15)}
+  .cs-cname{font-size:12.5px;font-weight:700;color:#e8dfc8;display:block;margin-bottom:3px;line-height:1.2}
+  .cs-ccur{font-size:11px;color:#c4a47c;display:block;font-weight:600}
+  .cs-lbtn{display:flex;align-items:center;gap:10px;padding:11px 16px;border:2px solid rgba(196,164,124,0.15);border-radius:10px;background:#1a2535;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.3s}
+  .cs-lbtn:hover{border-color:rgba(196,164,124,0.4);background:rgba(196,164,124,0.06)}
+  .cs-lbtn.cs-lon{border-color:#c4a47c;background:rgba(196,164,124,0.1)}
+  .cs-lbtn-name{font-size:13px;font-weight:700;color:#e8dfc8}
+  .cs-lbtn-nat{font-size:11px;color:#8a7d5a}
+  .cs-ldef{font-size:10px;background:rgba(196,164,124,0.15);color:#c4a47c;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:4px}
+  @media(max-width:640px){
+    #csGrid{grid-template-columns:repeat(3,1fr)!important;max-height:300px!important}
+    .cs-cflag{font-size:28px}
+  }
+  @media(max-width:400px){
+    #csGrid{grid-template-columns:repeat(2,1fr)!important}
+  }
+</style>
+
+
+
+
+<script>
+
+var CS_DATA=[
+  {c:'ZA',n:'South Africa',f:'🇿🇦',cur:'ZAR',l:'en',ln:'English',r:'Africa'},
+  {c:'NG',n:'Nigeria',f:'🇳🇬',cur:'NGN',l:'yo',ln:'Yoruba',r:'Africa'},
+  {c:'KE',n:'Kenya',f:'🇰🇪',cur:'KES',l:'sw',ln:'Kiswahili',r:'Africa'},
+  {c:'GH',n:'Ghana',f:'🇬🇭',cur:'GHS',l:'tw',ln:'Twi',r:'Africa'},
+  {c:'EG',n:'Egypt',f:'🇪🇬',cur:'EGP',l:'ar',ln:'العربية',r:'Africa'},
+  {c:'TZ',n:'Tanzania',f:'🇹🇿',cur:'TZS',l:'sw',ln:'Kiswahili',r:'Africa'},
+  {c:'ET',n:'Ethiopia',f:'🇪🇹',cur:'ETB',l:'am',ln:'አማርኛ',r:'Africa'},
+  {c:'MA',n:'Morocco',f:'🇲🇦',cur:'MAD',l:'ar',ln:'العربية',r:'Africa'},
+  {c:'DZ',n:'Algeria',f:'🇩🇿',cur:'DZD',l:'ar',ln:'العربية',r:'Africa'},
+  {c:'UG',n:'Uganda',f:'🇺🇬',cur:'UGX',l:'sw',ln:'Kiswahili',r:'Africa'},
+  {c:'AO',n:'Angola',f:'🇦🇴',cur:'AOA',l:'pt',ln:'Português',r:'Africa'},
+  {c:'MZ',n:'Mozambique',f:'🇲🇿',cur:'MZN',l:'pt',ln:'Português',r:'Africa'},
+  {c:'CM',n:'Cameroon',f:'🇨🇲',cur:'XAF',l:'fr',ln:'Français',r:'Africa'},
+  {c:'ZM',n:'Zambia',f:'🇿🇲',cur:'ZMW',l:'bem',ln:'Bemba',r:'Africa'},
+  {c:'ZW',n:'Zimbabwe',f:'🇿🇼',cur:'ZWL',l:'sn',ln:'Shona',r:'Africa'},
+  {c:'NA',n:'Namibia',f:'🇳🇦',cur:'NAD',l:'af',ln:'Afrikaans',r:'Africa'},
+  {c:'BW',n:'Botswana',f:'🇧🇼',cur:'BWP',l:'tn',ln:'Setswana',r:'Africa'},
+  {c:'RW',n:'Rwanda',f:'🇷🇼',cur:'RWF',l:'rw',ln:'Kinyarwanda',r:'Africa'},
+  {c:'SN',n:'Senegal',f:'🇸🇳',cur:'XOF',l:'fr',ln:'Français',r:'Africa'},
+  {c:'CI',n:"Côte d'Ivoire",f:'🇨🇮',cur:'XOF',l:'fr',ln:'Français',r:'Africa'},
+  {c:'LS',n:'Lesotho',f:'🇱🇸',cur:'LSL',l:'st',ln:'Sesotho',r:'Africa'},
+  {c:'SZ',n:'Eswatini',f:'🇸🇿',cur:'SZL',l:'ss',ln:'Siswati',r:'Africa'},
+  {c:'MW',n:'Malawi',f:'🇲🇼',cur:'MWK',l:'ny',ln:'Chichewa',r:'Africa'},
+  {c:'LY',n:'Libya',f:'🇱🇾',cur:'LYD',l:'ar',ln:'العربية',r:'Africa'},
+  {c:'TN',n:'Tunisia',f:'🇹🇳',cur:'TND',l:'ar',ln:'العربية',r:'Africa'},
+  {c:'CD',n:'DR Congo',f:'🇨🇩',cur:'CDF',l:'fr',ln:'Français',r:'Africa'},
+  {c:'MG',n:'Madagascar',f:'🇲🇬',cur:'MGA',l:'mg',ln:'Malagasy',r:'Africa'},
+  {c:'AE',n:'UAE',f:'🇦🇪',cur:'AED',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'SA',n:'Saudi Arabia',f:'🇸🇦',cur:'SAR',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'QA',n:'Qatar',f:'🇶🇦',cur:'QAR',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'KW',n:'Kuwait',f:'🇰🇼',cur:'KWD',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'BH',n:'Bahrain',f:'🇧🇭',cur:'BHD',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'OM',n:'Oman',f:'🇴🇲',cur:'OMR',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'IL',n:'Israel',f:'🇮🇱',cur:'ILS',l:'he',ln:'עברית',r:'Middle East'},
+  {c:'TR',n:'Turkey',f:'🇹🇷',cur:'TRY',l:'tr',ln:'Türkçe',r:'Middle East'},
+  {c:'JO',n:'Jordan',f:'🇯🇴',cur:'JOD',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'LB',n:'Lebanon',f:'🇱🇧',cur:'LBP',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'IQ',n:'Iraq',f:'🇮🇶',cur:'IQD',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'SY',n:'Syria',f:'🇸🇾',cur:'SYP',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'YE',n:'Yemen',f:'🇾🇪',cur:'YER',l:'ar',ln:'العربية',r:'Middle East'},
+  {c:'GB',n:'United Kingdom',f:'🇬🇧',cur:'GBP',l:'en',ln:'English',r:'Europe'},
+  {c:'DE',n:'Germany',f:'🇩🇪',cur:'EUR',l:'de',ln:'Deutsch',r:'Europe'},
+  {c:'FR',n:'France',f:'🇫🇷',cur:'EUR',l:'fr',ln:'Français',r:'Europe'},
+  {c:'ES',n:'Spain',f:'🇪🇸',cur:'EUR',l:'es',ln:'Español',r:'Europe'},
+  {c:'IT',n:'Italy',f:'🇮🇹',cur:'EUR',l:'it',ln:'Italiano',r:'Europe'},
+  {c:'PT',n:'Portugal',f:'🇵🇹',cur:'EUR',l:'pt',ln:'Português',r:'Europe'},
+  {c:'NL',n:'Netherlands',f:'🇳🇱',cur:'EUR',l:'nl',ln:'Nederlands',r:'Europe'},
+  {c:'CH',n:'Switzerland',f:'🇨🇭',cur:'CHF',l:'de',ln:'Deutsch',r:'Europe'},
+  {c:'AT',n:'Austria',f:'🇦🇹',cur:'EUR',l:'de',ln:'Deutsch',r:'Europe'},
+  {c:'SE',n:'Sweden',f:'🇸🇪',cur:'SEK',l:'sv',ln:'Svenska',r:'Europe'},
+  {c:'NO',n:'Norway',f:'🇳🇴',cur:'NOK',l:'no',ln:'Norsk',r:'Europe'},
+  {c:'DK',n:'Denmark',f:'🇩🇰',cur:'DKK',l:'da',ln:'Dansk',r:'Europe'},
+  {c:'FI',n:'Finland',f:'🇫🇮',cur:'EUR',l:'fi',ln:'Suomi',r:'Europe'},
+  {c:'IE',n:'Ireland',f:'🇮🇪',cur:'EUR',l:'en',ln:'English',r:'Europe'},
+  {c:'GR',n:'Greece',f:'🇬🇷',cur:'EUR',l:'el',ln:'Ελληνικά',r:'Europe'},
+  {c:'PL',n:'Poland',f:'🇵🇱',cur:'PLN',l:'pl',ln:'Polski',r:'Europe'},
+  {c:'BE',n:'Belgium',f:'🇧🇪',cur:'EUR',l:'nl',ln:'Nederlands',r:'Europe'},
+  {c:'CZ',n:'Czech Republic',f:'🇨🇿',cur:'CZK',l:'cs',ln:'Čeština',r:'Europe'},
+  {c:'HU',n:'Hungary',f:'🇭🇺',cur:'HUF',l:'hu',ln:'Magyar',r:'Europe'},
+  {c:'RO',n:'Romania',f:'🇷🇴',cur:'RON',l:'ro',ln:'Română',r:'Europe'},
+  {c:'UA',n:'Ukraine',f:'🇺🇦',cur:'UAH',l:'uk',ln:'Українська',r:'Europe'},
+  {c:'RU',n:'Russia',f:'🇷🇺',cur:'RUB',l:'ru',ln:'Русский',r:'Europe'},
+  {c:'HR',n:'Croatia',f:'🇭🇷',cur:'EUR',l:'hr',ln:'Hrvatski',r:'Europe'},
+  {c:'SK',n:'Slovakia',f:'🇸🇰',cur:'EUR',l:'sk',ln:'Slovenčina',r:'Europe'},
+  {c:'BG',n:'Bulgaria',f:'🇧🇬',cur:'BGN',l:'bg',ln:'Български',r:'Europe'},
+  {c:'RS',n:'Serbia',f:'🇷🇸',cur:'RSD',l:'sr',ln:'Српски',r:'Europe'},
+  {c:'LU',n:'Luxembourg',f:'🇱🇺',cur:'EUR',l:'lb',ln:'Lëtzebuergesch',r:'Europe'},
+  {c:'MT',n:'Malta',f:'🇲🇹',cur:'EUR',l:'mt',ln:'Malti',r:'Europe'},
+  {c:'CY',n:'Cyprus',f:'🇨🇾',cur:'EUR',l:'el',ln:'Ελληνικά',r:'Europe'},
+  {c:'EE',n:'Estonia',f:'🇪🇪',cur:'EUR',l:'et',ln:'Eesti',r:'Europe'},
+  {c:'LV',n:'Latvia',f:'🇱🇻',cur:'EUR',l:'lv',ln:'Latviešu',r:'Europe'},
+  {c:'LT',n:'Lithuania',f:'🇱🇹',cur:'EUR',l:'lt',ln:'Lietuvių',r:'Europe'},
+  {c:'CN',n:'China',f:'🇨🇳',cur:'CNY',l:'zh',ln:'中文',r:'Asia'},
+  {c:'IN',n:'India',f:'🇮🇳',cur:'INR',l:'hi',ln:'हिन्दी',r:'Asia'},
+  {c:'JP',n:'Japan',f:'🇯🇵',cur:'JPY',l:'ja',ln:'日本語',r:'Asia'},
+  {c:'KR',n:'South Korea',f:'🇰🇷',cur:'KRW',l:'ko',ln:'한국어',r:'Asia'},
+  {c:'SG',n:'Singapore',f:'🇸🇬',cur:'SGD',l:'zh',ln:'中文',r:'Asia'},
+  {c:'HK',n:'Hong Kong',f:'🇭🇰',cur:'HKD',l:'zh',ln:'粵語',r:'Asia'},
+  {c:'MY',n:'Malaysia',f:'🇲🇾',cur:'MYR',l:'ms',ln:'Bahasa Melayu',r:'Asia'},
+  {c:'ID',n:'Indonesia',f:'🇮🇩',cur:'IDR',l:'id',ln:'Bahasa Indonesia',r:'Asia'},
+  {c:'TH',n:'Thailand',f:'🇹🇭',cur:'THB',l:'th',ln:'ภาษาไทย',r:'Asia'},
+  {c:'VN',n:'Vietnam',f:'🇻🇳',cur:'VND',l:'vi',ln:'Tiếng Việt',r:'Asia'},
+  {c:'PH',n:'Philippines',f:'🇵🇭',cur:'PHP',l:'tl',ln:'Filipino',r:'Asia'},
+  {c:'PK',n:'Pakistan',f:'🇵🇰',cur:'PKR',l:'ur',ln:'اردو',r:'Asia'},
+  {c:'BD',n:'Bangladesh',f:'🇧🇩',cur:'BDT',l:'bn',ln:'বাংলা',r:'Asia'},
+  {c:'LK',n:'Sri Lanka',f:'🇱🇰',cur:'LKR',l:'si',ln:'සිංහල',r:'Asia'},
+  {c:'NP',n:'Nepal',f:'🇳🇵',cur:'NPR',l:'ne',ln:'नेपाली',r:'Asia'},
+  {c:'MM',n:'Myanmar',f:'🇲🇲',cur:'MMK',l:'my',ln:'မြန်မာ',r:'Asia'},
+  {c:'KH',n:'Cambodia',f:'🇰🇭',cur:'KHR',l:'km',ln:'ខ្មែរ',r:'Asia'},
+  {c:'KZ',n:'Kazakhstan',f:'🇰🇿',cur:'KZT',l:'kk',ln:'Қазақ',r:'Asia'},
+  {c:'US',n:'United States',f:'🇺🇸',cur:'USD',l:'es',ln:'Español',r:'Americas'},
+  {c:'CA',n:'Canada',f:'🇨🇦',cur:'CAD',l:'fr',ln:'Français',r:'Americas'},
+  {c:'MX',n:'Mexico',f:'🇲🇽',cur:'MXN',l:'es',ln:'Español',r:'Americas'},
+  {c:'BR',n:'Brazil',f:'🇧🇷',cur:'BRL',l:'pt',ln:'Português',r:'Americas'},
+  {c:'AR',n:'Argentina',f:'🇦🇷',cur:'ARS',l:'es',ln:'Español',r:'Americas'},
+  {c:'CO',n:'Colombia',f:'🇨🇴',cur:'COP',l:'es',ln:'Español',r:'Americas'},
+  {c:'CL',n:'Chile',f:'🇨🇱',cur:'CLP',l:'es',ln:'Español',r:'Americas'},
+  {c:'PE',n:'Peru',f:'🇵🇪',cur:'PEN',l:'es',ln:'Español',r:'Americas'},
+  {c:'VE',n:'Venezuela',f:'🇻🇪',cur:'VES',l:'es',ln:'Español',r:'Americas'},
+  {c:'EC',n:'Ecuador',f:'🇪🇨',cur:'USD',l:'es',ln:'Español',r:'Americas'},
+  {c:'GT',n:'Guatemala',f:'🇬🇹',cur:'GTQ',l:'es',ln:'Español',r:'Americas'},
+  {c:'CU',n:'Cuba',f:'🇨🇺',cur:'CUP',l:'es',ln:'Español',r:'Americas'},
+  {c:'DO',n:'Dominican Republic',f:'🇩🇴',cur:'DOP',l:'es',ln:'Español',r:'Americas'},
+  {c:'UY',n:'Uruguay',f:'🇺🇾',cur:'UYU',l:'es',ln:'Español',r:'Americas'},
+  {c:'PA',n:'Panama',f:'🇵🇦',cur:'PAB',l:'es',ln:'Español',r:'Americas'},
+  {c:'CR',n:'Costa Rica',f:'🇨🇷',cur:'CRC',l:'es',ln:'Español',r:'Americas'},
+  {c:'AU',n:'Australia',f:'🇦🇺',cur:'AUD',l:'en',ln:'English',r:'Oceania'},
+  {c:'NZ',n:'New Zealand',f:'🇳🇿',cur:'NZD',l:'mi',ln:'Māori',r:'Oceania'},
+  {c:'FJ',n:'Fiji',f:'🇫🇯',cur:'FJD',l:'en',ln:'English',r:'Oceania'},
+  {c:'PG',n:'Papua New Guinea',f:'🇵🇬',cur:'PGK',l:'en',ln:'English',r:'Oceania'}
+];
+
+var CS_LANGS=[
+  {c:'en',n:'English',nat:'English',f:'🇬🇧'},
+  {c:'ar',n:'Arabic',nat:'العربية',f:'🇸🇦'},
+  {c:'zh',n:'Chinese',nat:'中文',f:'🇨🇳'},
+  {c:'fr',n:'French',nat:'Français',f:'🇫🇷'},
+  {c:'de',n:'German',nat:'Deutsch',f:'🇩🇪'},
+  {c:'es',n:'Spanish',nat:'Español',f:'🇪🇸'},
+  {c:'pt',n:'Portuguese',nat:'Português',f:'🇵🇹'},
+  {c:'hi',n:'Hindi',nat:'हिन्दी',f:'🇮🇳'},
+  {c:'sw',n:'Swahili',nat:'Kiswahili',f:'🇰🇪'},
+  {c:'ru',n:'Russian',nat:'Русский',f:'🇷🇺'},
+  {c:'ja',n:'Japanese',nat:'日本語',f:'🇯🇵'},
+  {c:'ko',n:'Korean',nat:'한국어',f:'🇰🇷'},
+  {c:'it',n:'Italian',nat:'Italiano',f:'🇮🇹'},
+  {c:'nl',n:'Dutch',nat:'Nederlands',f:'🇳🇱'},
+  {c:'tr',n:'Turkish',nat:'Türkçe',f:'🇹🇷'},
+  {c:'id',n:'Indonesian',nat:'Bahasa Indonesia',f:'🇮🇩'},
+  {c:'ms',n:'Malay',nat:'Bahasa Melayu',f:'🇲🇾'},
+  {c:'th',n:'Thai',nat:'ภาษาไทย',f:'🇹🇭'},
+  {c:'vi',n:'Vietnamese',nat:'Tiếng Việt',f:'🇻🇳'},
+  {c:'pl',n:'Polish',nat:'Polski',f:'🇵🇱'},
+  {c:'he',n:'Hebrew',nat:'עברית',f:'🇮🇱'},
+  {c:'ur',n:'Urdu',nat:'اردو',f:'🇵🇰'},
+  {c:'bn',n:'Bengali',nat:'বাংলা',f:'🇧🇩'},
+  {c:'uk',n:'Ukrainian',nat:'Українська',f:'🇺🇦'}
+];
+
+var csSel={country:null,lang:'en'},csReg='All';
+
+function csRenderGrid(q,r){
+  var g=document.getElementById('csGrid');
+  var f=CS_DATA.filter(function(x){
+    var mq=!q||x.n.toLowerCase().includes(q.toLowerCase())||x.c.toLowerCase().includes(q.toLowerCase());
+    var mr=!r||r==='All'||x.r===r;
+    return mq&&mr;
+  });
+  g.innerHTML=f.map(function(x){
+    var s=csSel.country&&csSel.country.c===x.c?' cs-on':'';
+    return '<div class="cs-ccard'+s+'" onclick="csPick(\''+x.c+'\')" title="'+x.n+'">'+
+      '<span class="cs-cflag"><img src="https://flagcdn.com/32x24/'+x.c.toLowerCase()+'.png" alt="" style="width:32px;height:24px;object-fit:cover;border-radius:3px"></span>'+
+      '<span class="cs-cname">'+x.n+'</span>'+
+      '<span class="cs-ccur">'+x.cur+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function csPick(code){
+  csSel.country=CS_DATA.find(function(x){return x.c===code;});
+  csSel.lang=csSel.country.l!=='en'?csSel.country.l:'en';
+  // Close dropdown, update search input
+  document.getElementById('csSearchInput').value=csSel.country.n;
+  document.getElementById('csDropdown').style.display='none';
+  csRenderGrid('',csReg);
+  csRenderLangs();
+  document.getElementById('csLangSection').style.display='block';
+  var btn=document.getElementById('csConfirmBtn');
+  btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
+  // Scroll language section into view
+  setTimeout(function(){document.getElementById('csLangSection').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+}
+
+function csCheckEnableConfirm(val){
+  if(!val) return;
+  var btn=document.getElementById('csConfirmBtn');
+  if(btn&&val.length>1){ btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer'; }
+}
+
+function csHandleInput(val){
+  var v=val.trim().toLowerCase();
+  var match=CS_DATA.find(function(x){ return x.n.toLowerCase()===v; });
+  if(match){ csPick(match.c); return; }
+  // Also try partial — if only one match, auto-pick
+  var matches=CS_DATA.filter(function(x){ return x.n.toLowerCase().startsWith(v); });
+  if(matches.length===1) csPick(matches[0].c);
+}
+
+function csHandleChange(val){
+  var v=val.trim().toLowerCase();
+  // Extract just the country name (before the dash)
+  var namePart=v.split(' —')[0].replace(/[\uD83C][\uDDE6-\uDDFF]/g,'').trim();
+  var match=CS_DATA.find(function(x){ return x.n.toLowerCase()===namePart||x.n.toLowerCase()===v; });
+  if(match) csPick(match.c);
+}
+
+function csPickFromSelect(code){
+  if(!code) return;
+  csPick(code);
+}
+
+function csShowAllDrop(q){
+  var drop=document.getElementById('csDropdown');
+  var matches=q?CS_DATA.filter(function(x){return x.n.toLowerCase().includes(q.toLowerCase())||x.c.toLowerCase().startsWith(q.toLowerCase());}):CS_DATA;
+  drop.innerHTML=matches.slice(0,12).map(function(x){
+    return '<div onmousedown="event.preventDefault();csPick(\''+x.c+'\')" style="padding:11px 16px;cursor:pointer;font-size:14px;color:#e8dfc8;border-bottom:1px solid #1a2535;display:flex;align-items:center;gap:10px;font-family:sans-serif" onmouseover="this.style.background=\'#1a2535\'" onmouseout="this.style.background=\'\'">'+
+      '<img src="https://flagcdn.com/32x24/'+x.c.toLowerCase()+'.png" alt="" style="width:28px;height:21px;object-fit:cover;border-radius:2px"><span style="font-weight:600">'+x.n+'</span><span style="margin-left:auto;font-size:12px;color:#5B6B64">'+x.cur+'</span>'+
+    '</div>';
+  }).join('')+(matches.length>12?'<div style="padding:8px 16px;font-size:12px;color:#8a7d5a;text-align:center;">Type to narrow down '+matches.length+' countries...</div>':'');
+  drop.style.display='block';
+}
+function csDoSearch(q){
+  csRenderGrid(q,csReg);
+  var drop=document.getElementById('csDropdown');
+  if(!q){drop.style.display='none';return;}
+  var matches=CS_DATA.filter(function(x){return x.n.toLowerCase().includes(q.toLowerCase())||x.c.toLowerCase().startsWith(q.toLowerCase());}).slice(0,10);
+  if(!matches.length){drop.style.display='none';return;}
+  drop.innerHTML=matches.map(function(x){
+    return '<div onmousedown="event.preventDefault();csPick(\''+x.c+'\')" style="padding:11px 16px;cursor:pointer;font-size:14px;color:#e8dfc8;border-bottom:1px solid #1a2535;display:flex;align-items:center;gap:10px;font-family:sans-serif" onmouseover="this.style.background=\'#1a2535\'" onmouseout="this.style.background=\'\'">'+
+      '<img src="https://flagcdn.com/32x24/'+x.c.toLowerCase()+'.png" alt="" style="width:28px;height:21px;object-fit:cover;border-radius:2px"><span style="font-weight:600">'+x.n+'</span><span style="margin-left:auto;font-size:12px;color:#5B6B64">'+x.cur+'</span>'+
+    '</div>';
+  }).join('');
+  drop.style.display='block';
+}
+
+function csRegion(r,btn){
+  csReg=r;
+  document.querySelectorAll('.cs-rpill').forEach(function(b){b.classList.remove('cs-rpill-on');});
+  btn.classList.add('cs-rpill-on');
+  csRenderGrid(document.getElementById('csSearchInput').value,r);
+}
+
+function csRenderLangs(){
+  var c=csSel.country;
+  var row=document.getElementById('csLangRow');
+  // South Africa: English only
+  if(c.c==='ZA'){
+    csSel.lang='en';
+    row.innerHTML='<button class="cs-lang-btn" data-lang="en" onclick="csPickLang(\'en\')" style="flex:1;display:flex;align-items:center;gap:10px;justify-content:center;padding:16px 24px;border-radius:10px;cursor:pointer;font-family:\'DM Sans\',sans-serif;background:#c4a47c;color:#1a1408;border:2px solid #c4a47c;font-weight:700">'+
+      '<img src="https://flagcdn.com/32x24/za.png" alt="" style="width:32px;height:24px;object-fit:cover;border-radius:3px">'+
+      '<div style="font-size:13px;font-weight:700">English</div>'+
+    '</button>';
+    return;
+  }
+  // All other countries: English (UK flag) + Native language (country flag)
+  var natLang=CS_LANGS.find(function(l){return l.c===c.l;})||{c:c.l,n:c.ln,nat:c.ln};
+  var enActive=csSel.lang==='en';
+  var natActive=!enActive;
+  var enStyle=enActive?'background:#c4a47c;color:#1a1408;border:2px solid #c4a47c;font-weight:700':'background:transparent;color:#e8dfc8;border:1px solid rgba(196,164,124,0.3);font-weight:normal';
+  var natStyle=natActive?'background:#c4a47c;color:#1a1408;border:2px solid #c4a47c;font-weight:700':'background:transparent;color:#e8dfc8;border:1px solid rgba(196,164,124,0.3);font-weight:normal';
+  row.innerHTML=
+    '<button class="cs-lang-btn" data-lang="en" onclick="csPickLang(\'en\')" style="flex:1;display:flex;align-items:center;gap:10px;justify-content:center;padding:16px 24px;border-radius:10px;cursor:pointer;font-family:\'DM Sans\',sans-serif;transition:all 0.3s;'+enStyle+'">'+
+      '<img src="https://flagcdn.com/32x24/gb.png" alt="" style="width:32px;height:24px;object-fit:cover;border-radius:3px">'+
+      '<div style="font-size:13px;font-weight:inherit">English</div>'+
+    '</button>'+
+    '<button class="cs-lang-btn" data-lang="'+natLang.c+'" onclick="csPickLang(\''+natLang.c+'\')" style="flex:1;display:flex;align-items:center;gap:10px;justify-content:center;padding:16px 24px;border-radius:10px;cursor:pointer;font-family:\'DM Sans\',sans-serif;transition:all 0.3s;'+natStyle+'">'+
+      '<img src="https://flagcdn.com/32x24/'+c.c.toLowerCase()+'.png" alt="" style="width:32px;height:24px;object-fit:cover;border-radius:3px">'+
+      '<div style="font-size:13px;font-weight:inherit">'+(natLang.nat||natLang.n)+'</div>'+
+    '</button>';
+}
+function csPickLang(langCode){
+  csSel.lang=langCode;
+  var allBtns=document.querySelectorAll('.cs-lang-btn');
+  allBtns.forEach(function(b){
+    b.style.background='transparent';
+    b.style.color='#e8dfc8';
+    b.style.border='1px solid rgba(196,164,124,0.3)';
+    b.style.fontWeight='normal';
+  });
+  var clicked=document.querySelector('.cs-lang-btn[data-lang="'+langCode+'"]');
+  if(clicked){
+    clicked.style.background='#c4a47c';
+    clicked.style.color='#1a1408';
+    clicked.style.border='2px solid #c4a47c';
+    clicked.style.fontWeight='700';
+  }
+}
+
+function csConfirm(){
+  // Resolve country from search input
+  var inputEl=document.getElementById('csSearchInput');
+  var val=(inputEl?inputEl.value:'').trim().toLowerCase();
+  var country=CS_DATA.find(function(x){return x.n.toLowerCase()===val;});
+  if(!country)country=CS_DATA.find(function(x){return x.n.toLowerCase().startsWith(val);});
+  if(!country)country=CS_DATA.find(function(x){return x.n.toLowerCase().includes(val);});
+  if(!country)country=csSel.country;
+  if(!country)return;
+
+  // Language from button click, fallback to country default
+  var lang=csSel.lang||country.l||'en';
+
+  // Map to Google Translate language code
+  var gtMap={'pt':'pt','es':'es','fr':'fr','de':'de','ar':'ar','zh':'zh-CN',
+    'nl':'nl','it':'it','ru':'ru','ja':'ja','ko':'ko','hi':'hi',
+    'tr':'tr','sv':'sv','af':'af','he':'iw','id':'id','ms':'ms',
+    'th':'th','vi':'vi','pl':'pl','ur':'ur','bn':'bn','uk':'uk'};
+  var gtLang=gtMap[lang]||'en';
+
+  // Save to localStorage
+  localStorage.setItem('pf_language',gtLang);
+  localStorage.setItem('pf_country',country.c);
+  localStorage.setItem('pf_country_selected','true');
+  localStorage.setItem('pf_selected_country',country.c);
+  localStorage.setItem('pf_selected_country_name',country.n);
+  localStorage.setItem('pf_selected_language',lang);
+  localStorage.setItem('pf_currency',country.cur);
+  var _langObj=CS_LANGS.find(function(l){return l.c===lang;});
+  localStorage.setItem('pf_language_name',_langObj?(_langObj.nat||_langObj.n):'English');
+
+  // Update navbar pill
+  var nb=document.getElementById('navCountryBtn');
+  if(nb){
+    var flagUrl='https://flagcdn.com/32x24/'+country.c.toLowerCase()+'.png';
+    document.getElementById('navCountryFlag').src=flagUrl;
+    document.getElementById('navCountryLang').textContent=_langObj?(_langObj.nat||_langObj.n):'English';
+  }
+
+  // Show saved bar
+  document.getElementById('csPicker').style.display='none';
+  var sf=document.getElementById('csSavedFlag');
+  if(sf)sf.src='https://flagcdn.com/48x36/'+country.c.toLowerCase()+'.png';
+  var sn=document.getElementById('csSavedName');
+  if(sn)sn.textContent=country.n;
+  var sm=document.getElementById('csSavedMeta');
+  if(sm)sm.textContent=country.cur+' \u00b7 '+lang.toUpperCase();
+  var sb=document.getElementById('csSavedBar');
+  if(sb)sb.style.display='flex';
+
+  // Toast
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#141c2b;color:#fff;padding:12px 28px;border-radius:10px;font-size:15px;font-weight:700;z-index:9999;font-family:DM Sans,sans-serif;box-shadow:0 8px 28px rgba(0,0,0,0.2);white-space:nowrap';
+  t.textContent=country.f+'  '+country.n+' \u00b7 '+country.cur+' set!';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},3000);
+
+  // Apply language via Google Translate widget
+  if(gtLang==='en'){
+    pfSetLanguage('en');
+  }else{
+    pfSetLanguage(gtLang);
+  }
+}
+function csShowPicker(){
+  document.getElementById('csPicker').style.display='block';
+  document.getElementById('csSavedBar').style.display='none';
+}
+
+// Init
+// Run immediately when script is parsed
+try { csRenderGrid('','All'); } catch(e) {}
+
+document.addEventListener('DOMContentLoaded',function(){
+  // Render again after DOM is ready
+  csRenderGrid('','All');
+  // If saved country exists, show saved bar AND pre-select in grid
+  var saved=localStorage.getItem('pf_selected_country');
+  if(saved){
+    var sc=CS_DATA.find(function(x){return x.c===saved;});
+    if(sc){
+      csSel.country=sc;
+      csSel.lang=localStorage.getItem('pf_language')||localStorage.getItem('pf_selected_language')||'en';
+      document.getElementById('csSavedFlag').src='https://flagcdn.com/48x36/'+sc.c.toLowerCase()+'.png';
+      document.getElementById('csSavedName').textContent=sc.n;
+      document.getElementById('csSavedMeta').textContent=sc.cur+' · '+(localStorage.getItem('pf_selected_language')||'en').toUpperCase();
+      document.getElementById('csSavedBar').style.display='flex';
+      // Pre-fill search input
+      document.getElementById('csSearchInput').value=sc.n;
+      // Update navbar
+      var nb2=document.getElementById('navCountryBtn');
+      if(nb2){
+        var savedFlagUrl='https://flagcdn.com/32x24/'+sc.c.toLowerCase()+'.png';
+      document.getElementById('navCountryFlag').src=savedFlagUrl;
+        var sl2=localStorage.getItem('pf_selected_language')||'en';
+        var lo2=CS_LANGS.find(function(l){return l.c===sl2;})||CS_LANGS[0];
+        document.getElementById('navCountryLang').textContent=lo2.nat||lo2.n;
+      }
+      // Language is now handled by Google Translate widget on page load      // Enable confirm button
+      var btn=document.getElementById('csConfirmBtn');
+      btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
+    }
+  }
+});
+// Final fallback render
+window.addEventListener('load',function(){
+  if(document.getElementById('csGrid')&&!document.getElementById('csGrid').children.length){
+    csRenderGrid('','All');
+  }
+});
+
+document.addEventListener('click',function(e){
+  var drop=document.getElementById('csDropdown');
+  if(drop&&!document.getElementById('csSearchInput').contains(e.target))drop.style.display='none';
+});
+</script>
+
+<!-- ═══ TRENDING TICKER ═══ -->
+<div class="ps-ticker-wrap">
+  <div class="ps-ticker">
+    <div class="ps-ticker-item" onclick="psSearch('Camps Bay, Cape Town')"><div class="ps-t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Algarve villa')"><div class="ps-t-dot up"></div> 🇵🇹 Algarve villas <span class="ps-t-tag up">📈 +34%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Dubai Marina apartment')"><div class="ps-t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('London commercial office')"><div class="ps-t-dot new"></div> 🇬🇧 London commercial offices <span class="ps-t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Marbella sea view')"><div class="ps-t-dot up"></div> 🇪🇸 Marbella sea view <span class="ps-t-tag up">📈 +28%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Phuket beachfront')"><div class="ps-t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Stellenbosch wine farm')"><div class="ps-t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="ps-t-tag up">📈 +22%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Sydney waterfront apartment')"><div class="ps-t-dot new"></div> 🇦🇺 Sydney harbour view <span class="ps-t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Tuscany farmhouse')"><div class="ps-t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Singapore penthouse')"><div class="ps-t-dot up"></div> 🇸🇬 Singapore penthouse <span class="ps-t-tag up">📈 +18%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Miami waterfront')"><div class="ps-t-dot hot"></div> 🇺🇸 Miami waterfront <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Berlin investment property')"><div class="ps-t-dot up"></div> 🇩🇪 Berlin investment <span class="ps-t-tag up">📈 +12%</span></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="ps-ticker-item" onclick="psSearch('Camps Bay, Cape Town')"><div class="ps-t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Algarve villa')"><div class="ps-t-dot up"></div> 🇵🇹 Algarve villas <span class="ps-t-tag up">📈 +34%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Dubai Marina apartment')"><div class="ps-t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('London commercial office')"><div class="ps-t-dot new"></div> 🇬🇧 London commercial offices <span class="ps-t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Marbella sea view')"><div class="ps-t-dot up"></div> 🇪🇸 Marbella sea view <span class="ps-t-tag up">📈 +28%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Phuket beachfront')"><div class="ps-t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Stellenbosch wine farm')"><div class="ps-t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="ps-t-tag up">📈 +22%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Sydney waterfront apartment')"><div class="ps-t-dot new"></div> 🇦🇺 Sydney harbour view <span class="ps-t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Tuscany farmhouse')"><div class="ps-t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Singapore penthouse')"><div class="ps-t-dot up"></div> 🇸🇬 Singapore penthouse <span class="ps-t-tag up">📈 +18%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Miami waterfront')"><div class="ps-t-dot hot"></div> 🇺🇸 Miami waterfront <span class="ps-t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Berlin investment property')"><div class="ps-t-dot up"></div> 🇩🇪 Berlin investment <span class="ps-t-tag up">📈 +12%</span></div>
+  </div>
+</div>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section style="background:#1a2535;padding:64px 20px">
+  <div style="max-width:1100px;margin:0 auto">
+
+    <!-- HEADER -->
+    <div style="text-align:center;margin-bottom:16px">
+      <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#141c2b;font-family:'DM Sans',sans-serif">Getting Started</span>
+      <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:#e8dfc8;margin:8px 0 10px">How PropertyFinder Works</h2>
+      <p style="font-size:15px;color:#8a7d5a;max-width:560px;margin:0 auto;font-family:'DM Sans',sans-serif">Choose your path — find property anywhere in 185 countries, or list yours to reach global buyers.</p>
+    </div>
+
+    <!-- TOGGLE -->
+    <div style="display:flex;justify-content:center;gap:0;margin:24px auto 36px;background:#141c2b;border:1.5px solid #E3E8E5;border-radius:999px;padding:4px;width:fit-content;font-family:'DM Sans',sans-serif">
+      <button id="hiw-buyer-btn" onclick="hiwToggle('buyer')" style="padding:10px 28px;border-radius:999px;border:2px solid #c4a47c;background:#c4a47c;color:#1a1408;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s">🔍 I'm a Buyer</button>
+      <button id="hiw-seller-btn" onclick="hiwToggle('seller')" style="padding:10px 28px;border-radius:999px;border:2px solid rgba(196,164,124,0.25);background:transparent;color:rgba(232,223,200,0.5);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s">🏠 I'm a Seller / Agent</button>
+    </div>
+
+    <!-- BUYER PATH -->
+    <div id="hiw-buyer" style="display:block">
+      <!-- STEP 0 — CHOOSE COUNTRY FIRST -->
+      <div style="background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🌍</div>
+        <div style="flex:1">
+          <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:'DM Sans',sans-serif">First Step — Always</div>
+          <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Cinzel',serif">Select Your Country</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);font-family:'DM Sans',sans-serif">Start the wizard below → choose your country → we set your currency, language and filter listings to your market.</div>
+        </div>
+        <a href="#heroSection" onclick="document.querySelector('.wp-dot[data-wstep='2']').click()" style="background:#c4a47c;color:#1a1408;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif;flex-shrink:0;white-space:nowrap">Select Country →</a>
+      </div>
+
+      <!-- 4 STEPS GRID -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">1</div>
+          <div style="font-size:36px;margin:10px 0 12px">🔍</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Search & Discover</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Browse 350K+ listings. Filter by country, city, price, type. Use AI voice search.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">2</div>
+          <div style="font-size:36px;margin:10px 0 12px">📋</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Compare & Research</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">View 30 photos, video, maps. Use our 5 calculators to plan your finances.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">3</div>
+          <div style="font-size:36px;margin:10px 0 12px">📱</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Contact & Connect</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">WhatsApp, email or phone — directly to agent or seller. No middlemen.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">4</div>
+          <div style="font-size:36px;margin:10px 0 12px">🏡</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Buy or Bid</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Make an offer or bid in our online auction. Use our transfer cost calculator.</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:20px">
+        <span style="font-size:13px;color:#8a7d5a;font-family:'DM Sans',sans-serif">100% Free for buyers · No registration required · <a href="buy.html" style="color:#141c2b;font-weight:700">Start browsing →</a></span>
+      </div>
+    </div>
+
+    <!-- SELLER PATH -->
+    <div id="hiw-seller" style="display:none">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">1</div>
+          <div style="font-size:36px;margin:10px 0 12px">📝</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Sign Up Free</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Create account in 3 minutes. Connect your CRM for auto-sync. Fusion, Reapit, MLS.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">2</div>
+          <div style="font-size:36px;margin:10px 0 12px">📸</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Upload or Auto-Import</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Add listings or import from your CRM. 30 photos, video, portal walkthrough included.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">3</div>
+          <div style="font-size:36px;margin:10px 0 12px">✅</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Preview & Approve</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Review before publishing. Edit, approve or reject. Nothing goes live without your OK.</div>
+        </div>
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:14px;padding:24px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:#141c2b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:'DM Sans',sans-serif">4</div>
+          <div style="font-size:36px;margin:10px 0 12px">🌍</div>
+          <div style="font-size:14px;font-weight:700;color:#e8dfc8;margin-bottom:8px;font-family:'DM Sans',sans-serif">Go Global</div>
+          <div style="font-size:12.5px;color:#8a7d5a;line-height:1.6;font-family:'DM Sans',sans-serif">Reach buyers in 185 countries. Track analytics. From $2/listing — all features included.</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:20px">
+        <a href="list-property.html" style="display:inline-flex;align-items:center;gap:8px;background:#141c2b;color:#fff;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif">List Your Property — From $2/month →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function hiwToggle(path) {
+  document.getElementById('hiw-buyer').style.display = path==='buyer' ? 'block' : 'none';
+  document.getElementById('hiw-seller').style.display = path==='seller' ? 'block' : 'none';
+  document.getElementById('hiw-buyer-btn').style.background = path==='buyer' ? '#c4a47c' : 'transparent';
+  document.getElementById('hiw-buyer-btn').style.color = path==='buyer' ? '#1a1408' : 'rgba(232,223,200,0.5)';
+  document.getElementById('hiw-buyer-btn').style.border = path==='buyer' ? '2px solid #c4a47c' : '2px solid rgba(196,164,124,0.25)';
+  document.getElementById('hiw-seller-btn').style.background = path==='seller' ? '#c4a47c' : 'transparent';
+  document.getElementById('hiw-seller-btn').style.color = path==='seller' ? '#1a1408' : 'rgba(232,223,200,0.5)';
+  document.getElementById('hiw-seller-btn').style.border = path==='seller' ? '2px solid #c4a47c' : '2px solid rgba(196,164,124,0.25)';
+}
+</script>
+
+<!-- ═══ PLATFORM FEATURES BANNER ═══ -->
+<section style="background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);padding:64px 20px;position:relative;overflow:hidden">
+  <!-- subtle grid overlay -->
+  <div style="position:absolute;inset:0;opacity:0.03;background-image:linear-gradient(rgba(196,164,124,0.6) 1px,transparent 1px),linear-gradient(90deg,rgba(196,164,124,0.6) 1px,transparent 1px);background-size:60px 60px;pointer-events:none"></div>
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:1">
+
+    <!-- Top label -->
+    <div style="text-align:center;margin-bottom:36px">
+      <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:40px;padding:6px 18px;font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.9);font-family:'DM Sans',sans-serif">
+        <span style="width:6px;height:6px;border-radius:50%;background:#c4a47c;display:inline-block;animation:pulseLive 1.5s infinite"></span>
+        Why PropertyFinder Global
+      </span>
+      <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:700;color:#fff;margin:16px 0 12px;line-height:1.2">One Platform.<br><em style="font-style:italic;color:#c4a47c">Everything. Everywhere.</em></h2>
+      <p style="font-size:15px;color:rgba(255,255,255,0.8);max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.7">Built for buyers, sellers, agents and investors across 185 countries — with every tool you need in one place.</p>
+    </div>
+
+    <!-- Feature pills row -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:40px">
+      
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">🎤 AI Voice Search</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">🏛️ Live Auctions</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">🧮 5 Free Calculators</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">💰 From $2 / Listing</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">📊 50 Currencies</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">📸 30 Photos + Video</div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:40px;padding:8px 18px;font-size:13px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif">❌ No Contracts</div>
+    </div></div>
+</section>
+<!-- ═══ END PLATFORM FEATURES BANNER ═══ -->
+
+<section class="sections-grid">
+  <div class="container">
+    <h2>Everything You Need</h2>
+    <p class="sub">One platform — buy, rent, sell, auction, calculate and advertise worldwide</p>
+    <div class="cards-wrap">
+      
+    <a href="buy.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <h3>Buy Property</h3>
+      <p>Residential, commercial, industrial & farm properties for sale across 185 countries.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="rent.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <h3>Rent Property</h3>
+      <p>Premium short and long-term rentals — apartments, offices, warehouses and farms.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="business.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+      <h3>Business for Sale</h3>
+      <p>Restaurants, retail, tech, franchises, healthcare, agriculture and more.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="auctions.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <h3>Auctions</h3>
+      <p>Timed online auctions for residential, commercial, industrial and farm properties.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="calculators.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+      <h3>Calculators</h3>
+      <p>Mortgage, affordability, transfer cost, rental yield and bond calculators.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="advertise.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <h3>Advertise With Us</h3>
+      <p>Reach thousands of serious buyers. Premium listing packages for every budget.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="agency.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <h3>Agency Partnership</h3>
+      <p>Join our global network of verified agencies and grow your business worldwide.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    <a href="list-property.html" class="section-card">
+      <div class="card-ico" style="width:36px;height:36px;border-radius:8px;background:rgba(196,164,124,0.08);border:1px solid rgba(196,164,124,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#c4a47c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      <h3>List Property</h3>
+      <p>List your property in minutes. Private sellers welcome — no agent required.</p>
+      <span class="card-arrow">Explore →</span>
+    </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POPULAR SEARCHES ═══ -->
+<div class="ps-section">
+  <div class="container">
+
+    <div class="ps-hdr">
+      <div>
+        <div class="ps-eyebrow">🔥 Trending Now</div>
+        <div class="ps-title">Popular Searches</div>
+      </div>
+      <a href="popular-searches.html" class="ps-see-all">See all trending →</a>
+    </div>
+
+    <!-- Destination Photo Cards -->
+    <div class="ps-dest-grid">
+      <div class="ps-dest-card featured" onclick="psSearch('Camps Bay, Cape Town')">
+        <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=800&q=75" alt="Cape Town" loading="lazy">
+        <div class="dc-ov"></div>
+        <span class="dc-badge hot">🔥 #1 Trending</span>
+        <div class="dc-body"><div class="dc-name">Cape Town, South Africa</div><div class="dc-meta">48K searches this month</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('Dubai Marina apartment')">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=75" alt="Dubai" loading="lazy">
+        <div class="dc-ov"></div>
+        <span class="dc-badge hot">🔥 Hot</span>
+        <div class="dc-body"><div class="dc-name">Dubai, UAE</div><div class="dc-meta">38K searches</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('Algarve Portugal villa')">
+        <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=75" alt="Algarve" loading="lazy">
+        <div class="dc-ov"></div>
+        <span class="dc-badge trending">📈 +34%</span>
+        <div class="dc-body"><div class="dc-name">Algarve, Portugal</div><div class="dc-meta">29K searches</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('London property')">
+        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=75" alt="London" loading="lazy">
+        <div class="dc-ov"></div>
+        <span class="dc-badge new-dest">🆕 Rising</span>
+        <div class="dc-body"><div class="dc-name">London, UK</div><div class="dc-meta">24K searches</div></div>
+      </div>
+    </div>
+
+    <!-- Search Pills -->
+    <div class="ps-pills-wrap">
+      <div class="ps-pill" onclick="psSearch('3 bedroom house Cape Town')"><span class="p-ico">🏠</span> 3 Bed House — Cape Town <span class="p-count">12.4K</span></div>
+      <div class="ps-pill" onclick="psSearch('apartment Dubai Marina')"><span class="p-ico">🏢</span> Apartment — Dubai Marina <span class="p-count">9.8K</span></div>
+      <div class="ps-pill" onclick="psSearch('villa Algarve')"><span class="p-ico">🏡</span> Villa — Algarve <span class="p-count">8.2K</span></div>
+      <div class="ps-pill" onclick="psSearch('wine farm Stellenbosch')"><span class="p-ico">🌾</span> Wine Farm — Stellenbosch <span class="p-count">6.4K</span></div>
+      <div class="ps-pill" onclick="psSearch('office space London')"><span class="p-ico">🏢</span> Office — London <span class="p-count">5.9K</span></div>
+      <div class="ps-pill" onclick="psSearch('penthouse Singapore')"><span class="p-ico">🌇</span> Penthouse — Singapore <span class="p-count">5.1K</span></div>
+      <div class="ps-pill" onclick="psSearch('beachfront Phuket')"><span class="p-ico">🏖️</span> Beachfront — Phuket <span class="p-count">4.8K</span></div>
+      <div class="ps-pill" onclick="psSearch('restaurant for sale')"><span class="p-ico">🍽️</span> Restaurant for Sale <span class="p-count">4.3K</span></div>
+      <div class="ps-pill" onclick="psSearch('warehouse Gauteng')"><span class="p-ico">🏭</span> Warehouse — Gauteng <span class="p-count">3.7K</span></div>
+      <div class="ps-pill" onclick="psSearch('townhouse Sandton')"><span class="p-ico">🏘️</span> Townhouse — Sandton <span class="p-count">3.5K</span></div>
+      <div class="ps-pill" onclick="psSearch('sea view Marbella')"><span class="p-ico">🌊</span> Sea View — Marbella <span class="p-count">3.2K</span></div>
+      <div class="ps-pill" onclick="psSearch('game farm Limpopo')"><span class="p-ico">🦁</span> Game Farm — Limpopo <span class="p-count">2.1K</span></div>
+    </div>
+
+    <!-- Recent Searches -->
+    <div class="ps-recent-lbl">🕐 Your Recent Searches</div>
+    <div class="ps-recent-row" id="psRecentRow"></div>
+    <div id="psNoRecent" style="font-size:13px;color:#8a7d5a;padding:8px 0;display:none">No recent searches yet — start exploring above.</div>
+
+    <div class="ps-cta-row">
+      <a href="popular-searches.html" class="ps-btn-primary">🔥 View All Trending Searches →</a>
+      <a href="countries.html" class="ps-btn-outline">🌍 Browse 185 Countries</a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ ADVERTISE WITH US — homepage block ═══ -->
+<div style="background:linear-gradient(135deg,#0D0D0D 0%,#141c2b 40%,#1a2535 100%);padding:64px 20px;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 70% 50%,rgba(196,164,124,0.12),transparent);pointer-events:none"></div>
+  <div style="max-width:1200px;margin:0 auto;position:relative">
+
+    <!-- TOP: PPC GLOW STATEMENT -->
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-family:'Cinzel',serif;font-size:clamp(1.4rem,3.5vw,2.6rem);font-weight:800;color:#c4a47c;text-shadow:0 0 20px rgba(196,164,124,0.8),0 0 40px rgba(196,164,124,0.5),0 0 80px rgba(196,164,124,0.25);animation:pfPpcGlowHome 2.5s ease-in-out infinite;line-height:1;margin-bottom:8px">YOU ONLY PAY PER CLICK</div>
+      <div style="font-family:'Cinzel',serif;font-size:clamp(0.9rem,1.8vw,1.2rem);font-weight:700;color:#fff;margin-bottom:6px">Not per view. Not per day. Only when someone taps your ad.</div>
+      <p style="font-size:14px;color:rgba(255,255,255,0.45);max-width:520px;margin:0 auto">From just $0.08 per click · $50 minimum · No contracts · Real-time tracking</p>
+      <style>@keyframes pfPpcGlowHome{0%,100%{text-shadow:0 0 20px rgba(196,164,124,0.8),0 0 40px rgba(196,164,124,0.5),0 0 80px rgba(196,164,124,0.25)}50%{text-shadow:0 0 30px rgba(196,164,124,1),0 0 60px rgba(196,164,124,0.8),0 0 120px rgba(196,164,124,0.45)}}</style>
+    </div>
+
+    <!-- REAL PHONE IMAGE — FULL WIDTH -->
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.3);color:#c4a47c;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:16px;font-family:'DM Sans',sans-serif">📱 Real Mobile Ad Previews</div>
+      <img src="Advertisement_adds_on_Mobiles.png"
+           alt="PropertyFinder ad formats on real mobile phones — Medium, Leaderboard, Half-Page, Wide Skyscraper, Mobile Leaderboard, Large Rectangle"
+           style="width:100%;max-width:1100px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.04);display:block;margin:0 auto">
+      <p style="margin-top:14px;font-size:12.5px;color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif">6 real ad formats · Plumbing · Legal · Solar · Home Builders · Finance — shown exactly as property buyers see them</p>
+    </div>
+
+    <!-- BOTTOM ROW: INFO + LEADERBOARD PHONE -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.3);color:#c4a47c;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:18px;font-family:'DM Sans',sans-serif">📢 Advertising</div>
+        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:#fff;margin-bottom:14px;line-height:1.25">Reach <span style="color:#c4a47c">2.4 Million</span><br>Property Buyers</h2>
+        <p style="color:rgba(255,255,255,0.55);font-size:14.5px;line-height:1.75;margin-bottom:22px;font-family:'DM Sans',sans-serif">Place your ad in front of high-intent buyers searching for property across 185 countries. Pay only when someone clicks.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:26px">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif">✓ CPC — pay per click only</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif">✓ $50 minimum deposit</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif">✓ No contracts</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif">✓ Real-time dashboard</span>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="advertise.html" style="display:inline-flex;align-items:center;gap:8px;background:#c4a47c;color:#003d20;font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:800;padding:13px 26px;border-radius:999px;text-decoration:none">🚀 Start Advertising</a>
+          <a href="ad-preview-guide.html" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 22px;border-radius:999px;border:2px solid rgba(255,255,255,0.2);text-decoration:none">📱 See All Ad Formats →</a>
+        </div>
+      </div>
+
+      <!-- SINGLE LEADERBOARD PHONE -->
+      <div style="text-align:center">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;font-family:'DM Sans',sans-serif">📱 Mobile Leaderboard — $0.08/click</div>
+        <img src="Mobile_add_leaderboard.png"
+             alt="Mobile Leaderboard Ad on Real Phone — Need Legal Help"
+             style="max-width:280px;width:100%;margin:0 auto;display:block;border-radius:8px;box-shadow:0 16px 48px rgba(0,0,0,0.7);filter:drop-shadow(0 0 20px rgba(196,164,124,0.15))">
+        <p style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif">Sticky top/bottom · Mobile only · $0.08 per click</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="terms-of-use.html">Terms of Use</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="commission-fees.html">Commission & Fees</a>
+      <a href="dispute-resolution.html">Dispute Resolution</a>
+      <a href="advertise.html">Advertise With Us</a>
+      <a href="agency.html">Agency Partnership</a>
+      <a href="admin-dashboard.html" style="color:rgba(255,255,255,0.3);font-size:0.78rem">🔐 Admin Dashboard (Head Office Only)</a>
+    </div>
+    <p>© 2026 PropertyFinder Global. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+
+(function(){
+  // Mobile nav
+  var btn=document.getElementById('mobileMenuBtn'),nav=document.getElementById('mobileNav');
+  if(btn&&nav){
+    btn.addEventListener('click',function(){
+      nav.classList.toggle('open');
+      // Change hamburger icon to X when open
+      var isOpen = nav.classList.contains('open');
+      btn.innerHTML = isOpen 
+        ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>'
+        : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    // Close menu when any nav link is tapped
+    nav.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){
+        nav.classList.remove('open');
+        btn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // Header scroll
+  var h=document.getElementById('siteHeader');
+  if(h)window.addEventListener('scroll',function(){h.classList.toggle('scrolled',scrollY>20);},{passive:true});
+
+  // Toast
+  window.showToast=function(msg,type){
+    var t=document.createElement('div');
+    t.className='pf-toast'+(type?' '+type:'');
+    t.textContent=msg;
+    document.body.appendChild(t);
+    setTimeout(function(){t.style.opacity='0';},2800);
+    setTimeout(function(){t.parentNode&&t.remove();},3200);
+  };
+
+  // Simple auth modal (alert fallback if overlay not present)
+  window.openAuthModal=function(tab){
+    var o=document.getElementById('authOverlay');
+    if(o){o.classList.add('open');return;}
+    var msg='Test accounts:\n• buyer@propertyfinder.com / buyer123\n• agent@propertyfinder.com / agent123\n• admin@propertyfinder.com / admin123';
+    alert(msg);
+  };
+  window.closeAuthModal=function(){var o=document.getElementById('authOverlay');if(o)o.classList.remove('open');};
+
+  // Keyboard escape
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      closeAuthModal();
+      document.querySelectorAll('.pf-detail-overlay.active').forEach(function(o){o.classList.remove('active');});
+      document.body.style.overflow='';
+    }
+  });
+})();
+
+</script>
+<script>
+/* Hero wizard JS — from file 03, untouched */
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // TOAST (stub — replaced by 22-notifications-email.html)
+    // ═══════════════════════════════════════════════════════════════════════
+    function showToast(msg, type = 'info') {
+      const t = document.createElement('div');
+      t.className = 'pf-toast ' + type;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // WIZARD STATE & DATA
+    // ═══════════════════════════════════════════════════════════════════════
+    const wizState = { step: 1, type: '', purpose: '', country: '', countryCode: '', langs: [], lang: '', query: '' };
+
+    const countryNames = {
+      za:'South Africa',gb:'United Kingdom',us:'United States',ae:'UAE',pt:'Portugal',au:'Australia',
+      ca:'Canada',de:'Germany',fr:'France',es:'Spain',it:'Italy',nl:'Netherlands',ch:'Switzerland',
+      jp:'Japan',sg:'Singapore',hk:'Hong Kong',nz:'New Zealand',ie:'Ireland',se:'Sweden',no:'Norway',
+      dk:'Denmark',fi:'Finland',at:'Austria',be:'Belgium',pl:'Poland',cz:'Czech Republic',gr:'Greece',
+      hr:'Croatia',cy:'Cyprus',mx:'Mexico',br:'Brazil',ar:'Argentina',co:'Colombia',cl:'Chile',
+      pe:'Peru',cr:'Costa Rica',pa:'Panama',sa:'Saudi Arabia',qa:'Qatar',kw:'Kuwait',bh:'Bahrain',
+      om:'Oman',jo:'Jordan',il:'Israel',tr:'Turkey',th:'Thailand',my:'Malaysia',ph:'Philippines',
+      id:'Indonesia',vn:'Vietnam','in':'India',ng:'Nigeria',ke:'Kenya',eg:'Egypt',gh:'Ghana',
+      ma:'Morocco',tz:'Tanzania',mu:'Mauritius',jm:'Jamaica',bb:'Barbados',bs:'Bahamas'
+    };
+
+    const langEmojis = {
+      'English':'🇬🇧','Español':'🇪🇸','العربية':'🇸🇦','Português':'🇵🇹',
+      'Français':'🇫🇷','Deutsch':'🇩🇪','Italiano':'🇮🇹','Nederlands':'🇳🇱','Svenska':'🇸🇪',
+      'Norsk':'🇳🇴','Dansk':'🇩🇰','Suomi':'🇫🇮','Polski':'🇵🇱','Čeština':'🇨🇿',
+      'Ελληνικά':'🇬🇷','Hrvatski':'🇭🇷','עברית':'🇮🇱','Türkçe':'🇹🇷','中文':'🇨🇳',
+      'Malay':'🇲🇾','日本語':'🇯🇵','한국어':'🇰🇷','ไทย':'🇹🇭','Filipino':'🇵🇭',
+      'Bahasa':'🇮🇩','Tiếng Việt':'🇻🇳','हिन्दी':'🇮🇳','Swahili':'🇰🇪'
+    };
+
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // WIZARD NAVIGATION
+    // ═══════════════════════════════════════════════════════════════════════
+    function wizardGoTo(step) {
+      document.querySelectorAll('.wiz-step').forEach(s => s.classList.remove('active'));
+      const target = document.querySelector(`.wiz-step[data-step="${step}"]`);
+      if (target) target.classList.add('active');
+
+      // Update progress dots
+      const displayStep = step === '1.5' ? 1.5 : parseFloat(step);
+      document.querySelectorAll('.wp-dot').forEach(d => {
+        const dStep = parseInt(d.dataset.wstep);
+        d.classList.remove('active', 'done');
+        if (dStep < Math.ceil(displayStep)) d.classList.add('done');
+        else if (dStep === Math.ceil(displayStep)) d.classList.add('active');
+      });
+
+      // Progress bar fill
+      const fill = document.getElementById('wpFill');
+      const progress = step === '1.5' ? 12.5 : ((parseFloat(step) - 1) / 4 * 100);
+      fill.style.width = progress + '%';
+
+      // Back button
+      const backBtn = document.getElementById('wizBackBtn');
+      backBtn.style.visibility = (step > 1 || step === '1.5') ? 'visible' : 'hidden';
+
+      // Step indicator
+      const stepNum = step === '1.5' ? '1b' : step;
+      document.getElementById('wizStepIndicator').textContent = `Step ${stepNum} of 5`;
+
+      // Hide nav on step 5
+      document.getElementById('wizNav').style.display = step == 5 ? 'none' : 'flex';
+
+      wizState.step = step;
+    }
+
+    function wizardBack() {
+      if (wizState.step === '1.5') {
+        wizardGoTo(1);
+      } else if (wizState.step == 2 && wizState.type === 'property') {
+        wizardGoTo('1.5');
+      } else if (wizState.step == 2 && wizState.type === 'business') {
+        wizardGoTo(1);
+      } else if (wizState.step > 1) {
+        wizardGoTo(wizState.step - 1);
+      }
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // STEP 1: Choose Type
+    // ═══════════════════════════════════════════════════════════════════════
+    function wizardChooseType(value, el) {
+      wizState.type = value;
+      el.closest('.wiz-step').querySelectorAll('.wiz-option-card-img').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      setTimeout(() => {
+        if (value === 'property') { wizardGoTo('1.5'); }
+        else { wizardGoTo(2); }
+      }, 400);
+    }
+
+    // Step 1.5: Buy or Rent
+    function wizardChoosePurpose(value, el) {
+      wizState.purpose = value;
+      el.closest('.wiz-step').querySelectorAll('.wiz-option-card-img').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      setTimeout(() => wizardGoTo(2), 400);
+    }
+
+    // Legacy compatibility
+    function wizardChoose(step, value, el) { wizardChooseType(value, el); }
+
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // STEP 2: Choose Country
+    // ═══════════════════════════════════════════════════════════════════════
+    function wizardChooseCountryByName(countryCode) {
+    var card = document.querySelector('.wiz-country-card[data-country="'+countryCode+'"]');
+    if (card) {
+      document.getElementById('countrySearchInput').value = card.querySelector('.wc-name').textContent;
+      document.getElementById('countrySearchDrop').style.display = 'none';
+      wizardChooseCountry(card);
+    }
+  }
+  function wizardChooseCountry(el) {
+      const code = el.dataset.country;
+      const langs = el.dataset.langs.split(',');
+      wizState.country = el.querySelector('.wc-name').textContent;
+      wizState.countryCode = code;
+      wizState.langs = langs;
+
+      document.querySelectorAll('.wiz-country-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+
+      // Build language options for step 3
+      const langGrid = document.getElementById('wizLangGrid');
+      langGrid.innerHTML = '';
+      langs.forEach(lang => {
+        const btn = document.createElement('button');
+        btn.className = 'wiz-lang-card';
+        btn.innerHTML = `<span class="wl-emoji">${langEmojis[lang] || '🌐'}</span><span class="wl-name">${lang}</span>`;
+        btn.onclick = () => wizardChooseLang(lang, btn);
+        langGrid.appendChild(btn);
+      });
+
+      // If only 1 language, skip step 3
+      if (langs.length === 1) {
+        wizState.lang = langs[0];
+        setTimeout(() => { prepareStep4(); wizardGoTo(4); }, 350);
+      } else {
+        setTimeout(() => wizardGoTo(3), 350);
+      }
+    }
+
+    // Country search filter
+    function wizActiveRegion() {
+    var active = document.querySelector('.wiz-region-btn.wiz-region-active');
+    return active ? active.textContent.replace(/[^a-zA-Z ]/g,'').trim().toLowerCase() : 'all';
+  }
+  function wizFilterRegion(region, btn) {
+    document.querySelectorAll('.wiz-region-btn').forEach(function(b){ b.classList.remove('wiz-region-active'); });
+    btn.classList.add('wiz-region-active');
+    filterCountries(document.getElementById('countrySearchInput').value);
+  }
+  function filterCountries(query) {
+    var region = wizActiveRegion();
+    var cards = document.querySelectorAll('.wiz-country-card');
+    var q = (query||'').toLowerCase().trim();
+    var drop = document.getElementById('countrySearchDrop');
+
+    // Filter grid cards
+    cards.forEach(function(card) {
+      var name = (card.querySelector('.wc-name')||{}).textContent||'';
+      var cardRegion = (card.dataset.region||'').toLowerCase();
+      var matchQ = !q || name.toLowerCase().includes(q) || card.dataset.country.includes(q);
+      var matchR = region==='all' || cardRegion===region || cardRegion.includes(region);
+      card.style.display = (matchQ && matchR) ? '' : 'none';
+    });
+
+    // Live dropdown suggestions while typing
+    if (q.length >= 1 && drop) {
+      var suggestions = [];
+      cards.forEach(function(card) {
+        var name = (card.querySelector('.wc-name')||{}).textContent||'';
+        var cardRegion = (card.dataset.region||'').toLowerCase();
+        if (name.toLowerCase().includes(q) && (region==='all' || cardRegion===region || cardRegion.includes(region))) {
+          suggestions.push({name:name, country:card.dataset.country, card:card});
+        }
+      });
+      if (suggestions.length > 0) {
+        drop.innerHTML = suggestions.slice(0,8).map(function(s){
+          return '<div onclick="wizardChooseCountryByName(\'' + s.country + '\')" style="padding:10px 16px;cursor:pointer;font-size:14px;color:#e8dfc8;border-bottom:1px solid #F0F0F0;display:flex;align-items:center;gap:10px;transition:background 0.15s" onmouseover="this.style.background=\'#1a2535\'" onmouseout="this.style.background=\'\'">'+
+            '<img src="https://flagcdn.com/w40/'+s.country+'.png" style="width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0">'+
+            '<span style="font-weight:600">'+s.name+'</span>'+
+          '</div>';
+        }).join('');
+        drop.style.display = 'block';
+      } else {
+        drop.style.display = 'none';
+      }
+    } else if (drop) {
+      drop.style.display = 'none';
+    }
+  } // end filterCountries
+
+  var btn = document.querySelector('.voice-btn');
+  if (!btn) { btn = document.createElement('button'); }
+
+  var recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  var isListening = false;
+
+  // Detect language from wizard state if available
+  function getSpeechLang() {
+    if (window.wizState && wizState.lang) {
+      var langMap = {
+        'العربية': 'ar-SA', 'Deutsch': 'de-DE',
+        'Español': 'es-ES', 'Français': 'fr-FR', 'Italiano': 'it-IT',
+        'Nederlands': 'nl-NL', 'Português': 'pt-PT', 'Svenska': 'sv-SE',
+        'Polski': 'pl-PL', 'Čeština': 'cs-CZ', 'Ελληνικά': 'el-GR',
+        'Türkçe': 'tr-TR', '中文': 'zh-CN', '日本語': 'ja-JP',
+        '한국어': 'ko-KR', 'हिन्दी': 'hi-IN', 'Swahili': 'sw-KE',
+        'Tiếng Việt': 'vi-VN', 'ไทย': 'th-TH', 'Bahasa': 'id-ID'
+      };
+      return langMap[wizState.lang] || 'en-US';
+    }
+    return 'en-US';
+  }
+
+  function startListening() {
+    if (isListening) { stopListening(); return; }
+    recognition.lang = getSpeechLang();
+    recognition.start();
+  }
+
+  function stopListening() {
+    recognition.stop();
+  }
+
+  recognition.onstart = function() {
+    isListening = true;
+    btn.classList.add('listening');
+    btn.setAttribute('aria-label', 'Stop voice search');
+    var input = document.getElementById('searchInput');
+    if (input) { input.placeholder = 'Listening… speak now'; }
+    showToast('🎤 Listening… speak your search', 'info');
+  };
+
+  recognition.onresult = function(event) {
+    var transcript = '';
+    for (var i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    var input = document.getElementById('searchInput');
+    if (input) { input.value = transcript; }
+  };
+
+  recognition.onend = function() {
+    isListening = false;
+    btn.classList.remove('listening');
+    btn.setAttribute('aria-label', 'Voice search');
+    var input = document.getElementById('searchInput');
+    if (input) {
+      input.placeholder = 'Search by city, suburb, or address...';
+      if (input.value.trim()) {
+        showToast('✓ Got it: "' + input.value.trim() + '"', 'success');
+      }
+    }
+  };
+
+  recognition.onerror = function(event) {
+    isListening = false;
+    btn.classList.remove('listening');
+    btn.setAttribute('aria-label', 'Voice search');
+    var input = document.getElementById('searchInput');
+    if (input) { input.placeholder = 'Search by city, suburb, or address...'; }
+    var msgs = {
+      'not-allowed': 'Microphone access denied. Please allow microphone in browser settings.',
+      'no-speech':   'No speech detected. Please try again.',
+      'network':     'Network error. Please check your connection.',
+      'aborted':     ''
+    };
+    var msg = msgs[event.error] || 'Voice search error. Please try again.';
+    if (msg) showToast(msg, 'error');
+  };
+
+  btn.addEventListener('click', startListening);
+
+  // Also allow Enter key on the search input to stop listening
+  var searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && isListening) { stopListening(); }
+    });
+  }
+
+  console.log('%c PropertyFinder — AI Voice Search ready', 'color: #141c2b; font-weight: bold;');
+</script>
+
+
+<script>
+/* ── Popular Searches: navigate + recent ── */
+function psSearch(query){
+  try{
+    const r=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+    r.unshift({query,timestamp:Date.now()});
+    localStorage.setItem('pf_recent_searches',JSON.stringify(r.slice(0,10)));
+  }catch(e){}
+  const q=query.toLowerCase();
+  let dest='buy.html';
+  if(q.includes('rent')||q.includes('rental')||q.includes('holiday')||q.includes('short-term'))dest='rent.html';
+  else if(q.includes('auction')||q.includes('bid'))dest='auctions.html';
+  else if(q.includes('business')||q.includes('restaurant')||q.includes('franchise'))dest='business.html';
+  else if(q.includes('farm')||q.includes('wine')||q.includes('game farm'))dest='buy-farm.html';
+  else if(q.includes('warehouse')||q.includes('industrial')||q.includes('factory'))dest='buy-industrial.html';
+  else if(q.includes('office')||q.includes('commercial'))dest='buy-commercial.html';
+  else if(q.includes('country'))dest='countries.html';
+  // Show toast then navigate
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:8px;color:#fff;font-size:13.5px;font-weight:600;z-index:9999;background:#141c2b;box-shadow:0 8px 24px rgba(0,0,0,0.2);white-space:nowrap;font-family:DM Sans,sans-serif';
+  t.textContent='🔍 Searching: '+query;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.remove();window.location.href=dest+'?q='+encodeURIComponent(query);},700);
+  psLoadRecent();
+}
+function psLoadRecent(){
+  const row=document.getElementById('psRecentRow');
+  const none=document.getElementById('psNoRecent');
+  if(!row)return;
+  try{
+    const r=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+    if(!r.length){row.style.display='none';none.style.display='block';return;}
+    none.style.display='none';row.style.display='flex';
+    row.innerHTML=r.slice(0,8).map(item=>{
+      const s=Math.floor((Date.now()-item.timestamp)/1000);
+      const ago=s<60?'Just now':s<3600?Math.floor(s/60)+'m ago':s<86400?Math.floor(s/3600)+'h ago':Math.floor(s/86400)+'d ago';
+      return`<div class="ps-recent-item" onclick="psSearch('${item.query.replace(/'/g,"\'")}')">🔍 ${item.query}<span class="ri-time">${ago}</span></div>`;
+    }).join('');
+  }catch(e){none.style.display='block';}
+}
+document.addEventListener('DOMContentLoaded',psLoadRecent);
+</script>
+<script src="pf-core.js"></script>
+<!-- ═══ MOBILE BOTTOM NAV ═══ -->
+<style>
+#pfBotNav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:#0e1520;border-top:1px solid rgba(196,164,124,0.25);z-index:999999;padding-bottom:env(safe-area-inset-bottom,0px)}
+#pfBotNav .bn-inner{display:flex;align-items:stretch;height:64px;max-width:500px;margin:0 auto}
+#pfBotNav a,#pfBotNav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(232,223,200,0.5);text-decoration:none;font-size:9px;font-weight:700;font-family:'DM Sans',sans-serif;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;text-transform:uppercase;letter-spacing:0.03em}
+#pfBotNav a.active,#pfBotNav a:active{color:#c4a47c}
+#pfBotNav .bn-ico{font-size:20px;line-height:1}
+#pfBotNav .bn-cta{background:#c4a47c!important;color:#1a1408!important;border-radius:10px;margin:8px 4px;padding:4px 8px;font-weight:800!important}
+#pfBotNav .bn-cta .bn-ico{font-size:16px}
+#pfBotNav .bn-cta span:last-child{color:#1a1408!important}
+/* Drawer */
+#pfBotOverlay{display:none;position:fixed;inset:0;background:rgba(14,21,32,0.8);z-index:9999999;backdrop-filter:blur(4px)}
+#pfBotOverlay.open{display:block}
+#pfBotDrawer{position:fixed;bottom:0;left:0;right:0;background:#141c2b;border-radius:20px 20px 0 0;border-top:1px solid rgba(196,164,124,0.25);z-index:10000000;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);max-height:88vh;overflow-y:auto;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px)}
+#pfBotDrawer.open{transform:translateY(0)}
+.bn-handle{width:40px;height:4px;background:rgba(196,164,124,0.3);border-radius:2px;margin:12px auto 0}
+.bn-dhead{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid rgba(196,164,124,0.12)}
+.bn-dtitle{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#e8dfc8;letter-spacing:0.05em}
+.bn-dclose{width:32px;height:32px;background:rgba(196,164,124,0.1);border:1px solid rgba(196,164,124,0.2);border-radius:8px;color:#c4a47c;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
+.bn-dsec{padding:14px 20px 6px}
+.bn-dlab{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:#c4a47c;margin-bottom:10px;font-family:'DM Sans',sans-serif}
+.bn-dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.bn-ditem{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1a2535;border:1px solid rgba(196,164,124,0.15);border-radius:10px;color:#e8dfc8;text-decoration:none;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.bn-ditem:active{background:#1f2d3d;border-color:rgba(196,164,124,0.4);color:#c4a47c}
+.bn-ditem .bn-di{font-size:20px;flex-shrink:0}
+.bn-ditem.bn-full{grid-column:span 2;background:#c4a47c;border-color:#c4a47c;color:#1a1408;justify-content:center;font-weight:800;font-size:14px}
+.bn-ddiv{height:1px;background:rgba(196,164,124,0.1);margin:4px 20px}
+.bn-dsec2{display:flex;flex-wrap:wrap;gap:8px;padding:8px 20px 16px}
+.bn-dsec2 a{padding:7px 14px;background:#1a2535;border:1px solid rgba(196,164,124,0.12);border-radius:999px;color:#c8b98a;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;text-decoration:none}
+@media(max-width:768px){
+  #pfBotNav{display:block!important}
+  body{padding-bottom:72px!important}
+}
+</style>
+
+<div id="pfBotNav">
+  <div class="bn-inner">
+    <a href="index.html" class="active"><span class="bn-ico">🏠</span><span>Home</span></a>
+    <a href="buy.html"><span class="bn-ico">🔍</span><span>Buy</span></a>
+    <a href="rent.html"><span class="bn-ico">🔑</span><span>Rent</span></a>
+    <a href="auctions.html"><span class="bn-ico">🔨</span><span>Auctions</span></a>
+    <a href="list-property.html" class="bn-cta"><span class="bn-ico">＋</span><span>List</span></a>
+    <button onclick="document.getElementById('pfBotDrawer').classList.add('open');document.getElementById('pfBotOverlay').classList.add('open');document.body.style.overflow='hidden'"><span class="bn-ico">☰</span><span>More</span></button>
+  </div>
+</div>
+
+<div id="pfBotOverlay" onclick="document.getElementById('pfBotDrawer').classList.remove('open');document.getElementById('pfBotOverlay').classList.remove('open');document.body.style.overflow=''"></div>
+
+<div id="pfBotDrawer">
+  <div class="bn-handle"></div>
+  <div class="bn-dhead">
+    <span class="bn-dtitle">PropertyFinder</span>
+    <button class="bn-dclose" onclick="document.getElementById('pfBotDrawer').classList.remove('open');document.getElementById('pfBotOverlay').classList.remove('open');document.body.style.overflow=''">✕</button>
+  </div>
+  <div class="bn-dsec"><div class="bn-dlab">Property</div>
+  <div class="bn-dgrid">
+    <a class="bn-ditem" href="buy.html"><span class="bn-di">🏠</span>Buy</a>
+    <a class="bn-ditem" href="rent.html"><span class="bn-di">🔑</span>Rent</a>
+    <a class="bn-ditem" href="auctions.html"><span class="bn-di">🔨</span>Auctions</a>
+    <a class="bn-ditem" href="business.html"><span class="bn-di">💼</span>Business for Sale</a>
+    <a class="bn-ditem" href="countries.html"><span class="bn-di">🌍</span>185 Countries</a>
+    <a class="bn-ditem" href="valuation.html"><span class="bn-di">📊</span>ProVal</a>
+    <a class="bn-ditem bn-full" href="list-property.html">＋ List Your Property</a>
+  </div></div>
+  <div class="bn-ddiv"></div>
+  <div class="bn-dsec"><div class="bn-dlab">Tools & Info</div>
+  <div class="bn-dgrid">
+    <a class="bn-ditem" href="calculators.html"><span class="bn-di">🧮</span>Calculators</a>
+    <a class="bn-ditem" href="how-it-works.html"><span class="bn-di">💡</span>How It Works</a>
+    <a class="bn-ditem" href="popular-searches.html"><span class="bn-di">🔥</span>Popular</a>
+    <a class="bn-ditem" href="advertise.html"><span class="bn-di">📢</span>Advertise With Us</a>
+  </div></div>
+  <div class="bn-ddiv"></div>
+  <div class="bn-dsec2">
+    <a href="terms-of-use.html">Terms</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="fees.html">Fees</a>
+    <a href="anti-fraud.html">Anti-Fraud</a>
+  </div>
+</div>
+
+<script>
+/* Update nav buttons based on login state */
+(function() {
+  try {
+    var session = JSON.parse(localStorage.getItem('pf_session') || 'null');
+    if (session && session.loggedIn) {
+      document.addEventListener('DOMContentLoaded', function() {
+        var dashBtn   = document.getElementById('dashBtn');
+        var loginBtn  = document.getElementById('loginBtn');
+        var signupBtn = document.getElementById('signupBtn');
+        if (dashBtn) { dashBtn.textContent = '👤 ' + (session.name || 'Account'); dashBtn.href = session.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html'; }
+        if (loginBtn)  loginBtn.style.display = 'none';
+        if (signupBtn) { signupBtn.textContent = 'Log Out'; signupBtn.style.background = 'transparent'; signupBtn.style.color = '#e8dfc8'; signupBtn.style.borderColor = 'rgba(196,164,124,0.3)'; signupBtn.href = '#'; signupBtn.onclick = function(e) { e.preventDefault(); localStorage.removeItem('pf_session'); location.reload(); }; }
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

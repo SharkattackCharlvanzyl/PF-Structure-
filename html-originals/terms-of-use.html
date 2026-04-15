@@ -1,0 +1,238 @@
+<!-- FILE: terms-of-use.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PropertyFinder — Terms of Use</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#faf8f4;--panel:#ffffff;--text:#1a1408;--muted:#5a4f3a;
+      --line:rgba(196,164,124,0.18);--accent:#141c2b;--accent2:#ffffff;--accent-dark:#0e1520;
+      --lime:#c4a47c;--snow:#EDF2EF;
+      --radius:14px;--radius2:10px;--max:980px;
+      --font:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    /* Header */
+    header{
+      background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%) 0%,var(--accent) 55%,var(--accent2) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);
+      pointer-events:none;
+    }
+    header .wrap{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    h1{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;margin:0 0 10px;letter-spacing:0.3px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    .pill{
+      display:inline-block;border:1px solid rgba(255,255,255,0.2);border-radius:4px;
+      padding:5px 12px;font-size:0.75rem;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);
+      font-weight:700;letter-spacing:0.03em;text-transform:uppercase;
+    }
+    .pill .strong{color:#fff}
+    nav{display:flex;flex-wrap:wrap;gap:8px}
+    nav a{
+      color:rgba(255,255,255,0.85);font-weight:600;font-size:0.82rem;
+      padding:6px 14px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;
+    }
+    nav a:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.25);text-decoration:none}
+
+    /* Main */
+    main{max-width:var(--max);margin:0 auto;padding:24px 24px 60px}
+    section{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,0.03);
+    }
+    h2{
+      font-family:var(--font-display);font-size:1.15rem;font-weight:700;
+      margin:0 0 14px;color:var(--accent-dark);letter-spacing:0.2px;
+    }
+    h3{margin:18px 0 8px;font-size:0.95rem;font-weight:800;color:var(--text)}
+    p{margin:10px 0;font-size:0.9rem;line-height:1.65;color:var(--text)}
+    ul{margin:10px 0 0 20px;font-size:0.9rem}
+    ul li{margin-bottom:6px;line-height:1.55}
+    .note{
+      font-size:0.82rem;color:var(--muted);padding:12px;margin-top:12px;
+      border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);
+      background:rgba(196,164,124,0.03);line-height:1.5;
+    }
+    .strong{font-weight:800;color:var(--text)}
+
+    /* Section number accent */
+    section h2::before{
+      content:'';display:inline-block;width:4px;height:18px;
+      background:linear-gradient(180deg,var(--accent),var(--accent2));
+      border-radius:2px;margin-right:10px;vertical-align:middle;
+    }
+
+    /* Footer */
+    footer{
+      max-width:var(--max);margin:0 auto;padding:20px 24px 40px;
+      color:var(--muted);font-size:0.78rem;text-align:center;
+      border-top:1px solid var(--line);
+    }
+    footer a{font-weight:600}
+
+    /* Print */
+    @media print{
+      header{background:var(--accent)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      section{box-shadow:none!important;break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Terms of Use</h1>
+    <div class="meta">
+      <span class="pill">International Platform</span>
+      <span class="pill">Version: <span class="strong">1.0</span></span>
+      <span class="pill">Effective: <span class="strong">[Insert Date]</span></span>
+    </div>
+    <nav>
+      <a href="#acceptance">Acceptance</a>
+      <a href="#definitions">Definitions</a>
+      <a href="#accounts">Accounts &amp; Verification</a>
+      <a href="#platform">Platform Use</a>
+      <a href="#listings">Listings &amp; Content</a>
+      <a href="#liability">Disclaimers</a>
+      <a href="#termination">Suspension / Termination</a>
+      <a href="#law">Governing Law</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="acceptance">
+    <h2>1) Acceptance of these Terms</h2>
+    <p>
+      These Terms of Use ("Terms") govern access to and use of the PropertyFinder website, web application, mobile interfaces,
+      APIs, and related services (collectively, the "Platform") operated by <span class="strong">PropertyFinder Head Office</span>
+      ("PropertyFinder", "we", "us", "our").
+    </p>
+    <p>
+      By creating an account, accessing, browsing, listing, advertising, bidding, or otherwise using the Platform, you confirm that you:
+      (a) have read and understood these Terms; (b) agree to be legally bound by them; and (c) have authority to enter into these Terms.
+      If you do not agree, do not use the Platform.
+    </p>
+    <div class="note">
+      Auction bidding is additionally governed by the separate <a href="auction-bidding-terms.html">Online Auction Bidding Terms &amp; Conditions</a>.
+      In case of conflict, the Auction Terms prevail for auction activities.
+    </div>
+  </section>
+
+  <section id="definitions">
+    <h2>2) Definitions</h2>
+    <ul>
+      <li><span class="strong">"User"</span> means any person or entity using the Platform.</li>
+      <li><span class="strong">"Buyer"</span> means a User who searches, enquires, bids, or purchases.</li>
+      <li><span class="strong">"Seller"</span> means an owner, agent, developer, auctioneer, or authorised representative listing an item.</li>
+      <li><span class="strong">"Listing"</span> means any property or business-for-sale advertisement, including text, images, media, pricing, and documents.</li>
+      <li><span class="strong">"Auction"</span> means a time-bound bidding process hosted on the Platform.</li>
+      <li><span class="strong">"Accepted Bid"</span> means a bid approved/accepted by the Seller through the Platform.</li>
+      <li><span class="strong">"Head Office"</span> means the designated PropertyFinder contracting entity shown in the Platform's legal footer and invoices.</li>
+    </ul>
+  </section>
+
+  <section id="accounts">
+    <h2>3) Accounts, Eligibility &amp; Verification</h2>
+    <h3>3.1 Eligibility</h3>
+    <p>You must be legally capable of entering binding contracts in your jurisdiction. If you are acting for a company, you warrant you are authorised to bind that company.</p>
+
+    <h3>3.2 Account Security</h3>
+    <p>You are responsible for all activity on your account and must keep credentials secure. Notify us immediately if you suspect unauthorised access.</p>
+
+    <h3>3.3 KYC / Identity Checks</h3>
+    <p>
+      We may require identity, address, and payment verification (including third-party verification providers) and may refuse,
+      suspend, or limit access where verification is incomplete, inaccurate, or raises fraud/AML concerns.
+    </p>
+  </section>
+
+  <section id="platform">
+    <h2>4) Platform Rules (Permitted &amp; Prohibited Use)</h2>
+    <h3>4.1 Permitted Use</h3>
+    <p>You may use the Platform for lawful property search, advertising, communications, and transactions in accordance with these Terms and any applicable policies.</p>
+
+    <h3>4.2 Prohibited Conduct</h3>
+    <ul>
+      <li>Fraud, misrepresentation, shill bidding, bid manipulation, or circumvention of Platform processes.</li>
+      <li>Uploading unlawful, defamatory, infringing, or misleading content.</li>
+      <li>Attempting to bypass fees/commission, interfere with auctions, scrape data, reverse engineer, or harm Platform security.</li>
+      <li>Impersonating others, creating fake accounts, or using automated bidding tools unless expressly allowed by us.</li>
+    </ul>
+  </section>
+
+  <section id="listings">
+    <h2>5) Listings, Third-Party Content &amp; No Agency</h2>
+    <h3>5.1 Marketplace / Portal Nature</h3>
+    <p>
+      PropertyFinder is a technology platform. Unless we explicitly state otherwise in writing, we are not the seller, auctioneer,
+      conveyancer, or agent for any transaction. Listings are provided by Sellers/agents who are responsible for accuracy and legal compliance.
+    </p>
+
+    <h3>5.2 Content Responsibility</h3>
+    <p>
+      Sellers/agents warrant that listings are accurate, not misleading, and that they have all rights/authority to list.
+      PropertyFinder may remove or edit listings for compliance, quality, or risk reasons at our discretion.
+    </p>
+  </section>
+
+  <section id="liability">
+    <h2>6) Disclaimers, Limitation of Liability</h2>
+    <p>
+      The Platform is provided "as is" and "as available". We do not guarantee uninterrupted availability, error-free operation,
+      or that listings are complete or accurate. You remain responsible for due diligence, inspections, legal and financial advice.
+    </p>
+    <p>
+      To the maximum extent permitted by law, PropertyFinder is not liable for indirect, consequential, special, or punitive damages,
+      or for losses arising from reliance on listings, third-party content, failed communications, or disputes between Users.
+    </p>
+  </section>
+
+  <section id="termination">
+    <h2>7) Suspension, Termination &amp; Enforcement</h2>
+    <p>
+      We may suspend, limit, or terminate accounts and access at any time where we reasonably believe there is fraud, abuse, legal risk,
+      breach of Terms/policies, or harm to Platform integrity. We may cooperate with law enforcement and share information as permitted by law.
+    </p>
+  </section>
+
+  <section id="law">
+    <h2>8) Governing Law &amp; Dispute Resolution</h2>
+    <p>
+      These Terms are governed by the law stated in the legal footer on the Platform, unless mandatory consumer rules in your jurisdiction require otherwise.
+      Dispute handling is further described in <a href="dispute-resolution.html">Dispute Resolution &amp; Arbitration</a>.
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2>9) Contact</h2>
+    <p><span class="strong">PropertyFinder Head Office:</span> [Legal Entity Name], [Registration No], [Address], [Country]</p>
+    <p><span class="strong">Legal Notices Email:</span> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8be7eeeceae7cbfbf9e4fbeef9fff2ede2e5efeef9a5ffe7ef">[email&#160;protected]</a>]</p>
+    <p><span class="strong">Support:</span> [<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="661513161609141226161409160314121f000f0802031448120a02">[email&#160;protected]</a>]</p>
+  </section>
+
+  <section>
+    <h2>Important Legal Note</h2>
+    <div class="note">
+      This template is designed for international use, but laws differ by country (consumer protection, auction rules, real-estate regulation,
+      AML/KYC, data protection). Have local counsel adapt the governing law, consumer disclosures, and any mandatory provisions for each target market.
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder.   <script src="/social-share.js?v=2.1"></script>

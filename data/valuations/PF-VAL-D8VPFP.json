@@ -1,0 +1,16 @@
+{
+  "referenceId": "PF-VAL-D8VPFP",
+  "status": "pending",
+  "propertyType": "house",
+  "address": "Johannesburg",
+  "fullName": "Test User",
+  "email": "test@example.com",
+  "phone": null,
+  "bedrooms": null,
+  "bathrooms": null,
+  "size": null,
+  "condition": null,
+  "notes": null,
+  "createdAt": "2026-04-06T22:01:50.615Z",
+  "ip": "::1"
+}

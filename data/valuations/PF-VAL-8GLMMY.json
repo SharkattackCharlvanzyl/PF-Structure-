@@ -1,0 +1,16 @@
+{
+  "referenceId": "PF-VAL-8GLMMY",
+  "status": "pending",
+  "propertyType": "house",
+  "address": "45 Beach Road, Camps Bay, Cape Town",
+  "fullName": "Charl van Zyl",
+  "email": "charl@property-finder.co.za",
+  "phone": "+27820001234",
+  "bedrooms": "4",
+  "bathrooms": "3",
+  "size": "350",
+  "condition": "excellent",
+  "notes": "Ocean view property",
+  "createdAt": "2026-04-04T20:05:40.920Z",
+  "ip": "::1"
+}

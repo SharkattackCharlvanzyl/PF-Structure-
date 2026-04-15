@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Popular Searches &amp; Trending</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#1a2535;--nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;--nb-border:rgba(196,164,124,0.18);--nb-text:#e8dfc8;--nb-muted:#8a7d5a;
+      --nb-hero-grad:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      --nb-hero-overlay:linear-gradient(160deg,rgba(14,21,32,0.3) 0%,rgba(14,21,32,0.05) 100%);
+      --shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    /* Hero */
+    .hero{position:relative;background:var(--nb-hero-grad);padding:52px 24px 44px;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero h1{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.3rem);font-weight:700;color:white;margin-bottom:12px}
+    .hero p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:600px;margin:0 auto;line-height:1.6}
+
+    /* Ticker */
+    .ticker-wrap{background:var(--nb-green-dark);overflow:hidden;position:relative;padding:12px 0}
+    .ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2}
+    .ticker-wrap::before{left:0;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%),transparent)}
+    .ticker-wrap::after{right:0;background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%))}
+    .ticker{display:flex;gap:32px;animation:tickerScroll 60s linear infinite;width:max-content}
+    .ticker:hover{animation-play-state:paused}
+    @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .ticker-item{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.85);flex-shrink:0}
+    .ticker-item .t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+    .ticker-item .t-dot.up{background:var(--nb-lime)}
+    .ticker-item .t-dot.hot{background:#EF4444}
+    .ticker-item .t-dot.new{background:#3B82F6}
+    .ticker-item .t-tag{padding:2px 8px;border-radius:4px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
+    .ticker-item .t-tag.up{background:rgba(196,164,124,0.2);color:var(--nb-lime)}
+    .ticker-item .t-tag.hot{background:rgba(239,68,68,0.2);color:#FCA5A5}
+    .ticker-item .t-tag.new{background:rgba(59,130,246,0.2);color:#93C5FD}
+
+    .section{padding:52px 24px;background:var(--nb-white)}
+    .section.alt{background:var(--nb-offwhite)}
+    .section.dark{background:linear-gradient(135deg,#0e1520,#141c2b));color:white}
+    .inner{max-width:1220px;margin:0 auto}
+    .s-title{font-family:var(--font-display);font-size:clamp(1.15rem,2.5vw,1.5rem);font-weight:700;color:#e8dfc8;text-align:center;margin-bottom:6px}
+    .section.dark .s-title{color:white}
+    .s-sub{font-size:0.92rem;color:var(--nb-muted);text-align:center;max-width:600px;margin:0 auto 32px;line-height:1.6}
+    .section.dark .s-sub{color:rgba(255,255,255,0.65)}
+
+    /* Image cards — trending destinations */
+    .dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dest-grid .featured{grid-column:span 2;grid-row:span 2}
+    @media(max-width:900px){.dest-grid{grid-template-columns:repeat(2,1fr)}.dest-grid .featured{grid-column:span 2}}
+    @media(max-width:560px){.dest-grid{grid-template-columns:1fr}.dest-grid .featured{grid-column:span 1;grid-row:span 1}}
+    .dest-card{position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;box-shadow:var(--shadow);transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94)}
+    .dest-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+    .dest-card:hover img{transform:scale(1.06)}
+    .dest-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s cubic-bezier(0.16,1,0.3,1);min-height:180px}
+    .dest-card .featured img{min-height:380px}
+    .dest-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.7) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px}
+    .dest-badge{position:absolute;top:12px;left:12px;display:flex;gap:6px}
+    .dest-badge span{padding:4px 10px;border-radius:4px;font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;backdrop-filter:blur(6px)}
+    .dest-badge .trending{background:rgba(239,68,68,0.85);color:white}
+    .dest-badge .popular{background:rgba(196,164,124,0.85);color:#e8dfc8}
+    .dest-badge .rising{background:rgba(59,130,246,0.85);color:white}
+    .dest-badge .new{background:rgba(255,255,255,0.9);color:#c4a47c}
+    .dest-name{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:white;margin-bottom:2px}
+    .dest-card.featured .dest-name{font-size:1.4rem}
+    .dest-meta{font-size:0.78rem;color:rgba(255,255,255,0.7)}
+    .dest-count{font-size:0.72rem;font-weight:800;color:var(--nb-lime);margin-top:4px}
+
+    /* Popular search pills */
+    .pill-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .search-pill{padding:10px 18px;border-radius:4px;background:var(--nb-white);border:1px solid var(--nb-border);font-size:0.85rem;font-weight:700;color:#e8dfc8;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+    .search-pill:hover{border-color:#c4a47c;color:#c4a47c;transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+    .search-pill .p-ico{font-size:1.1rem}
+    .search-pill .p-count{font-size:0.68rem;color:var(--nb-muted);font-weight:600}
+
+    /* Property type trends */
+    .trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .trend-card{padding:20px;border-radius:var(--radius);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow);cursor:pointer;transition:all 0.3s ease;display:flex;align-items:center;gap:14px}
+    .trend-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:#c4a47c}
+    .trend-card .t-ico{font-size:2rem;flex-shrink:0}
+    .trend-card .t-body{flex:1;min-width:0}
+    .trend-card h3{font-size:0.9rem;font-weight:800;margin-bottom:2px}
+    .trend-card .t-sub{font-size:0.75rem;color:var(--nb-muted)}
+    .trend-card .t-change{font-size:0.72rem;font-weight:800;padding:3px 8px;border-radius:4px;margin-top:4px;display:inline-block}
+    .trend-card .t-change.up{background:rgba(22,163,74,0.1);color:#16A34A}
+    .trend-card .t-change.down{background:rgba(220,38,38,0.1);color:#DC2626}
+    .trend-card .t-change.stable{background:rgba(196,164,124,0.06);color:var(--nb-muted)}
+
+    /* Price range cards */
+    .price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+    .price-pill{padding:16px;border-radius:var(--radius2);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);text-align:center;cursor:pointer;transition:all 0.2s ease}
+    .price-pill:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25);transform:translateY(-2px)}
+    .price-pill .pp-ico{font-size:1.5rem;margin-bottom:6px}
+    .price-pill h4{font-size:0.88rem;font-weight:800;color:white;margin-bottom:2px}
+    .price-pill p{font-size:0.72rem;color:rgba(255,255,255,0.6)}
+
+    /* Recent searches */
+    .recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+    .recent-card{padding:16px 18px;border-radius:var(--radius2);background:var(--nb-white);border:1px solid var(--nb-border);box-shadow:var(--shadow);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:14px}
+    .recent-card:hover{border-color:#c4a47c;transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+    .recent-card .r-ico{font-size:1.6rem;flex-shrink:0}
+    .recent-card .r-body{flex:1;min-width:0}
+    .recent-card h4{font-size:0.88rem;font-weight:800;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .recent-card p{font-size:0.75rem;color:var(--nb-muted)}
+    .recent-card .r-time{font-size:0.68rem;color:var(--nb-muted);flex-shrink:0}
+
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+    .cta-btn{padding:14px 28px;border-radius:var(--radius3);font-size:0.95rem;font-weight:800;cursor:pointer;font-family:var(--font);border:none;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+    .cta-btn.primary{background:var(--nb-lime);color:#e8dfc8}
+    .cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,164,124,0.3)}
+    .cta-btn.outline{background:var(--nb-white);color:#c4a47c;border:2px solid rgba(196,164,124,0.4)}
+    .cta-btn.outline:hover{background:#c4a47c;color:#0e1520}
+
+    .footer{max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Popular Searches &amp; Trending</h1>
+      <p>Discover what buyers around the world are searching for right now. Trending destinations, popular property types, and the hottest markets.</p>
+    </div>
+  </div>
+
+  <!-- ═══ LIVE TRENDING TICKER ═══ -->
+  <div class="ticker-wrap">
+    <div class="ticker" id="ticker">
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇵🇹 Algarve villas <span class="t-tag up">📈 +34%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇬🇧 London commercial offices <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇪🇸 Marbella sea view <span class="t-tag up">📈 +28%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="t-tag up">📈 +22%</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇦🇺 Sydney harbour view <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇸🇬 Singapore penthouse <span class="t-tag up">📈 +18%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇬🇷 Santorini villa <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇳🇿 Queenstown lodge <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇫🇷 Paris apartment <span class="t-tag up">📈 +15%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇺🇸 Miami waterfront <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇩🇪 Berlin investment <span class="t-tag up">📈 +12%</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇧🇷 Rio beachfront <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇲🇦 Marrakech riad <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇭🇷 Dubrovnik coast <span class="t-tag up">📈 +31%</span></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇵🇹 Algarve villas <span class="t-tag up">📈 +34%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇬🇧 London commercial offices <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇪🇸 Marbella sea view <span class="t-tag up">📈 +28%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="t-tag up">📈 +22%</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇦🇺 Sydney harbour view <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇸🇬 Singapore penthouse <span class="t-tag up">📈 +18%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇬🇷 Santorini villa <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇳🇿 Queenstown lodge <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇫🇷 Paris apartment <span class="t-tag up">📈 +15%</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇺🇸 Miami waterfront <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇩🇪 Berlin investment <span class="t-tag up">📈 +12%</span></div>
+      <div class="ticker-item"><div class="t-dot new"></div> 🇧🇷 Rio beachfront <span class="t-tag new">🆕 New</span></div>
+      <div class="ticker-item"><div class="t-dot hot"></div> 🇲🇦 Marrakech riad <span class="t-tag hot">🔥 Hot</span></div>
+      <div class="ticker-item"><div class="t-dot up"></div> 🇭🇷 Dubrovnik coast <span class="t-tag up">📈 +31%</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ TRENDING DESTINATIONS ═══ -->
+  <div class="section" id="destinations">
+    <div class="inner">
+      <h2 class="s-title">🔥 Trending Destinations</h2>
+      <p class="s-sub">The most searched locations on PropertyFinder this month. Click any destination to explore listings.</p>
+
+      <div class="dest-grid">
+        <div class="dest-card featured" onclick="searchDest('Camps Bay, Cape Town')">
+          <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=800&q=80" alt="Cape Town" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="trending">🔥 #1 Trending</span></div>
+            <div class="dest-name">Cape Town, South Africa</div>
+            <div class="dest-meta">Camps Bay · Constantia · Hout Bay · Franschhoek</div>
+            <div class="dest-count">📊 12,400+ listings · 🔍 48K searches this month</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Dubai Marina')">
+          <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80" alt="Dubai" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="trending">🔥 Hot</span></div>
+            <div class="dest-name">Dubai, UAE</div>
+            <div class="dest-meta">Marina · Downtown · Palm Jumeirah</div>
+            <div class="dest-count">📊 9,400+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Algarve, Portugal')">
+          <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=600&q=80" alt="Algarve" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="rising">📈 Rising</span></div>
+            <div class="dest-name">Algarve, Portugal</div>
+            <div class="dest-meta">Lagos · Vilamoura · Albufeira</div>
+            <div class="dest-count">📊 8,600+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('London')">
+          <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80" alt="London" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="popular">⭐ Popular</span></div>
+            <div class="dest-name">London, UK</div>
+            <div class="dest-meta">Chelsea · Mayfair · Canary Wharf</div>
+            <div class="dest-count">📊 28,500+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Barcelona, Spain')">
+          <img src="https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=600&q=80" alt="Barcelona" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="popular">⭐ Popular</span></div>
+            <div class="dest-name">Barcelona, Spain</div>
+            <div class="dest-meta">Eixample · Gothic Quarter · Sitges</div>
+            <div class="dest-count">📊 14,200+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Bali, Indonesia')">
+          <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80" alt="Bali" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="rising">📈 Rising</span><span class="new">🆕 New</span></div>
+            <div class="dest-name">Bali, Indonesia</div>
+            <div class="dest-meta">Seminyak · Ubud · Canggu</div>
+            <div class="dest-count">📊 2,800+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Singapore')">
+          <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=600&q=80" alt="Singapore" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="popular">⭐ Popular</span></div>
+            <div class="dest-name">Singapore</div>
+            <div class="dest-meta">Orchard · Marina Bay · Sentosa</div>
+            <div class="dest-count">📊 5,600+ listings</div>
+          </div>
+        </div>
+        <div class="dest-card" onclick="searchDest('Stellenbosch')">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80" alt="Stellenbosch" loading="lazy">
+          <div class="dest-overlay">
+            <div class="dest-badge"><span class="rising">📈 Rising</span></div>
+            <div class="dest-name">Stellenbosch, South Africa</div>
+            <div class="dest-meta">Wine Farms · Franschhoek · Paarl</div>
+            <div class="dest-count">📊 3,200+ listings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ POPULAR SEARCHES ═══ -->
+  <div class="section alt" id="popularSearches">
+    <div class="inner">
+      <h2 class="s-title">🔍 Most Popular Searches</h2>
+      <p class="s-sub">What buyers are searching for right now on PropertyFinder.</p>
+
+      <div class="pill-grid">
+        <div class="search-pill" onclick="searchDest('3 bedroom house Cape Town')"><span class="p-ico">🏠</span> 3 Bed House — Cape Town <span class="p-count">12.4K</span></div>
+        <div class="search-pill" onclick="searchDest('apartment Dubai Marina')"><span class="p-ico">🏢</span> Apartment — Dubai Marina <span class="p-count">9.8K</span></div>
+        <div class="search-pill" onclick="searchDest('villa Algarve')"><span class="p-ico">🏡</span> Villa — Algarve, Portugal <span class="p-count">8.2K</span></div>
+        <div class="search-pill" onclick="searchDest('farm Stellenbosch')"><span class="p-ico">🌾</span> Wine Farm — Stellenbosch <span class="p-count">6.4K</span></div>
+        <div class="search-pill" onclick="searchDest('office London')"><span class="p-ico">🏢</span> Office Space — London <span class="p-count">5.9K</span></div>
+        <div class="search-pill" onclick="searchDest('penthouse Singapore')"><span class="p-ico">🌇</span> Penthouse — Singapore <span class="p-count">5.1K</span></div>
+        <div class="search-pill" onclick="searchDest('beachfront Phuket')"><span class="p-ico">🏖️</span> Beachfront — Phuket <span class="p-count">4.8K</span></div>
+        <div class="search-pill" onclick="searchDest('restaurant for sale')"><span class="p-ico">🍽️</span> Restaurant for Sale <span class="p-count">4.3K</span></div>
+        <div class="search-pill" onclick="searchDest('warehouse Frankfurt')"><span class="p-ico">🏭</span> Warehouse — Frankfurt <span class="p-count">3.7K</span></div>
+        <div class="search-pill" onclick="searchDest('townhouse Sandton')"><span class="p-ico">🏘️</span> Townhouse — Sandton <span class="p-count">3.5K</span></div>
+        <div class="search-pill" onclick="searchDest('sea view Marbella')"><span class="p-ico">🌊</span> Sea View — Marbella <span class="p-count">3.2K</span></div>
+        <div class="search-pill" onclick="searchDest('investment property Berlin')"><span class="p-ico">📈</span> Investment — Berlin <span class="p-count">2.9K</span></div>
+        <div class="search-pill" onclick="searchDest('holiday home Zanzibar')"><span class="p-ico">🌴</span> Holiday Home — Zanzibar <span class="p-count">2.4K</span></div>
+        <div class="search-pill" onclick="searchDest('game farm Limpopo')"><span class="p-ico">🦁</span> Game Farm — Limpopo <span class="p-count">2.1K</span></div>
+        <div class="search-pill" onclick="searchDest('franchise for sale')"><span class="p-ico">🏪</span> Franchise for Sale <span class="p-count">1.8K</span></div>
+        <div class="search-pill" onclick="searchDest('waterfront apartment Sydney')"><span class="p-ico">🌊</span> Waterfront — Sydney <span class="p-count">1.6K</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PROPERTY TYPE TRENDS ═══ -->
+  <div class="section" id="typeTrends">
+    <div class="inner">
+      <h2 class="s-title">📊 Property Type Trends</h2>
+      <p class="s-sub">Search demand by property and business type — updated in real-time.</p>
+
+      <div class="trend-grid">
+        <div class="trend-card" onclick="searchDest('residential for sale')"><div class="t-ico">🏠</div><div class="t-body"><h3>Residential Sales</h3><div class="t-sub">Houses, Apartments, Villas</div><div class="t-change up">📈 +18% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('property to rent')"><div class="t-ico">🔑</div><div class="t-body"><h3>Rentals</h3><div class="t-sub">Long-term, Furnished, Student</div><div class="t-change up">📈 +24% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('commercial property')"><div class="t-ico">🏢</div><div class="t-body"><h3>Commercial</h3><div class="t-sub">Offices, Retail, Mixed-Use</div><div class="t-change stable">→ Stable</div></div></div>
+        <div class="trend-card" onclick="searchDest('industrial property')"><div class="t-ico">🏭</div><div class="t-body"><h3>Industrial</h3><div class="t-sub">Warehouses, Factories, Logistics</div><div class="t-change up">📈 +31% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('farm for sale')"><div class="t-ico">🌾</div><div class="t-body"><h3>Farms &amp; Agricultural</h3><div class="t-sub">Wine, Game, Crop, Livestock</div><div class="t-change up">📈 +15% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('business for sale')"><div class="t-ico">🏪</div><div class="t-body"><h3>Business for Sale</h3><div class="t-sub">Restaurant, Retail, Tech, Services</div><div class="t-change up">📈 +22% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('online auctions')"><div class="t-ico">🔨</div><div class="t-body"><h3>Online Auctions</h3><div class="t-sub">Live Bidding, No Reserve</div><div class="t-change up">📈 +42% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('holiday rental')"><div class="t-ico">🏖️</div><div class="t-body"><h3>Holiday &amp; Short-Term</h3><div class="t-sub">Airbnb, Beach, Mountain, Eco</div><div class="t-change up">📈 +36% this month</div></div></div>
+        <div class="trend-card" onclick="searchDest('luxury property')"><div class="t-ico">💎</div><div class="t-body"><h3>Luxury &amp; Premium</h3><div class="t-sub">Estates, Penthouses, Villas</div><div class="t-change stable">→ Stable</div></div></div>
+        <div class="trend-card" onclick="searchDest('new development')"><div class="t-ico">🏗️</div><div class="t-body"><h3>New Developments</h3><div class="t-sub">Off-Plan, Pre-Launch, Turnkey</div><div class="t-change up">📈 +19% this month</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ POPULAR PRICE RANGES ═══ -->
+  <div class="section dark" id="priceRanges">
+    <div class="inner">
+      <h2 class="s-title">💰 Popular Price Ranges</h2>
+      <p class="s-sub">Browse by budget — find properties in your price range.</p>
+
+      <div class="price-grid">
+        <div class="price-pill" onclick="searchDest('under $100k')"><div class="pp-ico">🏠</div><h4>Under $100K</h4><p>38,200 listings</p></div>
+        <div class="price-pill" onclick="searchDest('$100k-$250k')"><div class="pp-ico">🏡</div><h4>$100K – $250K</h4><p>62,400 listings</p></div>
+        <div class="price-pill" onclick="searchDest('$250k-$500k')"><div class="pp-ico">🏘️</div><h4>$250K – $500K</h4><p>84,600 listings</p></div>
+        <div class="price-pill" onclick="searchDest('$500k-$1m')"><div class="pp-ico">🌇</div><h4>$500K – $1M</h4><p>56,800 listings</p></div>
+        <div class="price-pill" onclick="searchDest('$1m-$5m')"><div class="pp-ico">🏰</div><h4>$1M – $5M</h4><p>42,200 listings</p></div>
+        <div class="price-pill" onclick="searchDest('over $5m')"><div class="pp-ico">💎</div><h4>$5M+</h4><p>18,400 listings</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RECENT SEARCHES (from localStorage) ═══ -->
+  <div class="section alt" id="recentSearches">
+    <div class="inner">
+      <h2 class="s-title">🕐 Your Recent Searches</h2>
+      <p class="s-sub">Pick up where you left off — your recent search activity.</p>
+
+      <div class="recent-grid" id="recentGrid">
+        <!-- Populated by JS from localStorage -->
+      </div>
+      <div id="noRecent" style="text-align:center;padding:32px;color:var(--nb-muted);font-size:0.88rem">
+        <div style="font-size:2rem;margin-bottom:8px">🔍</div>
+        <p>No recent searches yet. Start exploring and your searches will appear here.</p>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-btn primary" href="index.html">🔍 Start Searching Now →</a>
+        <a class="cta-btn outline" href="countries.html">🌍 Browse by Country →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © <span id="y"></span> PropertyFinder. 185 countries. 350K+ listings. Updated in real-time. | <a href="terms-of-use.html">Terms</a> | <a href="privacy-policy.html">Privacy</a>
+  </div>
+
+  <script>
+    function showToast(msg){const ex=document.querySelector('.pf-toast');if(ex)ex.remove();const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+
+    function searchDest(query){
+      // Save to recent searches
+      try{
+        const recent=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+        recent.unshift({query,timestamp:Date.now()});
+        localStorage.setItem('pf_recent_searches',JSON.stringify(recent.slice(0,10)));
+      }catch(e){}
+
+      // Route to correct page based on query type
+      const q = query.toLowerCase();
+      let dest = 'index.html';
+      if(q.includes('rent')||q.includes('rental')||q.includes('holiday')||q.includes('short-term')){
+        dest = 'rent.html';
+      } else if(q.includes('auction')||q.includes('bid')){
+        dest = 'auctions.html';
+      } else if(q.includes('business')||q.includes('restaurant')||q.includes('franchise')||q.includes('retail')||q.includes('tech')){
+        dest = 'business.html';
+      } else if(q.includes('farm')||q.includes('wine')||q.includes('game farm')||q.includes('agri')||q.includes('smallholding')){
+        dest = 'auctions-farm.html';
+      } else if(q.includes('warehouse')||q.includes('industrial')||q.includes('factory')||q.includes('logistics')){
+        dest = 'buy-industrial.html';
+      } else if(q.includes('office')||q.includes('commercial')||q.includes('retail space')||q.includes('mixed-use')){
+        dest = 'buy-commercial.html';
+      } else if(q.includes('buy')||q.includes('for sale')||q.includes('house')||q.includes('apartment')||q.includes('villa')||q.includes('penthouse')||q.includes('townhouse')||q.includes('estate')||q.includes('luxury')||q.includes('new development')){
+        dest = 'buy.html';
+      } else if(q.includes('country')||q.includes('international')){
+        dest = 'countries.html';
+      } else {
+        dest = 'buy.html';
+      }
+
+      showToast('🔍 Searching: '+query);
+      setTimeout(()=>{ window.location.href = dest + '?q=' + encodeURIComponent(query); }, 700);
+      loadRecent();
+    }
+
+    function loadRecent(){
+      const grid=document.getElementById('recentGrid');
+      const noRecent=document.getElementById('noRecent');
+      try{
+        const recent=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+        if(recent.length===0){grid.style.display='none';noRecent.style.display='';return}
+        grid.style.display='';noRecent.style.display='none';
+        grid.innerHTML=recent.slice(0,6).map(r=>{
+          const ago=timeAgo(r.timestamp);
+          return`<div class="recent-card" onclick="searchDest('${r.query.replace(/'/g,"\\'")}')">
+            <div class="r-ico">🔍</div>
+            <div class="r-body"><h4>${r.query}</h4><p>Search again</p></div>
+            <div class="r-time">${ago}</div>
+          </div>`;
+        }).join('');
+      }catch(e){grid.style.display='none';noRecent.style.display=''}
+    }
+
+    function timeAgo(ts){
+      const s=Math.floor((Date.now()-ts)/1000);
+      if(s<60)return'Just now';
+      if(s<3600)return Math.floor(s/60)+'m ago';
+      if(s<86400)return Math.floor(s/3600)+'h ago';
+      return Math.floor(s/86400)+'d ago';
+    }
+
+    loadRecent();
+    document.getElementById('y').textContent=new Date().getFullYear();
+    console.log('%c PropertyFinder — Popular Searches loaded','color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

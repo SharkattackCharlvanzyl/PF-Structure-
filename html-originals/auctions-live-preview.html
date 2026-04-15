@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PropertyFinder — Live Auctions Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent:#141c2b; --accent2:#1a2535; --dark:#0e1520; --lime:#c4a47c;
+  --bg:#141c2b; --panel:#1a2535; --text:#e8dfc8; --muted:#8a7d5a; --line:rgba(196,164,124,0.18);
+  --font:'DM Sans',system-ui,sans-serif; --font-d:'Cinzel',Georgia,serif;
+  --r:14px; --r2:10px;
+  --shadow:0 4px 20px rgba(0,0,0,0.08); --shadow-lg:0 12px 40px rgba(0,0,0,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ── TOP BAR ── */
+.top-bar {
+  background:linear-gradient(135deg,#0e1520,#0e1520,#141c2b);
+  padding:14px 24px; display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,0.3);
+}
+.tb-logo { font-family:var(--font-d); font-size:1.1rem; font-weight:700; color:#fff; }
+.tb-logo span { color:#c4a47c; }
+.tb-center { display:flex; align-items:center; gap:12px; }
+.tb-live-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(220,38,38,0.2); border:1px solid rgba(220,38,38,0.45);
+  color:#ff7070; font-size:12px; font-weight:800; padding:6px 14px;
+  border-radius:999px; letter-spacing:0.5px;
+}
+.tb-live-badge::before {
+  content:''; width:8px; height:8px; border-radius:50%; background:#ff4444;
+  animation:pulse-r 1.2s infinite;
+}
+.tb-count { color:rgba(255,255,255,0.65); font-size:13px; }
+.tb-count strong { color:#c4a47c; }
+.tb-time { color:rgba(255,255,255,0.6); font-size:12px; }
+@keyframes pulse-r { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background:var(--panel); border-bottom:1px solid var(--line);
+  padding:12px 24px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.filter-label { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; }
+.filter-btn {
+  padding:7px 16px; border-radius:999px; border:1px solid var(--line);
+  background:var(--panel); color:var(--muted); font-size:12.5px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; font-family:var(--font);
+}
+.filter-btn:hover { border-color:#c4a47c; color:#c4a47c; }
+.filter-btn.active { background:var(--accent); color:#fff; border-color:#c4a47c; }
+.filter-count { background:rgba(196,164,124,0.08); color:#c4a47c; font-size:10px; font-weight:800; padding:2px 6px; border-radius:999px; margin-left:3px; }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  max-width:1280px; margin:0 auto; padding:20px 24px;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+}
+@media(max-width:768px){.stats-strip{grid-template-columns:repeat(2,1fr)}}
+.stat-box {
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 20px; display:flex; align-items:center; gap:14px;
+}
+.stat-box .s-icon { font-size:28px; flex-shrink:0; }
+.stat-box .s-num { font-family:var(--font-d); font-size:1.6rem; font-weight:700; color:#c4a47c; line-height:1; }
+.stat-box .s-lbl { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* ── AUCTIONS GRID ── */
+.auctions-grid {
+  max-width:1280px; margin:0 auto; padding:0 24px 60px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+}
+@media(max-width:1100px){.auctions-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.auctions-grid{grid-template-columns:1fr}}
+
+/* ── AUCTION CARD ── */
+.a-card {
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r);
+  overflow:hidden; box-shadow:var(--shadow); transition:all 0.3s;
+  display:flex; flex-direction:column; position:relative;
+}
+.a-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:rgba(196,164,124,0.25); }
+.a-card.ending-soon { border-color:rgba(220,38,38,0.4); }
+.a-card.ending-soon::before {
+  content:'ENDING SOON'; position:absolute; top:0; left:0; right:0;
+  background:rgba(220,38,38,0.9); color:#fff; font-size:9.5px; font-weight:800;
+  text-align:center; padding:4px; letter-spacing:1.5px; z-index:5;
+}
+
+/* IMAGE */
+.a-card-img { position:relative; height:210px; overflow:hidden; background:#1f2d3d; border-radius:var(--r) var(--r) 0 0; }
+.a-card-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s; }
+.a-card:hover .a-card-img img { transform:scale(1.04); }
+.a-img-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,20,10,0.72) 0%, transparent 50%); }
+
+/* BADGES */
+.a-badges { position:absolute; top:12px; left:12px; display:flex; gap:6px; flex-wrap:wrap; z-index:2; }
+.a-badge {
+  padding:4px 10px; border-radius:6px; font-size:10.5px; font-weight:700;
+  letter-spacing:0.3px; backdrop-filter:blur(8px);
+}
+.badge-type { background:rgba(255,255,255,0.92); color:#c4a47c; }
+.badge-reserve { background:rgba(196,164,124,0.85); color:#fff; }
+.badge-no-reserve { background:rgba(220,38,38,0.88); color:#fff; }
+.badge-live { background:rgba(255,60,60,0.9); color:#fff; animation:badge-pulse 1.5s infinite; }
+@keyframes badge-pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+.badge-country { background:rgba(0,0,0,0.5); color:rgba(255,255,255,0.9); }
+
+/* TIMER OVER IMAGE */
+.a-timer-overlay {
+  position:absolute; bottom:12px; left:12px; right:12px;
+  display:flex; gap:6px; z-index:3;
+}
+.a-t-seg {
+  flex:1; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px);
+  border-radius:7px; padding:7px 4px; text-align:center;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.a-t-num { font-family:var(--font-d); font-size:1.25rem; font-weight:700; color:#fff; line-height:1; }
+.a-t-lbl { font-size:8.5px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.5px; margin-top:1px; }
+.a-card.ending-soon .a-t-num { color:#ff6b6b; }
+
+/* CARD BODY */
+.a-body { padding:18px 18px 14px; flex:1; display:flex; flex-direction:column; gap:10px; }
+.a-title { font-family:var(--font-d); font-size:1rem; font-weight:700; color:var(--text); line-height:1.3; }
+.a-location { display:flex; align-items:center; gap:5px; color:var(--muted); font-size:12.5px; }
+.a-location .loc-icon { font-size:13px; }
+
+/* PRICE ROW */
+.a-price-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.a-current-bid { flex:1; }
+.a-bid-label { font-size:10px; font-weight:700; color:#c4a47c; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:2px; }
+.a-bid-amount { font-family:var(--font-d); font-size:1.3rem; font-weight:700; color:var(--text); line-height:1.1; }
+.a-bid-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.a-starting { text-align:right; }
+.a-starting .a-bid-label { text-align:right; }
+.a-starting .a-bid-amount { font-size:0.95rem; color:var(--muted); }
+
+/* BIDDERS ROW */
+.a-bidders-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.a-bidders { display:flex; align-items:center; gap:6px; }
+.a-avatar-stack { display:flex; }
+.a-avatar {
+  width:26px; height:26px; border-radius:50%; border:2px solid var(--panel);
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; color:#fff; margin-left:-6px;
+}
+.a-avatar:first-child { margin-left:0; }
+.a-bidder-count { font-size:12px; color:var(--muted); font-weight:600; }
+.a-last-bid { font-size:11.5px; color:var(--muted); }
+.a-last-bid strong { color:var(--text); }
+
+/* BID HISTORY MINI */
+.a-hist-mini { display:flex; flex-direction:column; gap:0; }
+.a-hist-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:5px 0; border-bottom:1px solid var(--line); font-size:12px;
+}
+.a-hist-row:last-child { border-bottom:none; }
+.a-hist-row .h-bidder { color:var(--muted); font-weight:500; }
+.a-hist-row .h-amt { color:#c4a47c; font-weight:700; }
+.a-hist-row .h-time { color:var(--muted); font-size:10.5px; }
+.a-hist-row.h-top .h-bidder { color:var(--text); font-weight:700; }
+.a-hist-row.h-top .h-amt { color:#c4a47c; }
+
+/* CARD FOOTER */
+.a-footer { padding:12px 14px 12px; display:flex; gap:8px; }
+.a-btn-bid {
+  flex:1; background:var(--accent); color:#fff; font-size:13.5px; font-weight:800;
+  padding:11px; border-radius:8px; border:none; cursor:pointer;
+  font-family:var(--font); transition:all 0.2s; text-align:center;
+}
+.a-btn-bid:hover { background:var(--accent2); transform:translateY(-1px); }
+.a-card.ending-soon .a-btn-bid { background:linear-gradient(135deg,#c0392b,#e74c3c); animation:cta-pulse 1.5s infinite; }
+@keyframes cta-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4)} 50%{box-shadow:0 0 0 6px rgba(220,38,38,0)} }
+.a-btn-watch {
+  width:42px; background:var(--bg); border:1px solid var(--line); border-radius:8px;
+  cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.a-btn-watch:hover { border-color:#c4a47c; background:rgba(196,164,124,0.05); }
+.a-btn-pack {
+  width:42px; background:var(--bg); border:1px solid var(--line); border-radius:8px;
+  cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; color:var(--muted); font-weight:700; font-size:11px;
+}
+.a-btn-pack:hover { border-color:#c4a47c; color:#c4a47c; }
+.a-btn-calc {
+  flex:1; background:rgba(196,164,124,0.04); border:1px solid rgba(196,164,124,0.2); border-radius:8px;
+  cursor:pointer; font-size:12px; font-weight:700; color:#c4a47c;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  transition:all 0.2s; padding:0 8px; text-decoration:none; white-space:nowrap;
+}
+.a-btn-calc:hover { background:rgba(196,164,124,0.1); border-color:#c4a47c; }
+
+/* INSPECTION PILL */
+.a-inspection {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(196,164,124,0.07); border:1px solid rgba(196,164,124,0.15);
+  color:#c4a47c; font-size:11px; font-weight:600;
+  padding:4px 10px; border-radius:999px; margin-bottom:4px;
+}
+
+/* SIZE/DETAILS ROW */
+.a-details { display:flex; flex-wrap:wrap; gap:6px; }
+.a-detail-pill {
+  display:inline-flex; align-items:center; gap:4px;
+  background:var(--bg); border:1px solid var(--line);
+  font-size:11px; color:var(--muted); padding:3px 9px; border-radius:999px;
+}
+
+/* SECTION HEADER */
+.section-hdr {
+  max-width:1280px; margin:0 auto; padding:28px 24px 16px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+}
+.sh-left .sh-eyebrow { font-size:11px; font-weight:700; color:#c4a47c; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:6px; }
+.sh-left .sh-title { font-family:var(--font-d); font-size:1.6rem; font-weight:700; color:var(--text); }
+.sh-sort {
+  display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted);
+}
+.sh-sort select {
+  border:1px solid var(--line); border-radius:6px; padding:6px 10px;
+  font-family:var(--font); font-size:13px; color:var(--text); background:var(--panel);
+  outline:none; cursor:pointer;
+}
+
+/* BID INPUT WRAP */
+.a-bid-input-wrap{display:flex;gap:6px;flex:1;align-items:center}
+.a-bid-input{
+  flex:1;border:1.5px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:13.5px;font-family:var(--font);
+  color:var(--text);background:#1a2535;outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  min-width:0;
+}
+.a-bid-input:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+.a-bid-input::placeholder{color:#bbb}
+
+/* TOAST */
+.pf-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:12px 24px; border-radius:8px; color:#fff; font-size:14px; font-weight:600; z-index:9999; background:var(--accent); box-shadow:0 8px 32px rgba(0,0,0,0.2); animation:tIn 0.3s,tOut 0.3s 2.6s forwards; white-space:nowrap; }
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tOut{to{opacity:0}}
+
+/* PREVIEW BADGE */
+.preview-note {
+  background:linear-gradient(135deg,#fff8e1,#fffde7);
+  border:1px solid #f0c040; border-radius:8px; padding:10px 18px;
+  font-size:12.5px; color:#7a5c00; display:flex; align-items:center; gap:8px;
+  max-width:1280px; margin:12px auto 0; padding:10px 24px;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="tb-logo">Property<span>Finder</span></div>
+  <div class="tb-center">
+    <a href="auctions.html" style="color:rgba(255,255,255,0.7);font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);text-decoration:none;margin-right:4px">← Auctions Home</a>
+    <span class="tb-live-badge">LIVE AUCTIONS</span>
+    <span class="tb-count"><strong id="activeCount">8</strong> auctions running now</span>
+  </div>
+  <div class="tb-time" id="liveTime"></div>
+</div>
+
+<!-- PREVIEW NOTE -->
+<div class="preview-note">
+  🎨 <strong>Design Preview</strong> — This shows how 8 simultaneous live auctions will appear on the auctions page. Timers, bids and bidder counts update in real time. Upload as <strong>auctions-live-preview.html</strong> to test.
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterCards('all',this)">All <span class="filter-count">8</span></button>
+  <button class="filter-btn" onclick="filterCards('Residential',this)">🏠 Residential <span class="filter-count">3</span></button>
+  <button class="filter-btn" onclick="filterCards('Commercial',this)">🏢 Commercial <span class="filter-count">2</span></button>
+  <button class="filter-btn" onclick="filterCards('Industrial',this)">🏭 Industrial <span class="filter-count">2</span></button>
+  <button class="filter-btn" onclick="filterCards('Agricultural',this)">🌾 Agricultural <span class="filter-count">1</span></button>
+  <button class="filter-btn" onclick="filterCards('no-reserve',this)">⚡ No Reserve</button>
+  <button class="filter-btn" onclick="filterCards('ending',this)">🔴 Ending Soon</button>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-box"><span class="s-icon">🔨</span><div><div class="s-num" id="statBids">47</div><div class="s-lbl">Bids placed today</div></div></div>
+  <div class="stat-box"><span class="s-icon">👥</span><div><div class="s-num" id="statBidders">23</div><div class="s-lbl">Active registered bidders</div></div></div>
+  <div class="stat-box"><span class="s-icon">💰</span><div><div class="s-num">R 89.4M</div><div class="s-lbl">Total value on auction today</div></div></div>
+  <div class="stat-box"><span class="s-icon">🌍</span><div><div class="s-num">6</div><div class="s-lbl">Countries represented</div></div></div>
+</div>
+
+<!-- SECTION HEADER -->
+<div class="section-hdr">
+  <div class="sh-left">
+    <div class="sh-eyebrow">🔴 Live Now</div>
+    <div class="sh-title">Active Auctions</div>
+  </div>
+  <div class="sh-sort">
+    Sort by:
+    <select onchange="showToast('Sorting updated')">
+      <option>Ending Soonest</option>
+      <option>Highest Bid</option>
+      <option>Lowest Starting</option>
+      <option>Most Bidders</option>
+      <option>Recently Listed</option>
+    </select>
+  </div>
+</div>
+
+<!-- AUCTIONS GRID -->
+<div class="auctions-grid" id="aGrid"></div>
+
+<script>
+const AUCTIONS = [
+  {
+    id:'A001', type:'Residential', sector:'🏠',
+    title:'4-Bed Family Home with Pool',
+    location:'Constantia, Cape Town, South Africa 🇿🇦',
+    country:'ZA', reserve:'With Reserve',
+    img:'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=75',
+    startPrice:2200000, currentBid:2850000, currency:'R', symbol:'R ',
+    bidCount:14, bidderCount:6,
+    floorArea:'340 m²', landArea:'820 m²', beds:'4 bed', baths:'3 bath',
+    inspection:'Tue 24 Mar · 10:00–12:00',
+    history:[{b:'Bidder #7',a:'R 2,850,000',t:'just now'},{b:'Bidder #3',a:'R 2,800,000',t:'2m ago'},{b:'Bidder #7',a:'R 2,750,000',t:'5m ago'}],
+    secsLeft: 4*60+37, endingSoon:false
+  },
+  {
+    id:'A002', type:'Commercial', sector:'🏢',
+    title:'Prime Office Park — 3,200 m² NLA',
+    location:'Sandton CBD, Johannesburg, South Africa 🇿🇦',
+    country:'ZA', reserve:'With Reserve',
+    img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=75',
+    startPrice:18500000, currentBid:22400000, currency:'R', symbol:'R ',
+    bidCount:9, bidderCount:4,
+    floorArea:'3,200 m²', landArea:'5,800 m²', beds:'Grade A', baths:'93% let',
+    inspection:'Wed 25 Mar · 14:00–16:00',
+    history:[{b:'Bidder #2',a:'R 22,400,000',t:'just now'},{b:'Bidder #5',a:'R 22,000,000',t:'8m ago'},{b:'Bidder #2',a:'R 21,500,000',t:'14m ago'}],
+    secsLeft: 1*3600+12*60+8, endingSoon:false
+  },
+  {
+    id:'A003', type:'Industrial', sector:'🏭',
+    title:'12,000 m² Logistics Warehouse',
+    location:'Kempton Park, Gauteng, South Africa 🇿🇦',
+    country:'ZA', reserve:'Without Reserve',
+    img:'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=75',
+    startPrice:9800000, currentBid:11200000, currency:'R', symbol:'R ',
+    bidCount:7, bidderCount:5,
+    floorArea:'12,000 m²', landArea:'18,500 m²', beds:'16m height', baths:'3 docks',
+    inspection:'Mon 23 Mar · 09:00–11:00',
+    history:[{b:'Bidder #9',a:'R 11,200,000',t:'3m ago'},{b:'Bidder #4',a:'R 11,000,000',t:'9m ago'},{b:'Bidder #9',a:'R 10,800,000',t:'18m ago'}],
+    secsLeft: 47*60+22, endingSoon:false
+  },
+  {
+    id:'A004', type:'Agricultural', sector:'🌾',
+    title:'1,840 ha Game & Cattle Farm',
+    location:'Limpopo Province, South Africa 🇿🇦',
+    country:'ZA', reserve:'With Reserve',
+    img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=75',
+    startPrice:14000000, currentBid:16750000, currency:'R', symbol:'R ',
+    bidCount:5, bidderCount:3,
+    floorArea:'1,840 ha', landArea:'Full title', beds:'Main lodge', baths:'2 boreholes',
+    inspection:'Fri 27 Mar · 10:00–14:00',
+    history:[{b:'Bidder #1',a:'R 16,750,000',t:'7m ago'},{b:'Bidder #6',a:'R 16,500,000',t:'22m ago'},{b:'Bidder #1',a:'R 16,000,000',t:'34m ago'}],
+    secsLeft: 2*3600+34*60+11, endingSoon:false
+  },
+  {
+    id:'A005', type:'Residential', sector:'🏠',
+    title:'Luxury Penthouse — Sea & Mountain Views',
+    location:'Clifton, Cape Town, South Africa 🇿🇦',
+    country:'ZA', reserve:'Without Reserve',
+    img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=75',
+    startPrice:8500000, currentBid:9800000, currency:'R', symbol:'R ',
+    bidCount:18, bidderCount:9,
+    floorArea:'285 m²', landArea:'Sectional title', beds:'3 bed', baths:'3 bath',
+    inspection:'Sat 22 Mar · 11:00–13:00',
+    history:[{b:'Bidder #11',a:'R 9,800,000',t:'just now'},{b:'Bidder #8',a:'R 9,600,000',t:'1m ago'},{b:'Bidder #11',a:'R 9,400,000',t:'4m ago'}],
+    secsLeft: 12*60+44, endingSoon:true
+  },
+  {
+    id:'A006', type:'Commercial', sector:'🏢',
+    title:'Retail Strip — 8 Tenanted Units',
+    location:'George, Western Cape, South Africa 🇿🇦',
+    country:'ZA', reserve:'With Reserve',
+    img:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=75',
+    startPrice:6200000, currentBid:7100000, currency:'R', symbol:'R ',
+    bidCount:6, bidderCount:4,
+    floorArea:'1,450 m²', landArea:'2,300 m²', beds:'8 units', baths:'95% let',
+    inspection:'Thu 26 Mar · 13:00–15:00',
+    history:[{b:'Bidder #3',a:'R 7,100,000',t:'11m ago'},{b:'Bidder #7',a:'R 6,900,000',t:'28m ago'},{b:'Bidder #3',a:'R 6,700,000',t:'41m ago'}],
+    secsLeft: 3*3600+8*60+55, endingSoon:false
+  },
+  {
+    id:'A007', type:'Industrial', sector:'🏭',
+    title:'Cold Storage Facility — 4,800 m²',
+    location:'Bellville, Cape Town, South Africa 🇿🇦',
+    country:'ZA', reserve:'Without Reserve',
+    img:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=75',
+    startPrice:7400000, currentBid:8650000, currency:'R', symbol:'R ',
+    bidCount:11, bidderCount:5,
+    floorArea:'4,800 m²', landArea:'7,200 m²', beds:'-22°C cold', baths:'Solar power',
+    inspection:'Wed 25 Mar · 10:00–12:00',
+    history:[{b:'Bidder #5',a:'R 8,650,000',t:'2m ago'},{b:'Bidder #2',a:'R 8,500,000',t:'7m ago'},{b:'Bidder #5',a:'R 8,250,000',t:'15m ago'}],
+    secsLeft: 8*60+19, endingSoon:true
+  },
+  {
+    id:'A008', type:'Residential', sector:'🏠',
+    title:'Heritage Home on 2,400 m² Corner Plot',
+    location:'Paarl, Western Cape, South Africa 🇿🇦',
+    country:'ZA', reserve:'With Reserve',
+    img:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=75',
+    startPrice:3100000, currentBid:3450000, currency:'R', symbol:'R ',
+    bidCount:8, bidderCount:5,
+    floorArea:'420 m²', landArea:'2,400 m²', beds:'5 bed', baths:'4 bath',
+    inspection:'Sat 22 Mar · 14:00–16:00',
+    history:[{b:'Bidder #4',a:'R 3,450,000',t:'6m ago'},{b:'Bidder #8',a:'R 3,350,000',t:'19m ago'},{b:'Bidder #4',a:'R 3,250,000',t:'31m ago'}],
+    secsLeft: 1*3600+52*60+3, endingSoon:false
+  }
+];
+
+const state = AUCTIONS.map(a => ({...a, secs: a.secsLeft}));
+
+function fmtMoney(n, sym){
+  // Format with spaces between thousands: R 2 850 000
+  const formatted = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return sym + formatted;
+}
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function buildCard(a, idx){
+  const s = state[idx];
+  const hh = Math.floor(s.secs/3600);
+  const mm = Math.floor((s.secs%3600)/60);
+  const ss = s.secs%60;
+  const endSoon = s.secs < 15*60;
+  const colors = ['#141c2b','#1a2535','#0e1520','#2E7D52','#1B5E20','#388E3C','#43A047','#66BB6A'];
+  const initials = ['BN','KM','TJ','AP','SR','LV','DW','CM','HF','RB'];
+
+  const avatarHtml = Array.from({length:Math.min(4,a.bidderCount)},(_,i)=>
+    `<div class="a-avatar" style="background:linear-gradient(135deg,${colors[i]},${colors[(i+2)%colors.length]})">${initials[i]}</div>`
+  ).join('');
+
+  return `
+<div class="a-card ${endSoon?'ending-soon':''}" data-type="${a.type}" data-id="${a.id}" id="card-${a.id}">
+  <div class="a-card-img">
+    <img src="${a.img}" alt="${a.title}" loading="lazy">
+    <div class="a-img-overlay"></div>
+    <div class="a-badges">
+      <span class="a-badge badge-type">${a.sector} ${a.type}</span>
+      <span class="a-badge badge-live">● LIVE</span>
+      <span class="a-badge ${a.reserve==='Without Reserve'?'badge-no-reserve':'badge-reserve'}">${a.reserve==='Without Reserve'?'⚡ No Reserve':'🔒 Reserve'}</span>
+      <span class="a-badge badge-country">${a.country}</span>
+    </div>
+    <div class="a-timer-overlay">
+      <div class="a-t-seg"><div class="a-t-num" id="h-${a.id}">${pad(hh)}</div><div class="a-t-lbl">Hrs</div></div>
+      <div class="a-t-seg"><div class="a-t-num" id="m-${a.id}">${pad(mm)}</div><div class="a-t-lbl">Min</div></div>
+      <div class="a-t-seg"><div class="a-t-num" id="s-${a.id}">${pad(ss)}</div><div class="a-t-lbl">Sec</div></div>
+    </div>
+  </div>
+
+  <div class="a-body">
+    <div class="a-title">${a.title}</div>
+    <div class="a-location"><span class="loc-icon">📍</span>${a.location}</div>
+
+    <div class="a-details">
+      <span class="a-detail-pill">📐 ${a.floorArea}</span>
+      <span class="a-detail-pill">🛏 ${a.beds}</span>
+      <span class="a-detail-pill">🚿 ${a.baths}</span>
+      ${a.landArea !== a.floorArea ? `<span class="a-detail-pill">🌿 ${a.landArea}</span>` : ''}
+    </div>
+
+    <div class="a-price-row">
+      <div class="a-current-bid">
+        <div class="a-bid-label">Current Bid</div>
+        <div class="a-bid-amount" id="bid-${a.id}">${fmtMoney(a.currentBid, a.symbol)}</div>
+        <div class="a-bid-sub" id="meta-${a.id}">${a.history[0].b} · <span id="bids-${a.id}">${a.bidCount}</span> bids</div>
+      </div>
+      <div class="a-starting">
+        <div class="a-bid-label">Starting Price</div>
+        <div class="a-bid-amount">${fmtMoney(a.startPrice, a.symbol)}</div>
+        <div class="a-bid-sub">+${Math.round((a.currentBid-a.startPrice)/a.startPrice*100)}% above start</div>
+      </div>
+    </div>
+
+    <div class="a-bidders-row">
+      <div class="a-bidders">
+        <div class="a-avatar-stack">${avatarHtml}</div>
+        <span class="a-bidder-count" id="bdrs-${a.id}">${a.bidderCount} bidders registered</span>
+      </div>
+      <div class="a-last-bid">Last bid <strong id="lbt-${a.id}">just now</strong></div>
+    </div>
+
+    <div class="a-hist-mini" id="hist-${a.id}">
+      ${a.history.map((h,i)=>`<div class="a-hist-row ${i===0?'h-top':''}"><span class="h-bidder">${h.b}</span><span class="h-amt">${h.a}</span><span class="h-time">${h.t}</span></div>`).join('')}
+    </div>
+
+    <span class="a-inspection">🏠 Inspection: ${a.inspection}</span>
+  </div>
+
+  <div class="a-footer">
+    <div class="a-bid-input-wrap">
+      <input
+        type="text"
+        id="inp-${a.id}"
+        class="a-bid-input"
+        placeholder="${a.symbol}${fmtAmt(a.currentBid + incr[idx])}"
+        oninput="formatBidInput(this,'${a.symbol}')"
+        onkeydown="if(event.key==='Enter')submitBid('${a.id}','${a.title}')"
+        autocomplete="off"
+      >
+      <button class="a-btn-bid" onclick="submitBid('${a.id}','${a.title}')">🔨 Bid</button>
+    </div>
+    <button class="a-btn-watch" onclick="watchAuction('${a.id}')" title="Watch">👁</button>
+    <button class="a-btn-pack" onclick="showToast('Auction pack downloading...')" title="Pack">📄</button>
+  </div>
+  <div style="padding:0 14px 14px">
+    <a class="a-btn-calc" href="calculators.html?price=${a.currentBid}&country=${a.country}&tab=transfer&title=${encodeURIComponent(a.title)}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;width:100%;background:rgba(196,164,124,0.04);border:1px solid rgba(196,164,124,0.2);border-radius:8px;font-size:12px;font-weight:700;color:#c4a47c;text-decoration:none">
+      🧮 Calculate Transfer Costs &amp; Stamp Duty
+    </a>
+  </div>
+</div>`;
+}
+
+function renderGrid(filter){
+  const grid = document.getElementById('aGrid');
+  let html = '';
+  state.forEach((a,i) => {
+    let show = filter === 'all' ||
+      filter === a.type ||
+      (filter === 'no-reserve' && a.reserve === 'Without Reserve') ||
+      (filter === 'ending' && state[i].secs < 15*60);
+    if(show) html += buildCard(a, i);
+  });
+  grid.innerHTML = html || '<div style="padding:40px;text-align:center;color:var(--muted);font-size:14px">No auctions match this filter right now.</div>';
+}
+
+// FILTER
+let currentFilter = 'all';
+function filterCards(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(f);
+}
+
+// TIMER TICK
+function tickAll(){
+  state.forEach((a, idx) => {
+    if(a.secs > 0) a.secs--;
+    const hEl = document.getElementById('h-'+a.id);
+    const mEl = document.getElementById('m-'+a.id);
+    const sEl = document.getElementById('s-'+a.id);
+    if(!hEl) return;
+    hEl.textContent = pad(Math.floor(a.secs/3600));
+    mEl.textContent = pad(Math.floor((a.secs%3600)/60));
+    sEl.textContent = pad(a.secs%60);
+    // Add ending soon class dynamically
+    const card = document.getElementById('card-'+a.id);
+    if(card && a.secs < 15*60) card.classList.add('ending-soon');
+  });
+}
+
+// SIMULATE INCOMING BIDS
+const incr = [50000,100000,50000,250000,200000,100000,150000,50000];
+function simBid(){
+  const eligible = state.filter(a => a.secs > 30 && Math.random() > 0.6);
+  if(!eligible.length) return;
+  const a = eligible[Math.floor(Math.random()*eligible.length)];
+  const idx = state.indexOf(a);
+  a.currentBid += incr[idx];
+  a.bidCount++;
+  const bdNum = Math.floor(Math.random()*9)+1;
+  const newBidder = 'Bidder #'+bdNum;
+  a.history.unshift({b:newBidder, a:fmtMoney(a.currentBid,a.symbol), t:'just now'});
+  if(a.history.length > 3) a.history.pop();
+
+  // Update DOM if card visible
+  const bidEl = document.getElementById('bid-'+a.id);
+  const metaEl = document.getElementById('meta-'+a.id);
+  const bidsEl = document.getElementById('bids-'+a.id);
+  const histEl = document.getElementById('hist-'+a.id);
+  const lbtEl = document.getElementById('lbt-'+a.id);
+  if(bidEl){
+    bidEl.textContent = fmtMoney(a.currentBid, a.symbol);
+    bidEl.style.animation = 'none';
+    bidEl.offsetHeight; // reflow
+    bidEl.style.animation = 'bidFlash 0.5s ease';
+  }
+  if(metaEl) metaEl.innerHTML = newBidder + ' · <span id="bids-'+a.id+'">'+a.bidCount+'</span> bids';
+  if(histEl){
+    histEl.innerHTML = a.history.map((h,i)=>`<div class="a-hist-row ${i===0?'h-top':''}"><span class="h-bidder">${h.b}</span><span class="h-amt">${h.a}</span><span class="h-time">${h.t}</span></div>`).join('');
+  }
+  if(lbtEl) lbtEl.textContent = 'just now';
+
+  // Update stats
+  document.getElementById('statBids').textContent = parseInt(document.getElementById('statBids').textContent)+1;
+}
+
+// BID FLASH
+const style = document.createElement('style');
+style.textContent = '@keyframes bidFlash{0%{color:var(--lime);transform:scale(1.06)}100%{color:var(--text);transform:scale(1)}}';
+document.head.appendChild(style);
+
+// Format raw number with spaces: 2850000 → "2 850 000"
+function fmtAmt(n){
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+}
+
+// As user types: strip non-digits, reformat with spaces, put cursor at end
+function formatBidInput(input, sym){
+  const raw = input.value.replace(/[^\d]/g,'');
+  if(!raw){ input.value=''; return; }
+  const num = parseInt(raw,10);
+  input.value = sym + fmtAmt(num);
+  // Move cursor to end
+  setTimeout(()=>{ input.setSelectionRange(input.value.length, input.value.length); },0);
+}
+
+// Submit bid from input field
+function submitBid(id, title){
+  const a = state.find(x=>x.id===id);
+  const inp = document.getElementById('inp-'+id);
+  const idx = state.indexOf(a);
+  let bidAmt = 0;
+
+  if(inp && inp.value.trim()){
+    // Parse number from formatted string (strip symbol and spaces)
+    const raw = inp.value.replace(/[^\d]/g,'');
+    bidAmt = parseInt(raw,10) || 0;
+  }
+
+  // Validate — must be higher than current bid
+  if(bidAmt > 0 && bidAmt <= a.currentBid){
+    showToast('⚠️ Your bid must be higher than '+fmtMoney(a.currentBid,a.symbol));
+    inp.style.borderColor='#dc2626';
+    setTimeout(()=>inp.style.borderColor='',2000);
+    return;
+  }
+
+  // Use entered amount or default increment
+  const finalBid = bidAmt > a.currentBid ? bidAmt : a.currentBid + incr[idx];
+
+  a.currentBid = finalBid;
+  a.bidCount++;
+  a.history.unshift({b:'You', a:fmtMoney(finalBid,a.symbol), t:'just now'});
+  if(a.history.length>3) a.history.pop();
+
+  // Update card DOM
+  const bidEl = document.getElementById('bid-'+id);
+  const metaEl = document.getElementById('meta-'+id);
+  const histEl = document.getElementById('hist-'+id);
+  if(bidEl){ bidEl.textContent=fmtMoney(finalBid,a.symbol); bidEl.style.animation='none';bidEl.offsetHeight;bidEl.style.animation='bidFlash 0.5s'; }
+  if(metaEl) metaEl.innerHTML='You · <span id="bids-'+id+'">'+a.bidCount+'</span> bids';
+  if(histEl) histEl.innerHTML=a.history.map((h,i)=>`<div class="a-hist-row ${i===0?'h-top':''}"><span class="h-bidder">${h.b}</span><span class="h-amt">${h.a}</span><span class="h-time">${h.t}</span></div>`).join('');
+
+  // Reset input to next suggested bid
+  if(inp){ inp.value=''; inp.placeholder=a.symbol+fmtAmt(finalBid+incr[idx]); inp.style.borderColor='var(--accent)'; setTimeout(()=>inp.style.borderColor='',1500); }
+
+  // Update global stats
+  const sb = document.getElementById('statBids');
+  if(sb) sb.textContent = parseInt(sb.textContent)+1;
+
+  showToast('✅ Bid of '+fmtMoney(finalBid,a.symbol)+' placed on "'+title.substring(0,28)+'..."');
+}
+
+// Legacy bidNow (kept for safety)
+function bidNow(id,title){ submitBid(id,title); }
+
+function watchAuction(id){ showToast('👁 Watching auction '+id+' — you\'ll be notified of new bids'); }
+
+// TOAST
+function showToast(msg){
+  document.querySelectorAll('.pf-toast').forEach(t=>t.remove());
+  const t = document.createElement('div');
+  t.className = 'pf-toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+
+// LIVE CLOCK
+function updateClock(){
+  const now = new Date();
+  document.getElementById('liveTime').textContent =
+    now.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' SAST';
+}
+
+// STAT UPDATES
+function updateStats(){
+  const b = parseInt(document.getElementById('statBidders').textContent);
+  if(Math.random()>0.7) document.getElementById('statBidders').textContent = b + (Math.random()>0.5?1:-1 > 0?1:0);
+}
+
+// INIT
+renderGrid('all');
+setInterval(tickAll, 1000);
+setInterval(simBid, 6000);
+setInterval(updateClock, 1000);
+setInterval(updateStats, 15000);
+updateClock();
+</script>
+
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

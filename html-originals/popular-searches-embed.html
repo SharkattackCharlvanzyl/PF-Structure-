@@ -1,0 +1,422 @@
+<!-- ═══════════════════════════════════════════════════════════
+     POPULAR SEARCHES & TRENDING — Homepage Embed Snippet
+     Add this block to index.html below the hero search bar.
+     This file is for reference — copy the HTML + CSS + JS
+     into index.html at the appropriate position.
+     ═══════════════════════════════════════════════════════════ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Popular Searches Embed — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Design System ── */
+:root{
+  --accent:#141c2b;--accent2:#1a2535;--dark:#0e1520;--lime:#c4a47c;
+  --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;--line:rgba(196,164,124,0.18);
+  --font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif;
+  --r:14px;--r2:10px;--shadow:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-h:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── TICKER ── */
+.ps-ticker-wrap{
+  background:var(--dark);overflow:hidden;position:relative;padding:11px 0;
+}
+.ps-ticker-wrap::before,.ps-ticker-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.ps-ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--dark),transparent)}
+.ps-ticker-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--dark))}
+.ps-ticker{display:flex;gap:32px;animation:tickerScroll 60s linear infinite;width:max-content}
+.ps-ticker:hover{animation-play-state:paused}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ps-ticker-item{
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+  font-size:12.5px;font-weight:700;color:rgba(255,255,255,0.85);flex-shrink:0;
+  cursor:pointer;transition:color 0.2s;
+}
+.ps-ticker-item:hover{color:#c4a47c}
+.t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.t-dot.hot{background:#ff6b6b;animation:dotPulse 1.5s infinite}
+.t-dot.up{background:var(--lime)}
+.t-dot.new{background:#60a5fa}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.t-tag{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:800;letter-spacing:0.3px}
+.t-tag.hot{background:rgba(255,107,107,0.2);color:#ff8a8a}
+.t-tag.up{background:rgba(196,164,124,0.2);color:var(--lime)}
+.t-tag.new{background:rgba(96,165,250,0.2);color:#93c5fd}
+
+/* ── SECTION WRAPPER ── */
+.ps-section{
+  background:var(--panel);padding:44px 20px 48px;
+  border-bottom:1px solid var(--line);
+}
+.ps-inner{max-width:1220px;margin:0 auto}
+.ps-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;flex-wrap:wrap;gap:12px;
+}
+.ps-header-left .ps-eyebrow{
+  font-size:11px;font-weight:700;color:#c4a47c;
+  text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;
+}
+.ps-header-left .ps-title{
+  font-family:var(--font-d);font-size:clamp(1.2rem,2.5vw,1.6rem);
+  font-weight:700;color:var(--text);
+}
+.ps-see-all{
+  display:inline-flex;align-items:center;gap:6px;
+  color:#c4a47c;font-size:13.5px;font-weight:700;
+  padding:8px 18px;border:1.5px solid rgba(196,164,124,0.25);
+  border-radius:999px;background:rgba(196,164,124,0.04);
+  transition:all 0.2s;white-space:nowrap;
+}
+.ps-see-all:hover{background:#c4a47c;color:#0e1520;border-color:#c4a47c;text-decoration:none}
+
+/* ── SEARCH PILLS ── */
+.ps-pills-wrap{
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;
+}
+.ps-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 16px;border-radius:999px;
+  border:1.5px solid var(--line);background:var(--panel);
+  font-size:13px;font-weight:600;color:var(--text);
+  cursor:pointer;transition:all 0.2s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.ps-pill:hover{
+  border-color:#c4a47c;color:#c4a47c;
+  background:rgba(196,164,124,0.04);transform:translateY(-1px);
+  box-shadow:0 3px 12px rgba(196,164,124,0.12);
+}
+.ps-pill .p-ico{font-size:15px}
+.ps-pill .p-count{
+  font-size:10px;font-weight:700;color:#c4a47c;
+  background:rgba(196,164,124,0.08);padding:2px 7px;
+  border-radius:999px;margin-left:2px;
+}
+
+/* ── DESTINATION CARDS (compact 4-grid for homepage) ── */
+.ps-dest-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  margin-bottom:32px;
+}
+@media(max-width:1024px){.ps-dest-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.ps-dest-grid{grid-template-columns:1fr 1fr}}
+.ps-dest-card{
+  border-radius:var(--r);overflow:hidden;
+  position:relative;cursor:pointer;
+  aspect-ratio:4/3;
+  box-shadow:var(--shadow);transition:all 0.3s;
+}
+.ps-dest-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-h)}
+.ps-dest-card img{
+  width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s;
+}
+.ps-dest-card:hover img{transform:scale(1.05)}
+.ps-dest-card .dc-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,20,10,0.82) 0%,rgba(0,0,0,0.15) 55%,transparent 100%);
+}
+.ps-dest-card .dc-body{
+  position:absolute;bottom:0;left:0;right:0;padding:14px 14px 12px;
+}
+.ps-dest-card .dc-name{
+  font-family:var(--font-d);font-size:clamp(0.78rem,1.3vw,0.95rem);
+  font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;
+}
+.ps-dest-card .dc-meta{font-size:11px;color:rgba(255,255,255,0.65)}
+.ps-dest-card .dc-badge{
+  position:absolute;top:10px;left:10px;
+  font-size:10px;font-weight:800;padding:3px 9px;border-radius:4px;
+  backdrop-filter:blur(6px);letter-spacing:0.3px;
+}
+.dc-badge.hot{background:rgba(255,80,80,0.85);color:#fff}
+.dc-badge.trending{background:rgba(196,164,124,0.85);color:#fff}
+.dc-badge.new{background:rgba(37,99,235,0.85);color:#fff}
+.ps-dest-card.featured{grid-column:span 2}
+@media(max-width:540px){.ps-dest-card.featured{grid-column:span 1}}
+
+/* ── RECENT SEARCHES ── */
+.ps-recent-title{
+  font-size:12px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.ps-recent-title::after{content:'';flex:1;height:1px;background:var(--line)}
+.ps-recent-grid{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;
+}
+.ps-recent-item{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);
+  font-size:12.5px;color:var(--muted);cursor:pointer;transition:all 0.2s;
+}
+.ps-recent-item:hover{border-color:#c4a47c;color:#c4a47c;background:rgba(196,164,124,0.03)}
+.ps-recent-item .ri-ico{font-size:12px}
+.ps-recent-item .ri-time{font-size:10px;color:#bbb;margin-left:4px}
+.ps-no-recent{
+  font-size:13px;color:var(--muted);padding:12px 0;display:none;
+}
+
+/* ── CTA ROW ── */
+.ps-cta-row{
+  display:flex;gap:10px;align-items:center;
+  margin-top:28px;flex-wrap:wrap;
+}
+.ps-cta-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#c4a47c;color:#0e1520;font-size:14px;font-weight:700;
+  padding:12px 24px;border-radius:999px;border:none;cursor:pointer;
+  font-family:var(--font);transition:all 0.2s;text-decoration:none;
+}
+.ps-cta-primary:hover{background:var(--accent2);transform:translateY(-1px);color:#fff;text-decoration:none}
+.ps-cta-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:#c4a47c;font-size:14px;font-weight:700;
+  padding:11px 22px;border-radius:999px;border:2px solid rgba(196,164,124,0.25);
+  cursor:pointer;font-family:var(--font);transition:all 0.2s;text-decoration:none;
+}
+.ps-cta-outline:hover{background:rgba(196,164,124,0.05);border-color:#c4a47c;text-decoration:none}
+
+/* ── TOAST ── */
+.pf-toast-ps{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:8px;color:#fff;font-size:13.5px;font-weight:600;z-index:9999;background:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:tIn 0.3s,tOut 0.3s 2.5s forwards;white-space:nowrap;}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tOut{to{opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     COPY EVERYTHING BELOW THIS LINE INTO index.html
+     Place it AFTER the hero search bar section
+     ═══════════════════════════════════════════════════ -->
+
+<!-- TRENDING TICKER -->
+<div class="ps-ticker-wrap">
+  <div class="ps-ticker" id="psTicker">
+    <div class="ps-ticker-item" onclick="psSearch('Camps Bay, Cape Town')"><div class="t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Algarve villa')"><div class="t-dot up"></div> 🇵🇹 Algarve villas <span class="t-tag up">📈 +34%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Dubai Marina apartment')"><div class="t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('London commercial office')"><div class="t-dot new"></div> 🇬🇧 London commercial offices <span class="t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Marbella sea view')"><div class="t-dot up"></div> 🇪🇸 Marbella sea view <span class="t-tag up">📈 +28%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Phuket beachfront')"><div class="t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Stellenbosch wine farm')"><div class="t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="t-tag up">📈 +22%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Sydney waterfront apartment')"><div class="t-dot new"></div> 🇦🇺 Sydney harbour view <span class="t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Tuscany farmhouse')"><div class="t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Singapore penthouse')"><div class="t-dot up"></div> 🇸🇬 Singapore penthouse <span class="t-tag up">📈 +18%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Miami waterfront')"><div class="t-dot hot"></div> 🇺🇸 Miami waterfront <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Berlin investment property')"><div class="t-dot up"></div> 🇩🇪 Berlin investment <span class="t-tag up">📈 +12%</span></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="ps-ticker-item" onclick="psSearch('Camps Bay, Cape Town')"><div class="t-dot hot"></div> 🇿🇦 Cape Town — Camps Bay <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Algarve villa')"><div class="t-dot up"></div> 🇵🇹 Algarve villas <span class="t-tag up">📈 +34%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Dubai Marina apartment')"><div class="t-dot hot"></div> 🇦🇪 Dubai Marina apartments <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('London commercial office')"><div class="t-dot new"></div> 🇬🇧 London commercial offices <span class="t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Marbella sea view')"><div class="t-dot up"></div> 🇪🇸 Marbella sea view <span class="t-tag up">📈 +28%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Phuket beachfront')"><div class="t-dot hot"></div> 🇹🇭 Phuket beachfront <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Stellenbosch wine farm')"><div class="t-dot up"></div> 🇿🇦 Stellenbosch wine farms <span class="t-tag up">📈 +22%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Sydney waterfront apartment')"><div class="t-dot new"></div> 🇦🇺 Sydney harbour view <span class="t-tag new">🆕 New</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Tuscany farmhouse')"><div class="t-dot hot"></div> 🇮🇹 Tuscany farmhouse <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Singapore penthouse')"><div class="t-dot up"></div> 🇸🇬 Singapore penthouse <span class="t-tag up">📈 +18%</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Miami waterfront')"><div class="t-dot hot"></div> 🇺🇸 Miami waterfront <span class="t-tag hot">🔥 Hot</span></div>
+    <div class="ps-ticker-item" onclick="psSearch('Berlin investment property')"><div class="t-dot up"></div> 🇩🇪 Berlin investment <span class="t-tag up">📈 +12%</span></div>
+  </div>
+</div>
+
+<!-- POPULAR SEARCHES SECTION -->
+<div class="ps-section">
+  <div class="ps-inner">
+
+    <!-- Header -->
+    <div class="ps-header">
+      <div class="ps-header-left">
+        <div class="ps-eyebrow">🔥 Trending Now</div>
+        <div class="ps-title">Popular Searches</div>
+      </div>
+      <a href="popular-searches.html" class="ps-see-all">See all trending →</a>
+    </div>
+
+    <!-- Destination Cards -->
+    <div class="ps-dest-grid">
+      <div class="ps-dest-card featured" onclick="psSearch('Camps Bay, Cape Town')">
+        <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=800&q=75" alt="Cape Town" loading="lazy">
+        <div class="dc-overlay"></div>
+        <span class="dc-badge hot">🔥 #1 Trending</span>
+        <div class="dc-body"><div class="dc-name">Cape Town, South Africa</div><div class="dc-meta">48K searches this month</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('Dubai Marina apartment')">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=75" alt="Dubai" loading="lazy">
+        <div class="dc-overlay"></div>
+        <span class="dc-badge hot">🔥 Hot</span>
+        <div class="dc-body"><div class="dc-name">Dubai, UAE</div><div class="dc-meta">38K searches</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('Algarve Portugal villa')">
+        <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=75" alt="Algarve" loading="lazy">
+        <div class="dc-overlay"></div>
+        <span class="dc-badge trending">📈 +34%</span>
+        <div class="dc-body"><div class="dc-name">Algarve, Portugal</div><div class="dc-meta">29K searches</div></div>
+      </div>
+      <div class="ps-dest-card" onclick="psSearch('London property')">
+        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=75" alt="London" loading="lazy">
+        <div class="dc-overlay"></div>
+        <span class="dc-badge new">🆕 Rising</span>
+        <div class="dc-body"><div class="dc-name">London, UK</div><div class="dc-meta">24K searches</div></div>
+      </div>
+    </div>
+
+    <!-- Search Pills -->
+    <div class="ps-pills-wrap" id="psPills">
+      <div class="ps-pill" onclick="psSearch('3 bedroom house Cape Town')"><span class="p-ico">🏠</span> 3 Bed House — Cape Town <span class="p-count">12.4K</span></div>
+      <div class="ps-pill" onclick="psSearch('apartment Dubai Marina')"><span class="p-ico">🏢</span> Apartment — Dubai Marina <span class="p-count">9.8K</span></div>
+      <div class="ps-pill" onclick="psSearch('villa Algarve')"><span class="p-ico">🏡</span> Villa — Algarve <span class="p-count">8.2K</span></div>
+      <div class="ps-pill" onclick="psSearch('farm Stellenbosch')"><span class="p-ico">🌾</span> Wine Farm — Stellenbosch <span class="p-count">6.4K</span></div>
+      <div class="ps-pill" onclick="psSearch('office London')"><span class="p-ico">🏢</span> Office — London <span class="p-count">5.9K</span></div>
+      <div class="ps-pill" onclick="psSearch('penthouse Singapore')"><span class="p-ico">🌇</span> Penthouse — Singapore <span class="p-count">5.1K</span></div>
+      <div class="ps-pill" onclick="psSearch('beachfront Phuket')"><span class="p-ico">🏖️</span> Beachfront — Phuket <span class="p-count">4.8K</span></div>
+      <div class="ps-pill" onclick="psSearch('restaurant for sale')"><span class="p-ico">🍽️</span> Restaurant for Sale <span class="p-count">4.3K</span></div>
+      <div class="ps-pill" onclick="psSearch('warehouse Gauteng')"><span class="p-ico">🏭</span> Warehouse — Gauteng <span class="p-count">3.7K</span></div>
+      <div class="ps-pill" onclick="psSearch('townhouse Sandton')"><span class="p-ico">🏘️</span> Townhouse — Sandton <span class="p-count">3.5K</span></div>
+      <div class="ps-pill" onclick="psSearch('sea view Marbella')"><span class="p-ico">🌊</span> Sea View — Marbella <span class="p-count">3.2K</span></div>
+      <div class="ps-pill" onclick="psSearch('game farm Limpopo')"><span class="p-ico">🦁</span> Game Farm — Limpopo <span class="p-count">2.1K</span></div>
+    </div>
+
+    <!-- Recent Searches from localStorage -->
+    <div class="ps-recent-title">🕐 Your Recent Searches</div>
+    <div class="ps-recent-grid" id="psRecentGrid"></div>
+    <div class="ps-no-recent" id="psNoRecent">No recent searches yet — start exploring above.</div>
+
+    <!-- CTA -->
+    <div class="ps-cta-row">
+      <a href="popular-searches.html" class="ps-cta-primary">🔥 View All Trending Searches →</a>
+      <a href="countries.html" class="ps-cta-outline">🌍 Browse by Country</a>
+    </div>
+
+  </div>
+</div>
+<!-- ═══ END OF EMBED — COPY UP TO THIS LINE ═══ -->
+
+<script>
+/* ── psSearch: saves to localStorage + navigates ── */
+function psSearch(query){
+  try{
+    const r=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+    r.unshift({query,timestamp:Date.now()});
+    localStorage.setItem('pf_recent_searches',JSON.stringify(r.slice(0,10)));
+  }catch(e){}
+
+  const q=query.toLowerCase();
+  let dest='buy.html';
+  if(q.includes('rent')||q.includes('rental')||q.includes('holiday')||q.includes('short-term')) dest='rent.html';
+  else if(q.includes('auction')||q.includes('bid')) dest='auctions.html';
+  else if(q.includes('business')||q.includes('restaurant')||q.includes('franchise')) dest='business.html';
+  else if(q.includes('farm')||q.includes('wine')||q.includes('game farm')||q.includes('agri')) dest='buy-farm.html';
+  else if(q.includes('warehouse')||q.includes('industrial')||q.includes('factory')||q.includes('logistics')) dest='buy-industrial.html';
+  else if(q.includes('office')||q.includes('commercial')||q.includes('retail space')) dest='buy-commercial.html';
+  else if(q.includes('country')||q.includes('international')) dest='countries.html';
+
+  showPsToast('🔍 Searching: '+query);
+  setTimeout(()=>{ window.location.href=dest+'?q='+encodeURIComponent(query); },700);
+  psLoadRecent();
+}
+
+function psLoadRecent(){
+  const grid=document.getElementById('psRecentGrid');
+  const none=document.getElementById('psNoRecent');
+  if(!grid) return;
+  try{
+    const r=JSON.parse(localStorage.getItem('pf_recent_searches')||'[]');
+    if(!r.length){ grid.style.display='none'; none.style.display='block'; return; }
+    none.style.display='none'; grid.style.display='flex';
+    grid.innerHTML=r.slice(0,8).map(item=>{
+      const s=Math.floor((Date.now()-item.timestamp)/1000);
+      const ago=s<60?'Just now':s<3600?Math.floor(s/60)+'m ago':s<86400?Math.floor(s/3600)+'h ago':Math.floor(s/86400)+'d ago';
+      return `<div class="ps-recent-item" onclick="psSearch('${item.query.replace(/'/g,"\\'")}')">
+        <span class="ri-ico">🔍</span>${item.query}<span class="ri-time">${ago}</span>
+      </div>`;
+    }).join('');
+  }catch(e){ none.style.display='block'; }
+}
+
+function showPsToast(msg){
+  document.querySelectorAll('.pf-toast-ps').forEach(t=>t.remove());
+  const t=document.createElement('div'); t.className='pf-toast-ps'; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(),3200);
+}
+
+psLoadRecent();
+</script>
+
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

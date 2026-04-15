@@ -1,0 +1,1502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PropertyFinder — 05g Short-Stay Rental (Detail)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;
+      --nb-green-dark:#0e1520;
+      --nb-green-hover:#1f2d3d;
+      --nb-white:#1a2535;
+      --nb-offwhite:#141c2b;
+      --nb-snow:#1f2d3d;
+      --nb-text:#e8dfc8;
+      --nb-muted:#8a7d5a;
+      --nb-border:rgba(196,164,124,0.18);
+      --line:var(--nb-border);
+      --chip:rgba(196,164,124,0.06);
+      --shadow:0 4px 24px rgba(196,164,124,0.06);
+      --shadow-lg:0 12px 40px rgba(0,0,0,0.08);
+      --radius:18px;
+      --radius2:12px;
+      --max:1220px;
+      --stickyH:72px;
+      --font-display:'Cinzel',Georgia,serif;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);background:var(--nb-offwhite);color:#e8dfc8;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 18px 110px}
+
+    /* TOPBAR */
+    .topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--line);background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:12px;z-index:50;margin-top:14px}
+    .topbar .left,.topbar .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .chip{display:inline-flex;gap:6px;align-items:center;padding:7px 12px;border-radius:999px;background:var(--chip);border:1px solid var(--line);color:var(--nb-muted);font-size:12.5px;font-weight:500}
+    .chip strong{color:#c4a47c}
+    .select,.input{background:var(--nb-white);border:1px solid var(--line);color:#e8dfc8;border-radius:999px;padding:7px 10px;font-size:12.5px;outline:none;font-family:var(--font)}
+    .select:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .btn{border:1px solid rgba(196,164,124,0.3);background:#c4a47c;color:#0e1520;padding:9px 16px;border-radius:999px;font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-size:13px;font-family:var(--font);transition:all 0.25s ease}
+    .btn:hover{background:var(--nb-green-hover);border-color:var(--nb-green-hover);transform:translateY(-1px)}
+    .btn.secondary{background:var(--nb-white);color:#c4a47c;border-color:var(--line)}
+    .btn.secondary:hover{border-color:#c4a47c}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{background:var(--nb-green);border-color:#c4a47c;color:white}
+    .btn.primary:hover{background:var(--nb-green-hover);border-color:var(--nb-green-hover)}
+
+    /* HERO PHOTO / CAROUSEL */
+    .hero-photo{margin-top:16px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--line);background:var(--nb-snow)}
+    .carousel{position:relative}
+    .carousel .stage{width:100%;height:80vh;min-height:400px;max-height:760px;position:relative;overflow:hidden;background:var(--nb-snow)}
+    .carousel .stage img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease}
+    .carousel .stage:hover img{transform:scale(1.02)}
+    .carousel .badgeRow{position:absolute;left:16px;top:16px;display:flex;gap:8px;flex-wrap:wrap;z-index:2}
+
+    .badge{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;backdrop-filter:blur(8px)}
+    .badge.rent{background:rgba(196,164,124,0.88);color:white}
+    .badge.available{background:rgba(196,164,124,0.9);color:white}
+    .badge.furnished{background:rgba(29,78,216,0.9);color:white}
+    .badge.pet-friendly{background:rgba(124,58,237,0.9);color:white}
+    .badge.short-term{background:rgba(234,88,12,0.9);color:white}
+    .badge.unfurnished{background:rgba(255,255,255,0.9);color:#c4a47c;border:1px solid rgba(196,164,124,0.15)}
+    .badge.type-b{background:rgba(255,255,255,0.88);color:#c4a47c;border:1px solid rgba(196,164,124,0.15)}
+
+    .carousel .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;pointer-events:none}
+    .nav .navbtn{pointer-events:auto;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:1.5rem;transition:all 0.25s ease}
+    .nav .navbtn:hover{background:rgba(0,0,0,0.55)}
+    .carousel .photo-count{position:absolute;bottom:16px;right:16px;padding:8px 18px;border-radius:8px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);color:white;font-size:0.85rem;font-weight:500}
+    .thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:10px;background:var(--nb-white);border-top:1px solid var(--line)}
+    @media(max-width:768px){.thumbs{grid-template-columns:repeat(4,1fr)}}
+    .thumb{border-radius:10px;overflow:hidden;border:2px solid transparent;cursor:pointer;background:var(--nb-snow);aspect-ratio:16/10;transition:all 0.25s ease;opacity:0.6}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb.active{border-color:#c4a47c;opacity:1;box-shadow:0 0 0 2px rgba(196,164,124,0.2)}
+    .thumb:hover{opacity:1}
+    @media(max-width:640px){.carousel .stage{height:55vh;min-height:260px}}
+
+    /* OVERVIEW (2 columns) */
+    .hero{margin-top:16px;display:grid;grid-template-columns:1.35fr .65fr;gap:16px;align-items:start}
+    @media(max-width:960px){.hero{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--line);background:var(--nb-white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .overview{padding:18px 20px}
+    .headline{font-family:var(--font-display);font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:700;margin:2px 0 10px;color:#e8dfc8}
+    .subline{color:var(--nb-muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .kvRow{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin-bottom:14px}
+    .priceBox{flex:1;min-width:250px;padding:14px;border-radius:var(--radius2);border:1px solid var(--line);background:linear-gradient(135deg,rgba(196,164,124,0.04),rgba(196,164,124,0.02))}
+    .priceTop{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+    .price{font-family:var(--font-display);font-size:clamp(1.35rem,3vw,1.85rem);font-weight:700;color:#c4a47c}
+    .perUnit{color:var(--nb-muted);font-size:13px}
+    .priceMeta{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+
+    .hlBox{flex:1;min-width:250px;padding:14px;border-radius:var(--radius2);border:1px solid var(--line);background:var(--nb-snow)}
+    .hlTitle{font-weight:700;margin:0 0 8px;font-size:12px;color:#c4a47c;text-transform:uppercase;letter-spacing:.6px}
+    .bullets{margin:0;padding-left:18px;color:#e8dfc8;font-size:14px;line-height:1.7}
+
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+    @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);text-align:center}
+    .stat .k{color:var(--nb-muted);font-size:11.5px;font-weight:500}
+    .stat .v{font-size:1.05rem;font-weight:700;margin-top:4px;color:#e8dfc8}
+    .hr{height:1px;background:var(--line);margin:14px 0}
+    .note{border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);padding:12px;color:var(--nb-muted);font-size:12.5px;background:rgba(196,164,124,0.02);line-height:1.6}
+    .muted{color:var(--nb-muted)}
+
+    /* TABS */
+    .section{margin-top:16px;border:1px solid var(--line);background:var(--nb-white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--line);background:var(--nb-snow)}
+    .tab{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--nb-white);color:var(--nb-muted);cursor:pointer;font-weight:600;font-size:12.5px;transition:all 0.25s ease;font-family:var(--font)}
+    .tab:hover{border-color:#c4a47c;color:#c4a47c}
+    .tab.active{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .tabPanel{display:none;padding:16px}
+    .tabPanel.active{display:block}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:960px){.grid2{grid-template-columns:1fr}}
+    .card{border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);padding:16px}
+    .card h3{margin:0 0 10px;font-size:12px;color:#c4a47c;text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+    .kv{display:grid;grid-template-columns:1fr;gap:0;font-size:14px}
+    .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:10px 0}
+    .row:last-child{border-bottom:none}
+    .row .label{color:var(--nb-muted);font-size:0.85rem}
+    .row .value{font-weight:700;text-align:right;color:#e8dfc8;font-size:0.88rem}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .tag{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--nb-white);font-size:12.5px;color:#c4a47c;font-weight:500;transition:all 0.2s ease}
+    .tag:hover{background:rgba(196,164,124,0.06)}
+
+    /* ACCORDION */
+    .accordion{border:1px solid var(--line);border-radius:var(--radius2);overflow:hidden;background:var(--nb-snow);margin-bottom:12px}
+    summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:0.92rem;color:#e8dfc8;transition:background 0.2s ease}
+    summary:hover{background:rgba(196,164,124,0.03)}
+    summary::-webkit-details-marker{display:none}
+    .accBody{padding:0 16px 16px;color:#e8dfc8}
+
+    /* MEDIA */
+    .mediaGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    @media(max-width:960px){.mediaGrid{grid-template-columns:1fr}}
+    .mediaBox{border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-snow);overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:var(--nb-muted);font-size:0.9rem}
+    iframe{width:100%;height:100%;border:0}
+
+    /* DESCRIPTION */
+    .desc{line-height:1.7;font-size:14.5px;color:var(--nb-muted);white-space:pre-line}
+
+    /* NEARBY */
+    .nearbyList{display:grid;grid-template-columns:1fr;gap:8px}
+    .nearbyItem{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:var(--radius2);background:var(--nb-white);transition:all 0.2s ease}
+    .nearbyItem:hover{border-color:rgba(196,164,124,0.2);box-shadow:0 2px 8px rgba(196,164,124,0.04)}
+    .nearbyItem .left{display:flex;flex-direction:column;gap:4px}
+    .nearbyItem .title{font-weight:700;font-size:0.88rem;color:#e8dfc8}
+    .nearbyItem .sub{color:var(--nb-muted);font-size:12.5px}
+    .nearbyItem .right{text-align:right}
+    .metric{color:var(--nb-muted);font-size:12px}
+    .pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--nb-snow);font-size:11.5px;color:#c4a47c;font-weight:600;margin-top:4px}
+
+    /* STICKY ACTION */
+    .actionSticky{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,0.88);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:60}
+    .actionInner{max-width:var(--max);margin:0 auto;padding:10px 18px;display:flex;gap:10px;align-items:center;justify-content:space-between;min-height:var(--stickyH)}
+    .agentMini{display:flex;gap:10px;align-items:center}
+    .avatar{width:42px;height:42px;border-radius:50%;border:2px solid var(--nb-snow);background:linear-gradient(135deg,rgba(196,164,124,0.15),rgba(196,164,124,0.08));display:flex;align-items:center;justify-content:center;font-weight:900;color:#c4a47c;font-size:0.9rem}
+    .agentMini .name{font-weight:700;font-size:14px;color:#e8dfc8}
+    .agentMini .meta{color:var(--nb-muted);font-size:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    /* TOAST */
+    .pf-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;color:white;font-size:0.88rem;font-weight:500;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards;background:var(--nb-green)}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link  pf-active">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+  <div class="wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar" aria-label="Top utilities">
+      <div class="left">
+        <span class="chip"><strong>05g</strong> Short-Stay Rental • Detail</span>
+
+        <label class="chip">Units
+          <select class="select" id="unitSelect" aria-label="Units">
+            <option value="metric">Metric (sqm)</option>
+            <option value="imperial">Imperial (sqft)</option>
+          </select>
+        </label>
+
+        <label class="chip">Currency
+          <select class="select" id="currencySelect" aria-label="Currency">
+            <option value="CHF">CHF</option><option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option><option value="ZAR">ZAR</option><option value="AED">AED</option><option value="SGD">SGD</option>
+          </select>
+        </label>
+
+        <label class="chip">Country
+          <select class="select" id="countryPreset" aria-label="Country preset">
+            <option value="AUTO">Auto (from listing)</option>
+            <option value="CH">Switzerland (CH)</option>
+            <option value="US">United States (US)</option>
+            <option value="UK">United Kingdom (UK)</option>
+            <option value="DE">Germany (DE)</option>
+            <option value="AE">UAE (AE)</option>
+            <option value="ZA">South Africa (ZA)</option>
+            <option value="SG">Singapore (SG)</option>
+          </select>
+        </label>
+
+        <label class="chip">Rate
+          <select class="select" id="rateSelect" aria-label="Rate selection">
+            <option value="daily">Daily (per night)</option>
+            <option value="monthly">Month-to-month (per month)</option>
+          </select>
+        </label>
+
+        <span class="chip">Source: <strong id="sourceText">Demo</strong></span>
+      </div>
+
+      <div class="right">
+        <button class="btn secondary" id="backBtn" type="button">Back</button>
+        <button class="btn secondary" id="shareBtn" type="button">Share</button>
+        <button class="btn secondary" id="saveBtn" type="button">Save</button>
+        <button class="btn" id="printBtn" type="button">Print</button>
+      </div>
+    </div>
+
+    <!-- HERO PHOTO -->
+    <div class="hero-photo">
+      <div class="carousel" aria-label="Photo carousel">
+        <div class="stage">
+          <div class="badgeRow" id="badgeRow">
+            <!-- badges injected -->
+          </div>
+
+          <img id="stageImg" alt="Property image" src="https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=1600&q=80" />
+
+          <div class="nav">
+            <div class="navbtn" id="prevBtn" role="button" aria-label="Previous image">&#8249;</div>
+            <div class="navbtn" id="nextBtn" role="button" aria-label="Next image">&#8250;</div>
+          </div>
+
+          <div class="photo-count" id="photoCount">1 / 6</div>
+        </div>
+
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="hero">
+      <div class="panel overview" aria-label="Overview">
+        <div class="headline" id="headline">Short-Stay Rental</div>
+
+        <div class="subline" id="locationLine">
+          <span>📍 <span id="locationText">—</span></span>
+          <span>• <span class="muted" id="privacyNote">Exact address hidden (privacy mode)</span></span>
+        </div>
+
+        <div class="kvRow">
+          <div class="priceBox">
+            <div class="priceTop">
+              <div class="price" id="rentMain">—</div>
+              <div class="perUnit" id="rentPeriod">/night</div>
+            </div>
+            <div class="priceMeta">
+              <span class="chip">Availability: <strong id="availText">—</strong></span>
+              <span class="chip">Stay plan: <strong id="termText">—</strong></span>
+              <span class="chip">Deposit: <strong id="depositText">—</strong></span>
+            </div>
+          </div>
+
+          <div class="hlBox">
+            <div class="hlTitle">Short-stay highlights</div>
+            <ul class="bullets" id="highlights">
+              <li>Furnished, move-in ready</li>
+              <li>Fast Wi-Fi / work-friendly</li>
+              <li>Secure access</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="stats" aria-label="Core stats">
+          <div class="stat"><div class="k">Bedrooms</div><div class="v" id="beds">—</div></div>
+          <div class="stat"><div class="k">Bathrooms</div><div class="v" id="baths">—</div></div>
+          <div class="stat"><div class="k">Living Area</div><div class="v" id="livingArea">—</div></div>
+          <div class="stat"><div class="k">Parking</div><div class="v" id="parking">—</div></div>
+          <div class="stat"><div class="k">Type</div><div class="v" id="propType">—</div></div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="note" id="autoNote">
+          Tip: In the final webapp, short-stay "extras" can be auto-filled (cleaning schedule, house rules, access method) plus map data (stations, shops, hospitals, schools).
+        </div>
+      </div>
+
+      <!-- RIGHT: quick contact sidebar -->
+      <div class="panel overview" aria-label="Quick contact">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div class="avatar">PF</div>
+          <div>
+            <div style="font-weight:700;font-size:0.95rem" id="agentNameSide">Short-Stay Agent</div>
+            <div class="muted" style="font-size:12px" id="agentOrgSide">Property Finder International</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn primary" style="width:100%;justify-content:center" onclick="showToast('Calling agent...')">📞 Call Agent</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Email form opening...')">✉️ Send Email</button>
+          <button style="width:100%;padding:12px;border-radius:999px;border:none;background:#25D366;color:white;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--font);transition:all 0.25s ease"
+                  onmouseover="this.style.background='#1EBE5A'" onmouseout="this.style.background='#25D366'"
+                  onclick="showToast('Opening WhatsApp...')">WhatsApp</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Requesting availability...')">📅 Request Availability</button>
+          <button class="btn secondary" style="width:100%;justify-content:center" onclick="showToast('Requesting booking...')">🗓 Request Booking</button>
+        </div>
+
+        <div class="note" style="margin-top:12px">
+          <strong>Important:</strong> PropertyFinder does not take bookings or payments. The listing agent confirms dates, deposit terms, contracts and payment instructions.
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAILS TABS -->
+    <div class="section" aria-label="Short-stay rental details">
+      <div class="tabs" role="tablist" aria-label="Detail tabs">
+        <div class="tab active" data-tab="tab-rental" role="tab" aria-selected="true">Short-stay terms</div>
+        <div class="tab" data-tab="tab-basic" role="tab">Basics</div>
+        <div class="tab" data-tab="tab-sizes" role="tab">Sizes</div>
+        <div class="tab" data-tab="tab-rooms" role="tab">Rooms &amp; Layout</div>
+        <div class="tab" data-tab="tab-interior" role="tab">Interior</div>
+        <div class="tab" data-tab="tab-exterior" role="tab">Exterior</div>
+        <div class="tab" data-tab="tab-utilities" role="tab">Utilities</div>
+        <div class="tab" data-tab="tab-location" role="tab">Location &amp; Nearby</div>
+        <div class="tab" data-tab="tab-media" role="tab">Media</div>
+        <div class="tab" data-tab="tab-desc" role="tab">Description</div>
+      </div>
+
+      <!-- TERMS -->
+      <div class="tabPanel active" id="tab-rental" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Rates & upfront costs</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Selected rate</span><span class="value" id="rentRow">—</span></div>
+              <div class="row"><span class="label">Rate period</span><span class="value" id="periodRow">—</span></div>
+              <div class="row"><span class="label">Daily rate</span><span class="value" id="dailyRow">—</span></div>
+              <div class="row"><span class="label">Month-to-month rate</span><span class="value" id="monthlyRow">—</span></div>
+
+              <div class="row"><span class="label">Deposit / damage hold</span><span class="value" id="depositRow">—</span></div>
+              <div class="row"><span class="label">Stay plan</span><span class="value" id="termRow">—</span></div>
+              <div class="row"><span class="label">Available</span><span class="value" id="availableRow">—</span></div>
+              <div class="row"><span class="label">Minimum stay</span><span class="value" id="minStayRow">—</span></div>
+              <div class="row"><span class="label">Maximum stay</span><span class="value" id="maxStayRow">—</span></div>
+              <div class="row"><span class="label">Check-in / Check-out</span><span class="value" id="checkRow">—</span></div>
+              <div class="row"><span class="label">Cleaning</span><span class="value" id="cleaningRow">—</span></div>
+              <div class="row"><span class="label">Included</span><span class="value" id="includedRow">—</span></div>
+              <div class="row"><span class="label">Additional fees</span><span class="value" id="feesRow">—</span></div>
+            </div>
+            <div class="note" id="countryRentNote" style="margin-top:10px">
+              Country-smart: short-stays differ by country (tourism levies, cleaning fees, deposit holds, ID/passport requirements). Show only what the agent confirms.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Stay preferences</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Furnished</span><span class="value" id="furnishedRow">—</span></div>
+              <div class="row"><span class="label">Pet policy</span><span class="value" id="petsRow">—</span></div>
+              <div class="row"><span class="label">Smoking</span><span class="value" id="smokingRow">—</span></div>
+              <div class="row"><span class="label">Max occupancy</span><span class="value" id="occupancyRow">—</span></div>
+              <div class="row"><span class="label">Parking</span><span class="value" id="parkingRow">—</span></div>
+              <div class="row"><span class="label">Work-from-home ready</span><span class="value" id="wfhRow">—</span></div>
+              <div class="row"><span class="label">Internet</span><span class="value" id="internetRow">—</span></div>
+            </div>
+            <div class="chips" id="rentalTags"></div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Guest requirements</h3>
+            <div class="kv">
+              <div class="row"><span class="label">ID / Passport</span><span class="value" id="screeningRow">Required</span></div>
+              <div class="row"><span class="label">Deposit authorization</span><span class="value" id="incomeRow">Required</span></div>
+              <div class="row"><span class="label">House rules</span><span class="value" id="refsRow">Provided by agent</span></div>
+              <div class="row"><span class="label">Late arrival policy</span><span class="value" id="guarantorRow">Varies</span></div>
+            </div>
+            <div class="note" style="margin-top:10px">In the final webapp: show country-specific short-stay requirements + legal disclaimers automatically.</div>
+          </div>
+
+          <div class="card">
+            <h3>What the import should capture</h3>
+            <div class="chips">
+              <span class="tag">Daily rate</span><span class="tag">Month-to-month rate</span><span class="tag">Deposit</span>
+              <span class="tag">Min/Max stay</span><span class="tag">Check-in/out</span><span class="tag">Cleaning rules</span>
+              <span class="tag">Furnished</span><span class="tag">Pet policy</span><span class="tag">Utilities included</span>
+            </div>
+            <div class="note" style="margin-top:10px">
+              Map/transit APIs can still fill nearby stations, supermarkets, hospitals, schools, etc. Privacy mode can hide exact address until verified.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASICS -->
+      <div class="tabPanel" id="tab-basic" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Basic characteristics</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Property type</span><span class="value" id="basicType">—</span></div>
+              <div class="row"><span class="label">Condition</span><span class="value" id="condition">—</span></div>
+              <div class="row"><span class="label">Year built</span><span class="value" id="yearBuilt">—</span></div>
+              <div class="row"><span class="label">Floors / levels</span><span class="value" id="levels">—</span></div>
+              <div class="row"><span class="label">Orientation</span><span class="value" id="orientation">—</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Listing info</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Listing ID</span><span class="value" id="listingId">PF-STAY-05g-0001</span></div>
+              <div class="row"><span class="label">Status</span><span class="value" id="statusLong">—</span></div>
+              <div class="row"><span class="label">Neighborhood vibe</span><span class="value" id="neighborhoodVibe">—</span></div>
+              <div class="row"><span class="label">Views</span><span class="value" id="views">—</span></div>
+            </div>
+            <div class="chips" id="lifestyleTags"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIZES -->
+      <div class="tabPanel" id="tab-sizes" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Sizes &amp; dimensions</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Living / interior area</span><span class="value" id="sizeLiving">—</span></div>
+              <div class="row"><span class="label">Land / plot size</span><span class="value" id="sizeLand">—</span></div>
+              <div class="row"><span class="label">Terrace / balcony area</span><span class="value" id="sizeTerrace">—</span></div>
+              <div class="row"><span class="label">Parking</span><span class="value" id="sizeParking">—</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Measurement notes</h3>
+            <div class="note">
+              • Users can switch sqm ↔ sqft.<br/>
+              • Some countries use gross vs net living area — show helper notes when needed.<br/>
+              • Land size may be N/A for apartments (keep optional).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROOMS -->
+      <div class="tabPanel" id="tab-rooms" role="tabpanel">
+        <details class="accordion" open>
+          <summary>Bedrooms &amp; bathrooms <span class="muted">tap to expand/collapse</span></summary>
+          <div class="accBody">
+            <div class="grid2">
+              <div class="card">
+                <h3>Bedrooms</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Total bedrooms</span><span class="value" id="roomsBeds">—</span></div>
+                  <div class="row"><span class="label">Primary suite</span><span class="value" id="primarySuite">—</span></div>
+                  <div class="row"><span class="label">Storage</span><span class="value" id="bedStorage">—</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Bathrooms</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Total bathrooms</span><span class="value" id="roomsBaths">—</span></div>
+                  <div class="row"><span class="label">Laundry</span><span class="value" id="laundry">—</span></div>
+                  <div class="row"><span class="label">Water pressure</span><span class="value" id="waterPressure">—</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>Living spaces &amp; kitchen <span class="muted">layout details</span></summary>
+          <div class="accBody">
+            <div class="grid2">
+              <div class="card">
+                <h3>Living spaces</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Living / lounge</span><span class="value" id="livingRooms">—</span></div>
+                  <div class="row"><span class="label">Dining</span><span class="value" id="dining">—</span></div>
+                  <div class="row"><span class="label">Ceiling height</span><span class="value" id="ceiling">—</span></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3>Kitchen</h3>
+                <div class="kv">
+                  <div class="row"><span class="label">Type</span><span class="value" id="kitchenType">—</span></div>
+                  <div class="row"><span class="label">Appliances included</span><span class="value" id="appliances">—</span></div>
+                  <div class="row"><span class="label">Dishwasher</span><span class="value" id="dishwasher">—</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note">Optional uploads: floor plan image, room-by-room photo grouping.</div>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>Other rooms <span class="muted">study, storage, balcony, etc.</span></summary>
+          <div class="accBody">
+            <div class="chips">
+              <span class="tag">Study / Home Office</span><span class="tag">Laundry</span><span class="tag">Storage</span><span class="tag">Balcony</span>
+              <span class="tag">Basement (optional)</span><span class="tag">Attic (optional)</span><span class="tag">Gym room (optional)</span>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- INTERIOR -->
+      <div class="tabPanel" id="tab-interior" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Interior finishes</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Flooring</span><span class="value" id="flooring">—</span></div>
+              <div class="row"><span class="label">Windows</span><span class="value" id="windows">—</span></div>
+              <div class="row"><span class="label">Blinds / curtains</span><span class="value" id="blinds">—</span></div>
+              <div class="row"><span class="label">Built-ins</span><span class="value" id="builtins">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Comfort systems</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Heating</span><span class="value" id="heating">—</span></div>
+              <div class="row"><span class="label">Cooling</span><span class="value" id="cooling">—</span></div>
+              <div class="row"><span class="label">Ventilation</span><span class="value" id="ventilation">—</span></div>
+              <div class="row"><span class="label">Noise insulation</span><span class="value" id="noise">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Smart home &amp; tech</h3>
+            <div class="chips" id="techTags"></div>
+          </div>
+          <div class="card">
+            <h3>Accessibility</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Step-free access</span><span class="value" id="stepFree">—</span></div>
+              <div class="row"><span class="label">Elevator</span><span class="value" id="elevator">—</span></div>
+              <div class="row"><span class="label">Wheelchair-friendly</span><span class="value" id="wheelchair">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXTERIOR -->
+      <div class="tabPanel" id="tab-exterior" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Outdoor features</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Balcony / terrace</span><span class="value" id="balcony">—</span></div>
+              <div class="row"><span class="label">Garden</span><span class="value" id="garden">—</span></div>
+              <div class="row"><span class="label">Pool</span><span class="value" id="pool">—</span></div>
+              <div class="row"><span class="label">Security / access</span><span class="value" id="security">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Building / community amenities</h3>
+            <div class="chips" id="communityTags"></div>
+            <div class="note" style="margin-top:10px">Short-stay friendly: access control, lifts, parking type, concierge and check-in method matter.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UTILITIES -->
+      <div class="tabPanel" id="tab-utilities" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Utilities & services</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Electricity</span><span class="value" id="electricity">—</span></div>
+              <div class="row"><span class="label">Water</span><span class="value" id="water">—</span></div>
+              <div class="row"><span class="label">Heating fuel</span><span class="value" id="fuel">—</span></div>
+              <div class="row"><span class="label">Internet</span><span class="value" id="internet2">—</span></div>
+              <div class="row"><span class="label">Energy certificate</span><span class="value" id="energyCert">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Country-smart notes</h3>
+            <div class="note" id="utilitiesNote">
+              ZA: show backup power readiness. EU/CH/DE: show energy certificate type. US: show HVAC + utilities responsibility. Short-stay: highlight internet speed and included services.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="tabPanel" id="tab-location" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Neighborhood overview</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Area description</span><span class="value" id="areaDesc">—</span></div>
+              <div class="row"><span class="label">Views</span><span class="value" id="areaViews">—</span></div>
+              <div class="row"><span class="label">Commute snapshot</span><span class="value" id="commute">—</span></div>
+              <div class="row"><span class="label">Vibe</span><span class="value" id="vibe">—</span></div>
+            </div>
+            <div class="chips" id="locationBadges"></div>
+            <div class="note" style="margin-top:10px">
+              Implementation: populate nearby items using map/transit/schools + country rules. Privacy mode can show approximate pin / radius.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Interactive map (placeholder)</h3>
+            <div class="mediaBox">Map embed goes here (Google/Mapbox/Here)</div>
+            <div class="note" style="margin-top:10px">Privacy mode: hide exact address until guest is verified / booking confirmed.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px" class="card">
+          <h3>Nearby essentials (country-smart)</h3>
+          <div class="nearbyList" id="nearbyList"></div>
+        </div>
+
+        <div style="margin-top:14px" class="grid2">
+          <div class="card">
+            <h3>Education (expanded)</h3>
+            <div class="nearbyList" id="eduList"></div>
+            <div class="note" style="margin-top:10px">Short-stay: education can still matter for relocations. Show only if relevant.</div>
+          </div>
+          <div class="card">
+            <h3>Daily convenience & lifestyle</h3>
+            <div class="nearbyList" id="lifeList"></div>
+            <div class="note" style="margin-top:10px">Great for guests: groceries, gyms, parks, cafés, hospital/clinic, coworking.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px" class="grid2">
+          <div class="card">
+            <h3>Healthcare & safety</h3>
+            <div class="nearbyList" id="healthList"></div>
+          </div>
+          <div class="card">
+            <h3>Guest-friendly extras (optional)</h3>
+            <div class="kv">
+              <div class="row"><span class="label">Noise exposure</span><span class="value" id="noiseExposure">—</span></div>
+              <div class="row"><span class="label">Walk score</span><span class="value" id="walkScore">—</span></div>
+              <div class="row"><span class="label">Transit score</span><span class="value" id="transitScore">—</span></div>
+              <div class="row"><span class="label">Bike friendliness</span><span class="value" id="bikeScore">—</span></div>
+            </div>
+            <div class="note">Show only if data exists; keep optional to avoid blocking imports.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIA -->
+      <div class="tabPanel" id="tab-media" role="tabpanel">
+        <div style="background:#141c2b;border:1.5px solid #E3E8E5;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h3 style="font-family:'Cinzel',Georgia,serif;font-size:1rem;font-weight:700;color:#0e1520;margin-bottom:6px">📸 Property Photos &amp; Video</h3>
+          <p style="font-size:0.82rem;color:#8a7d5a;margin-bottom:14px">Upload up to 30 photos · First photo = cover · Drag &amp; drop or click · No people in photos</p>
+          <div id="pfuMedia_rent_short_stay"></div>
+        </div>
+        <div class="mediaGrid">
+          <div class="card">
+            <h3>Video tour</h3>
+            <div class="mediaBox"><iframe title="Video placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px">Embed YouTube/Vimeo link. For privacy, optionally disable autoplay and show consent.</div>
+          </div>
+          <div class="card">
+            <h3>Virtual tour / 3D walkthrough</h3>
+            <div class="mediaBox"><iframe title="Virtual tour placeholder" src="about:blank"></iframe></div>
+            <div class="note" style="margin-top:10px">Support Matterport / 360° tours.</div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h3>Floor plan</h3>
+            <div class="mediaBox">Floor plan image / interactive plan here</div>
+            <div class="note" style="margin-top:10px">Download link + watermark toggle.</div>
+          </div>
+          <div class="card">
+            <h3>Photo categories</h3>
+            <div class="chips"><span class="tag">Interior</span><span class="tag">Exterior</span><span class="tag">Views</span><span class="tag">Building</span><span class="tag">Floor plan</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="tabPanel" id="tab-desc" role="tabpanel">
+        <div class="grid2">
+          <div class="card">
+            <h3>Public description</h3>
+            <div class="desc" id="publicDesc">—</div>
+            <div class="note" style="margin-top:10px">Recommendation: 150–600 words. Include rate options, min/max stay, check-in/out, and what's included.</div>
+          </div>
+          <div class="card">
+            <h3>Private remarks (agent-only)</h3>
+            <div class="desc muted" id="privateRemarks">[Agent-only notes] • Access method • Quiet hours • Deposit handling • Sensitive instructions</div>
+            <div class="note" style="margin-top:10px">In public mode, hide this panel completely.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /section -->
+  </div><!-- /wrap -->
+
+  <!-- STICKY ACTION BAR -->
+  <div class="actionSticky" aria-label="Contact actions">
+    <div class="actionInner">
+      <div class="agentMini">
+        <div class="avatar">PF</div>
+        <div>
+          <div class="name" id="agentName">Short-Stay Agent</div>
+          <div class="meta" id="agentMeta">Property Finder International • +00 000 0000 • WhatsApp</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" type="button" id="infoBtn">Request Availability</button>
+        <button class="btn secondary" type="button" id="viewBtn">Message Agent</button>
+        <button class="btn primary" type="button" id="applyBtn">Request Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 05g Short-Stay Rental — Standalone Detail
+     * Integration method: localStorage.pf_selected_shortterm (JSON).
+     * Important: PropertyFinder does NOT take bookings/payments.
+     ********************************************************************/
+
+    // Toast
+    function showToast(msg){
+      const ex=document.querySelector('.pf-toast');if(ex)ex.remove();
+      const t=document.createElement('div');t.className='pf-toast';t.textContent=msg;
+      document.body.appendChild(t);setTimeout(()=>t.remove(),3200);
+    }
+
+    // ===== 1) Pull selected listing from 05g listings (if present) =====
+    function loadFrom05(){
+      try{
+        const raw = localStorage.getItem('pf_selected_shortterm');
+        if(!raw) return null;
+        const obj = JSON.parse(raw);
+        if(!obj || !obj.title) return null;
+        return obj;
+      }catch(e){ return null; }
+    }
+
+    // ===== 2) Demo fallback listing (always works) =====
+    const demoShortStay = {
+      title: "Loft in Zürich Seefeld — Short Stay",
+      location: "Zürich, Switzerland",
+      flag: "ch",
+      badges: ["short-term","furnished","month-to-month"],
+      tags: ["furnished","month-to-month"],
+      beds: 2, baths: 1, size: "95 m²",
+      parking: 0,
+
+      // Two options only:
+      rates: { daily: "CHF 220", monthly: "CHF 4,800" },
+
+      lease: {
+        plan: "Daily or Month-to-month",
+        deposit: "CHF 1,500 (refundable)",
+        available: "1 May 2026",
+        furnished: "Furnished",
+        minStay: "3 nights",
+        maxStay: "6 months (typical)",
+        check: "Check-in 15:00 • Check-out 10:00",
+        cleaning: "Weekly clean included (monthly stays) • Checkout clean applies",
+        included: "Wi-Fi • Basic linens • Water (varies by contract)",
+        fees: "Tourism / service fees may apply (country-specific)",
+        pets: "Case-by-case",
+        smoking: "No",
+        occupancy: "Up to 3",
+        wfh: "Yes (desk-friendly)",
+        internet: "Fiber-ready",
+        serviced: "Optional (add-on)"
+      },
+
+      desc: "Light-filled industrial loft conversion in Zürich's sought-after Seefeld quarter. Exposed brick, polished concrete floors, and double-height ceilings. Five-minute walk to the lake and tram stop. Ideal for corporate relocations, project stays, or premium short breaks — bookings and payment handled directly by the listing agent.",
+      features: ["Lake Proximity","Loft Style","High Ceilings","Tram Access","Storage"],
+      img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600",
+      images: [
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1600&q=80"
+      ],
+
+      meta: {
+        country: "CH",
+        propertyType: "Apartment / Loft",
+        privacyMode: true,
+        highlights: ["Daily or month-to-month rates","Near tram + lake","Furnished, move-in ready","Fibre-ready","Storage included"],
+        yearBuilt: "Converted",
+        levels: "1",
+        orientation: "South-facing (approx.)",
+        condition: "Excellent",
+        vibe: "Quiet residential • walkable",
+        views: "City • neighborhood",
+        areaDesc: "Seefeld is a premium lakeside district with cafés, parks, excellent tram links and everyday convenience.",
+        commute: "10–15 min to city center (tram)",
+        sizeLivingSqm: 95,
+        sizeLandSqm: null,
+        terraceSqm: 8,
+        parkingText: "Street permit / none included",
+        flooring: "Polished concrete",
+        windows: "Double / triple glazing (varies)",
+        blinds: "Blinds included",
+        builtins: "Wardrobes",
+        heating: "Radiator / heat pump (building)",
+        cooling: "N/A (portable optional)",
+        ventilation: "Standard",
+        noise: "Good insulation",
+        tech: ["Fiber-ready internet","Video intercom","Smart lock (optional)"],
+        accessibility: { stepFree:"Partial", elevator:"Yes", wheelchair:"Partial" },
+        exterior: { balcony:"Yes", garden:"None", pool:"None", security:"Intercom + building access control" },
+        community: ["Elevator","Secure entry","Bike storage (optional)"],
+        utilities: { electricity:"Varies by stay", water:"Included / varies", fuel:"District/heat pump (building)", internet:"Fiber available", energyCert:"Minergie (if applicable)" },
+        tenantExtras: { noiseExposure:"Low–Medium (estimate)", walkScore:"Optional", transitScore:"Optional", bikeScore:"Optional" }
+      },
+
+      agent: {
+        name: "Short-Stay Agent",
+        org: "Property Finder International",
+        phone: "+41 00 000 0000",
+        email: "agent@example.com",
+        whatsapp: "+41 00 000 0000"
+      }
+    };
+
+    // The active listing used by this page
+    const selected = loadFrom05();
+    const listing = selected ? normalizeFrom05(selected) : demoShortStay;
+
+    // ===== Normalize object from 05g so it always has what 05g needs =====
+    function normalizeFrom05(p){
+      const isUnfurnished = (p.tags||[]).includes('unfurnished');
+      const furnishedText = (p.lease && p.lease.furnished) ? p.lease.furnished : (isUnfurnished ? 'Unfurnished' : 'Furnished');
+
+      const imgs = Array.isArray(p.images) && p.images.length ? p.images : [
+        p.img, p.img, p.img, p.img, p.img, p.img
+      ];
+
+      const flag = (p.flag||'').toLowerCase();
+      const countryGuess = flag === 'gb' ? 'UK' :
+                           flag === 'za' ? 'ZA' :
+                           flag === 'ch' ? 'CH' :
+                           flag === 'ae' ? 'AE' :
+                           flag === 'sg' ? 'SG' :
+                           flag === 'de' ? 'DE' :
+                           flag === 'us' ? 'US' : 'AUTO';
+
+      return {
+        ...demoShortStay,
+        title: p.title || demoShortStay.title,
+        location: p.location || demoShortStay.location,
+        flag: flag || demoShortStay.flag,
+        badges: p.badges || ["short-term"],
+        beds: (typeof p.beds === 'number') ? p.beds : demoShortStay.beds,
+        baths: (typeof p.baths === 'number') ? p.baths : demoShortStay.baths,
+        size: p.size || demoShortStay.size,
+        parking: (typeof p.parking === 'number') ? p.parking : demoShortStay.parking,
+
+        rates: p.rates || demoShortStay.rates,
+        // Backward compatible fields (optional)
+        price: p.price || demoShortStay.rates.monthly,
+        period: p.period || "/mo",
+
+        lease: {
+          plan: p.lease?.plan || p.lease?.term || "Daily or Month-to-month",
+          deposit: p.lease?.deposit || "—",
+          available: p.lease?.available || "—",
+          furnished: furnishedText,
+          minStay: p.lease?.minStay || "—",
+          maxStay: p.lease?.maxStay || "—",
+          check: p.lease?.check || "—",
+          cleaning: p.lease?.cleaning || "—",
+          included: p.lease?.included || "Varies by country / listing source",
+          fees: p.lease?.fees || "Varies (service/cleaning/tourism)",
+          pets: p.lease?.pets || ((p.tags||[]).includes('pet-friendly') ? "Allowed (policy applies)" : "Not specified"),
+          smoking: p.lease?.smoking || "Not specified",
+          occupancy: p.lease?.occupancy || "Not specified",
+          wfh: p.lease?.wfh || "Not specified",
+          internet: p.lease?.internet || "Not specified",
+          serviced: p.lease?.serviced || ((p.tags||[]).includes('serviced') ? "Yes" : "Optional")
+        },
+
+        tags: p.tags || [],
+        desc: p.desc || demoShortStay.desc,
+        features: p.features || [],
+        img: p.img || demoShortStay.img,
+        images: imgs,
+
+        meta: {
+          ...demoShortStay.meta,
+          country: (countryGuess==="AUTO") ? demoShortStay.meta.country : countryGuess,
+          propertyType: p.propertyType || demoShortStay.meta.propertyType,
+          highlights: buildHighlights(p),
+          parkingText: (typeof p.parking === 'number' && p.parking>0) ? (p.parking+" space(s)") : "Not included / street options",
+          utilities: { ...demoShortStay.meta.utilities, internet: p.lease?.internet || demoShortStay.meta.utilities.internet }
+        },
+
+        agent: p.agent || demoShortStay.agent
+      };
+    }
+
+    function buildHighlights(p){
+      const h = [];
+      h.push("Daily + month-to-month options");
+      if((p.tags||[]).includes('furnished')) h.push('Furnished, move-in ready');
+      if((p.tags||[]).includes('pet-friendly')) h.push('Pet friendly');
+      if((p.tags||[]).includes('serviced')) h.push('Serviced option');
+      if((p.badges||[]).includes('available')) h.push('Available now');
+      if((p.features||[]).length) h.push((p.features[0]));
+      if(p.location) h.push('Prime location');
+      return h.slice(0,6);
+    }
+
+    // ===== Country-smart nearby templates (same concept as 05a) =====
+    const nearbyTemplates = {
+      CH: {
+        transport: [
+          { name:"Nearest SBB Train Station", desc:"Mainline rail connections", distanceKm:1.2, timeMin:6, mode:"walk" },
+          { name:"Nearest Tram Stop", desc:"Tram line(s) to city center", distanceKm:0.35, timeMin:4, mode:"walk" },
+          { name:"Nearest Bus Stop", desc:"Local bus routes", distanceKm:0.22, timeMin:3, mode:"walk" },
+          { name:"Motorway / Highway Access", desc:"Fast regional access", distanceKm:3.8, timeMin:9, mode:"drive" },
+          { name:"Airport", desc:"International flights", distanceKm:12.5, timeMin:20, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Public school nearby", distanceKm:0.55, timeMin:7, mode:"walk" },
+          { name:"Secondary School", desc:"Gymnasium / secondary options", distanceKm:1.7, timeMin:7, mode:"tram" },
+          { name:"International School", desc:"IB / bilingual programs (optional)", distanceKm:6.1, timeMin:18, mode:"drive" },
+          { name:"University", desc:"Campus access via tram/train", distanceKm:3.2, timeMin:14, mode:"tram" }
+        ],
+        lifestyle: [
+          { name:"Supermarket", desc:"Daily shopping", distanceKm:0.48, timeMin:6, mode:"walk" },
+          { name:"Park / Waterfront", desc:"Jogging, family time", distanceKm:0.30, timeMin:4, mode:"walk" },
+          { name:"Cafés & Restaurants", desc:"Dining corridor", distanceKm:0.40, timeMin:5, mode:"walk" },
+          { name:"Gym / Fitness", desc:"Fitness & wellness", distanceKm:1.1, timeMin:6, mode:"tram" }
+        ],
+        health: [
+          { name:"Hospital / Clinic", desc:"Emergency + outpatient", distanceKm:4.9, timeMin:16, mode:"drive" },
+          { name:"Pharmacy", desc:"Nearest pharmacy", distanceKm:0.60, timeMin:7, mode:"walk" }
+        ]
+      },
+      US: {
+        transport: [
+          { name:"Nearest Metro / Subway Station", desc:"City transit (if applicable)", distanceKm:2.4, timeMin:8, mode:"drive" },
+          { name:"Nearest Bus Stop", desc:"Local routes", distanceKm:0.60, timeMin:7, mode:"walk" },
+          { name:"Highway Access", desc:"Commute corridor", distanceKm:3.2, timeMin:7, mode:"drive" },
+          { name:"Airport", desc:"Regional / international flights", distanceKm:22.0, timeMin:28, mode:"drive" }
+        ],
+        education: [
+          { name:"School District", desc:"District name + boundary map", distanceKm:null, timeMin:null, mode:"info" },
+          { name:"Elementary School", desc:"Rating + enrollment", distanceKm:1.1, timeMin:4, mode:"drive" },
+          { name:"Middle School", desc:"Rating + programs", distanceKm:2.8, timeMin:8, mode:"drive" },
+          { name:"High School", desc:"Sports + academics", distanceKm:3.6, timeMin:10, mode:"drive" },
+          { name:"School Bus Pickup Zone", desc:"Nearest pickup location", distanceKm:0.25, timeMin:3, mode:"walk" },
+          { name:"University / College", desc:"Commute time", distanceKm:9.5, timeMin:18, mode:"drive" }
+        ],
+        lifestyle: [
+          { name:"Grocery Store", desc:"Daily shopping", distanceKm:1.9, timeMin:6, mode:"drive" },
+          { name:"Retail / Services", desc:"Shopping & essentials", distanceKm:6.5, timeMin:12, mode:"drive" },
+          { name:"Parks / Trails", desc:"Outdoor lifestyle", distanceKm:1.0, timeMin:4, mode:"drive" }
+        ],
+        health: [
+          { name:"Hospital", desc:"Emergency services", distanceKm:7.2, timeMin:14, mode:"drive" },
+          { name:"Pharmacy", desc:"Nearest pharmacy", distanceKm:2.1, timeMin:7, mode:"drive" }
+        ]
+      },
+      UK: {
+        transport: [
+          { name:"Nearest Underground / Metro", desc:"If in metro areas", distanceKm:1.1, timeMin:6, mode:"walk" },
+          { name:"Nearest Rail Station", desc:"National rail access", distanceKm:2.0, timeMin:9, mode:"drive" },
+          { name:"Bus Stop", desc:"Local routes", distanceKm:0.25, timeMin:3, mode:"walk" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Catchment (optional)", distanceKm:0.9, timeMin:12, mode:"walk" },
+          { name:"Secondary School", desc:"Catchment (optional)", distanceKm:2.2, timeMin:10, mode:"bus" },
+          { name:"University", desc:"Commute time", distanceKm:5.7, timeMin:20, mode:"bus" }
+        ],
+        lifestyle: [
+          { name:"High Street / Shops", desc:"Daily convenience", distanceKm:1.2, timeMin:6, mode:"drive" },
+          { name:"Parks", desc:"Green spaces", distanceKm:0.6, timeMin:8, mode:"walk" }
+        ],
+        health: [
+          { name:"Hospital", desc:"NHS access", distanceKm:6.8, timeMin:18, mode:"drive" },
+          { name:"Pharmacy", desc:"Nearest", distanceKm:0.8, timeMin:10, mode:"walk" }
+        ]
+      },
+      DE: {
+        transport: [
+          { name:"S-Bahn / U-Bahn Station", desc:"Local rapid transit", distanceKm:0.7, timeMin:8, mode:"walk" },
+          { name:"Tram Stop", desc:"Tram lines nearby", distanceKm:0.4, timeMin:5, mode:"walk" }
+        ],
+        education: [
+          { name:"Grundschule (Primary)", desc:"Nearby", distanceKm:0.8, timeMin:10, mode:"walk" },
+          { name:"Gymnasium (Secondary)", desc:"Nearby", distanceKm:2.1, timeMin:12, mode:"tram" },
+          { name:"University", desc:"Commute", distanceKm:4.4, timeMin:18, mode:"tram" }
+        ],
+        lifestyle: [
+          { name:"Supermarket", desc:"Daily needs", distanceKm:0.5, timeMin:6, mode:"walk" },
+          { name:"Bakery / Café", desc:"Local lifestyle", distanceKm:0.3, timeMin:4, mode:"walk" }
+        ],
+        health: [
+          { name:"Clinic", desc:"Outpatient", distanceKm:2.9, timeMin:10, mode:"tram" },
+          { name:"Pharmacy", desc:"Nearby", distanceKm:0.4, timeMin:5, mode:"walk" }
+        ]
+      },
+      AE: {
+        transport: [
+          { name:"Metro Station", desc:"If applicable (Dubai/Abu Dhabi)", distanceKm:2.2, timeMin:10, mode:"drive" },
+          { name:"Main Road Access", desc:"Fast city movement", distanceKm:1.5, timeMin:6, mode:"drive" }
+        ],
+        education: [
+          { name:"International School", desc:"IB / British / American curriculum", distanceKm:3.5, timeMin:12, mode:"drive" },
+          { name:"University", desc:"Commute time", distanceKm:9.0, timeMin:18, mode:"drive" }
+        ],
+        lifestyle: [
+          { name:"Mall", desc:"Shopping + dining", distanceKm:4.8, timeMin:14, mode:"drive" },
+          { name:"Beach", desc:"Coastal lifestyle (if relevant)", distanceKm:6.2, timeMin:16, mode:"drive" },
+          { name:"Mosque", desc:"Nearby (optional)", distanceKm:1.1, timeMin:6, mode:"drive" }
+        ],
+        health: [
+          { name:"Private Hospital", desc:"Premium care", distanceKm:7.0, timeMin:18, mode:"drive" }
+        ]
+      },
+      ZA: {
+        transport: [
+          { name:"Main Road Access", desc:"Commute corridor", distanceKm:1.6, timeMin:6, mode:"drive" },
+          { name:"Nearest Fuel Station", desc:"Convenience", distanceKm:2.1, timeMin:7, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Nearby", distanceKm:2.4, timeMin:8, mode:"drive" },
+          { name:"High School", desc:"Nearby", distanceKm:3.8, timeMin:12, mode:"drive" },
+          { name:"University", desc:"Commute time", distanceKm:11.0, timeMin:22, mode:"drive" }
+        ],
+        lifestyle: [
+          { name:"Supermarket", desc:"Daily shopping", distanceKm:3.0, timeMin:10, mode:"drive" },
+          { name:"Shopping Center", desc:"Services + dining", distanceKm:6.0, timeMin:16, mode:"drive" }
+        ],
+        health: [
+          { name:"Hospital", desc:"Emergency services", distanceKm:6.5, timeMin:16, mode:"drive" },
+          { name:"Pharmacy", desc:"Nearest", distanceKm:3.0, timeMin:10, mode:"drive" }
+        ]
+      },
+      SG: {
+        transport: [
+          { name:"MRT Station", desc:"Rapid transit access", distanceKm:0.65, timeMin:8, mode:"walk" },
+          { name:"Bus Interchange", desc:"Route connectivity", distanceKm:1.4, timeMin:6, mode:"drive" }
+        ],
+        education: [
+          { name:"Primary School", desc:"Within 1km/2km zone (optional)", distanceKm:0.9, timeMin:11, mode:"walk" },
+          { name:"Secondary School", desc:"Nearby", distanceKm:1.8, timeMin:10, mode:"bus" },
+          { name:"University", desc:"Commute", distanceKm:6.0, timeMin:20, mode:"mrt" }
+        ],
+        lifestyle: [
+          { name:"Hawker Centre", desc:"Local dining", distanceKm:0.8, timeMin:10, mode:"walk" },
+          { name:"Supermarket", desc:"Daily needs", distanceKm:0.6, timeMin:8, mode:"walk" },
+          { name:"Park Connector", desc:"Walking/cycling", distanceKm:0.5, timeMin:6, mode:"walk" }
+        ],
+        health: [
+          { name:"Polyclinic / Hospital", desc:"Healthcare access", distanceKm:3.6, timeMin:14, mode:"mrt" }
+        ]
+      }
+    };
+
+    // ===== Helpers (units/distances) =====
+    const SQM_TO_SQFT = 10.76391041671;
+
+    function areaText(sqm,u){
+      if(sqm==null || sqm===undefined) return "N/A";
+      return u==="imperial" ? Math.round(sqm*SQM_TO_SQFT).toLocaleString()+" sqft" : sqm.toLocaleString()+" sqm";
+    }
+    function distanceText(km,u){
+      if(km==null) return "—";
+      if(u==="imperial"){ const mi=km*0.621371; return mi.toFixed(mi<1?2:1)+" mi"; }
+      return km.toFixed(km<1?2:1)+" km";
+    }
+    function modeLabel(m){ return {walk:"Walk",drive:"Drive",tram:"Tram",bus:"Bus",train:"Train",mrt:"MRT",info:"Info"}[m]||"—"; }
+
+    // ===== Carousel =====
+    let imgIndex = 0;
+    const stageImg = document.getElementById("stageImg");
+
+    function renderThumbs(){
+      const t=document.getElementById("thumbs"); t.innerHTML="";
+      listing.images.forEach((src,i)=>{
+        const d=document.createElement("div");
+        d.className="thumb"+(i===imgIndex?" active":"");
+        d.innerHTML='<img alt="Thumbnail '+(i+1)+'" src="'+src+'">';
+        d.addEventListener("click",()=>{ imgIndex=i; renderCarousel(); });
+        t.appendChild(d);
+      });
+    }
+    function renderCarousel(){
+      stageImg.src=listing.images[imgIndex];
+      document.getElementById("photoCount").textContent=(imgIndex+1)+" / "+listing.images.length;
+      renderThumbs();
+    }
+    document.getElementById("prevBtn").addEventListener("click",()=>{ imgIndex=(imgIndex-1+listing.images.length)%listing.images.length; renderCarousel(); });
+    document.getElementById("nextBtn").addEventListener("click",()=>{ imgIndex=(imgIndex+1)%listing.images.length; renderCarousel(); });
+
+    // ===== Tabs =====
+    const tabs=Array.from(document.querySelectorAll(".tab"));
+    const panels=Array.from(document.querySelectorAll(".tabPanel"));
+    tabs.forEach(t=>{ t.addEventListener("click",()=>{
+      tabs.forEach(x=>x.classList.remove("active"));
+      panels.forEach(p=>p.classList.remove("active"));
+      t.classList.add("active");
+      document.getElementById(t.dataset.tab).classList.add("active");
+    }); });
+
+    // ===== Nearby renderer =====
+    function buildNearbyItem(item,u){
+      const dist=item.distanceKm==null?"—":distanceText(item.distanceKm,u);
+      const time=item.timeMin==null?"":item.timeMin+" min";
+      const rt=(dist!=="—"&&time)?dist+" • "+time:(dist!=="—"?dist:(time||"—"));
+      return '<div class="nearbyItem"><div class="left"><div class="title">'+item.name+'</div><div class="sub">'+item.desc+'</div><div class="pill">'+modeLabel(item.mode)+'</div></div><div class="right"><div class="title">'+rt+'</div><div class="metric muted">'+(item.mode==="info"?"Country-specific":"Approx.")+'</div></div></div>';
+    }
+    function renderNearby(country,u){
+      const tpl = nearbyTemplates[country] || nearbyTemplates.CH;
+      document.getElementById("nearbyList").innerHTML = tpl.transport.map(x=>buildNearbyItem(x,u)).join("");
+      document.getElementById("eduList").innerHTML = tpl.education.map(x=>buildNearbyItem(x,u)).join("");
+      document.getElementById("lifeList").innerHTML = tpl.lifestyle.map(x=>buildNearbyItem(x,u)).join("");
+      document.getElementById("healthList").innerHTML = tpl.health.map(x=>buildNearbyItem(x,u)).join("");
+    }
+
+    // ===== Badges =====
+    function badgeLabel(b){
+      return b === "rent" ? "For Rent" :
+             b === "available" ? "Available Now" :
+             b === "furnished" ? "Furnished" :
+             b === "unfurnished" ? "Unfurnished" :
+             b === "pet-friendly" ? "Pet Friendly" :
+             b === "short-term" ? "Short-Term" : b;
+    }
+    function renderBadges(){
+      const row = document.getElementById("badgeRow");
+      row.innerHTML = "";
+      const type = (listing.meta && listing.meta.propertyType) ? listing.meta.propertyType : "Residential";
+      row.insertAdjacentHTML("beforeend", `<span class="badge type-b">${type}</span>`);
+      (listing.badges||["short-term"]).forEach(b=>{
+        row.insertAdjacentHTML("beforeend", `<span class="badge ${b}">${badgeLabel(b)}</span>`);
+      });
+    }
+
+    // ===== Render listing =====
+    function renderListing(){
+      const u = document.getElementById("unitSelect").value;
+      const preset = document.getElementById("countryPreset").value;
+      const country = (preset==="AUTO") ? (listing.meta?.country || "CH") : preset;
+      const rate = document.getElementById("rateSelect").value;
+      const rateVal = (listing.rates && listing.rates[rate]) ? listing.rates[rate] : (listing.price || "—");
+      const ratePeriod = (rate==="daily") ? "/night" : "/mo";
+
+      // Top
+      document.getElementById("headline").textContent = listing.title;
+      document.getElementById("locationText").textContent = listing.location || "—";
+      document.getElementById("privacyNote").textContent = (listing.meta?.privacyMode) ? "Exact address hidden (privacy mode)" : "Exact address visible";
+
+      // Rate
+      document.getElementById("rentMain").textContent = rateVal;
+      document.getElementById("rentPeriod").textContent = ratePeriod;
+      document.getElementById("availText").textContent = listing.lease?.available || "—";
+      document.getElementById("termText").textContent = (rate==="daily") ? "Daily" : "Month-to-month";
+      document.getElementById("depositText").textContent = listing.lease?.deposit || "—";
+
+      // Highlights
+      const hl=document.getElementById("highlights"); hl.innerHTML="";
+      const highs = listing.meta?.highlights || [];
+      (highs.length ? highs : ["Daily/month-to-month","Furnished","Secure access"]).forEach(h=>{
+        const li=document.createElement("li"); li.textContent=h; hl.appendChild(li);
+      });
+
+      // Stats
+      document.getElementById("beds").textContent = (listing.beds===0 ? "Studio" : listing.beds);
+      document.getElementById("baths").textContent = listing.baths ?? "—";
+      const sqm = listing.meta?.sizeLivingSqm ?? null;
+      document.getElementById("livingArea").textContent = sqm ? areaText(sqm,u) : (listing.size || "—");
+      document.getElementById("parking").textContent = (typeof listing.parking === "number") ? (listing.parking || "0") : "—";
+      document.getElementById("propType").textContent = listing.meta?.propertyType || "Residential";
+
+      // Terms tab
+      document.getElementById("rentRow").textContent = rateVal;
+      document.getElementById("periodRow").textContent = ratePeriod;
+      document.getElementById("dailyRow").textContent = (listing.rates && listing.rates.daily) ? listing.rates.daily : "—";
+      document.getElementById("monthlyRow").textContent = (listing.rates && listing.rates.monthly) ? listing.rates.monthly : "—";
+
+      document.getElementById("depositRow").textContent = listing.lease?.deposit || "—";
+      document.getElementById("termRow").textContent = listing.lease?.plan || "Daily or Month-to-month";
+      document.getElementById("availableRow").textContent = listing.lease?.available || "—";
+      document.getElementById("minStayRow").textContent = listing.lease?.minStay || "—";
+      document.getElementById("maxStayRow").textContent = listing.lease?.maxStay || "—";
+      document.getElementById("checkRow").textContent = listing.lease?.check || "—";
+      document.getElementById("cleaningRow").textContent = listing.lease?.cleaning || "—";
+      document.getElementById("includedRow").textContent = listing.lease?.included || "Varies by listing";
+      document.getElementById("feesRow").textContent = listing.lease?.fees || "Varies (service/cleaning/tourism)";
+
+      document.getElementById("furnishedRow").textContent = listing.lease?.furnished || "Not specified";
+      document.getElementById("petsRow").textContent = listing.lease?.pets || "Not specified";
+      document.getElementById("smokingRow").textContent = listing.lease?.smoking || "Not specified";
+      document.getElementById("occupancyRow").textContent = listing.lease?.occupancy || "Not specified";
+      document.getElementById("parkingRow").textContent = listing.meta?.parkingText || ((typeof listing.parking==="number") ? (listing.parking+" space(s)") : "Not specified");
+      document.getElementById("wfhRow").textContent = listing.lease?.wfh || "Not specified";
+      document.getElementById("internetRow").textContent = listing.lease?.internet || "Not specified";
+      document.getElementById("internet2").textContent = listing.meta?.utilities?.internet || listing.lease?.internet || "Not specified";
+
+      // Tags
+      const rt = document.getElementById("rentalTags");
+      rt.innerHTML = "";
+      (listing.tags||[]).forEach(t=> rt.insertAdjacentHTML("beforeend", `<span class="tag">${t}</span>`));
+      (listing.badges||[]).forEach(b=>{
+        if(!(listing.tags||[]).includes(b)) rt.insertAdjacentHTML("beforeend", `<span class="tag">${badgeLabel(b)}</span>`);
+      });
+
+      // Country note
+      const rentNote =
+        (country==="UK") ? "UK short-stay: nightly rates, cleaning fees, deposit holds, and local rules may apply. Agent confirms everything." :
+        (country==="US") ? "US short-stay: deposits + ID checks + local occupancy rules vary by state/city. Agent confirms everything." :
+        (country==="AE") ? "UAE short-stay: tourism fees, deposits, and building access rules may apply. Agent confirms everything." :
+        (country==="CH") ? "CH short-stay: ID requirements + quiet-hours rules are common. Agent confirms everything." :
+        (country==="DE") ? "DE short-stay: registration/house rules and deposits may apply. Agent confirms everything." :
+        (country==="ZA") ? "ZA short-stay: security + backup power readiness can matter. Agent confirms everything." :
+        "Country-smart: short-stay terms differ. The listing agent confirms rates, availability, deposits and fees.";
+      document.getElementById("countryRentNote").textContent = rentNote;
+
+      // Basics
+      document.getElementById("basicType").textContent = listing.meta?.propertyType || "Residential";
+      document.getElementById("condition").textContent = listing.meta?.condition || "Good";
+      document.getElementById("yearBuilt").textContent = listing.meta?.yearBuilt || "—";
+      document.getElementById("levels").textContent = listing.meta?.levels || "—";
+      document.getElementById("orientation").textContent = listing.meta?.orientation || "—";
+      document.getElementById("statusLong").textContent = (listing.badges||[]).includes("available") ? "Available" : "Active";
+      document.getElementById("neighborhoodVibe").textContent = listing.meta?.vibe || "—";
+      document.getElementById("views").textContent = listing.meta?.views || "—";
+
+      const lt = document.getElementById("lifestyleTags");
+      lt.innerHTML = "";
+      ["Transit-accessible","Walkable amenities","Parks nearby"].forEach(x=> lt.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Sizes
+      document.getElementById("sizeLiving").textContent = (listing.meta?.sizeLivingSqm!=null) ? areaText(listing.meta.sizeLivingSqm,u) : (listing.size || "—");
+      document.getElementById("sizeLand").textContent = (listing.meta?.sizeLandSqm!=null) ? areaText(listing.meta.sizeLandSqm,u) : "N/A";
+      document.getElementById("sizeTerrace").textContent = (listing.meta?.terraceSqm!=null) ? areaText(listing.meta.terraceSqm,u) : "N/A";
+      document.getElementById("sizeParking").textContent = listing.meta?.parkingText || "—";
+
+      // Rooms
+      document.getElementById("roomsBeds").textContent = (listing.beds===0 ? "Studio" : listing.beds);
+      document.getElementById("roomsBaths").textContent = listing.baths ?? "—";
+      document.getElementById("primarySuite").textContent = (listing.beds>=1) ? "Optional / depends on unit" : "N/A";
+      document.getElementById("bedStorage").textContent = "Built-in cupboards (if any)";
+      document.getElementById("laundry").textContent = "In-unit / shared (varies)";
+      document.getElementById("waterPressure").textContent = "Standard";
+      document.getElementById("livingRooms").textContent = (listing.beds===0 ? "Studio layout" : "1");
+      document.getElementById("dining").textContent = "Open-plan / nook";
+      document.getElementById("ceiling").textContent = "Standard";
+      document.getElementById("kitchenType").textContent = "Open-plan";
+      document.getElementById("appliances").textContent = "As per listing";
+      document.getElementById("dishwasher").textContent = "Optional";
+
+      // Interior
+      document.getElementById("flooring").textContent = listing.meta?.flooring || "—";
+      document.getElementById("windows").textContent = listing.meta?.windows || "—";
+      document.getElementById("blinds").textContent = listing.meta?.blinds || "—";
+      document.getElementById("builtins").textContent = listing.meta?.builtins || "—";
+      document.getElementById("heating").textContent = listing.meta?.heating || "—";
+      document.getElementById("cooling").textContent = listing.meta?.cooling || "—";
+      document.getElementById("ventilation").textContent = listing.meta?.ventilation || "—";
+      document.getElementById("noise").textContent = listing.meta?.noise || "—";
+
+      const tech = document.getElementById("techTags");
+      tech.innerHTML = "";
+      (listing.meta?.tech || ["Fiber-ready internet"]).forEach(x=> tech.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      document.getElementById("stepFree").textContent = listing.meta?.accessibility?.stepFree || "—";
+      document.getElementById("elevator").textContent = listing.meta?.accessibility?.elevator || "—";
+      document.getElementById("wheelchair").textContent = listing.meta?.accessibility?.wheelchair || "—";
+
+      // Exterior
+      document.getElementById("balcony").textContent = listing.meta?.exterior?.balcony || "—";
+      document.getElementById("garden").textContent = listing.meta?.exterior?.garden || "—";
+      document.getElementById("pool").textContent = listing.meta?.exterior?.pool || "—";
+      document.getElementById("security").textContent = listing.meta?.exterior?.security || "—";
+
+      const com = document.getElementById("communityTags");
+      com.innerHTML = "";
+      (listing.meta?.community || ["Secure entry"]).forEach(x=> com.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Utilities
+      document.getElementById("electricity").textContent = listing.meta?.utilities?.electricity || "—";
+      document.getElementById("water").textContent = listing.meta?.utilities?.water || "—";
+      document.getElementById("fuel").textContent = listing.meta?.utilities?.fuel || "—";
+      document.getElementById("energyCert").textContent =
+        (country==="CH") ? "Minergie (if applicable)" :
+        (country==="DE") ? "Energieausweis (if applicable)" :
+        (country==="UK") ? "EPC Certificate" : (listing.meta?.utilities?.energyCert || "Local certificate (if available)");
+
+      // Location
+      document.getElementById("areaDesc").textContent = listing.meta?.areaDesc || "—";
+      document.getElementById("areaViews").textContent = listing.meta?.views || "—";
+      document.getElementById("commute").textContent = listing.meta?.commute || "—";
+      document.getElementById("vibe").textContent = listing.meta?.vibe || "—";
+
+      const lb = document.getElementById("locationBadges");
+      lb.innerHTML = "";
+      ["Transit-accessible","Walkable","Parks"].forEach(x=> lb.insertAdjacentHTML("beforeend", `<span class="tag">${x}</span>`));
+
+      // Guest extras
+      document.getElementById("noiseExposure").textContent = listing.meta?.tenantExtras?.noiseExposure || "Optional";
+      document.getElementById("walkScore").textContent = listing.meta?.tenantExtras?.walkScore || "Optional";
+      document.getElementById("transitScore").textContent = listing.meta?.tenantExtras?.transitScore || "Optional";
+      document.getElementById("bikeScore").textContent = listing.meta?.tenantExtras?.bikeScore || "Optional";
+
+      // Description
+      document.getElementById("publicDesc").textContent = listing.desc || "—";
+
+      // Nearby
+      renderNearby(country,u);
+
+      // Agent labels
+      document.getElementById("agentName").textContent = listing.agent?.name || "Short-Stay Agent";
+      document.getElementById("agentNameSide").textContent = listing.agent?.name || "Short-Stay Agent";
+      document.getElementById("agentOrgSide").textContent = listing.agent?.org || "Property Finder International";
+      document.getElementById("agentMeta").textContent = (listing.agent?.org || "Property Finder International") + " • " + (listing.agent?.phone || "+00 000 0000") + " • WhatsApp";
+    }
+
+    // ===== Wire up buttons =====
+    document.getElementById("unitSelect").addEventListener("change",renderListing);
+    document.getElementById("countryPreset").addEventListener("change",renderListing);
+    document.getElementById("rateSelect").addEventListener("change",renderListing);
+
+    document.getElementById("printBtn").addEventListener("click",()=>window.print());
+    document.getElementById("shareBtn").addEventListener("click",()=>showToast("Link copied to clipboard!"));
+    document.getElementById("saveBtn").addEventListener("click",()=>showToast("Saved to favourites!"));
+
+    document.getElementById("infoBtn").addEventListener("click",()=>showToast("Requesting availability from agent..."));
+    document.getElementById("viewBtn").addEventListener("click",()=>showToast("Messaging agent..."));
+    document.getElementById("applyBtn").addEventListener("click",()=>showToast("Requesting booking details from agent..."));
+
+    document.getElementById("backBtn").addEventListener("click",()=>{
+      if(history.length>1) history.back();
+      else showToast("Back to results (05g) in final app");
+    });
+
+    // ===== Init =====
+    (function init(){
+      document.getElementById("sourceText").textContent = selected ? "From 05g (selected listing)" : "Demo";
+      document.getElementById("countryPreset").value = "AUTO";
+
+      stageImg.src = listing.images[0] || listing.img;
+      renderBadges();
+      renderCarousel();
+      renderListing();
+
+      console.log("%c PropertyFinder — 05g Short-Stay Rental Detail loaded","color:#141c2b;font-weight:bold;font-size:12px");
+    })();
+  </script>
+<footer style="max-width:1220px;margin:0 auto;padding:20px 24px 40px;color:#8a7d5a;font-size:0.78rem;text-align:center;border-top:1px solid #E3E8E5;">
+  © <span id="y"></span> PropertyFinder. All rights reserved. |
+  <a href="terms-of-use.html" style="color:#141c2b;">Terms of Use</a> |
+  <a href="privacy-policy.html" style="color:#141c2b;">Privacy Policy</a> |
+  <a href="commission-fees.html" style="color:#141c2b;">Commission &amp; Fees</a>
+</footer>
+<script>document.getElementById("y").textContent=new Date().getFullYear();</script>
+
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script src="pf-photo-upload.js"></script>
+<script src="pf-core.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  if(document.getElementById("pfuMedia_rent_short_stay")){
+    PFUpload.init("pfuMedia_rent_short_stay",{maxPhotos:30,showVideoUpload:true,
+      onPhotosChanged:function(p){console.log("[PFUpload] rent-short-stay: "+p.length+" photos");}
+    });
+  }
+});
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

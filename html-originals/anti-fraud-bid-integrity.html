@@ -1,0 +1,141 @@
+<!-- FILE: anti-fraud-bid-integrity.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="google-translate-customization" content="property-finder">
+<script>
+(function(){
+  document.documentElement.style.display='none';
+  var x=new XMLHttpRequest();
+  x.open('GET','/ip-gate.php?check=1',true);
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText);if(d.ok){document.documentElement.style.display='';return;}}catch(e){}
+    document.documentElement.style.display='';
+    document.head.innerHTML='<title>403 Forbidden</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#141c2b;color:#c4a47c}div{text-align:center}h1{font-size:3rem;margin-bottom:0.5rem}p{color:#e8dfc8;opacity:0.7}</style>';
+    document.body.innerHTML='<div><h1>403</h1><p>Access Denied</p></div>';
+  };
+  x.onerror=function(){document.documentElement.style.display='';};
+  x.send();
+})();
+</script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — Anti-Fraud &amp; Bid Integrity Policy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#141c2b;--panel:#1a2535;--text:#e8dfc8;--muted:#8a7d5a;
+      --line:rgba(196,164,124,0.18);--accent:#141c2b;--accent2:#1a2535;--accent-dark:#0e1520;
+      --lime:#c4a47c;--danger:#DC2626;--danger-bg:#FEF2F2;
+      --radius:14px;--radius2:10px;--max:980px;
+      --font:'DM Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+    a:hover{text-decoration:underline}
+
+    header{
+      background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%) 0%,var(--accent) 55%,var(--accent2) 100%);
+      padding:48px 24px 36px;color:#fff;position:relative;overflow:hidden;
+    }
+    header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.92) 0%,rgba(196,164,124,.55) 55%,rgba(196,164,124,.35) 100%);pointer-events:none}
+    header .wrap{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    h1{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;margin:0 0 10px}
+    .meta{color:rgba(255,255,255,0.75);font-size:0.82rem;margin-bottom:8px}
+    .meta strong{color:#fff}
+    .meta a{color:rgba(255,255,255,0.85);font-weight:600;padding:5px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);transition:all 0.2s ease;text-decoration:none;font-size:0.8rem}
+    .meta a:hover{background:rgba(255,255,255,0.12);color:#fff;text-decoration:none}
+
+    main{max-width:var(--max);margin:0 auto;padding:24px 24px 60px}
+    section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+    h2{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin:0 0 14px;color:var(--accent-dark)}
+    h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px;margin-right:10px;vertical-align:middle}
+    h3{margin:18px 0 8px;font-size:0.95rem;font-weight:800;color:var(--text)}
+    p{margin:10px 0;font-size:0.9rem;line-height:1.65}
+    ul{margin:10px 0 0 20px;font-size:0.9rem}
+    ul li{margin-bottom:6px;line-height:1.55}
+
+    .danger{border-left:4px solid var(--danger);background:var(--danger-bg);padding:14px 16px;border-radius:var(--radius2);margin:14px 0}
+    .danger p{margin:0;font-size:0.88rem;line-height:1.55}
+    .note{font-size:0.82rem;color:var(--muted);padding:12px;margin-top:12px;border:1px dashed rgba(196,164,124,0.2);border-radius:var(--radius2);background:rgba(196,164,124,0.03);line-height:1.5}
+
+    footer{max-width:var(--max);margin:0 auto;padding:20px 24px 40px;color:var(--muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--line)}
+
+    @media print{header{background:var(--accent)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}section{box-shadow:none!important;break-inside:avoid}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Anti-Fraud &amp; Bid Integrity Policy</h1>
+    <div class="meta">Version 1.0 | Effective: <strong>[Insert Date]</strong></div>
+    <div class="meta" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="auction-bidding-terms.html">Auction Terms</a>
+      <a href="terms-of-use.html">Terms of Use</a>
+      <a href="privacy-policy.html">Privacy</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>1) Purpose</h2>
+    <p>
+      PropertyFinder operates an international marketplace with online bidding. This Policy sets the standards required to keep auctions fair,
+      protect buyers and sellers, and prevent fraud, manipulation, and platform abuse.
+    </p>
+  </section>
+
+  <section>
+    <h2>2) Prohibited Activities</h2>
+    <div class="danger">
+      <p><strong>Zero tolerance:</strong> Any manipulation, shill bidding, spoofing, coordinated bidding, false identities, or fee circumvention may result in immediate suspension and legal action.</p>
+    </div>
+    <ul>
+      <li><strong>Shill bidding:</strong> Bidding to artificially increase price (by seller, agent, associate, or linked accounts).</li>
+      <li><strong>Spoof bidding / bid withdrawal manipulation:</strong> Inflating bids with no intent to complete.</li>
+      <li><strong>Multi-accounting:</strong> Operating multiple accounts to influence outcomes.</li>
+      <li><strong>Collusion:</strong> Coordinating to suppress competition or fix price.</li>
+      <li><strong>Off-platform circumvention:</strong> Attempting to avoid platform fees/commission by moving the deal off-platform.</li>
+      <li><strong>Identity fraud:</strong> Fake IDs, stolen cards, or incorrect verification data.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3) Verification &amp; Controls</h2>
+    <h3>3.1 Identity / KYC</h3>
+    <p>We may require proof of identity, address, and payment ownership before bidding, during bidding, or before seller acceptance.</p>
+    <h3>3.2 Technical Controls</h3>
+    <ul>
+      <li>Risk scoring (behavioural and transactional)</li>
+      <li>Device and account linkage analysis</li>
+      <li>Payment verification and fraud screening</li>
+      <li>Manual review for high-risk events</li>
+    </ul>
+    <div class="note">All processing is governed by the <a href="privacy-policy.html">Privacy Policy</a> and applicable law.</div>
+  </section>
+
+  <section>
+    <h2>4) Enforcement Actions</h2>
+    <p>If we reasonably suspect a breach, we may (subject to law):</p>
+    <ul>
+      <li>Cancel bids, freeze auctions, extend closing time, or relist.</li>
+      <li>Suspend/terminate accounts and block related accounts/devices/payment methods.</li>
+      <li>Require additional verification or deposits (where permitted).</li>
+      <li>Recover losses and costs caused by manipulation and enforce the 5% commission where applicable.</li>
+      <li>Report suspected fraud to payment providers, verification partners, and authorities.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5) Reporting Abuse</h2>
+    <p>To report suspicious behaviour: <strong>[<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="462f28322321342f323f06363429362334323f202f2822233468322a22">[email&#160;protected]</a>]</strong></p>
+  </section>
+</main>
+
+<footer>
+  © <span id="y"></span> PropertyFinder. Al  <script src="/social-share.js?v=2.1"></script>
+

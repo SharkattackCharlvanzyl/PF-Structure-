@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PropertyFinder — 08 Property Calculators</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nb-green:#1a2535;--nb-green-dark:#0e1520;--nb-green-hover:#1f2d3d;
+      --nb-lime:#c4a47c;--nb-white:#ffffff;--nb-offwhite:#faf8f4;
+      --nb-snow:#f0ece4;--nb-border:rgba(196,164,124,0.18);--nb-border-strong:#D1D9D4;
+      --nb-text:#1a1408;--nb-muted:#8a7d5a;
+      --nb-hero-grad:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);
+      --nb-hero-overlay:linear-gradient(160deg,rgba(14,21,32,0.3) 0%,rgba(14,21,32,0.05) 100%);
+      --pf-danger:#DC2626;--pf-danger-light:#FEF2F2;
+      --pf-success:#16A34A;--pf-success-light:#F0FDF4;
+      --pf-warn:#D97706;--pf-warn-light:#FFFBEB;
+      --shadow-card:0 2px 8px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);
+      --shadow-card-hover:0 6px 20px rgba(0,0,0,0.08),0 12px 36px rgba(0,0,0,0.06);
+      --radius:14px;--radius2:10px;--radius3:6px;
+      --font:'DM Sans',system-ui,-apple-system,sans-serif;
+      --font-display:'Cinzel','Playfair Display',Georgia,serif;
+      --transition:0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--nb-offwhite);color:#1a1408;-webkit-font-smoothing:antialiased}
+    a{color:#c4a47c;text-decoration:none;font-weight:700}
+
+    /* Hero */
+    .hero-banner{position:relative;background:var(--nb-hero-grad);padding:52px 24px 44px;overflow:hidden}
+    .hero-banner::before{content:'';position:absolute;inset:0;background:var(--nb-hero-overlay);pointer-events:none}
+    .hero-inner{max-width:1220px;margin:0 auto;position:relative;z-index:1;text-align:center}
+    .hero-title{font-family:var(--font-display);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;color:white;margin-bottom:10px}
+    .hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.75);max-width:600px;margin:0 auto}
+
+    /* Calc selector */
+    .calc-nav{max-width:1220px;margin:-24px auto 0;position:relative;z-index:2;padding:0 24px}
+    .calc-tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;background:var(--nb-white);border-radius:var(--radius);padding:16px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.1);border:1px solid var(--nb-border)}
+    .calc-tab{padding:12px 20px;border-radius:var(--radius3);border:1px solid var(--nb-border);background:var(--nb-white);font-size:0.85rem;font-weight:700;color:var(--nb-muted);cursor:pointer;transition:all 0.2s ease;font-family:var(--font);display:flex;align-items:center;gap:8px}
+    .calc-tab:hover{border-color:#c4a47c;color:#c4a47c}
+    .calc-tab.active{background:#c4a47c;color:#0e1520;border-color:#c4a47c}
+    .calc-tab .ico{font-size:1.1rem}
+
+    /* Main content */
+    .main{max-width:880px;margin:32px auto;padding:0 24px 60px}
+
+    /* Calculator panel */
+    .calc-panel{display:none;animation:fadeIn 0.3s ease}
+    .calc-panel.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    .calc-card{background:var(--nb-white);border-radius:var(--radius);border:1px solid var(--nb-border);box-shadow:var(--shadow-card);overflow:hidden}
+    .calc-header{padding:20px 24px;border-bottom:1px solid var(--nb-border);background:var(--nb-snow)}
+    .calc-header h2{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:#e8dfc8;margin:0 0 4px}
+    .calc-header p{font-size:0.82rem;color:var(--nb-muted);margin:0}
+    .calc-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    @media(max-width:700px){.calc-body{grid-template-columns:1fr}}
+
+    .form-col{display:flex;flex-direction:column;gap:18px}
+    .result-col{display:flex;flex-direction:column;gap:14px}
+
+    /* Fields */
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field label{font-size:0.82rem;font-weight:700;color:#e8dfc8}
+    .field label .unit{font-weight:500;color:var(--nb-muted)}
+    .field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.92rem;font-family:var(--font);color:#e8dfc8;background:var(--nb-white);outline:none;transition:border-color 0.2s ease,box-shadow 0.2s ease}
+    .field input:focus,.field select:focus{border-color:#c4a47c;box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+    .field .hint{font-size:0.72rem;color:var(--nb-muted)}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:500px){.field-row{grid-template-columns:1fr}}
+
+    /* Range slider */
+    .range-wrap{display:flex;align-items:center;gap:10px}
+    .range-wrap input[type="range"]{flex:1;accent-color:#c4a47c;height:6px}
+    .range-val{min-width:48px;text-align:right;font-weight:800;font-size:0.88rem;color:#c4a47c}
+
+    /* Calculate button */
+    .calc-btn{width:100%;padding:14px;border:none;border-radius:var(--radius3);background:#c4a47c;color:#0e1520;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s ease;margin-top:4px}
+    .calc-btn:hover{background:var(--nb-green-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,164,124,0.25)}
+
+    /* Results */
+    .result-box{padding:18px;border-radius:var(--radius2);border:1px solid var(--nb-border)}
+    .result-box.primary{background:linear-gradient(135deg,rgba(196,164,124,0.06),rgba(196,164,124,0.03));border-color:rgba(196,164,124,0.15)}
+    .result-box .rl{font-size:0.68rem;font-weight:700;color:var(--nb-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .result-box .rv{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:#e8dfc8}
+    .result-box.primary .rl{color:#c4a47c}
+    .result-box.primary .rv{font-size:1.6rem;color:#c4a47c}
+
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .result-mini{padding:12px;border-radius:var(--radius3);border:1px solid var(--nb-border);background:var(--nb-white)}
+    .result-mini .rl{font-size:0.65rem;font-weight:700;color:var(--nb-muted);text-transform:uppercase;letter-spacing:0.4px}
+    .result-mini .rv{font-weight:800;font-size:0.95rem;margin-top:2px}
+
+    /* Amortization mini table */
+    .amort-table{width:100%;font-size:0.78rem;border-collapse:collapse;margin-top:10px}
+    .amort-table th{text-align:left;padding:6px 8px;background:var(--nb-snow);border-bottom:1px solid var(--nb-border);font-weight:700;color:var(--nb-muted);text-transform:uppercase;font-size:0.65rem;letter-spacing:0.3px}
+    .amort-table td{padding:6px 8px;border-bottom:1px solid var(--nb-border)}
+    .amort-table tr:last-child td{border-bottom:none}
+
+    /* Bar chart */
+    .bar-chart{display:flex;gap:3px;align-items:flex-end;height:80px;margin:10px 0}
+    .bar-seg{flex:1;border-radius:3px 3px 0 0;min-height:4px;transition:height 0.4s ease}
+    .bar-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+    .bar-legend-item{display:flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:600;color:var(--nb-muted)}
+    .bar-legend-item .dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+    .note{font-size:0.75rem;color:var(--nb-muted);padding:10px;margin-top:10px;border:1px dashed rgba(196,164,124,0.15);border-radius:var(--radius3);background:rgba(196,164,124,0.02);line-height:1.5}
+
+    /* Country presets info */
+    .country-info{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--radius3);background:var(--nb-snow);border:1px solid var(--nb-border);font-size:0.78rem;color:var(--nb-muted);margin-bottom:14px;font-weight:600}
+
+    /* Toast */
+    /* Country dropdown */
+    .cc-drop{display:none}
+    .cc-drop.open{display:block !important}
+    .calc-drop-opt{padding:9px 14px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:10px;transition:background 0.12s}
+    .calc-drop-opt:hover,.calc-drop-opt.focused{background:#F6F8F7}
+    .calc-drop-flag{font-size:1rem;flex-shrink:0}
+    .calc-drop-name{font-weight:600;flex:1}
+    .calc-drop-curr{font-size:0.72rem;color:var(--nb-muted)}
+
+    .pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:var(--radius3);color:white;font-size:0.85rem;font-weight:600;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:var(--nb-green);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.6s forwards}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    @keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+
+    .footer{max-width:880px;margin:0 auto;padding:20px 24px 40px;color:var(--nb-muted);font-size:0.78rem;text-align:center;border-top:1px solid var(--nb-border)}
+  
+    /* ══ PF GLOBAL NAV ══ */
+    .pf-nav{background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);position:sticky;top:0;z-index:500;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:'DM Sans',system-ui,sans-serif}
+    .pf-nav-inner{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:10px;height:54px}
+    .pf-logo{font-family:'Cinzel','Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;letter-spacing:0.03em}
+    .pf-logo span{color:#c4a47c}
+    .pf-links{display:flex;align-items:center;gap:1px;flex:1;overflow:hidden}
+    .pf-link{color:rgba(255,255,255,0.78);font-size:0.77rem;font-weight:600;padding:5px 9px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:all 0.2s}
+    .pf-link:hover,.pf-link.pf-active{color:#fff;background:rgba(255,255,255,0.1);text-decoration:none}
+    .pf-link-auction{color:#c4a47c!important;font-weight:700;border:1px solid rgba(196,164,124,0.25)}
+    .pf-link-auction:hover{background:rgba(196,164,124,0.12)!important}
+    .pf-nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    /* Language toggle */
+    .pf-lang{position:relative;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;color:#fff;font-size:0.76rem;font-weight:600;transition:all 0.2s;user-select:none}
+    .pf-lang:hover{background:rgba(255,255,255,0.14)}
+    .pf-lang img{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-lang-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a2535;border:1px solid #E3E8E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:195px;z-index:9999;overflow:hidden;padding:4px 0}
+    .pf-lang.open .pf-lang-drop{display:block}
+    .pf-lang-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:0.81rem;color:#e8dfc8;font-family:'DM Sans',system-ui,sans-serif;transition:background 0.12s}
+    .pf-lang-opt:hover{background:#F6F8F7}
+    .pf-lang-opt.pf-lang-active{background:rgba(196,164,124,0.06);color:#141c2b;font-weight:700}
+    .pf-lang-opt img{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0}
+    .pf-list-btn{padding:6px 13px;border-radius:6px;background:#c4a47c;color:#0e1520;font-size:0.77rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'DM Sans',system-ui,sans-serif}
+    .pf-list-btn:hover{background:#b8976a;text-decoration:none;color:#0e1520}
+    @media(max-width:820px){.pf-links{display:none}}
+
+  </style>
+</head>
+<body>
+<!-- ══ PropertyFinder Global Nav ══ -->
+<nav class="pf-nav" id="pfNav">
+  <div class="pf-nav-inner">
+    <a href="index.html" class="pf-logo">Property<span>Finder</span></a>
+    <div class="pf-links">
+      <a href="index.html" class="pf-link">Home</a>
+      <a href="buy.html" class="pf-link">Buy</a>
+      <a href="rent.html" class="pf-link">Rent</a>
+      <a href="auctions.html" class="pf-link pf-link-auction">🔨 Auctions</a>
+      <a href="business.html" class="pf-link">Business for Sale</a>
+      <a href="countries.html" class="pf-link">185 Countries</a>
+      <a href="valuation.html" class="pf-link">Valuation</a>
+      <a href="calculators.html" class="pf-link  pf-active">Calculators</a>
+      <a href="advertise.html" class="pf-link">Advertise</a>
+      <a href="how-it-works.html" class="pf-link">How It Works</a>
+      
+    </div>
+    <div class="pf-nav-right">
+      <div class="pf-lang" id="pfLang" onclick="pfToggleLang(event)">
+        <img id="pfLangFlag" src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <span id="pfLangLabel">EN</span>
+        <span style="font-size:0.6rem;opacity:0.6;margin-left:1px">▼</span>
+        <div class="pf-lang-drop" id="pfLangDrop">
+          <div class="pf-lang-opt pf-lang-active" onclick="pfSetLang('en','gb','English',this)"><img src="https://flagcdn.com/w40/gb.png" alt="">English</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('fr','fr','Français',this)"><img src="https://flagcdn.com/w40/fr.png" alt="">Français</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('de','de','Deutsch',this)"><img src="https://flagcdn.com/w40/de.png" alt="">Deutsch</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('es','es','Español',this)"><img src="https://flagcdn.com/w40/es.png" alt="">Español</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('pt','pt','Português',this)"><img src="https://flagcdn.com/w40/pt.png" alt="">Português</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('ar','sa','العربية',this)"><img src="https://flagcdn.com/w40/sa.png" alt="">العربية</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('zh','cn','中文',this)"><img src="https://flagcdn.com/w40/cn.png" alt="">中文</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('af','za','Afrikaans',this)"><img src="https://flagcdn.com/w40/za.png" alt="">Afrikaans</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('sw','ke','Swahili',this)"><img src="https://flagcdn.com/w40/ke.png" alt="">Swahili</div>
+          <div class="pf-lang-opt" onclick="pfSetLang('hi','in','हिंदी',this)"><img src="https://flagcdn.com/w40/in.png" alt="">हिंदी</div>
+        </div>
+      </div>
+      <a href="list-property.html" class="pf-list-btn">+ List Property</a>
+    </div>
+  </div>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hero-inner">
+      <h1 class="hero-title">Property Calculators</h1>
+      <p class="hero-sub">Professional tools to help you plan your property purchase — mortgage repayments, affordability, transfer costs, rental yields, and bond calculations.</p>
+    </div>
+  </div>
+
+  <!-- CALC NAV -->
+  <div class="calc-nav">
+    <div class="calc-tabs" id="calcTabs">
+      <button class="calc-tab active" data-calc="mortgage"><span class="ico">🏠</span> Mortgage</button>
+      <button class="calc-tab" data-calc="afford"><span class="ico">💰</span> Affordability</button>
+      <button class="calc-tab" data-calc="transfer"><span class="ico">📋</span> Transfer Cost</button>
+      <button class="calc-tab" data-calc="yield"><span class="ico">📈</span> Rental Yield</button>
+      <button class="calc-tab" data-calc="bond"><span class="ico">🏦</span> Bond</button>
+      <button class="calc-tab" data-calc="stamp"><span class="ico">🔖</span> Stamp Duty</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         1. MORTGAGE CALCULATOR
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel active" id="calc-mortgage">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>🏠 Mortgage Calculator</h2>
+          <p>Estimate your monthly repayment based on property price, deposit, interest rate, and loan term.</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="country-info">🌍 Rates and terms vary by country — adjust to match your market</div>
+            <div class="field">
+              <label>Property Price</label>
+              <input type="number" id="mc-price" value="2000000" min="0" step="10000">
+            </div>
+            <div class="field">
+              <label>Deposit / Down Payment</label>
+              <div class="range-wrap">
+                <input type="range" id="mc-deposit-range" min="0" max="50" value="10" oninput="document.getElementById('mc-deposit-val').textContent=this.value+'%';document.getElementById('mc-deposit').value=this.value">
+                <span class="range-val" id="mc-deposit-val">10%</span>
+              </div>
+              <input type="number" id="mc-deposit" value="10" min="0" max="100" style="display:none">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Interest Rate <span class="unit">% p.a.</span></label>
+                <input type="number" id="mc-rate" value="11.5" min="0" max="30" step="0.25">
+              </div>
+              <div class="field">
+                <label>Loan Term <span class="unit">years</span></label>
+                <select id="mc-term">
+                  <option value="5">5 years</option><option value="10">10 years</option>
+                  <option value="15">15 years</option><option value="20" selected>20 years</option>
+                  <option value="25">25 years</option><option value="30">30 years</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Currency</label>
+              <select id="mc-currency"><option value="R">ZAR (R)</option><option value="£">GBP (£)</option><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="CHF ">CHF</option><option value="AED ">AED</option><option value="SGD ">SGD</option></select>
+            </div>
+            <button class="calc-btn" onclick="calcMortgage()">Calculate Repayment</button>
+          </div>
+          <div class="result-col" id="mc-results">
+            <div class="result-box primary"><div class="rl">Monthly Repayment</div><div class="rv" id="mc-monthly">—</div></div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Loan Amount</div><div class="rv" id="mc-loan">—</div></div>
+              <div class="result-mini"><div class="rl">Deposit Amount</div><div class="rv" id="mc-dep-amt">—</div></div>
+              <div class="result-mini"><div class="rl">Total Repaid</div><div class="rv" id="mc-total">—</div></div>
+              <div class="result-mini"><div class="rl">Total Interest</div><div class="rv" id="mc-interest">—</div></div>
+            </div>
+            <div class="result-box">
+              <div class="rl">Cost Breakdown</div>
+              <div class="bar-chart" id="mc-chart"></div>
+              <div class="bar-legend">
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-green)"></div> Principal</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--pf-warn)"></div> Interest</div>
+              </div>
+            </div>
+            <div class="note">Indicative only. Actual repayments depend on your bank's assessment, credit profile, and prevailing rates. Consult a financial advisor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         2. AFFORDABILITY CALCULATOR
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel" id="calc-afford">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>💰 Affordability Calculator</h2>
+          <p>How much property can you afford based on your income, expenses, and deposit?</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="field">
+              <label>Gross Monthly Income (combined)</label>
+              <input type="number" id="af-income" value="85000" min="0" step="1000">
+            </div>
+            <div class="field">
+              <label>Monthly Expenses (debt, living costs)</label>
+              <input type="number" id="af-expenses" value="25000" min="0" step="1000">
+            </div>
+            <div class="field">
+              <label>Available Deposit</label>
+              <input type="number" id="af-deposit" value="200000" min="0" step="10000">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Interest Rate <span class="unit">% p.a.</span></label>
+                <input type="number" id="af-rate" value="11.5" min="0" max="30" step="0.25">
+              </div>
+              <div class="field">
+                <label>Loan Term <span class="unit">years</span></label>
+                <select id="af-term"><option value="10">10 years</option><option value="15">15 years</option><option value="20" selected>20 years</option><option value="25">25 years</option><option value="30">30 years</option></select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Debt-to-Income Ratio Limit <span class="unit">%</span></label>
+              <div class="range-wrap">
+                <input type="range" id="af-dti-range" min="20" max="40" value="30" oninput="document.getElementById('af-dti-val').textContent=this.value+'%';document.getElementById('af-dti').value=this.value">
+                <span class="range-val" id="af-dti-val">30%</span>
+              </div>
+              <input type="number" id="af-dti" value="30" style="display:none">
+              <div class="hint">Banks typically allow 28–33% of gross income for mortgage repayments.</div>
+            </div>
+            <div class="field">
+              <label>Currency</label>
+              <select id="af-currency"><option value="R">ZAR (R)</option><option value="£">GBP (£)</option><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="CHF ">CHF</option></select>
+            </div>
+            <button class="calc-btn" onclick="calcAfford()">Calculate Affordability</button>
+          </div>
+          <div class="result-col" id="af-results">
+            <div class="result-box primary"><div class="rl">Maximum Property Price</div><div class="rv" id="af-max-price">—</div></div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Max Monthly Payment</div><div class="rv" id="af-max-payment">—</div></div>
+              <div class="result-mini"><div class="rl">Max Loan Amount</div><div class="rv" id="af-max-loan">—</div></div>
+              <div class="result-mini"><div class="rl">Net Monthly Income</div><div class="rv" id="af-net">—</div></div>
+              <div class="result-mini"><div class="rl">Available for Bond</div><div class="rv" id="af-available">—</div></div>
+            </div>
+            <div class="result-box">
+              <div class="rl">Income Allocation</div>
+              <div class="bar-chart" id="af-chart"></div>
+              <div class="bar-legend">
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-green)"></div> Mortgage</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--pf-warn)"></div> Expenses</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-border)"></div> Remaining</div>
+              </div>
+            </div>
+            <div class="note">This is a guideline based on standard banking ratios. Your bank may approve more or less depending on your credit score, employment type, and other commitments.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         3. TRANSFER COST CALCULATOR
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel" id="calc-transfer">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>📋 Transfer Cost Calculator</h2>
+          <p>Estimate transfer duty, conveyancing fees, and other costs when buying property.</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="field">
+              <label>Country <span class="unit">185 countries supported</span></label>
+              <div style="position:relative">
+                <input type="text" id="tc-country-search" placeholder="🔍 Search country..." autocomplete="off"
+                  oninput="filterCalcCountries('tc')" onfocus="showCalcDrop('tc')" onblur="hideCalcDrop('tc')"
+                  style="width:100%;padding:10px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.88rem;font-family:var(--font);outline:none">
+                <input type="hidden" id="tc-country" value="ZA">
+                <div id="tc-drop" class="cc-drop" style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:#1a2535;border:1.5px solid var(--nb-border);border-radius:var(--radius3);box-shadow:0 8px 24px rgba(0,0,0,0.12);max-height:240px;overflow-y:auto;z-index:300;display:none"></div>
+              </div>
+              <div id="tc-country-display" style="margin-top:5px;font-size:0.82rem;color:#c4a47c;font-weight:700">🇿🇦 South Africa — ZAR</div>
+            </div>
+            <div class="field">
+              <label>Property Purchase Price</label>
+              <input type="number" id="tc-price" value="2000000" min="0" step="10000">
+            </div>
+            <div class="field" id="tc-buyer-field">
+              <label id="tc-buyer-label">Buyer Type</label>
+              <select id="tc-buyer"><option value="natural">Individual (natural person)</option><option value="company">Company / Trust</option></select>
+            </div>
+            <div class="field">
+              <label>Bond / Mortgage Required?</label>
+              <select id="tc-bond"><option value="yes">Yes — include bond registration</option><option value="no">No — cash purchase</option></select>
+            </div>
+            <div class="field" id="tc-bond-amount-field">
+              <label>Bond Amount</label>
+              <input type="number" id="tc-bond-amount" value="1800000" min="0" step="10000">
+            </div>
+            <button class="calc-btn" onclick="calcTransfer()">Calculate Transfer Costs</button>
+          </div>
+          <div class="result-col" id="tc-results">
+            <div class="result-box primary"><div class="rl">Total Estimated Costs</div><div class="rv" id="tc-total">—</div></div>
+            <div class="result-box">
+              <div class="rl">Cost Breakdown</div>
+              <div style="margin-top:8px" id="tc-breakdown"></div>
+            </div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Purchase Price</div><div class="rv" id="tc-price-display">—</div></div>
+              <div class="result-mini"><div class="rl">Total Cash Needed</div><div class="rv" id="tc-cash-needed">—</div></div>
+            </div>
+            <div class="note" id="tc-note">Transfer costs vary by country and property value. This calculator provides estimates based on standard tariffs. Actual costs may differ — consult a conveyancer in your jurisdiction.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         4. RENTAL YIELD CALCULATOR
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel" id="calc-yield">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>📈 Rental Yield Calculator</h2>
+          <p>Calculate gross and net rental yield on an investment property.</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="field">
+              <label>Property Purchase Price</label>
+              <input type="number" id="ry-price" value="2000000" min="0" step="10000">
+            </div>
+            <div class="field">
+              <label>Monthly Rental Income</label>
+              <input type="number" id="ry-rent" value="15000" min="0" step="500">
+            </div>
+            <div class="field">
+              <label>Annual Operating Expenses</label>
+              <input type="number" id="ry-expenses" value="36000" min="0" step="1000">
+              <div class="hint">Levies, rates, insurance, maintenance, management fees, vacancy allowance</div>
+            </div>
+            <div class="field">
+              <label>Vacancy Rate <span class="unit">%</span></label>
+              <div class="range-wrap">
+                <input type="range" id="ry-vacancy-range" min="0" max="20" value="5" oninput="document.getElementById('ry-vacancy-val').textContent=this.value+'%';document.getElementById('ry-vacancy').value=this.value">
+                <span class="range-val" id="ry-vacancy-val">5%</span>
+              </div>
+              <input type="number" id="ry-vacancy" value="5" style="display:none">
+            </div>
+            <div class="field">
+              <label>Currency</label>
+              <select id="ry-currency"><option value="R">ZAR (R)</option><option value="£">GBP (£)</option><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="CHF ">CHF</option></select>
+            </div>
+            <button class="calc-btn" onclick="calcYield()">Calculate Yield</button>
+          </div>
+          <div class="result-col" id="ry-results">
+            <div class="result-grid" style="grid-template-columns:1fr 1fr">
+              <div class="result-box primary"><div class="rl">Gross Yield</div><div class="rv" id="ry-gross">—</div></div>
+              <div class="result-box primary"><div class="rl">Net Yield</div><div class="rv" id="ry-net">—</div></div>
+            </div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Annual Rent (gross)</div><div class="rv" id="ry-annual-gross">—</div></div>
+              <div class="result-mini"><div class="rl">Annual Rent (net of vacancy)</div><div class="rv" id="ry-annual-net">—</div></div>
+              <div class="result-mini"><div class="rl">Annual Expenses</div><div class="rv" id="ry-annual-exp">—</div></div>
+              <div class="result-mini"><div class="rl">Net Operating Income</div><div class="rv" id="ry-noi">—</div></div>
+            </div>
+            <div class="result-box">
+              <div class="rl">Income vs Expenses</div>
+              <div class="bar-chart" id="ry-chart"></div>
+              <div class="bar-legend">
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-green)"></div> Net Income</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--pf-warn)"></div> Expenses</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-border)"></div> Vacancy Loss</div>
+              </div>
+            </div>
+            <div class="note">Gross yield = annual rent / purchase price. Net yield = (annual rent - expenses - vacancy) / purchase price. Does not include capital growth, tax, or financing costs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         5. BOND CALCULATOR
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel" id="calc-bond">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>🏦 Bond Calculator</h2>
+          <p>Detailed bond repayment schedule with amortization breakdown — see how extra payments save you money.</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="field">
+              <label>Bond / Loan Amount</label>
+              <input type="number" id="bc-amount" value="1800000" min="0" step="10000">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Interest Rate <span class="unit">% p.a.</span></label>
+                <input type="number" id="bc-rate" value="11.5" min="0" max="30" step="0.25">
+              </div>
+              <div class="field">
+                <label>Loan Term <span class="unit">years</span></label>
+                <select id="bc-term"><option value="5">5 years</option><option value="10">10 years</option><option value="15">15 years</option><option value="20" selected>20 years</option><option value="25">25 years</option><option value="30">30 years</option></select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Extra Monthly Payment <span class="unit">(optional)</span></label>
+              <input type="number" id="bc-extra" value="0" min="0" step="500">
+              <div class="hint">Even small extra payments can dramatically reduce total interest and loan term.</div>
+            </div>
+            <div class="field">
+              <label>Currency</label>
+              <select id="bc-currency"><option value="R">ZAR (R)</option><option value="£">GBP (£)</option><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="CHF ">CHF</option></select>
+            </div>
+            <button class="calc-btn" onclick="calcBond()">Calculate Bond</button>
+          </div>
+          <div class="result-col" id="bc-results">
+            <div class="result-box primary"><div class="rl">Monthly Repayment</div><div class="rv" id="bc-monthly">—</div></div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Total Repaid</div><div class="rv" id="bc-total">—</div></div>
+              <div class="result-mini"><div class="rl">Total Interest</div><div class="rv" id="bc-interest">—</div></div>
+              <div class="result-mini"><div class="rl">Effective Term</div><div class="rv" id="bc-eff-term">—</div></div>
+              <div class="result-mini"><div class="rl">Interest Saved</div><div class="rv" id="bc-saved" style="color:var(--pf-success)">—</div></div>
+            </div>
+            <div class="result-box">
+              <div class="rl">Amortization Schedule (first 5 years)</div>
+              <table class="amort-table" id="bc-amort">
+                <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+                <tbody id="bc-amort-body"></tbody>
+              </table>
+            </div>
+            <div class="result-box">
+              <div class="rl">Principal vs Interest Over Time</div>
+              <div class="bar-chart" id="bc-chart"></div>
+              <div class="bar-legend">
+                <div class="bar-legend-item"><div class="dot" style="background:var(--nb-green)"></div> Principal</div>
+                <div class="bar-legend-item"><div class="dot" style="background:var(--pf-warn)"></div> Interest</div>
+              </div>
+            </div>
+            <div class="note">Bond repayments are calculated using standard amortization. Actual bank terms, initiation fees, and service fees may vary. Extra payments reduce both term and total interest paid.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         6. STAMP DUTY / PROPERTY TAX CALCULATOR — 185 COUNTRIES
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="calc-panel" id="calc-stamp">
+      <div class="calc-card">
+        <div class="calc-header">
+          <h2>🔖 Stamp Duty &amp; Property Tax</h2>
+          <p>Calculate stamp duty, transfer tax, and property acquisition tax for 185 countries. Full bracket-by-bracket breakdown.</p>
+        </div>
+        <div class="calc-body">
+          <div class="form-col">
+            <div class="field">
+              <label>Country <span class="unit">185 countries supported</span></label>
+              <div style="position:relative">
+                <input type="text" id="sd-country-search" placeholder="🔍 Search country..." autocomplete="off"
+                  oninput="filterCalcCountries('sd')" onfocus="showCalcDrop('sd')" onblur="hideCalcDrop('sd')"
+                  style="width:100%;padding:10px 14px;border:1.5px solid var(--nb-border);border-radius:var(--radius3);font-size:0.88rem;font-family:var(--font);outline:none">
+                <input type="hidden" id="sd-country" value="GB">
+                <div id="sd-drop" class="cc-drop" style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:#1a2535;border:1.5px solid var(--nb-border);border-radius:var(--radius3);box-shadow:0 8px 24px rgba(0,0,0,0.12);max-height:240px;overflow-y:auto;z-index:300;display:none"></div>
+              </div>
+              <div id="sd-country-display" style="margin-top:5px;font-size:0.82rem;color:#c4a47c;font-weight:700">🇬🇧 United Kingdom — GBP</div>
+            </div>
+            <div class="field">
+              <label>Purchase Price</label>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span id="sd-sym" style="font-weight:700;color:var(--nb-muted);font-size:0.9rem">£</span>
+                <input type="number" id="sd-price" value="500000" min="0" step="10000" style="flex:1">
+              </div>
+            </div>
+            <div class="field">
+              <label>Buyer Type</label>
+              <select id="sd-buyer">
+                <option value="first">First-time Buyer</option>
+                <option value="standard" selected>Standard / Owner-Occupier</option>
+                <option value="additional">Additional / Investment Property</option>
+                <option value="foreign">Foreign / Non-Resident Buyer</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Property Type</label>
+              <select id="sd-proptype">
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial / Industrial</option>
+                <option value="land">Vacant Land / Plot</option>
+              </select>
+            </div>
+            <button class="calc-btn" onclick="calcStampDutyFull()">🔖 Calculate Stamp Duty</button>
+          </div>
+          <div class="result-col" id="sd-results">
+            <div class="result-box primary">
+              <div class="rl" id="sd-tax-label">Stamp Duty / SDLT</div>
+              <div class="rv" id="sd-total">—</div>
+            </div>
+            <div class="result-grid">
+              <div class="result-mini"><div class="rl">Effective Rate</div><div class="rv" id="sd-eff-rate">—</div></div>
+              <div class="result-mini"><div class="rl">Marginal Rate</div><div class="rv" id="sd-marg-rate">—</div></div>
+              <div class="result-mini"><div class="rl">Tax Amount</div><div class="rv" id="sd-tax-amt">—</div></div>
+              <div class="result-mini"><div class="rl">Price + Tax</div><div class="rv" id="sd-net-cost">—</div></div>
+            </div>
+            <div class="result-box">
+              <div class="rl">Bracket Breakdown</div>
+              <div id="sd-brackets" style="margin-top:8px"></div>
+            </div>
+            <div class="note" id="sd-note">Select a country and enter a purchase price to calculate stamp duty.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <div class="footer">
+    © <span id="y"></span> PropertyFinder. All calculators are for estimation purposes only — consult a financial advisor. | <a href="terms-of-use.html">Terms</a>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 08 — PROPERTY CALCULATORS
+     * ✅ 1. Mortgage Calculator (PMT formula + chart)
+     * ✅ 2. Affordability Calculator (DTI-based max price)
+     * ✅ 3. Transfer Cost Calculator (ZA/UK/US/DE/CH/AE schedules)
+     * ✅ 4. Rental Yield Calculator (gross + net yield)
+     * ✅ 5. Bond Calculator (amortization + extra payments)
+     * ✅ Integrates with header via window._openCalc
+     ********************************************************************/
+
+    const fmt=(v,c)=>c+' '+Math.round(v).toLocaleString();
+
+    // ===== TAB SWITCHING =====
+    document.querySelectorAll('.calc-tab').forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        document.querySelectorAll('.calc-tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.calc-panel').forEach(p=>p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('calc-'+tab.dataset.calc).classList.add('active');
+      });
+    });
+
+    // ===== PMT (standard mortgage formula) =====
+    function PMT(rate,nper,pv){
+      if(rate===0)return pv/nper;
+      const r=rate/12;
+      return pv*(r*Math.pow(1+r,nper))/(Math.pow(1+r,nper)-1);
+    }
+
+    // ===== 1. MORTGAGE CALCULATOR =====
+    function calcMortgage(){
+      const price=+document.getElementById('mc-price').value||0;
+      const depPct=+document.getElementById('mc-deposit-range').value||0;
+      const rate=(+document.getElementById('mc-rate').value||0)/100;
+      const term=+document.getElementById('mc-term').value||20;
+      const c=document.getElementById('mc-currency').value;
+
+      const deposit=price*(depPct/100);
+      const loan=price-deposit;
+      const months=term*12;
+      const monthly=PMT(rate,months,loan);
+      const totalPaid=monthly*months;
+      const totalInterest=totalPaid-loan;
+
+      document.getElementById('mc-monthly').textContent=fmt(monthly,c);
+      document.getElementById('mc-loan').textContent=fmt(loan,c);
+      document.getElementById('mc-dep-amt').textContent=fmt(deposit,c);
+      document.getElementById('mc-total').textContent=fmt(totalPaid,c);
+      document.getElementById('mc-interest').textContent=fmt(totalInterest,c);
+
+      // Chart
+      const maxV=Math.max(loan,totalInterest);
+      document.getElementById('mc-chart').innerHTML=
+        `<div class="bar-seg" style="height:${Math.max(4,loan/maxV*70)}px;background:var(--nb-green)"></div>`+
+        `<div class="bar-seg" style="height:${Math.max(4,totalInterest/maxV*70)}px;background:var(--pf-warn)"></div>`;
+    }
+
+    // ===== 2. AFFORDABILITY CALCULATOR =====
+    function calcAfford(){
+      const income=+document.getElementById('af-income').value||0;
+      const expenses=+document.getElementById('af-expenses').value||0;
+      const deposit=+document.getElementById('af-deposit').value||0;
+      const rate=(+document.getElementById('af-rate').value||0)/100;
+      const term=+document.getElementById('af-term').value||20;
+      const dti=(+document.getElementById('af-dti-range').value||30)/100;
+      const c=document.getElementById('af-currency').value;
+
+      const maxPayment=income*dti;
+      const months=term*12;
+      // Reverse PMT to find max loan
+      let maxLoan=0;
+      if(rate===0){maxLoan=maxPayment*months}
+      else{const r=rate/12;maxLoan=maxPayment*(Math.pow(1+r,months)-1)/(r*Math.pow(1+r,months))}
+      const maxPrice=maxLoan+deposit;
+
+      document.getElementById('af-max-price').textContent=fmt(maxPrice,c);
+      document.getElementById('af-max-payment').textContent=fmt(maxPayment,c)+' /mo';
+      document.getElementById('af-max-loan').textContent=fmt(maxLoan,c);
+      document.getElementById('af-net').textContent=fmt(income,c);
+      document.getElementById('af-available').textContent=fmt(income-expenses,c);
+
+      const maxV=income;
+      const mortH=Math.max(4,(maxPayment/maxV)*70);
+      const expH=Math.max(4,(expenses/maxV)*70);
+      const remH=Math.max(4,((income-maxPayment-expenses)/maxV)*70);
+      document.getElementById('af-chart').innerHTML=
+        `<div class="bar-seg" style="height:${mortH}px;background:var(--nb-green)"></div>`+
+        `<div class="bar-seg" style="height:${expH}px;background:var(--pf-warn)"></div>`+
+        `<div class="bar-seg" style="height:${remH}px;background:var(--nb-border)"></div>`;
+    }
+
+    // ===== 3. TRANSFER COST CALCULATOR =====
+    const transferRates={
+      ZA:{name:'South Africa',currency:'R',
+        duty:function(p,buyer){
+          if(buyer==='company')return p*0.08;
+          if(p<=1100000)return 0;
+          if(p<=1512500)return(p-1100000)*0.03;
+          if(p<=2117500)return 12375+(p-1512500)*0.06;
+          if(p<=2722500)return 48675+(p-2117500)*0.08;
+          if(p<=12100000)return 97075+(p-2722500)*0.11;
+          return 1128635+(p-12100000)*0.13;
+        },
+        convey:p=>p<500000?10000:p<1000000?16000:p<2000000?25000:p<5000000?40000:60000,
+        bond:p=>p<500000?8000:p<1000000?14000:p<2000000?22000:p<5000000?35000:50000,
+        other:p=>({deeds:1500,postage:800,rates_clearance:2500}),
+        label:'Transfer Duty'
+      },
+      UK:{name:'United Kingdom',currency:'£',
+        duty:function(p){
+          if(p<=250000)return 0;
+          if(p<=925000)return(p-250000)*0.05;
+          if(p<=1500000)return 33750+(p-925000)*0.10;
+          return 91250+(p-1500000)*0.12;
+        },
+        convey:p=>p<300000?1000:p<750000?1500:p<1500000?2500:4000,
+        bond:()=>0,
+        other:p=>({searches:300,land_registry:p<300000?200:p<500000?300:500}),
+        label:'Stamp Duty Land Tax'
+      },
+      US:{name:'United States',currency:'$',
+        duty:p=>0,convey:p=>p<500000?2000:p<1000000?3500:5000,
+        bond:()=>0,
+        other:p=>({title_insurance:Math.round(p*0.005),recording:200,escrow:Math.round(p*0.01)}),
+        label:'Transfer Tax (varies by state)'
+      },
+      DE:{name:'Germany',currency:'€',
+        duty:p=>p*0.05,convey:p=>Math.round(p*0.015),bond:()=>0,
+        other:p=>({notary:Math.round(p*0.02),land_registry:Math.round(p*0.005)}),
+        label:'Grunderwerbsteuer (3.5–6.5%)'
+      },
+      CH:{name:'Switzerland',currency:'CHF ',
+        duty:p=>Math.round(p*0.01),convey:p=>Math.round(p*0.005),bond:()=>0,
+        other:p=>({notary:Math.round(p*0.003),land_registry:Math.round(p*0.002)}),
+        label:'Handänderungssteuer'
+      },
+      AE:{name:'UAE',currency:'AED ',
+        duty:p=>Math.round(p*0.04),convey:p=>5000,bond:()=>0,
+        other:p=>({admin:4000,agent_fee:Math.round(p*0.02)}),
+        label:'DLD Transfer Fee (4%)'
+      }
+    };
+
+    function updateTransferLabels(){
+      const c=document.getElementById('tc-country').value;
+      const info=transferRates[c];
+      document.getElementById('tc-note').textContent=`Estimates for ${info.name} based on standard tariffs. Actual costs may differ — consult a conveyancer.`;
+    }
+
+    function calcTransfer(){
+      const country=document.getElementById('tc-country').value;
+      const price=+document.getElementById('tc-price').value||0;
+      const buyer=document.getElementById('tc-buyer').value;
+      const needBond=document.getElementById('tc-bond').value==='yes';
+      const bondAmt=needBond?(+document.getElementById('tc-bond-amount').value||0):0;
+      const info=transferRates[country];
+      const c=info.currency;
+
+      const duty=info.duty(price,buyer);
+      const convey=info.convey(price);
+      const bond=needBond?info.bond(bondAmt):0;
+      const other=info.other(price);
+      const otherTotal=Object.values(other).reduce((a,b)=>a+b,0);
+      const total=duty+convey+bond+otherTotal;
+
+      document.getElementById('tc-total').textContent=fmt(total,c);
+      document.getElementById('tc-price-display').textContent=fmt(price,c);
+      document.getElementById('tc-cash-needed').textContent=fmt(price-bondAmt+total,c);
+
+      let html=`<div style="font-size:0.85rem">`;
+      html+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">${info.label}</span><span style="font-weight:800">${fmt(duty,c)}</span></div>`;
+      html+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">Conveyancing / Legal</span><span style="font-weight:800">${fmt(convey,c)}</span></div>`;
+      if(needBond)html+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">Bond Registration</span><span style="font-weight:800">${fmt(bond,c)}</span></div>`;
+      for(const[k,v] of Object.entries(other)){
+        html+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">${k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</span><span style="font-weight:800">${fmt(v,c)}</span></div>`;
+      }
+      html+=`<div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:900;font-size:0.95rem;color:#141c2b"><span>Total</span><span>${fmt(total,c)}</span></div>`;
+      html+=`</div>`;
+      document.getElementById('tc-breakdown').innerHTML=html;
+    }
+
+    // ===== 4. RENTAL YIELD CALCULATOR =====
+    function calcYield(){
+      const price=+document.getElementById('ry-price').value||0;
+      const rent=+document.getElementById('ry-rent').value||0;
+      const expenses=+document.getElementById('ry-expenses').value||0;
+      const vacancy=(+document.getElementById('ry-vacancy-range').value||0)/100;
+      const c=document.getElementById('ry-currency').value;
+
+      const annualGross=rent*12;
+      const vacancyLoss=annualGross*vacancy;
+      const annualNet=annualGross-vacancyLoss;
+      const noi=annualNet-expenses;
+      const grossYield=price>0?(annualGross/price*100):0;
+      const netYield=price>0?(noi/price*100):0;
+
+      document.getElementById('ry-gross').textContent=grossYield.toFixed(2)+'%';
+      document.getElementById('ry-net').textContent=netYield.toFixed(2)+'%';
+      document.getElementById('ry-annual-gross').textContent=fmt(annualGross,c);
+      document.getElementById('ry-annual-net').textContent=fmt(annualNet,c);
+      document.getElementById('ry-annual-exp').textContent=fmt(expenses,c);
+      document.getElementById('ry-noi').textContent=fmt(noi,c);
+
+      const maxV=annualGross;
+      document.getElementById('ry-chart').innerHTML=
+        `<div class="bar-seg" style="height:${Math.max(4,noi/maxV*70)}px;background:var(--nb-green)"></div>`+
+        `<div class="bar-seg" style="height:${Math.max(4,expenses/maxV*70)}px;background:var(--pf-warn)"></div>`+
+        `<div class="bar-seg" style="height:${Math.max(4,vacancyLoss/maxV*70)}px;background:var(--nb-border)"></div>`;
+    }
+
+    // ===== 5. BOND CALCULATOR =====
+    function calcBond(){
+      const amount=+document.getElementById('bc-amount').value||0;
+      const rate=(+document.getElementById('bc-rate').value||0)/100;
+      const term=+document.getElementById('bc-term').value||20;
+      const extra=+document.getElementById('bc-extra').value||0;
+      const c=document.getElementById('bc-currency').value;
+
+      const months=term*12;
+      const baseMonthly=PMT(rate,months,amount);
+      const totalMonthly=baseMonthly+extra;
+
+      // Amortize with extra payments
+      let balance=amount,totalPaid=0,totalInt=0,monthCount=0;
+      const yearlyData=[];
+      let yearPrinc=0,yearInt=0;
+
+      while(balance>0.01&&monthCount<months*2){
+        const r=rate/12;
+        const intPayment=balance*r;
+        let princPayment=totalMonthly-intPayment;
+        if(princPayment>balance)princPayment=balance;
+        balance-=princPayment;
+        totalPaid+=princPayment+intPayment;
+        totalInt+=intPayment;
+        yearPrinc+=princPayment;
+        yearInt+=intPayment;
+        monthCount++;
+        if(monthCount%12===0||balance<=0.01){
+          yearlyData.push({year:Math.ceil(monthCount/12),princ:yearPrinc,int:yearInt,balance:Math.max(0,balance)});
+          yearPrinc=0;yearInt=0;
+        }
+      }
+
+      // Compare without extra
+      const baseTotal=baseMonthly*months;
+      const baseInterest=baseTotal-amount;
+      const saved=baseInterest-totalInt;
+
+      document.getElementById('bc-monthly').textContent=fmt(totalMonthly,c)+(extra>0?' (incl. '+fmt(extra,c)+' extra)':'');
+      document.getElementById('bc-total').textContent=fmt(totalPaid,c);
+      document.getElementById('bc-interest').textContent=fmt(totalInt,c);
+      document.getElementById('bc-eff-term').textContent=Math.ceil(monthCount/12)+' yrs ('+monthCount+' mo)';
+      document.getElementById('bc-saved').textContent=extra>0?fmt(saved,c)+' saved!':'—';
+
+      // Amortization table (first 5 years)
+      const tbody=document.getElementById('bc-amort-body');
+      tbody.innerHTML=yearlyData.slice(0,5).map(y=>
+        `<tr><td style="font-weight:700">Year ${y.year}</td><td>${fmt(y.princ,c)}</td><td>${fmt(y.int,c)}</td><td style="font-weight:700">${fmt(y.balance,c)}</td></tr>`
+      ).join('');
+
+      // Chart (5-year bars)
+      const chartData=yearlyData.slice(0,Math.min(10,yearlyData.length));
+      const maxY=Math.max(...chartData.map(y=>y.princ+y.int));
+      document.getElementById('bc-chart').innerHTML=chartData.map(y=>{
+        const pH=Math.max(2,y.princ/maxY*70);
+        const iH=Math.max(2,y.int/maxY*70);
+        return`<div style="flex:1;display:flex;flex-direction:column;gap:1px;align-items:stretch;justify-content:flex-end"><div class="bar-seg" style="height:${pH}px;background:var(--nb-green)"></div><div class="bar-seg" style="height:${iH}px;background:var(--pf-warn);border-radius:0"></div></div>`;
+      }).join('');
+    }
+
+    // ===== AUTO-CALCULATE ON LOAD =====
+    calcMortgage();
+
+    // ===== HEADER INTEGRATION =====
+    window._openCalc=function(e){
+      if(e)e.preventDefault();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+
+    document.getElementById('y').textContent=new Date().getFullYear();
+    console.log('%c PropertyFinder — 08 Property Calculators loaded','color:#141c2b;font-weight:bold;font-size:12px');
+  </script>
+<footer style="background:#0F3D2A;color:#fff;text-align:center;padding:24px 20px;font-family:'DM Sans',system-ui,sans-serif;font-size:0.82rem;margin-top:40px;line-height:1.8">
+  <div style="max-width:1220px;margin:0 auto">
+    <div style="margin-bottom:10px">
+      <a href="index.html" style="color:#c4a47c;font-weight:700;font-size:0.95rem;text-decoration:none">Property<span style="color:#D4AF77">Finder</span></a>
+      <span style="color:rgba(255,255,255,0.4);margin:0 8px">|</span>
+      <span style="color:rgba(255,255,255,0.6)">Connecting Buyers, Sellers & Businesses Across 185 Countries</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:10px">
+      <a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Home</a>
+      <a href="buy.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Buy</a>
+      <a href="rent.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Rent</a>
+      <a href="auctions.html" style="color:#c4a47c;text-decoration:none">Auctions</a>
+      <a href="business.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Business for Sale</a>
+      <a href="countries.html" style="color:rgba(255,255,255,0.7);text-decoration:none">185 Countries</a>
+      <a href="valuation.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Valuation</a>
+      <a href="calculators.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Calculators</a>
+      <a href="advertise.html" style="color:rgba(255,255,255,0.7);text-decoration:none">Advertise</a>
+      <a href="how-it-works.html" style="color:rgba(255,255,255,0.7);text-decoration:none">How It Works</a>
+      <a href="list-property.html" style="color:rgba(255,255,255,0.7);text-decoration:none">List Property</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:12px">
+      <a href="terms-of-use.html" style="color:#D4AF77;text-decoration:none">Terms of Use</a>
+      <a href="privacy-policy.html" style="color:#D4AF77;text-decoration:none">Privacy</a>
+      <a href="commission-fees.html" style="color:#D4AF77;text-decoration:none">Fees</a>
+      <a href="anti-fraud.html" style="color:#D4AF77;text-decoration:none">Anti-Fraud</a>
+      <a href="auction-terms.html" style="color:#D4AF77;text-decoration:none">Auction Terms</a>
+      <a href="dispute-resolution.html" style="color:#D4AF77;text-decoration:none">Disputes</a>
+      <a href="seller-agent-listing.html" style="color:#D4AF77;text-decoration:none">Seller Agreement</a>
+    </div>
+    <div style="color:rgba(255,255,255,0.4);font-size:0.75rem">
+      © <span id="pf-year"></span> PropertyFinder Global. All rights reserved. | 185 Countries · 10 Business Sectors · AI-Powered · Real-Time Auctions
+    </div>
+  </div>
+</footer>
+<script>try{document.getElementById('pf-year').textContent=new Date().getFullYear();}catch(e){}</script>
+<script>
+// ═══════════════════════════════════════════════════════════
+// COUNTRY DATA FOR TRANSFER COSTS + STAMP DUTY — 185 COUNTRIES
+// ═══════════════════════════════════════════════════════════
+var CALC_COUNTRIES = [
+  {code:"ZA",name:"South Africa",currency:"ZAR",symbol:"R",flag:"🇿🇦",stamp:[{f:0,t:1100000,r:0},{f:1100000,t:1512000,r:3},{f:1512000,t:2117000,r:6},{f:2117000,t:2722000,r:8},{f:2722000,t:12100000,r:11},{f:12100000,t:9e9,r:13}],stampLabel:"Transfer Duty (SARS scale)",tc:{conv:1.5,deeds:0.1,notes:"Conveyancing ~1.5%+VAT. Deeds office ~0.1%. Bond registration R8,000–R25,000."}},
+  {code:"GB",name:"United Kingdom",currency:"GBP",symbol:"£",flag:"🇬🇧",stamp:[{f:0,t:250000,r:0},{f:250000,t:925000,r:5},{f:925000,t:1500000,r:10},{f:1500000,t:9e9,r:12}],stampLabel:"SDLT (Stamp Duty Land Tax)",tc:{conv:0.3,deeds:0.3,notes:"Solicitor £1,000–£2,500. Land Registry 0.1–0.5%. First-time buyer relief up to £425K."}},
+  {code:"US",name:"United States",currency:"USD",symbol:"$",flag:"🇺🇸",stamp:[{f:0,t:9e9,r:0.2,flat:true}],stampLabel:"Transfer Tax (avg 0.2%, varies by state)",tc:{conv:1,deeds:0.2,notes:"Closing costs 2–5% total. Title insurance 0.5–1%. Escrow/attorney $1,000–$3,000."}},
+  {code:"AU",name:"Australia",currency:"AUD",symbol:"A$",flag:"🇦🇺",stamp:[{f:0,t:14000,r:1.25},{f:14000,t:32000,r:1.5},{f:32000,t:85000,r:1.75},{f:85000,t:319000,r:3.5},{f:319000,t:1064000,r:4.5},{f:1064000,t:3131000,r:5.5},{f:3131000,t:9e9,r:7}],stampLabel:"Stamp Duty (NSW/VIC rates)",tc:{conv:0.4,deeds:0.2,notes:"Conveyancer A$1,500–A$3,000. Title search A$500–A$1,500."}},
+  {code:"AE",name:"United Arab Emirates",currency:"AED",symbol:"AED",flag:"🇦🇪",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"DLD Transfer Fee (4%)",tc:{conv:0.3,deeds:0,notes:"DLD admin AED 4,000. Trustee AED 4,000. Mortgage reg 0.25%. Agency 2%."}},
+  {code:"DE",name:"Germany",currency:"EUR",symbol:"€",flag:"🇩🇪",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"Grunderwerbsteuer (3.5–6.5%, avg 5%)",tc:{conv:1.5,deeds:0.5,notes:"Notary ~1.5%. Land registry 0.5%. Agent 3.57–7.14%."}},
+  {code:"FR",name:"France",currency:"EUR",symbol:"€",flag:"🇫🇷",stamp:[{f:0,t:9e9,r:5.8,flat:true}],stampLabel:"Frais de Notaire (~5.8% resale)",tc:{conv:0,deeds:0,notes:"All costs in notaire frais ~5.8%. Agency 3–8% additional."}},
+  {code:"ES",name:"Spain",currency:"EUR",symbol:"€",flag:"🇪🇸",stamp:[{f:0,t:400000,r:8},{f:400000,t:700000,r:9},{f:700000,t:9e9,r:10}],stampLabel:"ITP (8–10%)",tc:{conv:0.5,deeds:0.4,notes:"Notary 0.5%. Land registry 0.4%. AJD 0.5–1.5%. Agency 3–5%."}},
+  {code:"PT",name:"Portugal",currency:"EUR",symbol:"€",flag:"🇵🇹",stamp:[{f:0,t:97064,r:0},{f:97064,t:132774,r:2},{f:132774,t:181034,r:5},{f:181034,t:301688,r:7},{f:301688,t:578598,r:8},{f:578598,t:9e9,r:6,flat:true}],stampLabel:"IMT (Imposto Municipal Transmissões)",tc:{conv:0.5,deeds:0.8,notes:"Notary/legal ~1%. Land registry 0.2–0.6%. Stamp duty (IS) 0.8%. Agency 3–5%."}},
+  {code:"CH",name:"Switzerland",currency:"CHF",symbol:"CHF",flag:"🇨🇭",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Transfer Tax (avg ~2% by canton)",tc:{conv:0.3,deeds:0.5,notes:"Notary 0.1–0.5%. Land registry 0.3–0.5%. Agent 2–3%."}},
+  {code:"SG",name:"Singapore",currency:"SGD",symbol:"S$",flag:"🇸🇬",stamp:[{f:0,t:180000,r:1},{f:180000,t:360000,r:2},{f:360000,t:1000000,r:3},{f:1000000,t:1500000,r:4},{f:1500000,t:3000000,r:5},{f:3000000,t:9e9,r:6}],stampLabel:"BSD (Buyer's Stamp Duty) + ABSD",tc:{conv:0.3,deeds:0.1,notes:"Legal S$2,000–S$4,000. ABSD: Citizens 0%, PRs 5%, Foreigners 60%."}},
+  {code:"NZ",name:"New Zealand",currency:"NZD",symbol:"NZ$",flag:"🇳🇿",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No stamp duty in New Zealand",tc:{conv:0.3,deeds:0.1,notes:"Solicitor NZ$1,500–$3,000. LINZ registration NZ$200–$500."}},
+  {code:"CA",name:"Canada",currency:"CAD",symbol:"C$",flag:"🇨🇦",stamp:[{f:0,t:55000,r:0.5},{f:55000,t:250000,r:1},{f:250000,t:400000,r:1.5},{f:400000,t:2000000,r:2},{f:2000000,t:9e9,r:2.5}],stampLabel:"Land Transfer Tax (Ontario rates)",tc:{conv:0.3,deeds:0.2,notes:"Legal/notary C$1,500–$2,500. Title insurance C$200–$400."}},
+  {code:"IT",name:"Italy",currency:"EUR",symbol:"€",flag:"🇮🇹",stamp:[{f:0,t:9e9,r:9,flat:true}],stampLabel:"Imposta di Registro (9%, 2% primary)",tc:{conv:2,deeds:1,notes:"Notary 1.5–3%. Cadastral tax 1%. Mortgage tax 2%. Agency 3–4%."}},
+  {code:"GR",name:"Greece",currency:"EUR",symbol:"€",flag:"🇬🇷",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Transfer Tax (3%)",tc:{conv:1.5,deeds:0.5,notes:"Notary 1.5%. Lawyer 1%. Land registry 0.5%. Agency 2–3%."}},
+  {code:"TH",name:"Thailand",currency:"THB",symbol:"฿",flag:"🇹🇭",stamp:[{f:0,t:9e9,r:0.5,flat:true}],stampLabel:"Stamp Duty 0.5% (or SBT 3.3%)",tc:{conv:0,deeds:2,notes:"Transfer fee 2%. Withholding tax ~1%. SBT 3.3% if held <5yr."}},
+  {code:"ID",name:"Indonesia",currency:"IDR",symbol:"Rp",flag:"🇮🇩",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"BPHTB Acquisition Tax (5%)",tc:{conv:1,deeds:1,notes:"Notarial deed 1%. PPAT up to 1%. VAT 10% new builds."}},
+  {code:"MY",name:"Malaysia",currency:"MYR",symbol:"RM",flag:"🇲🇾",stamp:[{f:0,t:100000,r:1},{f:100000,t:500000,r:2},{f:500000,t:9e9,r:3}],stampLabel:"Stamp Duty (MOF scale)",tc:{conv:0.5,deeds:0.3,notes:"Legal 0.5–1%. RPGT 5–30%. Agent 2–3%."}},
+  {code:"IN",name:"India",currency:"INR",symbol:"₹",flag:"🇮🇳",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"Stamp Duty (avg 5%, varies by state)",tc:{conv:1,deeds:1,notes:"Registration 1%. Stamp duty 5–8% by state. GST 5% under-construction."}},
+  {code:"CN",name:"China",currency:"CNY",symbol:"¥",flag:"🇨🇳",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Deed Tax (3%, 1.5% first small home)",tc:{conv:0.3,deeds:0.05,notes:"Registration 0.05%. Maintenance fund ~3%. Agent 1–3%."}},
+  {code:"JP",name:"Japan",currency:"JPY",symbol:"¥",flag:"🇯🇵",stamp:[{f:0,t:9e9,r:0.15,flat:true}],stampLabel:"Registration License Tax (~2%)",tc:{conv:3,deeds:2,notes:"Registration tax 2% (0.15% primary). Scrivener ¥50K–¥200K. Agent 3%+¥60K."}},
+  {code:"KR",name:"South Korea",currency:"KRW",symbol:"₩",flag:"🇰🇷",stamp:[{f:0,t:600000000,r:1},{f:600000000,t:900000000,r:2},{f:900000000,t:9e9,r:3}],stampLabel:"Acquisition Tax (1–3%)",tc:{conv:0.2,deeds:0.2,notes:"Acquisition tax 1–3%. Registration tax 0.2%. Agent 0.4–0.9%."}},
+  {code:"BR",name:"Brazil",currency:"BRL",symbol:"R$",flag:"🇧🇷",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"ITBI (2–3%)",tc:{conv:1.5,deeds:1,notes:"Cartório ~1%. ITBI 2–3%. Lawyer 1–2%. Agent 6%."}},
+  {code:"MX",name:"Mexico",currency:"MXN",symbol:"MX$",flag:"🇲🇽",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"ISAI Acquisition Tax (~2%)",tc:{conv:1.5,deeds:0.5,notes:"Notary 1–2%. Registry 0.5%. Tax 2–4% by state. Agent 3–5%."}},
+  {code:"AT",name:"Austria",currency:"EUR",symbol:"€",flag:"🇦🇹",stamp:[{f:0,t:9e9,r:3.5,flat:true}],stampLabel:"Grunderwerbsteuer (3.5%)",tc:{conv:1.5,deeds:1.1,notes:"Notary 1.5%. Land registry 1.1%. Agent 3%+VAT."}},
+  {code:"NL",name:"Netherlands",currency:"EUR",symbol:"€",flag:"🇳🇱",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Overdrachtsbelasting (2%)",tc:{conv:1,deeds:0.2,notes:"Notary ~1.5%. Kadaster €150. Agent 1–2%."}},
+  {code:"BE",name:"Belgium",currency:"EUR",symbol:"€",flag:"🇧🇪",stamp:[{f:0,t:9e9,r:12.5,flat:true}],stampLabel:"Registration Tax (12.5% Brussels, 3% Flanders)",tc:{conv:1,deeds:0.5,notes:"Notary ~1%. Agent 3%."}},
+  {code:"SE",name:"Sweden",currency:"SEK",symbol:"kr",flag:"🇸🇪",stamp:[{f:0,t:9e9,r:1.5,flat:true}],stampLabel:"Stämpelskatt (1.5%)",tc:{conv:0.3,deeds:0.3,notes:"Legal SEK 5,000–10,000. Agent 2–3%."}},
+  {code:"NO",name:"Norway",currency:"NOK",symbol:"kr",flag:"🇳🇴",stamp:[{f:0,t:9e9,r:2.5,flat:true}],stampLabel:"Dokumentavgift (2.5%)",tc:{conv:0.3,deeds:0.3,notes:"Legal NOK 5,000–15,000. Agent 1–3%."}},
+  {code:"DK",name:"Denmark",currency:"DKK",symbol:"kr",flag:"🇩🇰",stamp:[{f:0,t:9e9,r:0.6,flat:true}],stampLabel:"Tinglysningsafgift (0.6% + DKK 1,750)",tc:{conv:0.3,deeds:0.3,notes:"Legal DKK 5,000–15,000. Agent 1–3%."}},
+  {code:"FI",name:"Finland",currency:"EUR",symbol:"€",flag:"🇫🇮",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"Varainsiirtovero (4%, 2% first home)",tc:{conv:0.5,deeds:0.3,notes:"Legal €1,000–€2,000. Agent 2–4%."}},
+  {code:"PL",name:"Poland",currency:"PLN",symbol:"zł",flag:"🇵🇱",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"PCC Civil Law Tax (2%)",tc:{conv:0.5,deeds:0.3,notes:"Notary 0.5–3%. Land register PLN 200. Agent 2–3%."}},
+  {code:"CZ",name:"Czech Republic",currency:"CZK",symbol:"Kč",flag:"🇨🇿",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No transfer tax (abolished 2020)",tc:{conv:0.5,deeds:0.3,notes:"Notary CZK 5,000–15,000. Cadastre. Agent 3–5%."}},
+  {code:"HU",name:"Hungary",currency:"HUF",symbol:"Ft",flag:"🇭🇺",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"Property Transfer Tax (4%)",tc:{conv:0.5,deeds:0.5,notes:"Land registry. Legal. Agent 3–5%."}},
+  {code:"RO",name:"Romania",currency:"RON",symbol:"lei",flag:"🇷🇴",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Notarial Tax (3%, 0.5% under 3yr)",tc:{conv:0.5,deeds:0.5,notes:"Notary 0.5–3%. ANCPI land book. Agent 2–4%."}},
+  {code:"IL",name:"Israel",currency:"ILS",symbol:"₪",flag:"🇮🇱",stamp:[{f:0,t:1978745,r:0},{f:1978745,t:2347470,r:3.5},{f:2347470,t:6055000,r:5},{f:6055000,t:20183000,r:8},{f:20183000,t:9e9,r:10}],stampLabel:"Mas Rechisha (Purchase Tax)",tc:{conv:0.5,deeds:0.5,notes:"Legal ~1%. Land Registry. Agent 2%."}},
+  {code:"TR",name:"Turkey",currency:"TRY",symbol:"₺",flag:"🇹🇷",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"Tapu Harcı (4% title deed fee)",tc:{conv:0.5,deeds:0,notes:"Notary 0.5%. Title deed 4% (2% each party). Agent 2–4%."}},
+  {code:"SA",name:"Saudi Arabia",currency:"SAR",symbol:"SAR",flag:"🇸🇦",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"RETT (Real Estate Transaction Tax 5%)",tc:{conv:0.5,deeds:0,notes:"Agency 2.5%. Legal varies."}},
+  {code:"QA",name:"Qatar",currency:"QAR",symbol:"QR",flag:"🇶🇦",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No property transfer tax",tc:{conv:0.5,deeds:0.25,notes:"Maktab Aqari registration ~0.25%. Agent 2–3%."}},
+  {code:"BH",name:"Bahrain",currency:"BHD",symbol:"BD",flag:"🇧🇭",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Property Transfer Fee (2%)",tc:{conv:0.5,deeds:0.5,notes:"Survey General. Legal. Agent 2%."}},
+  {code:"OM",name:"Oman",currency:"OMR",symbol:"OMR",flag:"🇴🇲",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Property Registration Fee (3%)",tc:{conv:0.5,deeds:0,notes:"MRMEWR registration. Legal. Agent 2%."}},
+  {code:"KE",name:"Kenya",currency:"KES",symbol:"KSh",flag:"🇰🇪",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"Stamp Duty (4% urban, 2% rural)",tc:{conv:1,deeds:0.1,notes:"Legal 1.5%. Land search. Agent 2–5%."}},
+  {code:"NG",name:"Nigeria",currency:"NGN",symbol:"₦",flag:"🇳🇬",stamp:[{f:0,t:9e9,r:1.5,flat:true}],stampLabel:"Stamp Duty (FIRS 1.5%)",tc:{conv:1.5,deeds:1,notes:"Governor's consent 1%. Legal 1.5%. Agent 5–10%."}},
+  {code:"GH",name:"Ghana",currency:"GHS",symbol:"₵",flag:"🇬🇭",stamp:[{f:0,t:9e9,r:0.5,flat:true}],stampLabel:"Stamp Duty (0.5%)",tc:{conv:1,deeds:0.5,notes:"Legal 2%. Land Commission. Agent 5%."}},
+  {code:"MA",name:"Morocco",currency:"MAD",symbol:"DH",flag:"🇲🇦",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Droits d'Enregistrement (3%)",tc:{conv:1,deeds:1,notes:"Notary 1.5%. Land registry 1%. Agent 2.5%."}},
+  {code:"EG",name:"Egypt",currency:"EGP",symbol:"E£",flag:"🇪🇬",stamp:[{f:0,t:9e9,r:2.5,flat:true}],stampLabel:"Registration Tax (2.5%)",tc:{conv:0.5,deeds:0.5,notes:"Notary 1%. Registry. Agent 2–5%."}},
+  {code:"NA",name:"Namibia",currency:"NAD",symbol:"N$",flag:"🇳🇦",stamp:[{f:0,t:600000,r:0},{f:600000,t:9e9,r:1}],stampLabel:"Transfer Duty",tc:{conv:1,deeds:0.3,notes:"Conveyancing ~1.5%. Deeds registration. Agent 5–8%."}},
+  {code:"BW",name:"Botswana",currency:"BWP",symbol:"P",flag:"🇧🇼",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"Transfer Duty (5%)",tc:{conv:1,deeds:0.5,notes:"Legal ~1.5%. Transfer duty. Agent 3–5%."}},
+  {code:"ZW",name:"Zimbabwe",currency:"USD",symbol:"$",flag:"🇿🇼",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Stamp Duty (2%)",tc:{conv:1,deeds:0.5,notes:"Legal 1.5%. Deeds registry. Agent 5%."}},
+  {code:"ZM",name:"Zambia",currency:"ZMW",symbol:"K",flag:"🇿🇲",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Stamp Duty (2%)",tc:{conv:1.5,deeds:0.5,notes:"Conveyancing ~2%. Lands dept. Agent 3–5%."}},
+  {code:"TZ",name:"Tanzania",currency:"TZS",symbol:"TSh",flag:"🇹🇿",stamp:[{f:0,t:9e9,r:1,flat:true}],stampLabel:"Stamp Duty (1%)",tc:{conv:1,deeds:0.5,notes:"Legal 2%. Land rent clearance. Agent 3–5%."}},
+  {code:"RW",name:"Rwanda",currency:"RWF",symbol:"RF",flag:"🇷🇼",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No property transfer tax",tc:{conv:0.5,deeds:0.3,notes:"Legal ~1.5%. RHA fees. Agent 3–5%."}},
+  {code:"UG",name:"Uganda",currency:"UGX",symbol:"USh",flag:"🇺🇬",stamp:[{f:0,t:9e9,r:1.5,flat:true}],stampLabel:"Stamp Duty (1.5%)",tc:{conv:1,deeds:0.5,notes:"Legal ~2%. Land registry. Agent 5%."}},
+  {code:"PH",name:"Philippines",currency:"PHP",symbol:"₱",flag:"🇵🇭",stamp:[{f:0,t:9e9,r:1.5,flat:true}],stampLabel:"Documentary Stamp Tax (1.5%)",tc:{conv:0.5,deeds:0.25,notes:"Registration 0.25%. CGT 6%. Transfer tax 0.5–0.75%. Agent 5%."}},
+  {code:"VN",name:"Vietnam",currency:"VND",symbol:"₫",flag:"🇻🇳",stamp:[{f:0,t:9e9,r:0.5,flat:true}],stampLabel:"Registration Fee (0.5%)",tc:{conv:0.3,deeds:0,notes:"Personal income tax 2%. Notary. Agent 1–2%."}},
+  {code:"KH",name:"Cambodia",currency:"USD",symbol:"$",flag:"🇰🇭",stamp:[{f:0,t:9e9,r:4,flat:true}],stampLabel:"Transfer Tax (4%)",tc:{conv:0.5,deeds:0.5,notes:"Title transfer. Legal. Agent 2–3%."}},
+  {code:"HK",name:"Hong Kong",currency:"HKD",symbol:"HK$",flag:"🇭🇰",stamp:[{f:0,t:3000000,r:1.5},{f:3000000,t:4500000,r:2.25},{f:4500000,t:6000000,r:3},{f:6000000,t:9000000,r:3.75},{f:9000000,t:9e9,r:4.25}],stampLabel:"AVD (Ad Valorem Duty)",tc:{conv:0.3,deeds:0.1,notes:"Legal 0.1–0.5%. Land Registry HK$230+. Agent 1%."}},
+  {code:"TW",name:"Taiwan",currency:"TWD",symbol:"NT$",flag:"🇹🇼",stamp:[{f:0,t:9e9,r:6,flat:true}],stampLabel:"Land Value Increment Tax (~6%)",tc:{conv:0.1,deeds:0.1,notes:"Deed tax 6%. Land value increment varies. Agent 2%."}},
+  {code:"IE",name:"Ireland",currency:"EUR",symbol:"€",flag:"🇮🇪",stamp:[{f:0,t:1000000,r:1},{f:1000000,t:9e9,r:2}],stampLabel:"Stamp Duty (1% up to €1M, 2% above)",tc:{conv:0.5,deeds:0.5,notes:"Legal ~1%. Land Registry. Agent 1–2%."}},
+  {code:"HR",name:"Croatia",currency:"EUR",symbol:"€",flag:"🇭🇷",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Property Transfer Tax (3%)",tc:{conv:0.5,deeds:0.5,notes:"Notary. Land registry. Agent 3%."}},
+  {code:"PK",name:"Pakistan",currency:"PKR",symbol:"Rs",flag:"🇵🇰",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Stamp Duty (3%, varies by province)",tc:{conv:1,deeds:1,notes:"CVT capital value tax. Advance tax 1%. Agent 2%."}},
+  {code:"AR",name:"Argentina",currency:"ARS",symbol:"$",flag:"🇦🇷",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Sello Fiscal (2–4% by province)",tc:{conv:1,deeds:0.5,notes:"Notary 1–2%. Registry. Agent 4%."}},
+  {code:"CL",name:"Chile",currency:"CLP",symbol:"$",flag:"🇨🇱",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No transfer tax (annual territorial tax applies)",tc:{conv:0.5,deeds:0.5,notes:"Notary. CBR registration. Agent 2%."}},
+  {code:"CO",name:"Colombia",currency:"COP",symbol:"$",flag:"🇨🇴",stamp:[{f:0,t:9e9,r:1,flat:true}],stampLabel:"Boleta Fiscal (1%)",tc:{conv:0.3,deeds:0.5,notes:"Notarial fees. Registration 0.5%. Agent 3%."}},
+  {code:"UA",name:"Ukraine",currency:"UAH",symbol:"₴",flag:"🇺🇦",stamp:[{f:0,t:9e9,r:1,flat:true}],stampLabel:"State Duty (1%, 5% if held <3yr)",tc:{conv:0.5,deeds:0.5,notes:"Notary. Pension fund 1%. Agent 3%."}},
+  {code:"GE",name:"Georgia",currency:"GEL",symbol:"₾",flag:"🇬🇪",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No property transfer tax",tc:{conv:0.3,deeds:0.2,notes:"Notary. NAPR registration. Agent 3%."}},
+  {code:"LK",name:"Sri Lanka",currency:"LKR",symbol:"Rs",flag:"🇱🇰",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Stamp Duty 3% + Transfer 2%",tc:{conv:0.5,deeds:0.5,notes:"Legal ~1%. Survey. Agent 2%."}},
+  {code:"LU",name:"Luxembourg",currency:"EUR",symbol:"€",flag:"🇱🇺",stamp:[{f:0,t:9e9,r:6,flat:true}],stampLabel:"Droits d'Enregistrement (6%)",tc:{conv:0.5,deeds:1,notes:"Notary ~1%. Transcription 1%. Agent 3%."}},
+  {code:"MT",name:"Malta",currency:"EUR",symbol:"€",flag:"🇲🇹",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"Stamp Duty (5%)",tc:{conv:0.5,deeds:0.5,notes:"Notary ~1%. Registry. Agent 3.5%."}},
+  {code:"CY",name:"Cyprus",currency:"EUR",symbol:"€",flag:"🇨🇾",stamp:[{f:0,t:5000,r:0},{f:5000,t:170860,r:0.15},{f:170860,t:9e9,r:0.2}],stampLabel:"Stamp Duty (0.15–0.2%) + Transfer Fees 3–8%",tc:{conv:0.5,deeds:0.5,notes:"Transfer fees 3–8%. Legal. Agent 3–5%."}},
+  {code:"RS",name:"Serbia",currency:"RSD",symbol:"din",flag:"🇷🇸",stamp:[{f:0,t:9e9,r:2.5,flat:true}],stampLabel:"Property Transfer Tax (2.5%)",tc:{conv:0.5,deeds:0.5,notes:"Notary. Cadastre. Agent 3%."}},
+  {code:"BG",name:"Bulgaria",currency:"BGN",symbol:"лв",flag:"🇧🇬",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Local Municipality Tax (~0.1–3%)",tc:{conv:0.5,deeds:0.5,notes:"Notary 0.1–1.5%. Registry. Agent 3%."}},
+  {code:"SI",name:"Slovenia",currency:"EUR",symbol:"€",flag:"🇸🇮",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Property Transfer Tax (2%)",tc:{conv:0.5,deeds:0.3,notes:"Notary. Land registry. Agent 3%."}},
+  {code:"SK",name:"Slovakia",currency:"EUR",symbol:"€",flag:"🇸🇰",stamp:[{f:0,t:9e9,r:0}],stampLabel:"No real estate transfer tax since 2005",tc:{conv:0.5,deeds:0.2,notes:"Notary. Cadastre €66. Agent 2–4%."}},
+  {code:"UY",name:"Uruguay",currency:"UYU",symbol:"$",flag:"🇺🇾",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Impuesto Transferencia (2%)",tc:{conv:0.5,deeds:0.5,notes:"Notarial. BPS. Agent 3%."}},
+  {code:"RU",name:"Russia",currency:"RUB",symbol:"₽",flag:"🇷🇺",stamp:[{f:0,t:9e9,r:0.3,flat:true}],stampLabel:"Gosposhlina State Duty (0.3–0.5%)",tc:{conv:0.3,deeds:0.3,notes:"Rosreestr. Legal. Agent 3–5%."}},
+  {code:"MM",name:"Myanmar",currency:"MMK",symbol:"K",flag:"🇲🇲",stamp:[{f:0,t:9e9,r:2,flat:true}],stampLabel:"Stamp Duty (2%)",tc:{conv:1,deeds:0.5,notes:"Legal. Registration. Agent 3%."}},
+  {code:"BD",name:"Bangladesh",currency:"BDT",symbol:"৳",flag:"🇧🇩",stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Registration Fee (3%)",tc:{conv:1,deeds:1,notes:"Registration. Stamp. Agent 2%."}},
+  {code:"LB",name:"Lebanon",currency:"LBP",symbol:"L£",flag:"🇱🇧",stamp:[{f:0,t:9e9,r:5,flat:true}],stampLabel:"Transfer Fees (~5%)",tc:{conv:1,deeds:0.5,notes:"Registration fees. Legal. Agent 2–3%."}}
+];
+
+// Generic fallback
+var CC_GENERIC = {stamp:[{f:0,t:9e9,r:3,flat:true}],stampLabel:"Estimated Transfer/Registration Tax (~3%)",tc:{conv:1.5,deeds:0.5,notes:"Estimated figures. Actual rates vary — consult a local conveyancer/notary."}};
+
+function getCC(code){return CALC_COUNTRIES.find(function(c){return c.code===code})||null;}
+
+// ─── Country search dropdown ───
+var _dropBlur = {};
+function filterCalcCountries(prefix){
+  var q = document.getElementById(prefix+'-country-search').value.toLowerCase();
+  renderCalcDrop(prefix, q);
+  document.getElementById(prefix+'-drop').style.display='block';
+}
+function renderCalcDrop(prefix, q){
+  var list = q ? CALC_COUNTRIES.filter(function(c){
+    return c.name.toLowerCase().includes(q.toLowerCase())||c.code.toLowerCase().includes(q.toLowerCase());
+  }) : CALC_COUNTRIES;
+  var html = list.slice(0,40).map(function(c){
+    return '<div class="calc-drop-opt" onmousedown="pickCC(''+prefix+'',''+c.code+'')">'+
+      '<span class="calc-drop-flag">'+c.flag+'</span>'+
+      '<span class="calc-drop-name">'+c.name+'</span>'+
+      '<span class="calc-drop-curr">'+c.currency+'</span></div>';
+  }).join('');
+  if(!html) html='<div class="calc-drop-opt" style="color:#888;padding:12px">No matches found</div>';
+  var drop = document.getElementById(prefix+'-drop');
+  drop.innerHTML = html;
+}
+function showCalcDrop(prefix){
+  clearTimeout(_dropBlur[prefix]);
+  var drop = document.getElementById(prefix+'-drop');
+  renderCalcDrop(prefix, document.getElementById(prefix+'-country-search').value||'');
+  drop.style.display='block';
+  drop.style.zIndex='500';
+}
+function hideCalcDrop(prefix){
+  _dropBlur[prefix]=setTimeout(function(){
+    document.getElementById(prefix+'-drop').style.display='none';
+  },250);
+}
+function pickCC(prefix, code){
+  var c = getCC(code);
+  if(!c) return;
+  document.getElementById(prefix+'-country').value = code;
+  document.getElementById(prefix+'-country-search').value = c.name;
+  document.getElementById(prefix+'-country-display').textContent = c.flag+' '+c.name+' — '+c.currency;
+  if(prefix==='tc'){
+    document.getElementById(prefix+'-drop').style.display='none';
+    // update the symbol in Transfer calc price field
+    updateTransferFromCC(c);
+    calcTransfer();
+  }
+  if(prefix==='sd'){
+    document.getElementById(prefix+'-drop').style.display='none';
+    document.getElementById('sd-sym').textContent = c.symbol;
+    calcStampDutyFull();
+  }
+}
+function updateTransferFromCC(c){
+  // The existing transfer calc uses its own internal rates — we override with country data
+  // Update the price field prefix if exists
+}
+
+// ─── CALCULATE STAMP DUTY ───
+function calcBracketDuty(rules,price){
+  if(!rules||!rules.length) return price*0.03;
+  if(rules.length===1&&rules[0].flat) return price*(rules[0].r/100);
+  var total=0;
+  for(var i=0;i<rules.length;i++){
+    var b=rules[i];
+    if(price>b.f){
+      var taxable=Math.min(price,b.t)-b.f;
+      total+=taxable*(b.r/100);
+    }
+  }
+  return total;
+}
+
+function calcStampDutyFull(){
+  var code = document.getElementById('sd-country').value||'GB';
+  var price = parseFloat(document.getElementById('sd-price').value)||0;
+  var buyer = document.getElementById('sd-buyer').value;
+  var c = getCC(code)||(function(){var g=JSON.parse(JSON.stringify(CC_GENERIC));g.symbol='$';g.name='Unknown';g.flag='🌍';return g;})();
+  var sym = c.symbol||'$';
+  document.getElementById('sd-sym').textContent = sym;
+
+  var duty = calcBracketDuty(c.stamp, price);
+  var surcharge = 0;
+
+  // Country-specific adjustments for buyer type
+  if(code==='GB'){
+    if(buyer==='first' && price<=425000) duty=0;
+    else if(buyer==='first' && price<=625000) duty=Math.max(0,duty-21250);
+    if(buyer==='additional') surcharge=price*0.03;
+    if(buyer==='foreign') surcharge+=price*0.02;
+  } else if(code==='SG'){
+    if(buyer==='additional') surcharge=price*0.20;
+    if(buyer==='foreign') surcharge=price*0.60;
+  } else if(code==='AU'){
+    if(buyer==='foreign') surcharge=price*0.08;
+  } else if(code==='ZA'){
+    // First-time buyers: no concession on transfer duty but FliSP may apply
+  }
+  duty += surcharge;
+
+  var effRate = price>0 ? (duty/price*100) : 0;
+  var margRate = c.stamp&&c.stamp.length ? c.stamp[c.stamp.length-1].r : 0;
+  var netCost = price+duty;
+
+  var fmtCC = function(n){return sym+' '+Math.round(n).toLocaleString();};
+  document.getElementById('sd-tax-label').textContent = c.stampLabel||'Property Tax';
+  document.getElementById('sd-total').textContent = fmtCC(duty);
+  document.getElementById('sd-eff-rate').textContent = effRate.toFixed(2)+'%';
+  document.getElementById('sd-marg-rate').textContent = margRate+'%';
+  document.getElementById('sd-tax-amt').textContent = fmtCC(duty);
+  document.getElementById('sd-net-cost').textContent = fmtCC(netCost);
+  document.getElementById('sd-note').textContent = (c.tc&&c.tc.notes)||'Consult a local property lawyer for exact figures.';
+
+  // Bracket breakdown
+  var bd = document.getElementById('sd-brackets');
+  bd.innerHTML='';
+  if(c.stamp && c.stamp.length>1){
+    bd.innerHTML='<table style="width:100%;border-collapse:collapse;font-size:0.8rem"><thead><tr style="background:#F6F8F7"><th style="padding:6px 8px;text-align:left;color:#8a7d5a;font-size:0.72rem;text-transform:uppercase">Bracket</th><th style="padding:6px 8px;text-align:right;color:#8a7d5a;font-size:0.72rem;text-transform:uppercase">Rate</th><th style="padding:6px 8px;text-align:right;color:#8a7d5a;font-size:0.72rem;text-transform:uppercase">Tax</th></tr></thead><tbody id="sd-bracket-rows"></tbody></table>';
+    var tbody=document.getElementById('sd-bracket-rows');
+    c.stamp.forEach(function(b){
+      if(price>b.f){
+        var taxable=Math.min(price,b.t)-b.f;
+        var tax=taxable*(b.r/100);
+        if(tax>=0){
+          var tr=document.createElement('tr');
+          tr.innerHTML='<td style="padding:6px 8px;border-bottom:1px solid #E3E8E5">'+sym+' '+Math.round(b.f).toLocaleString()+' – '+sym+' '+Math.round(Math.min(price,b.t)).toLocaleString()+'</td><td style="padding:6px 8px;border-bottom:1px solid #E3E8E5;text-align:right">'+b.r+'%</td><td style="padding:6px 8px;border-bottom:1px solid #E3E8E5;text-align:right;font-weight:700;color:#e8dfc8">'+fmtCC(tax)+'</td>';
+          tbody.appendChild(tr);
+        }
+      }
+    });
+    if(surcharge>0){
+      var tr2=document.createElement('tr');
+      tr2.innerHTML='<td style="padding:6px 8px;color:#D97706">Buyer surcharge</td><td style="padding:6px 8px;text-align:right;color:#D97706">—</td><td style="padding:6px 8px;text-align:right;font-weight:700;color:#D97706">'+fmtCC(surcharge)+'</td>';
+      tbody.appendChild(tr2);
+    }
+  } else {
+    bd.innerHTML='<div style="font-size:0.85rem;color:var(--nb-muted);padding:8px 0">'+c.stampLabel+'</div>';
+  }
+}
+
+// ─── OVERRIDE Transfer Cost to use 185-country data ───
+// Patch calcTransfer to use CALC_COUNTRIES when available
+var _origCalcTransfer = window.calcTransfer;
+window.calcTransfer = function(){
+  var code = document.getElementById('tc-country').value;
+  var c = getCC(code);
+  if(!c){
+    // Fall back to original if country not in our DB
+    if(typeof _origCalcTransfer==='function') _origCalcTransfer();
+    return;
+  }
+  var price = parseFloat(document.getElementById('tc-price').value)||0;
+  var needBond = document.getElementById('tc-bond').value==='yes';
+  var bondAmt = needBond?(parseFloat(document.getElementById('tc-bond-amount').value)||0):0;
+  var sym = c.symbol;
+
+  var duty = calcBracketDuty(c.stamp, price);
+  var convey = price*(c.tc.conv/100);
+  var deeds = price*(c.tc.deeds/100)+300;
+  var bond = bondAmt>0?Math.min(price*0.015+4000,28000):0;
+  var total = duty+convey+deeds+(needBond?bond:0);
+  var cashNeeded = price+total;
+
+  var fmtCC = function(n){return sym+' '+Math.round(n).toLocaleString();};
+  document.getElementById('tc-total').textContent = fmtCC(total);
+  document.getElementById('tc-price-display').textContent = fmtCC(price);
+  document.getElementById('tc-cash-needed').textContent = fmtCC(cashNeeded);
+  document.getElementById('tc-note').textContent = c.tc.notes||'Consult a local conveyancer.';
+
+  var html='';
+  html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">'+c.stampLabel+'</span><span style="font-weight:800">'+fmtCC(duty)+'</span></div>';
+  html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">Conveyancing Fee</span><span style="font-weight:800">'+fmtCC(convey)+'</span></div>';
+  html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">Deeds / Registry Fee</span><span style="font-weight:800">'+fmtCC(deeds)+'</span></div>';
+  if(needBond) html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #E3E8E5"><span style="color:#5B6B64">Bond Registration</span><span style="font-weight:800">'+fmtCC(bond)+'</span></div>';
+  html+='<div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:800;color:#e8dfc8"><span>TOTAL</span><span>'+fmtCC(total)+'</span></div>';
+  document.getElementById('tc-breakdown').innerHTML=html;
+};
+
+// ─── INIT dropdowns on load ───
+window.addEventListener('DOMContentLoaded',function(){
+  // ── Read URL parameters (from property/auction pages) ──
+  var params = new URLSearchParams(window.location.search);
+  var urlPrice   = params.get('price');
+  var urlCountry = params.get('country') || 'ZA';
+  var urlTab     = params.get('tab') || 'mortgage';
+  var urlTitle   = params.get('title') || '';
+
+  // Activate the correct tab
+  var tabMap = {transfer:'transfer',stamp:'stamp',mortgage:'mortgage',afford:'afford',yield:'yield',bond:'bond'};
+  var activeTab = tabMap[urlTab] || 'mortgage';
+  document.querySelectorAll('.calc-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.calc-panel').forEach(function(p){ p.classList.remove('active'); });
+  var tabBtn = document.querySelector('.calc-tab[data-calc="'+activeTab+'"]');
+  var tabPanel = document.getElementById('calc-'+activeTab);
+  if(tabBtn) tabBtn.classList.add('active');
+  if(tabPanel) tabPanel.classList.add('active');
+
+  // Show property banner if coming from a listing
+  if(urlTitle || urlPrice){
+    var banner = document.createElement('div');
+    banner.style.cssText='background:linear-gradient(160deg,#0e1520 0%,#141c2b 50%,#111828 100%);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font)';
+    banner.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:18px">🏠</span><div><div style="font-size:13px;font-weight:700;color:#fff">'+(urlTitle?decodeURIComponent(urlTitle):'Property Calculator')+'</div><div style="font-size:12px;color:rgba(255,255,255,0.65)">Calculators pre-filled with this property's price and country</div></div></div><a href="javascript:history.back()" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none">← Back to Listing</a>';
+    document.body.insertBefore(banner, document.body.firstChild);
+  }
+
+  // Set country for transfer and stamp duty
+  var ccDef = getCC(urlCountry) || getCC('ZA');
+  var tcCountry = urlCountry;
+  var sdCountry = urlCountry;
+
+  // Pre-populate Transfer Cost
+  if(ccDef){
+    document.getElementById('tc-country').value = tcCountry;
+    document.getElementById('tc-country-search').value = ccDef.name;
+    document.getElementById('tc-country-display').textContent = ccDef.flag+' '+ccDef.name+' — '+ccDef.currency;
+  } else {
+    var tcDef2 = getCC('ZA');
+    document.getElementById('tc-country').value = 'ZA';
+    document.getElementById('tc-country-search').value = tcDef2.name;
+    document.getElementById('tc-country-display').textContent = tcDef2.flag+' '+tcDef2.name+' — '+tcDef2.currency;
+  }
+  if(urlPrice){
+    document.getElementById('tc-price').value = urlPrice;
+    var bondGuess = Math.round(parseFloat(urlPrice)*0.9);
+    if(document.getElementById('tc-bond-amount')) document.getElementById('tc-bond-amount').value = bondGuess;
+  }
+
+  // Pre-populate Stamp Duty
+  var sdDef = getCC(sdCountry) || getCC('GB');
+  document.getElementById('sd-country').value = sdCountry||'GB';
+  document.getElementById('sd-country-search').value = sdDef.name;
+  document.getElementById('sd-country-display').textContent = sdDef.flag+' '+sdDef.name+' — '+sdDef.currency;
+  document.getElementById('sd-sym').textContent = sdDef.symbol;
+  if(urlPrice) document.getElementById('sd-price').value = urlPrice;
+
+  // Pre-populate Mortgage if price provided
+  if(urlPrice){
+    if(document.getElementById('mc-price')) document.getElementById('mc-price').value = urlPrice;
+    if(document.getElementById('bc-amount')) document.getElementById('bc-amount').value = Math.round(parseFloat(urlPrice)*0.9);
+  }
+
+  // Run all calcs after a short delay
+  setTimeout(function(){
+    try{calcStampDutyFull();}catch(e){}
+    try{calcTransfer();}catch(e){}
+    try{calcMortgage();}catch(e){}
+    try{calcBond();}catch(e){}
+  },150);
+});
+</script>
+
+<script src="pf-core.js"></script>
+  <script src="/social-share.js?v=2.1"></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

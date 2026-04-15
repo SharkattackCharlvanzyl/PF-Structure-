@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PropertyFinder — Agency Listing Agreement</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#141c2b;--g2:#1a2535;--gd:#0e1520;--lime:#c4a47c;--bg:#faf8f4;--panel:#ffffff;--text:#1a1408;--muted:#5a4f3a;--line:rgba(196,164,124,0.18);--r:14px;--r2:10px;--font:'DM Sans',system-ui,sans-serif;--font-d:'Cinzel',Georgia,serif;--danger:#DC2626;--success:#16A34A;--warn:#D97706;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:var(--g);text-decoration:none;font-weight:700}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--gd),var(--g),var(--g2));padding:40px 24px 32px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,21,32,.9),rgba(196,164,124,.5),rgba(196,164,124,.3));pointer-events:none}
+.hdr-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.hdr-back{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.75);font-size:13px;font-weight:600;padding:6px 12px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);margin-bottom:16px;cursor:pointer;transition:all 0.2s}
+.hdr-back:hover{background:rgba(255,255,255,0.15);color:#fff}
+.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:999px;margin-bottom:12px}
+.hdr h1{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#fff;margin-bottom:8px}
+.hdr p{color:rgba(255,255,255,0.7);font-size:14px;line-height:1.6;max-width:580px}
+.tier-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(196,164,124,0.2);border:1px solid rgba(196,164,124,0.4);color:#c4a47c;font-size:13px;font-weight:800;padding:6px 16px;border-radius:999px;margin-top:12px}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--panel);border-bottom:1px solid var(--line);padding:0 24px}
+.prog-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;padding:14px 0}
+.prog-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.prog-step+.prog-step::before{content:'';position:absolute;left:-50%;top:14px;width:100%;height:2px;background:var(--line);z-index:0}
+.prog-step.done+.prog-step::before{background:var(--g)}
+.prog-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--muted);position:relative;z-index:1;transition:all 0.3s}
+.prog-step.active .prog-dot{background:var(--g);border-color:var(--g);color:#fff}
+.prog-step.done .prog-dot{background:var(--success);border-color:var(--success);color:#fff}
+.prog-lbl{font-size:11px;font-weight:600;color:var(--muted);text-align:center}
+.prog-step.active .prog-lbl{color:var(--g)}
+
+/* MAIN */
+.main{max-width:1000px;margin:32px auto;padding:0 24px 80px}
+.step-panel{display:none}.step-panel.active{display:block;animation:fadeUp 0.3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARDS */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.card-hdr{background:rgba(196,164,124,0.04);padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.card-hdr h2{font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--gd);margin:0}
+.card-body{padding:22px}
+
+/* FORM */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+.req{color:var(--danger)}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;font-family:var(--font);color:var(--text);background:#ffffff;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(196,164,124,0.1)}
+.field textarea{resize:vertical;min-height:80px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.field-row{grid-template-columns:1fr}}
+.field-hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+.field-error{font-size:12px;color:var(--danger);margin-top:4px;display:none}
+.field.has-error input,.field.has-error select{border-color:var(--danger)}
+.field.has-error .field-error{display:block}
+
+/* SYNC SYSTEM SELECTOR */
+.sys-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:768px){.sys-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.sys-grid{grid-template-columns:1fr 1fr}}
+.sys-card{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r2);padding:14px 10px;text-align:center;cursor:pointer;transition:all 0.2s}
+.sys-card:hover{border-color:var(--g);background:rgba(196,164,124,0.03)}
+.sys-card.selected{border-color:var(--g);background:rgba(196,164,124,0.06);box-shadow:0 0 0 2px rgba(196,164,124,0.15)}
+.sys-card .s-ico{font-size:20px;margin-bottom:5px;display:block}
+.sys-card .s-name{font-size:11.5px;font-weight:700;color:var(--text);line-height:1.3}
+.sys-card .s-cred{font-size:10px;color:var(--muted);margin-top:2px}
+.sync-creds{background:rgba(196,164,124,0.04);border:1px solid rgba(196,164,124,0.15);border-radius:var(--r2);padding:18px 20px;margin-bottom:16px;display:none}
+.sync-creds.show{display:block;animation:fadeUp 0.3s ease}
+.sync-creds .cred-title{font-size:13px;font-weight:700;color:var(--gd);margin-bottom:12px}
+.manual-option{background:rgba(37,99,235,0.04);border:1px solid rgba(37,99,235,0.15);border-radius:var(--r2);padding:16px 20px;cursor:pointer;transition:all 0.2s;margin-bottom:8px}
+.manual-option:hover{border-color:rgba(37,99,235,0.4)}
+.manual-option.selected{border-color:#2563EB;background:rgba(37,99,235,0.07)}
+
+/* AGREEMENT TEXT */
+.agreement-box{background:var(--bg);border:1px solid var(--line);border-radius:var(--r2);padding:20px;max-height:320px;overflow-y:auto;font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:16px}
+.agreement-box h3{font-family:var(--font-d);font-size:0.85rem;font-weight:700;color:var(--gd);margin:18px 0 8px}
+.agreement-box h3:first-child{margin-top:0}
+.agreement-box p{margin-bottom:10px}
+.agreement-box ul{margin:8px 0 12px 20px}
+.agreement-box ul li{margin-bottom:4px}
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.check-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--g);cursor:pointer;flex-shrink:0;margin-top:1px}
+.check-row label{font-size:13px;color:var(--text);line-height:1.5;cursor:pointer}
+
+/* SIG */
+.sig-wrap{border:2px dashed var(--line);border-radius:var(--r2);padding:16px;text-align:center;background:var(--bg);margin-bottom:12px;transition:all 0.2s}
+.sig-wrap canvas{display:block;width:100%;height:100px;cursor:crosshair;border-radius:6px;background:#ffffff;border:1px solid var(--line);touch-action:none}
+.sig-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.sig-hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+/* SUMMARY CARD */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+@media(max-width:640px){.summary-grid{grid-template-columns:1fr}}
+.sum-item{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.sum-k{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.sum-v{font-size:14px;font-weight:700;color:var(--text)}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:24px;flex-wrap:wrap}
+.btn{padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);border:1.5px solid var(--line);background:var(--panel);color:var(--text);transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--g);color:var(--g)}
+.btn.primary{background:var(--g);color:#fff;border-color:var(--g)}
+.btn.primary:hover{background:var(--g2);border-color:var(--g2)}
+.btn.primary:disabled{background:var(--muted);border-color:var(--muted);cursor:not-allowed}
+
+/* SUCCESS */
+.success-panel{display:none;text-align:center;padding:60px 24px}
+.success-panel.show{display:block;animation:fadeUp 0.4s ease}
+.success-panel .s-check{width:72px;height:72px;border-radius:50%;background:rgba(22,163,74,0.1);border:2px solid rgba(22,163,74,0.3);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px}
+.success-panel h2{font-family:var(--font-d);font-size:1.6rem;font-weight:700;color:var(--gd);margin-bottom:12px}
+.success-panel p{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:500px;margin:0 auto 24px}
+.success-steps{text-align:left;max-width:420px;margin:0 auto 28px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px}
+.s-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.s-step:last-child{border-bottom:none}
+.s-step .s-num{width:22px;height:22px;border-radius:50%;background:var(--g);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* TOAST */
+.pf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;color:#fff;font-size:14px;font-weight:600;z-index:10000;background:var(--g);box-shadow:0 8px 32px rgba(0,0,0,0.2);animation:tIn 0.3s ease,tOut 0.3s ease 2.6s forwards;white-space:nowrap}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tOut{to{opacity:0}}
+
+.note{font-size:12.5px;color:var(--muted);padding:12px 16px;border-radius:8px;border:1px dashed rgba(196,164,124,0.2);background:rgba(196,164,124,0.02);line-height:1.6;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <a href="list-property.html" class="hdr-back">← Back to Listing Plans</a>
+    <div class="hdr-badge">📋 Listing Agreement</div>
+    <h1>PropertyFinder — Agency Listing Agreement</h1>
+    <p>Complete the 4 steps below to register your account, sign the agreement, connect your listing source, and go live across 185 countries.</p>
+    <div class="tier-pill">💰 $3.00 per listing / month &nbsp;·&nbsp; 11–2,000 listings</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-inner">
+    <div class="prog-step active" id="ps1"><div class="prog-dot">1</div><div class="prog-lbl">Your Details</div></div>
+    <div class="prog-step" id="ps2"><div class="prog-dot">2</div><div class="prog-lbl">Listing Source</div></div>
+    <div class="prog-step" id="ps3"><div class="prog-dot">3</div><div class="prog-lbl">Agreement</div></div>
+    <div class="prog-step" id="ps4"><div class="prog-dot">4</div><div class="prog-lbl">Confirm & Submit</div></div>
+  </div>
+</div>
+
+<div class="main" id="mainWrap">
+
+  <!-- STEP 1: DETAILS -->
+  <div class="step-panel active" id="step1">
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:20px">👤</span><h2>Step 1 — Your Details</h2></div>
+      <div class="card-body">
+        <div class="field-row">
+          <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="f_fname" placeholder="John"><div class="field-error">Required</div></div>
+          <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" id="f_lname" placeholder="Smith"><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Email Address <span class="req">*</span></label><input type="email" id="f_email" placeholder="john@example.com"><div class="field-error">Valid email required</div></div>
+          <div class="field"><label>Phone / WhatsApp <span class="req">*</span></label><input type="tel" id="f_phone" placeholder="+27 82 000 0000"><div class="field-error">Required</div></div>
+        </div>
+        
+        <div class="field-row">
+          <div class="field"><label>Agency / Company Name <span class="req">*</span></label><input type="text" id="f_company" placeholder="ABC Properties (Pty) Ltd"></div>
+          <div class="field"><label>Agency Registration Number</label><input type="text" id="f_regno" placeholder="e.g. 2018/123456/07"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Agency Website</label><input type="url" id="f_website" placeholder="https://youragency.com"></div>
+          <div class="field"><label>PPRA / Estate Agent Licence Number</label><input type="text" id="f_licence" placeholder="Your licence/registration number"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Country <span class="req">*</span></label>
+            <select id="f_country">
+              <option value="">Select country...</option>
+              <option>South Africa</option><option>United Kingdom</option><option>United States</option>
+              <option>Australia</option><option>New Zealand</option><option>Germany</option>
+              <option>France</option><option>Spain</option><option>UAE</option>
+              <option>Switzerland</option><option>Singapore</option><option>Kenya</option>
+              <option>Nigeria</option><option>Zimbabwe</option><option>Zambia</option>
+              <option>Namibia</option><option>Botswana</option><option>Other</option>
+            </select>
+            <div class="field-error">Required</div>
+          </div>
+          <div class="field"><label>City / Town</label><input type="text" id="f_city" placeholder="Cape Town"></div>
+        </div>
+        <div class="field"><label>How many listings do you want to add?</label>
+          <select id="f_listcount">
+            <option value="1">1 listing</option><option value="2-5">2–5 listings</option>
+            <option value="6-10">6–10 listings</option><option value="11-50">11–50 listings</option>
+            <option value="51-200">51–200 listings</option><option value="201-2000">201–2,000 listings</option>
+            <option value="2000+">2,000+ listings</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <span></span>
+          <button class="btn primary" onclick="goStep(2)">Continue — Listing Source →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: LISTING SOURCE -->
+  <div class="step-panel" id="step2">
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:20px">🔗</span><h2>Step 2 — Choose Your Listing Source</h2></div>
+      <div class="card-body">
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.65">Select how you want to add listings to PropertyFinder. Auto-Sync is recommended for agents and portals — we import everything automatically. Manual upload is available for private sellers or small portfolios.</p>
+
+        <div class="note">🔒 All credentials are encrypted with AES-256 and stored in a secure vault. PropertyFinder staff never see your password. We only require read-only access — we never modify your source system.</div>
+
+        <!-- MANUAL OPTION -->
+        <div class="manual-option" id="manualOpt" onclick="selectManual()">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:24px">✏️</span>
+            <div>
+              <div style="font-weight:700;font-size:14px;color:var(--text)">Manual Upload / Enter Manually</div>
+              <div style="font-size:12.5px;color:var(--muted);margin-top:2px">Add listings one by one using the PropertyFinder listing form. Best for private sellers or small portfolios.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin:16px 0 10px">Or select your system for Auto-Sync:</div>
+
+        <div class="sys-grid">
+<div class="sys-card" onclick="selectSync(this,'Fusion (Prop Data)','API Key')" data-cred="API Key"><span class="s-ico">🔧</span><div class="s-name">Fusion (Prop Data)</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'Flex MLS','API Key')" data-cred="API Key"><span class="s-ico">🏢</span><div class="s-name">Flex MLS</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'Rex Software','Username + Password')" data-cred="Username + Password"><span class="s-ico">📊</span><div class="s-name">Rex Software</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'Reapit (Foundations)','API Key')" data-cred="API Key"><span class="s-ico">🌐</span><div class="s-name">Reapit (Foundations)</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'AgentBox','Username + Password')" data-cred="Username + Password"><span class="s-ico">🏠</span><div class="s-name">AgentBox</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'Salesforce','Username + Password')" data-cred="Username + Password"><span class="s-ico">📋</span><div class="s-name">Salesforce</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'Propertybase','API Key')" data-cred="API Key"><span class="s-ico">🔑</span><div class="s-name">Propertybase</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'HubSpot CRM','API Key')" data-cred="API Key"><span class="s-ico">💼</span><div class="s-name">HubSpot CRM</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'Entegral (OMS)','Username + Password')" data-cred="Username + Password"><span class="s-ico">📐</span><div class="s-name">Entegral (OMS)</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'PropCtrl','Username + Password')" data-cred="Username + Password"><span class="s-ico">🏗️</span><div class="s-name">PropCtrl</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'XML / JSON Feed','Feed URL')" data-cred="Feed URL"><span class="s-ico">📡</span><div class="s-name">XML / JSON Feed</div><div class="s-cred">Feed URL</div></div>
+<div class="sys-card" onclick="selectSync(this,'BLM / RETS Feed','Feed URL')" data-cred="Feed URL"><span class="s-ico">🔗</span><div class="s-name">BLM / RETS Feed</div><div class="s-cred">Feed URL</div></div>
+<div class="sys-card" onclick="selectSync(this,'WordPress + IDX','Website URL')" data-cred="Website URL"><span class="s-ico">🌐</span><div class="s-name">WordPress + IDX</div><div class="s-cred">Website URL</div></div>
+<div class="sys-card" onclick="selectSync(this,'Wix / Squarespace','Website URL')" data-cred="Website URL"><span class="s-ico">🖥️</span><div class="s-name">Wix / Squarespace</div><div class="s-cred">Website URL</div></div>
+<div class="sys-card" onclick="selectSync(this,'Property24 / PP','Username + Password')" data-cred="Username + Password"><span class="s-ico">📱</span><div class="s-name">Property24 / PP</div><div class="s-cred">Username + Password</div></div>
+<div class="sys-card" onclick="selectSync(this,'Rightmove / Zoopla','API Key')" data-cred="API Key"><span class="s-ico">🏘️</span><div class="s-name">Rightmove / Zoopla</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'Zillow / Realtor','API Key')" data-cred="API Key"><span class="s-ico">🏡</span><div class="s-name">Zillow / Realtor</div><div class="s-cred">API Key</div></div>
+<div class="sys-card" onclick="selectSync(this,'Any Website URL','Website URL')" data-cred="Website URL"><span class="s-ico">🌍</span><div class="s-name">Any Website URL</div><div class="s-cred">Website URL</div></div>
+        </div>
+
+        <div class="sync-creds" id="syncCreds">
+          <div class="cred-title" id="credTitle">Enter your credentials</div>
+          <div id="credFields"></div>
+          <div class="note" style="margin-top:12px;margin-bottom:0">PropertyFinder will use these credentials to read and import your listings. You can revoke access at any time from your dashboard.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" onclick="goStep(1)">← Back</button>
+          <button class="btn primary" onclick="goStep(3)">Continue — Agreement →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: AGREEMENT -->
+  <div class="step-panel" id="step3">
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:20px">📜</span><h2>Step 3 — Agency Listing Agreement</h2></div>
+      <div class="card-body">
+        <div class="agreement-box">
+          <h3>1. Parties & Purpose</h3>
+          <p>This Listing Agreement ("Agreement") is between <strong>PropertyFinder Global</strong> ("PropertyFinder", "Platform") and the listing party named in the registration form ("Lister", "you"). By submitting this form and checking the acceptance boxes below, you agree to be legally bound by these terms.</p>
+
+          <h3>2. Listing Tier — Agency</h3>
+          <p>You are registering under the <strong>Agency tier</strong> at <strong>$3.00 per listing per month</strong> (11–2,000 listings). Your tier adjusts automatically as your listing count changes. All tiers receive identical features: 30 photos, 1 video, 1 portal walkthrough, full analytics, WhatsApp contact, featured badge, priority search ranking, and 185-country exposure.</p>
+
+          <h3>3. Listing Content & Accuracy</h3>
+          <p>You warrant that all listing content you provide — including photographs, descriptions, dimensions, zoning, permitted use, legal title, and price — is accurate, complete, and not misleading. You are solely responsible for the accuracy of your listings. PropertyFinder does not verify listing content.</p>
+          <ul>
+            <li>You must have full authority to list the property or business.</li>
+            <li>Listings must not misrepresent ownership, condition, price, or legal status.</li>
+            <li>Fraudulent listings will result in immediate account suspension and legal action.</li>
+          </ul>
+
+          <h3>4. Auto-Sync Credentials (if applicable)</h3>
+          <p>Where you provide login credentials or API keys for auto-sync, you confirm that you have authority to grant PropertyFinder read-only access to your listing system. Credentials are encrypted with AES-256. PropertyFinder will never modify, delete, or alter data on your source system.</p>
+
+          <h3>5. Payment & Billing</h3>
+          <p>Listings are billed monthly at the rate for your tier. Billing begins when a listing is approved and published. Listings renew automatically each month. You may cancel at any time from your dashboard — your listing remains active until the end of the billing period. No refunds for partial months.</p>
+          <ul>
+            <li>Private tier: $7.50/listing/month (1–10 listings)</li>
+            <li>Agency tier: $3.00/listing/month (11–2,000 listings)</li>
+            <li>Enterprise tier: $2.00/listing/month (2,000+ listings)</li>
+            <li>Tier adjusts automatically. No action required when your count changes.</li>
+          </ul>
+
+          <h3>6. Anti-Fraud & Off-Platform Dealing</h3>
+          <p>You agree not to use PropertyFinder to identify buyers and then conduct the transaction off-platform to circumvent fees. Shill listings, fraudulent pricing, and fake contact details are strictly prohibited and will result in account suspension.</p>
+
+          <h3>7. PropertyFinder's Rights</h3>
+          <p>PropertyFinder may remove, edit, or decline to publish any listing that violates these terms, applicable law, or platform policies. PropertyFinder is a technology platform and is not the seller, agent, conveyancer, or financial advisor for any transaction.</p>
+
+          <h3>8. Privacy & Data</h3>
+          <p>Your personal data is processed in accordance with the <a href="privacy-policy.html">Privacy Policy</a>. By submitting this form, you consent to PropertyFinder contacting you about your account via email, WhatsApp, and phone.</p>
+
+          <h3>9. Governing Law</h3>
+          <p>This Agreement is governed by the laws stated in the Platform's Terms of Use. Disputes are handled per the <a href="dispute-resolution.html">Dispute Resolution Policy</a>.</p>
+        </div>
+
+        <div class="check-row">
+          <input type="checkbox" id="chk1">
+          <label for="chk1">I have read and understood the full Listing Agreement above and agree to be legally bound by its terms.</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="chk2">
+          <label for="chk2">I confirm that all listing content I submit will be accurate, complete, and not misleading. I have authority to list the properties/businesses I intend to advertise.</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="chk3">
+          <label for="chk3">I agree to the <a href="payment-terms.html">Payment Terms</a>, <a href="privacy-policy.html">Privacy Policy</a>, and <a href="terms-of-use.html">Terms of Use</a>.</label>
+        </div>
+
+        <div style="margin-top:20px">
+          <div class="sig-hint">Please sign below using your mouse or finger (touchscreen):</div>
+          <div class="sig-wrap">
+            <canvas id="sigCanvas" height="100"></canvas>
+          </div>
+          <div class="sig-actions">
+            <button class="btn" onclick="clearSig()" style="font-size:12px;padding:7px 14px">Clear Signature</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" onclick="goStep(2)">← Back</button>
+          <button class="btn primary" id="btnStep3" onclick="goStep(4)" disabled>Continue — Review & Submit →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: CONFIRM -->
+  <div class="step-panel" id="step4">
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:20px">✅</span><h2>Step 4 — Review & Submit</h2></div>
+      <div class="card-body">
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:20px">Please review your details before submitting. Once submitted, PropertyFinder will review your application within 1 business day and send you login credentials and next steps via email.</p>
+
+        <div class="summary-grid" id="summaryGrid"></div>
+
+        <div style="background:linear-gradient(135deg,rgba(196,164,124,0.05),rgba(196,164,124,0.03));border:1px solid rgba(196,164,124,0.15);border-radius:var(--r2);padding:18px 20px;margin-bottom:20px">
+          <div style="font-weight:700;font-size:14px;color:var(--gd);margin-bottom:8px">📧 What Happens After Submission</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">
+            ✓ You will receive a <strong>confirmation email</strong> with your signed agreement attached.<br>
+            ✓ Our team will review your application within <strong>1 business day</strong>.<br>
+            ✓ You will receive <strong>login credentials</strong> to your PropertyFinder dashboard.<br>
+            ✓ If you selected Auto-Sync, our team will <strong>initiate the import</strong> within 24 hours.<br>
+            ✓ You will receive a <strong>preview link</strong> to approve your listings before they go live.
+          </div>
+        </div>
+
+        <div class="note">💳 <strong>Payment note:</strong> No payment is taken now. You will be invoiced once your first listing is approved and live. Payment is processed securely via card, PayPal, or EFT.</div>
+
+        <div class="btn-row">
+          <button class="btn" onclick="goStep(3)">← Back</button>
+          <button class="btn primary" id="btnSubmit" onclick="submitForm()">🚀 Submit Application →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-panel" id="successPanel">
+    <div class="s-check">✅</div>
+    <h2>Application Submitted!</h2>
+    <p>Thank you for registering with PropertyFinder. Your signed agreement has been recorded and a confirmation email is on its way.</p>
+    <div class="success-steps">
+      <div class="s-step"><div class="s-num">1</div><div><strong>Check your email</strong> — confirmation + signed agreement sent now</div></div>
+      <div class="s-step"><div class="s-num">2</div><div><strong>Within 1 business day</strong> — team reviews and sends dashboard login</div></div>
+      <div class="s-step"><div class="s-num">3</div><div><strong>Import & preview</strong> — listings synced and sent for your approval</div></div>
+      <div class="s-step"><div class="s-num">4</div><div><strong>Go live</strong> — approve listings → instantly live in 185 countries</div></div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="list-property.html" class="btn">← Back to Listing Plans</a>
+      <a href="pricing.html" class="btn" style="background:#c4a47c;color:#1a1408;font-weight:700;padding:12px 28px;border-radius:10px;font-size:0.95rem;text-decoration:none">Proceed to Payment →</a>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+var currentStep = 1;
+var selectedSyncSystem = null;
+var selectedManual = false;
+var sigCanvas, sigCtx, sigDrawing = false, sigHasData = false;
+
+// ── STEP NAVIGATION ──
+function goStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.prog-step').forEach((s, i) => {
+    s.classList.remove('active','done');
+    if (i+1 < n) s.classList.add('done');
+    else if (i+1 === n) s.classList.add('active');
+  });
+  document.getElementById('step' + n).classList.add('active');
+  currentStep = n;
+  if (n === 3) initSig();
+  if (n === 4) buildSummary();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── VALIDATE ──
+function validateStep(n) {
+  if (n === 1) {
+    let ok = true;
+    [['f_fname','text'],['f_lname','text'],['f_email','email'],['f_phone','text'],['f_country','select']].forEach(([id, type]) => {
+      const el = document.getElementById(id); if (!el) return;
+      const parent = el.closest('.field');
+      const val = el.value.trim();
+      let valid = !!val;
+      if (type === 'email') valid = /^[^@]+@[^@]+\.[^@]+$/.test(val);
+      if (!valid) { parent.classList.add('has-error'); ok = false; }
+      else parent.classList.remove('has-error');
+    });
+    if (!ok) { showToast('⚠️ Please fill in all required fields'); return false; }
+  }
+  if (n === 3) {
+    const chks = ['chk1','chk2','chk3'].every(id => document.getElementById(id).checked);
+    if (!chks) { showToast('⚠️ Please accept all agreement terms'); return false; }
+    if (!sigHasData) { showToast('⚠️ Please provide your signature'); return false; }
+  }
+  return true;
+}
+
+// ── SYNC SYSTEM ──
+function selectSync(el, name, cred) {
+  document.querySelectorAll('.sys-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('manualOpt').classList.remove('selected');
+  el.classList.add('selected');
+  selectedSyncSystem = name;
+  selectedManual = false;
+  document.getElementById('credTitle').textContent = '🔐 ' + name + ' — Enter your ' + cred;
+  const cf = document.getElementById('credFields');
+  if (cred === 'API Key') {
+    cf.innerHTML = '<div class="field"><label>API Key <span class="req">*</span></label><input type="text" id="cred_api" placeholder="Enter your API key"><div class="field-hint">Found in your system settings under Integrations or API.</div></div>';
+  } else if (cred === 'Username + Password') {
+    cf.innerHTML = '<div class="field-row"><div class="field"><label>Username / Email <span class="req">*</span></label><input type="text" id="cred_user" placeholder="your@email.com"></div><div class="field"><label>Password <span class="req">*</span></label><input type="password" id="cred_pass" placeholder="••••••••"><div class="field-hint">Stored encrypted. We use read-only access only.</div></div></div>';
+  } else {
+    cf.innerHTML = '<div class="field"><label>Website / Feed URL <span class="req">*</span></label><input type="url" id="cred_url" placeholder="https://yoursite.com/listings"><div class="field-hint">The URL of your listing page or XML/JSON feed.</div></div>';
+  }
+  document.getElementById('syncCreds').classList.add('show');
+}
+
+function selectManual() {
+  document.querySelectorAll('.sys-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('manualOpt').classList.add('selected');
+  document.getElementById('syncCreds').classList.remove('show');
+  selectedSyncSystem = 'Manual Upload';
+  selectedManual = true;
+}
+
+// ── SIGNATURE ──
+function initSig() {
+  sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas || sigCanvas._init) return;
+  sigCanvas._init = true;
+  sigCtx = sigCanvas.getContext('2d');
+  sigCanvas.width = sigCanvas.offsetWidth;
+  sigCtx.strokeStyle = '#141c2b'; sigCtx.lineWidth = 2; sigCtx.lineCap = 'round';
+
+  const pos = (e) => {
+    const r = sigCanvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {x: (t.clientX - r.left) * (sigCanvas.width/r.width), y: (t.clientY - r.top) * (sigCanvas.height/r.height)};
+  };
+  sigCanvas.addEventListener('mousedown', e => { sigDrawing=true; sigCtx.beginPath(); const p=pos(e); sigCtx.moveTo(p.x,p.y); });
+  sigCanvas.addEventListener('mousemove', e => { if(!sigDrawing) return; const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); sigHasData=true; updateStep3Btn(); });
+  sigCanvas.addEventListener('mouseup', () => sigDrawing=false);
+  sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); sigDrawing=true; sigCtx.beginPath(); const p=pos(e); sigCtx.moveTo(p.x,p.y); }, {passive:false});
+  sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(!sigDrawing) return; const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); sigHasData=true; updateStep3Btn(); }, {passive:false});
+  sigCanvas.addEventListener('touchend', () => sigDrawing=false);
+}
+function clearSig() { if(sigCtx) { sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height); sigHasData=false; updateStep3Btn(); } }
+function updateStep3Btn() {
+  const chks = ['chk1','chk2','chk3'].every(id => document.getElementById(id)?.checked);
+  const btn = document.getElementById('btnStep3');
+  if(btn) btn.disabled = !(chks && sigHasData);
+}
+['chk1','chk2','chk3'].forEach(id => document.addEventListener('change', e => { if(e.target.id===id) updateStep3Btn(); }));
+
+// ── SUMMARY ──
+function buildSummary() {
+  const grid = document.getElementById('summaryGrid');
+  const items = [
+    ['Name', (document.getElementById('f_fname')?.value||'') + ' ' + (document.getElementById('f_lname')?.value||'')],
+    ['Email', document.getElementById('f_email')?.value||''],
+    ['Phone', document.getElementById('f_phone')?.value||''],
+    ['Country', document.getElementById('f_country')?.value||''],
+    ['Listing Count', document.getElementById('f_listcount')?.value||''],
+    ['Tier', 'Agency — $3.00/listing/month'],
+    ['Listing Source', selectedSyncSystem || 'Not selected'],
+  ];
+  const extra = document.getElementById('f_company');
+  if(extra) items.splice(2,0,['Company', extra.value]);
+  grid.innerHTML = items.map(([k,v]) => `<div class="sum-item"><div class="sum-k">${k}</div><div class="sum-v">${v||'—'}</div></div>`).join('');
+}
+
+// ── SUBMIT ──
+function submitForm(){
+  const btn=document.getElementById('btnSubmit');
+  btn.disabled=true;btn.textContent='â³ Submitting...';
+  const g=id=>(document.getElementById(id)||{}).value||'';
+  const sig=(()=>{try{return document.getElementById('sigCanvas').toDataURL();}catch(e){return '';}})();
+  const payload={plan:'Agency',agreementType:'Agency',firstName:g('f_fname'),lastName:g('f_lname'),name:(g('f_fname')+' '+g('f_lname')).trim(),email:g('f_email'),phone:g('f_phone'),company:g('f_company'),regNo:g('f_regno'),website:g('f_website'),licence:g('f_licence'),country:g('f_country'),city:g('f_city'),listings:g('f_listcount'),syncSystem:selectedSyncSystem||'Manual Upload',signature:sig};
+  fetch('https://property-finder.co.za/api/submit-agreement.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+  .then(r=>r.json()).then(data=>{
+    if(data.success){localStorage.setItem('pf_agreement_agency',JSON.stringify({signed:true,date:new Date().toISOString(),plan:'Agency',name:payload.name,ref:data.ref}));document.getElementById('mainWrap').style.display='none';document.getElementById('successPanel').classList.add('show');window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>{window.location.href='pricing.html';},3000);}
+    else{btn.disabled=false;btn.textContent='ð Submit Application â';alert('Error: '+(data.error||'Please try again.'));}
+  }).catch(()=>{btn.disabled=false;btn.textContent='ð Submit Application â';alert('Network error.');});
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  document.querySelectorAll('.pf-toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className='pf-toast'; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 3200);
+}
+</script>
+
+<script src="pf-photo-upload.js"></script>
+<script src="pf-core.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  if(document.getElementById("pfuMedia_listing_agency")){
+    PFUpload.init("pfuMedia_listing_agency", {
+      maxPhotos: 30,
+      showVideoUpload: true,
+      onPhotosChanged: function(photos){ console.log("[PFUpload] Property Photos: " + photos.length + " photos"); }
+    });
+  }
+});
+</script>
+  <script src="/social-share.js?v=2.1"></script>
+  <script src="/search-filter.js" defer></script>
+
+
+
+<div id="google_translate_element" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'af,ar,zh-CN,nl,fr,de,hi,it,ja,ko,pt,ru,es,sv,tr',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+function pfSetLanguage(langCode){
+  if(!langCode||langCode==='en'){
+    // Reset to English
+    var f=document.querySelector('.goog-te-banner-frame');
+    if(f){try{var b=f.contentDocument.querySelector('.goog-te-button button');if(b)b.click();}catch(e){}}
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie='googtrans=;expires=Thu,01 Jan 1970 00:00:00 GMT;path=/;domain=.property-finder.co.za';
+    if(window.location.href.indexOf('translate.goog')!==-1){
+      window.location.href='https://property-finder.co.za'+window.location.pathname;
+    }
+    return;
+  }
+  var tries=0;
+  function attempt(){
+    tries++;
+    var sel=document.querySelector('.goog-te-combo');
+    if(sel){
+      sel.value=langCode;
+      sel.dispatchEvent(new Event('change'));
+      return;
+    }
+    if(tries<40)setTimeout(attempt,500);
+  }
+  attempt();
+}
+(function(){
+  var lang=localStorage.getItem('pf_language');
+  if(lang&&lang!=='en'){
+    if(document.readyState==='complete'){pfSetLanguage(lang);}
+    else{window.addEventListener('load',function(){pfSetLanguage(lang);});}
+  }
+})();
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
