@@ -9,7 +9,7 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="hero-gradient min-h-[60vh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-12">
-        <Image src="/propworths-logo-transparent.png" alt="Propworths" width={600} height={180} unoptimized className="object-contain mx-auto mb-8" />
+        <Image src="/propworths-logo-transparent.png" alt="Propworths" width={1000} height={300} unoptimized className="object-contain mx-auto mb-8" style={{width: '100%', maxWidth: '1000px'}} />
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-gold mb-4">
           {t("hero.title")}
         </h1>

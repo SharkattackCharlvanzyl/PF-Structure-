@@ -45,8 +45,8 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-md border-b border-gold/20">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/"><Image src="/propworths-logo-transparent.png" alt="Propworths" width={200} height={60} unoptimized className="object-contain" /></Link>
+      <div className="max-w-7xl mx-auto px-4 h-32 flex items-center justify-between">
+        <Link href="/"><Image src="/propworths-logo-transparent.png" alt="Propworths" width={400} height={120} unoptimized className="object-contain" /></Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-6">
