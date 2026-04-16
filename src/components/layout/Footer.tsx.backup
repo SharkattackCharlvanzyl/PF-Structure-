@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 export default function Footer() {
@@ -10,7 +9,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           <div>
-            <Image src="/propworths-logo-transparent.png" alt="Propworths" width={300} height={90} unoptimized className="object-contain mb-4" />
+            <h4 className="font-display text-gold font-bold mb-4">PropertyFinder</h4>
             <p className="text-cream/50 text-sm">{t("footer.tagline")}</p>
           </div>
           <div>
