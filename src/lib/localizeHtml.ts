@@ -22,9 +22,7 @@ export const htmlRouteMap: Record<string, string> = {
   "how-it-works.html": "/how-it-works",
   "valuation.html": "/valuate",
   "payment-terms.html": "/payment-terms",
-  "commission-fees.html": "/commission-fees",
   "payment-system.html": "/payment-system",
-  "privacy-policy.html": "/privacy-policy",
 };
 
 export function localizeHtmlLinks(html: string, locale: string) {

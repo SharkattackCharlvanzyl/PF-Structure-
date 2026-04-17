@@ -23,6 +23,8 @@ const SAMPLE = [
   { icon: "☕", title: "F&B Strip, 6 Tenants", loc: "Green Point", price: "R 28,000,000", yield: "9.4% yield", class: "WALE 4.2y" },
 ];
 
+type SampleItem = { icon: string; title: string; loc: string; price: string; [k: string]: string };
+
 export default function BuyCommercialPage() {
   return <CategoryPage
     label="Buy · Commercial"
@@ -38,9 +40,7 @@ export default function BuyCommercialPage() {
   />;
 }
 
-type SampleItem = { icon: string; title: string; loc: string; price: string; [k: string]: string };
-
-export function CategoryPage({
+function CategoryPage({
   label, titleMain, titleEm, sub, features, sampleTitle, sample, parentHref, parentLabel, listingPill,
 }: {
   label: string;

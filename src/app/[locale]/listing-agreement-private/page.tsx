@@ -1,4 +1,4 @@
-import { ListingAgreement } from "../listing-agreement-enterprise/page";
+import { ListingAgreement } from "@/components/ListingAgreementTemplate";
 
 export const metadata = {
   title: "Private Listing Agreement — Propworths",
