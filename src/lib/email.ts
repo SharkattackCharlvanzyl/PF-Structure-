@@ -107,10 +107,12 @@ async function send(
   to: string | string[],
   subject: string,
   html: string,
-  replyTo?: { email: string; name: string }
+  replyTo?: { email: string; name: string },
+  fromName?: string
 ): Promise<EmailResult> {
   try {
-    const msg: Parameters<typeof sgMail.send>[0] = { to, from: SG_FROM, subject, html };
+    const from = fromName ? { email: SG_FROM.email, name: fromName } : SG_FROM;
+    const msg: Parameters<typeof sgMail.send>[0] = { to, from, subject, html };
     if (replyTo) (msg as unknown as Record<string, unknown>).replyTo = replyTo;
     const [res] = await sgMail.send(msg);
     return { success: true, messageId: res?.headers?.["x-message-id"] || "sent" };
@@ -200,7 +202,8 @@ export async function sendPaymentReceipt(data: PaymentData): Promise<EmailResult
   return send(data.to, `Payment Receipt - ${data.transactionId}`, html);
 }
 
-// ── 5. Contact message → admin ──────────────────────────────────────
+// ── 5. Contact message → info@propworths.com ───────────────────────
+const CONTACT_INBOX = "info@propworths.com";
 export async function sendContactMessage(data: ContactData): Promise<EmailResult> {
   const html = wrap(
     heading("New Contact Message") +
@@ -212,7 +215,13 @@ export async function sendContactMessage(data: ContactData): Promise<EmailResult
     ) +
     para(data.message.replace(/\n/g, "<br>"))
   );
-  return send(ADMIN_EMAIL, `[Contact] ${data.subject}`, html, { email: data.from, name: data.name });
+  return send(
+    CONTACT_INBOX,
+    `Propworths Contact Form — ${data.subject}`,
+    html,
+    { email: data.from, name: data.name },
+    `${data.name} <${data.from}>`
+  );
 }
 
 // ── 6. Test email ───────────────────────────────────────────────────

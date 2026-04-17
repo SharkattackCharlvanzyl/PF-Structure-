@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   sendAgreementConfirmation,
   sendPaymentReceipt,
+  sendContactMessage,
 } from "@/lib/email";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -10,6 +11,7 @@ const VALID_TEMPLATES = [
   "agreement-confirmation",
   "payment-receipt",
   "enquiry-notification",
+  "contact-form",
 ];
 
 export async function POST(request: NextRequest) {
@@ -100,6 +102,38 @@ export async function POST(request: NextRequest) {
           transactionId: data.transactionId,
           plan: data.plan,
           amount: data.amount,
+        });
+        break;
+
+      case "contact-form":
+        if (!data?.name || !data?.from || !data?.subject || !data?.message) {
+          return NextResponse.json(
+            {
+              success: false,
+              error:
+                "Missing data fields for contact-form: name, from, subject, message",
+            },
+            { status: 400 }
+          );
+        }
+        if (!EMAIL_REGEX.test(data.from)) {
+          return NextResponse.json(
+            { success: false, error: "Invalid sender email format" },
+            { status: 400 }
+          );
+        }
+        if (typeof data.message !== "string" || data.message.trim().length < 10) {
+          return NextResponse.json(
+            { success: false, error: "Message must be at least 10 characters" },
+            { status: 400 }
+          );
+        }
+        result = await sendContactMessage({
+          from: data.from,
+          name: data.name,
+          phone: data.phone,
+          subject: data.subject,
+          message: data.message,
         });
         break;
 
