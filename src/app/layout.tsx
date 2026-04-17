@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PropertyFinder",
+  title: "Propworths",
   description: "Find Your Dream Property Anywhere in the World",
 };
 

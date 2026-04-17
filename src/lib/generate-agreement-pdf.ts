@@ -28,7 +28,7 @@ function getClausesForType(type: string): string[] {
     case "agency":
       return [
         "1. EXCLUSIVE LISTING PERIOD: The Agent is hereby granted an exclusive mandate to market and sell the Property for a period of ninety (90) days from the date of this agreement. During this period, the Seller shall not appoint any other agent or sell the Property independently without the Agent's written consent.",
-        "2. MARKETING OBLIGATIONS: The Agent undertakes to actively market the Property through all reasonable channels, including but not limited to the PropertyFinder platform, social media, print media, show days, and direct buyer engagement. A marketing plan shall be provided within seven (7) days of signing.",
+        "2. MARKETING OBLIGATIONS: The Agent undertakes to actively market the Property through all reasonable channels, including but not limited to the Propworths platform, social media, print media, show days, and direct buyer engagement. A marketing plan shall be provided within seven (7) days of signing.",
         "3. COMMISSION ON SALE: Upon successful sale of the Property, the Seller agrees to pay the Agent a commission as specified in this agreement, calculated on the gross selling price. Commission is due and payable upon registration of transfer in the Deeds Office.",
         "4. PROPERTY VALUATION: The Agent shall provide a comparative market analysis (CMA) within fourteen (14) days of mandate acceptance. The asking price may be adjusted by mutual written agreement based on market conditions and buyer feedback.",
         "5. REPORTING & COMMUNICATION: The Agent shall provide the Seller with written progress reports at least fortnightly, detailing all marketing activities, buyer enquiries, viewings conducted, and offers received. All offers must be presented to the Seller in writing.",
@@ -45,12 +45,12 @@ function getClausesForType(type: string): string[] {
       ];
     case "enterprise":
       return [
-        "1. PORTFOLIO LISTING: The Enterprise Client agrees to list a portfolio of properties on the PropertyFinder platform as detailed in the attached schedule. All listed properties shall comply with the platform's listing requirements and standards.",
+        "1. PORTFOLIO LISTING: The Enterprise Client agrees to list a portfolio of properties on the Propworths platform as detailed in the attached schedule. All listed properties shall comply with the platform's listing requirements and standards.",
         "2. BULK COMMISSION RATES: In consideration of the volume of properties listed, the Enterprise Client shall benefit from a reduced commission rate as set out in this agreement. The commission structure applies to all properties within the portfolio for the duration of this agreement.",
-        "3. DEDICATED ACCOUNT MANAGER: PropertyFinder shall assign a dedicated account manager to the Enterprise Client. The account manager shall serve as the primary point of contact for all listing management, marketing coordination, and performance reporting.",
-        "4. PERFORMANCE METRICS: PropertyFinder shall provide monthly analytics reports including total views, enquiries, click-through rates, and lead conversion metrics for each property in the portfolio. Quarterly strategy reviews shall be conducted.",
+        "3. DEDICATED ACCOUNT MANAGER: Propworths shall assign a dedicated account manager to the Enterprise Client. The account manager shall serve as the primary point of contact for all listing management, marketing coordination, and performance reporting.",
+        "4. PERFORMANCE METRICS: Propworths shall provide monthly analytics reports including total views, enquiries, click-through rates, and lead conversion metrics for each property in the portfolio. Quarterly strategy reviews shall be conducted.",
         "5. DATA PROTECTION: Both parties agree to comply with the Protection of Personal Information Act (POPIA). All personal data collected through property enquiries shall be handled in accordance with the agreed data processing addendum attached hereto.",
-        "6. SERVICE LEVEL AGREEMENT: PropertyFinder commits to a 99.5% platform uptime, 24-hour listing turnaround time, and response to support queries within 4 business hours. Failure to meet these SLAs entitles the Enterprise Client to service credits.",
+        "6. SERVICE LEVEL AGREEMENT: Propworths commits to a 99.5% platform uptime, 24-hour listing turnaround time, and response to support queries within 4 business hours. Failure to meet these SLAs entitles the Enterprise Client to service credits.",
       ];
     case "seller":
       return [
@@ -68,7 +68,7 @@ function getClausesForType(type: string): string[] {
         "3. BUYER'S PREMIUM: The successful bidder shall pay a buyer's premium of the percentage specified in the auction conditions, calculated on the hammer price. The buyer's premium is payable in addition to the hammer price and forms part of the total purchase price.",
         "4. HAMMER PRICE BINDING: The fall of the auctioneer's hammer constitutes a binding contract of sale between the Seller and the highest bidder, provided the reserve price has been met. No conditions may be attached to any bid.",
         "5. DEPOSIT REQUIREMENTS: The successful bidder shall pay a deposit as specified in the auction conditions immediately upon the fall of the hammer. The deposit shall be held in trust by the auctioneer's attorneys pending registration of transfer.",
-        "6. AUCTION MARKETING: The auctioneer shall market the auction through the PropertyFinder platform, print media, digital advertising, and direct buyer contact for a minimum of twenty-one (21) days prior to the auction date.",
+        "6. AUCTION MARKETING: The auctioneer shall market the auction through the Propworths platform, print media, digital advertising, and direct buyer contact for a minimum of twenty-one (21) days prior to the auction date.",
       ];
     case "buyer":
       return [
@@ -124,7 +124,7 @@ export function generateAgreementPDF(data: AgreementData): jsPDF {
   // Subtitle
   doc.setFontSize(10);
   doc.setTextColor(200, 200, 200);
-  doc.text("PropertyFinder South Africa", pageWidth / 2, 30, { align: "center" });
+  doc.text("Propworths", pageWidth / 2, 30, { align: "center" });
 
   // Reference and date line
   doc.setFontSize(8);
@@ -230,7 +230,7 @@ export function generateAgreementPDF(data: AgreementData): jsPDF {
   doc.setFontSize(7);
   doc.setTextColor(150, 150, 150);
   doc.text(
-    "This document was generated by PropertyFinder South Africa. For queries contact support@propertyfinder.org.za",
+    "This document was generated by Propworths. For queries contact support@propertyfinder.org.za",
     pageWidth / 2,
     footerY,
     { align: "center" }

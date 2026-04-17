@@ -2,7 +2,7 @@ import sgMail from "@sendgrid/mail";
 
 // ── SendGrid Configuration ──────────────────────────────────────────
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
-const SG_FROM = { email: "charl@property-finder.co.za", name: "Property Finder" };
+const SG_FROM = { email: "charl@property-finder.co.za", name: "Propworths" };
 const ADMIN_EMAIL = "charl@property-finder.co.za";
 
 // ── Branded HTML wrapper ──────────────────────────────────────────────
@@ -16,7 +16,7 @@ function wrap(content: string): string {
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
   <tr><td align="center" style="padding:0 0 30px 0;">
     <h1 style="margin:0;font-size:28px;font-weight:400;letter-spacing:2px;">
-      <span style="color:#c4a47c;">Property</span><span style="color:#e8dfc8;">Finder</span>
+      <span style="color:#c4a47c;">Prop</span><span style="color:#e8dfc8;">worths</span>
     </h1>
     <div style="width:60px;height:2px;background-color:#c4a47c;margin:10px auto 0;"></div>
   </td></tr>
@@ -25,7 +25,7 @@ function wrap(content: string): string {
   </td></tr>
   <tr><td align="center" style="padding:30px 0 0 0;">
     <p style="margin:0;font-size:12px;color:#6b7a8d;line-height:1.6;">
-      &copy; ${new Date().getFullYear()} PropertyFinder. All rights reserved.<br>
+      &copy; ${new Date().getFullYear()} Propworths. All rights reserved.<br>
       South Africa&rsquo;s Premium Property Platform
     </p>
   </td></tr>
