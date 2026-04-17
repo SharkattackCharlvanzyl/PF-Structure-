@@ -34,10 +34,9 @@ export default function Footer() {
           <div>
             <h5 className="text-cream/80 font-semibold mb-3 text-sm uppercase tracking-wider">{t("footer.legal")}</h5>
             <div className="flex flex-col gap-2">
-              <Link href="/about" className="text-cream/50 hover:text-gold text-sm">{t("footer.about")}</Link>
               <Link href="/contact" className="text-cream/50 hover:text-gold text-sm">{t("footer.contact")}</Link>
-              <Link href="/terms" className="text-cream/50 hover:text-gold text-sm">{t("footer.terms")}</Link>
-              <Link href="/privacy" className="text-cream/50 hover:text-gold text-sm">{t("footer.privacy")}</Link>
+              <Link href="/terms-of-use" className="text-cream/50 hover:text-gold text-sm">{t("footer.terms")}</Link>
+              <Link href="/privacy-policy" className="text-cream/50 hover:text-gold text-sm">{t("footer.privacy")}</Link>
             </div>
           </div>
         </div>
