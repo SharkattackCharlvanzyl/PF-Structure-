@@ -185,7 +185,7 @@ export default function AgreementPage() {
     if (!pdfUrl) return;
     const a = document.createElement("a");
     a.href = pdfUrl;
-    a.download = `PropertyFinder-Agreement-${reference}.pdf`;
+    a.download = `Propworths-Agreement-${reference}.pdf`;
     a.click();
   };
 

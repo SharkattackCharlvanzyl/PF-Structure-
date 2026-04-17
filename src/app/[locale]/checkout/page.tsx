@@ -81,7 +81,7 @@ export default function CheckoutPage() {
         email_address: customerEmail.trim(),
         m_payment_id: paymentId,
         amount: total.toFixed(2),
-        item_name: "PropertyFinder " + planName + " Plan",
+        item_name: "Propworths " + planName + " Plan",
         item_description: billingLabel + " subscription",
       };
 

@@ -147,7 +147,7 @@ export default function RentDetailPage() {
               </div>
               <div>
                 <p className="text-cream font-semibold">{property.agentName}</p>
-                <p className="text-cream/40 text-sm">PropertyFinder Agent</p>
+                <p className="text-cream/40 text-sm">Propworths Agent</p>
               </div>
             </div>
 

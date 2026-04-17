@@ -150,7 +150,7 @@ export async function sendAgreementConfirmation(data: AgreementData): Promise<Em
 export async function sendAgreementInternalCopy(data: AgreementData): Promise<EmailResult> {
   const html = wrap(
     heading("New Agreement Submission") +
-    para("A new agreement has been submitted on PropertyFinder.") +
+    para("A new agreement has been submitted on Propworths.") +
     table(
       row("Reference", data.referenceId, true) +
       row("Client Name", data.fullName) +
@@ -228,14 +228,14 @@ export async function sendContactMessage(data: ContactData): Promise<EmailResult
 export async function sendTestEmail(to: string): Promise<EmailResult> {
   const html = wrap(
     heading("Email Integration Test") +
-    para("This is a test email from your PropertyFinder Next.js application.") +
+    para("This is a test email from your Propworths Next.js application.") +
     para("If you are reading this, email delivery is working correctly.") +
     table(
       row("Status", "Connected", true) +
       row("Sent At", new Date().toISOString()) +
       row("Recipient", to)
     ) +
-    button("https://property-finder.co.za", "Visit PropertyFinder")
+    button("https://property-finder.co.za", "Visit Propworths")
   );
-  return send(to, "PropertyFinder - Email Test", html);
+  return send(to, "Propworths - Email Test", html);
 }
