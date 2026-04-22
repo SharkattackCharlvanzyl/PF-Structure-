@@ -38,3 +38,7 @@ next-env.d.ts
 # agreement data files
 data/agreements/*.json
 .env.local
+
+# session scratch + local Claude Code settings
+tmp/
+.claude/settings.local.json
